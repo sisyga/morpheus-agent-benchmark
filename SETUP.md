@@ -153,7 +153,7 @@ uv sync --locked
 
 Commit `pyproject.toml`, `uv.lock`, and `.python-version` when they change. Keep `.venv` and uv's cache out of Git. To change only your local interpreter, use `uv sync --locked --python 3.11`; to change the team's default, use `uv python pin <version>` and verify the environment and tests.
 
-The old `requirements.txt` is replaced by `pyproject.toml` and `uv.lock`. If an external tool needs a requirements file, generate one with `uv export --locked --no-dev --format requirements.txt --output-file /path/to/requirements.txt`.
+If an external tool needs a requirements file, generate one with `uv export --locked --no-dev --format requirements.txt --output-file /path/to/requirements.txt`.
 
 ## 4. Run a one-paper smoke test
 
@@ -204,51 +204,9 @@ npm run benchmark -- --no-analysis
 
 The default runner concurrency is one job at a time. On Linux and WSL2, paper/mode/repetition jobs are independent, so `--max-concurrent-jobs` can shorten full benchmark runs when the machine has enough CPU/RAM and Codex quota headroom. Native Windows always runs these jobs serially. Each job gets one continuous subject execution. Only a classified infrastructure failure can receive one clean replacement, which uses a new thread and empty workspace.
 
-## 5a. CLI flag reference
+## 5a. CLI options and recovery
 
-Run selection and inputs:
-
-- `--config <path>`
-- `--benchmark-mode <python_web|morpheus_cli|morpheus_cli_docs|morpheus_skill|morpheus_mcp>`; repeatable
-- `--all-benchmark-modes`
-- `--papers-dir <path>`
-- `--results-dir <path>`
-- `--benchmark-focus-dir <path>`
-- `--no-benchmark-focus`
-- `--max-papers <number>`
-- `--start-at-paper <pdf filename|stem>`
-- `--repetitions <number>`
-
-Model and execution:
-
-- `--model <name>`
-- `--reasoning-effort <none|low|medium|high|xhigh|max>` (`minimal` is legacy-only)
-- `--total-time-limit-minutes <number>`
-- `--finalization-reserve-minutes <number>`
-- `--max-concurrent-jobs <number>`
-- `--codex-quota-job-cost-percent <number>`
-- `--page-render-dpi <number>`
-- `--representative-output-frames <number>`
-- `--codex-allow-env <NAME>`
-- `--score-biological`
-- `--skip-scored-attempts`
-- `--biological-scoring-criteria-path <path>`
-- `--biological-scoring-model <name>`
-- `--biological-scoring-reasoning-effort <none|low|medium|high|xhigh|max>`
-- `--biological-scoring-max-concurrent-jobs <number>`
-- `--biological-scoring-turn-timeout-ms <number>`
-- `--bridge-tool-timeout-ms <number>`
-- `--morpheus-run-timeout-ms <number>`
-- `--morpheus-num-threads <number>`
-- `--morpheus-xml-schema-path <path>`
-- `--no-analysis`
-
-Recovery and aggregation:
-- `--recover-run <benchmark run dir>`
-- `--combine-runs <benchmark run dir> <benchmark run dir> [...]`
-- `--combined-run-dir <output dir>`
-
-An explicit `--recover-run` reruns recorded infrastructure failures that have not used their one clean replacement, launches assignments the queue never started, re-audits stored capability events, then rebuilds the v2 aggregate artifacts. Successful assignments, time limits, and other benchmark outcomes are not relaunched. Each replacement uses a fresh execution ID, thread, Codex home, workspace, and full budget. The automatic recovery pass after a normal benchmark remains deterministic postprocessing only. Historical v1 folders are read-only in this runner. Failures before the subject starts (run creation, paper extraction, command-runner preflight) and Codex errors mid-execution receive the automatic clean replacement; systemic preflight failures and host-side errors after the subject started do not. An exhausted Codex quota is never replaced automatically and instead stops the queue. After the quota resets, `--recover-run` reruns the quota-failed and never-launched assignments. Quota and model-capacity failures do not count toward the one-replacement limit. A quota guard reads the weekly quota from the jobs' Codex session logs and starts a new job only while the remaining quota covers it and every running job (see `--codex-quota-job-cost-percent`). Jobs and recovery run repetition-first. `--combine-runs` rejects mixed protocols, time budgets, model/effort settings, scorer settings, concurrency, and Morpheus thread settings. Repeated paper/mode repetitions from a later folder are appended as additional repetitions, and the combined summary carries the source runs' configuration.
+`npm run benchmark -- --help` lists every option. The [benchmark CLI reference](readme.md#benchmark-cli-reference) in the README describes each one, including how `--recover-run` reruns infrastructure failures and quota-stopped assignments and which runs `--combine-runs` accepts.
 
 ## 6. Understand the configuration
 
@@ -347,32 +305,9 @@ The MCP server reads `.agents/skills/morpheus/references/*-examples.md` live, an
 5. Run `npm run typecheck`, `npm run test:ts`, and `uv run --locked python -m pytest tests`, then do a one-paper smoke run for `morpheus_cli_docs` and `morpheus_mcp`, and check `agent_workspace/morpheusml_doc.txt` and `codex_home/skills/morpheus/`.
 6. Commit, start fresh benchmark runs from a clean tree (the runner warns about uncommitted changes), and tag the release commit `benchmark-v<N+1>`.
 
-## 6a. Direct MCP contract
+## 6a. Direct MCP use
 
-Outside the benchmark harness, the supported MCP transport for this repository is **stdio**.
-
-The canonical local startup command is:
-
-```powershell
-uv run --locked python server.py
-```
-
-The same contract is also written to the repo-root `.mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "morpheus": {
-      "command": "uv",
-      "args": ["run", "--locked", "python", "server.py"]
-    }
-  }
-}
-```
-
-Run these startup forms from the repository root. The benchmark's `mcpCommand` continues to use `python`, which the runner resolves to the project `.venv` interpreter; benchmark agents do not need uv or package downloads at runtime.
-
-This repository does not currently document or support an HTTP `/mcp` transport for the Morpheus server.
+Outside the benchmark, start the MCP server over stdio with `uv run --locked python server.py` from the repository root, or let an MCP client read the repo-root `.mcp.json`. See [Direct MCP usage](readme.md#direct-mcp-usage) in the README.
 
 ## 7. Read the outputs
 
@@ -395,7 +330,7 @@ The main files to inspect are:
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/codex_home/`
   Sanitized audit snapshot of the isolated Codex home.
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/subject_deadline.json`
-  Exact v2 total, soft cutoff, and hard cutoff.
+  Exact total, soft cutoff, and hard cutoff.
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/subject_execution.json`
   Direct active-subject duration and stop reason.
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/model.xml`
@@ -403,11 +338,11 @@ The main files to inspect are:
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/xml_versions/`
   Captured and harvested model XML revisions.
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/technical_evaluation.json`
-  Legacy 0-7 executability score.
+  0-7 executability score (not used in the preprint).
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/reproduction_report.json`
   Structured 0-8 reproduction rubric.
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/biological_scores/scorer-v...json`
-  Optional 0-1 biological score generated by `--score-biological` or `npm run score:biology -- <benchmark_dir>`. The path encodes scorer, criteria, and attempt provenance, so a new scorer cohort does not overwrite the historical artifact. Each scorer works read-only with the canonical attempt as its sole scoring target. It can inspect the run's `agent_workspace` and the staged Morpheus skill only to interpret assets referenced by the canonical `model.xml`; outputs and alternative models there are not scoring evidence. Network access, web search, plugins, and Morpheus MCP tools remain disabled. Failed canonical simulations without scoreable output receive `model_failed` and score zero without invoking a scoring agent. Missing evidence without an explicit execution failure receives `insufficient_evidence` and a null score. Partial runs with scoreable output receive credit for demonstrated behavior, using the last observed state for endpoint clauses. Use `--skip-scored-attempts` to reuse scores only when the canonical attempt, scorer version, model, effort, criteria, and artifact identity match. The standalone scorer accepts `--model`, `--reasoning-effort`, `--max-concurrent-jobs`, `--criteria-path`, `--turn-timeout-ms`, and `--skip-scored-attempts` for scoring-agent overrides.
+  Optional 0-1 biological score generated by `--score-biological` or `npm run score:biology -- <benchmark_dir>`. The path encodes scorer, criteria, and attempt provenance, so a new scorer cohort does not overwrite earlier scores. Each scorer works read-only with the canonical attempt as its sole scoring target. It can inspect the run's `agent_workspace` and the staged Morpheus skill only to interpret assets referenced by the canonical `model.xml`; outputs and alternative models there are not scoring evidence. Network access, web search, plugins, and Morpheus MCP tools remain disabled. Failed canonical simulations without scoreable output receive `model_failed` and score zero without invoking a scoring agent. Missing evidence without an explicit execution failure receives `insufficient_evidence` and a null score. Partial runs with scoreable output receive credit for demonstrated behavior, using the last observed state for endpoint clauses. Use `--skip-scored-attempts` to reuse scores only when the canonical attempt, scorer version, model, effort, criteria, and artifact identity match. The standalone scorer accepts `--model`, `--reasoning-effort`, `--max-concurrent-jobs`, `--criteria-path`, `--turn-timeout-ms`, and `--skip-scored-attempts` for scoring-agent overrides.
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/biological_scores/scorer-v...txt`
   Human-readable companion to that scorer-cohort JSON.
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/biological_scores/scorer-v.../`
@@ -419,7 +354,7 @@ The main files to inspect are:
 - `benchmark_runs/<timestamp>_benchmark/<paper_run_dir>/transcripts/`
   Single subject transcript (`subject.jsonl`) plus separate preflight transcripts. Scorer transcripts live under `biological_scores/`.
 
-Codex uses the paper-specific `agent_workspace` as its working directory, so one paper agent does not see sibling paper outputs from the same benchmark invocation. The runner prepares a mode-specific isolated `codex_home`, including allowed skills, MCP config, and sandbox trust root. V2 analysis uses direct `subjectExecutionMs` without timeout imputation and reports Morpheus, host-evaluation, cache-read, and cache-write usage separately. Subject attempts are counted only when their folders contain `morpheus_command.json`; host technical reruns are excluded. The per-run CSV reports missing attempt XML, reproduction report, and logs. ITT averages treat missing/unscoreable subject outcomes as zero; valid-only averages are secondary. For biological ITT, `model_failed` and `insufficient_evidence` count as zero, while `scoring_failed` and never-scored runs stay missing (`biological_itt_n` gives the covered count). Time-limited or killed subjects never emit `turn.completed`, so their token usage is read from the subject's Codex session rollout; reasoning tokens are part of output tokens and are priced once.
+Codex uses the paper-specific `agent_workspace` as its working directory, so one paper agent does not see sibling paper outputs from the same benchmark invocation. The runner prepares a mode-specific isolated `codex_home`, including allowed skills, MCP config, and sandbox trust root. Analysis uses direct `subjectExecutionMs` without timeout imputation and reports Morpheus, host-evaluation, cache-read, and cache-write usage separately. Subject attempts are counted only when their folders contain `morpheus_command.json`; host technical reruns are excluded. The per-run CSV reports missing attempt XML, reproduction report, and logs. ITT averages treat missing/unscoreable subject outcomes as zero; valid-only averages are secondary. For biological ITT, `model_failed` and `insufficient_evidence` count as zero, while `scoring_failed` and never-scored runs stay missing (`biological_itt_n` gives the covered count). Time-limited or killed subjects never emit `turn.completed`, so their token usage is read from the subject's Codex session rollout; reasoning tokens are part of output tokens and are priced once.
 The trusted Morpheus launcher is staged outside the writable subject workspace, and the real executable directory is removed from the subject `PATH`. `benchmark_recovery.json` plus per-assignment result files allow recovery even if the final summary was not written; ambiguous subject state is retained as infrastructure-invalid and receives at most one clean replacement. Analysis writes `benchmark_execution_audit.csv` with both executions while assignment metrics select the replacement only.
 
 The benchmark is text-first. It does not attach all page images or all Morpheus output images up front. Instead:
@@ -427,10 +362,9 @@ The benchmark is text-first. It does not attach all page images or all Morpheus 
 - the agent reads `paper.txt` first;
 - if it needs figures or tables, it uses `paper_visual_manifest.json` to choose specific pages and renders only those pages;
 - if it needs Morpheus visual output, it samples representative output images;
-- the agent inspects local PNGs directly with `view_image` when available;
-- the runner no longer adds separate image-review turns, image-review budgets, `outputImagePaths`, or `contactSheetPath` fields.
+- the agent inspects local PNGs directly with `view_image` when available.
 
-Morpheus attempts are executions of `run_morpheus_model(...)` or CLI Morpheus runs inside the continuous active-time budget. CLI modes must use the staged `morpheus` command; absolute Morpheus binary paths bypass capture and are flagged in analysis with agent-side Morpheus timing left blank. For Morpheus-running modes, the prompt asks the agent to use fresh attempt folders, copy the corresponding `model.xml`, inspect outputs—including preserved partial outputs after a timeout—and write `attempt_reproduction.json` with four 0-2 self-scores.
+Morpheus attempts are executions of `run_morpheus_model(...)` or CLI Morpheus runs inside the continuous active-time budget. CLI modes must use the staged `morpheus` command; absolute Morpheus binary paths bypass capture and are flagged in analysis with agent-side Morpheus timing left blank. For Morpheus-running modes, the prompt asks the agent to use fresh attempt folders, copy the corresponding `model.xml`, inspect outputs, including partial outputs preserved after a timeout, and write `attempt_reproduction.json` with four 0-2 self-scores.
 
 ## 7a. Generate analysis figures
 
@@ -457,17 +391,15 @@ The script writes run-level, mode-level, and paper-cohort-by-mode CSVs; token-co
 
 When biological score files exist, analysis also writes `benchmark_biological_scores.csv`, includes biological score columns in run/mode CSVs, adds biological heatmaps, and folds the normalized biological score into cost-quality summaries.
 
-### Compare two benchmark models
+### Compare benchmark models
 
-Use the separate comparison script when two or more complete benchmark folders were generated with different models:
+To compare complete benchmark folders produced by different models, run:
 
 ```powershell
 uv run --locked python compare_benchmarks.py benchmark_runs/<first>_benchmark benchmark_runs/<second>_benchmark [benchmark_runs/<third>_benchmark ...] --out-dir benchmark_model_comparison
 ```
 
-If `--out-dir` is omitted, outputs go to `benchmark_comparison_figures/` in the current directory.
-
-The comparison script accepts two or more benchmark folders, with optional `--labels` (one per folder; default `<model> (<reasoning effort>)`). It refuses to compare runs whose protocol, time budget, benchmark version, or scorer cohort differ unless `--force` is passed. Runs whose subject never started (no tokens and no cost) are excluded from both score and cost and listed in `benchmark_model_comparison_excluded_runs.csv`; failed runs that did spend tokens keep their intention-to-treat score. Repetitions are averaged within each paper and mode first, so runs with different repetition counts receive equal paper weighting, and papers are the unit of replication. It writes PNG, PDF, and SVG by default (`--formats` selects a subset): `biological_score_by_model_and_mode` and `api_cost_by_model_and_mode` (box plots of paper-level means, cost on a log axis), `api_cost_biological_score_pareto_by_model` (mode means with 95% confidence intervals, mean ± t·SD/√n across papers, and the Pareto frontier), and `overall_score_and_cost_by_model` (per-model means over the four Morpheus modes with 95% confidence intervals). Figures carry no titles so captions can describe them. Paper-level, model/mode-level, and overall source CSVs are written alongside; the summaries keep the across-paper SD next to the confidence interval.
+If `--out-dir` is omitted, outputs go to `benchmark_comparison_figures/` in the current directory. The README section [Analysis figures](readme.md#analysis-figures) lists the figures, confidence intervals, and statistical tests the script writes.
 
 ## 8. Common setup failures
 
@@ -494,7 +426,6 @@ Python scripts cannot import a project dependency:
 
 Native Windows reports `unelevated restricted-token sandbox cannot enforce split filesystem read restrictions`:
 
-- Remove any old `--codex-windows-sandbox unelevated` argument; that option is no longer supported by this benchmark.
 - Initialize the elevated Codex sandbox and approve its administrator prompt.
 - If machine policy blocks elevated sandbox setup, run the benchmark in WSL2.
 
@@ -524,13 +455,7 @@ The smoke test works but the full benchmark is slow:
 - Use `--max-papers` first to measure behavior on your machine before running the full set.
 - On native Windows, jobs intentionally remain serial; use Linux or WSL2 for parallel benchmark and scoring jobs.
 
-## Historical v1 interpretation
-
-The old 90-minute Codex limit was an absolute per-turn wall-clock watchdog, not an inactivity timer. Commands and tool output did not reset it, and subjects were not told the deadline. Automatic retries normally used a fresh thread while retaining workspace artifacts, which could preserve work without preserving conversational context. Report this as a protocol limitation in any paper using v1 data; do not pool v1 and v2 or claim timeout-independent mode effects.
-
 ## 9. What you do not need to do
 
-- You do not need to move files around before running the benchmark.
+- Apart from adding the paper PDFs, you do not need to move files around before running the benchmark.
 - You do not need to launch `server.py` separately for the benchmark path.
-
-The supported path is the Codex SDK benchmark runner at the repository root. The earlier Anthropic-based prototype is not part of this release.

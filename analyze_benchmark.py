@@ -2881,7 +2881,7 @@ def make_full_figure(df: pd.DataFrame, summary: pd.DataFrame, output_dir: Path, 
         for ax in biological_axes[len(biological_specs[:2]) :]:
             ax.set_axis_off()
 
-    fig.suptitle("Morpheus.AI benchmark comparison across agent modes", fontsize=13, fontweight="bold")
+    fig.suptitle("Benchmark comparison across agent modes", fontsize=13, fontweight="bold")
     save_figure(fig, output_dir, "mode_comparison_overview", formats)
     plt.close(fig)
 

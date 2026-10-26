@@ -8,7 +8,9 @@ from unittest import mock
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+from scipy import stats
 
 import compare_benchmarks as comparison
 
@@ -22,6 +24,8 @@ class CompareBenchmarksTests(unittest.TestCase):
         self.assertEqual(args.formats, ["png", "pdf", "svg"])
         self.assertIsNone(args.out_dir)
         self.assertFalse(args.force)
+        self.assertTrue(args.significance)
+        self.assertFalse(comparison.parse_args(["run_a", "run_b", "--no-significance"]).significance)
 
     def test_parse_args_rejects_a_single_folder_and_mismatched_labels(self) -> None:
         with mock.patch.object(sys, "stderr"):
@@ -386,6 +390,84 @@ class CompareBenchmarksTests(unittest.TestCase):
             self.assertTrue((output_dir / "benchmark_model_comparison_by_model_mode.csv").exists())
             self.assertTrue((output_dir / "benchmark_model_comparison_overall.csv").exists())
             self.assertTrue((output_dir / "benchmark_model_comparison_excluded_runs.csv").exists())
+            for stem in expected_stems:
+                self.assertTrue((output_dir / f"{stem}_stats.md").exists())
+            self.assertTrue((output_dir / "statistical_tests.md").exists())
+            self.assertTrue((output_dir / "statistical_tests.csv").exists())
+
+    def test_exact_signed_rank_test_matches_scipy_with_ties_and_zeros(self) -> None:
+        differences = np.array([0, 0, 0, 0.1, 0.1, 0.2, -0.1, 0.33, 0.33, 0, 0.5, 0.25, 0.1, 0.2, 0.0])
+        expected = stats.wilcoxon(
+            differences, zero_method="pratt", method=stats.PermutationMethod(n_resamples=np.inf)
+        )
+
+        statistic, p_value = comparison.exact_signed_rank_test(differences)
+
+        self.assertAlmostEqual(statistic, float(expected.statistic))
+        self.assertAlmostEqual(p_value, float(expected.pvalue))
+        untied = np.random.default_rng(0).normal(size=12)
+        self.assertAlmostEqual(
+            comparison.exact_signed_rank_test(untied)[1], stats.wilcoxon(untied, method="exact").pvalue
+        )
+
+    def test_holm_adjust_steps_down_and_ignores_missing_p_values(self) -> None:
+        adjusted = comparison.holm_adjust([0.01, 0.04, float("nan"), 0.03])
+
+        np.testing.assert_allclose(adjusted[[0, 1, 3]], [0.03, 0.06, 0.06])
+        self.assertTrue(np.isnan(adjusted[2]))
+
+    def test_paired_wilcoxon_reports_cost_effect_as_a_ratio(self) -> None:
+        a = np.array([2.0, 4.0, 8.0, 1.0, 3.0])
+
+        result = comparison.paired_wilcoxon(a, a / 2, log_scale=True)
+
+        self.assertAlmostEqual(result["effect"], 2.0)
+        self.assertEqual(result["effect_size"], 1.0)
+        self.assertAlmostEqual(result["p_value"], 0.0625)
+
+    def test_bootstrap_confidence_interval_stays_inside_bounded_scores(self) -> None:
+        scores = [1.0] * 10 + [0.83, 0.83, 0.66, 1.0, 0.9]
+
+        low, high = comparison.mean_confidence_interval(scores)
+
+        self.assertLess(low, np.mean(scores))
+        self.assertLessEqual(high, 1.0)
+        self.assertEqual(comparison.mean_confidence_interval([0.5] * 4), (0.5, 0.5))
+
+    def test_between_model_tests_pair_papers_within_each_mode(self) -> None:
+        rows = []
+        for benchmark_id, shift in [("run_a", 0.2), ("run_b", 0.0)]:
+            for paper_index in range(6):
+                rows.append({
+                    "benchmark_id": benchmark_id, "benchmark_label": benchmark_id.upper(),
+                    "mode": "morpheus_mcp", "paper": f"p{paper_index}.pdf",
+                    "biological_score": 0.1 * paper_index + shift + 0.01 * paper_index * (benchmark_id == "run_a"),
+                    "total_cost_usd": 1.0 + paper_index,
+                })
+        paper_records = pd.DataFrame(rows)
+
+        tests = comparison.compute_statistical_tests(paper_records, pd.DataFrame())
+
+        score = tests.loc[(tests["family"] == "between_models_by_mode") & (tests["metric"] == "biological_score")]
+        self.assertEqual(len(score), 1)
+        self.assertEqual(score.iloc[0]["n"], 6)
+        self.assertAlmostEqual(score.iloc[0]["p_value"], 2 / 2**6)
+        cost = tests.loc[(tests["family"] == "between_models_by_mode") & (tests["metric"] == "total_cost_usd")]
+        self.assertEqual(cost.iloc[0]["p_value"], 1.0)
+
+    def test_compact_letter_display_separates_only_significant_pairs(self) -> None:
+        letters = comparison.compact_letter_display(
+            ["A", "B", "C", "D"], {frozenset("AD"), frozenset("AC"), frozenset("BD")}
+        )
+
+        self.assertEqual(letters, {"A": "a", "B": "ab", "C": "bc", "D": "c"})
+        self.assertEqual(comparison.compact_letter_display(["A", "B"], set()), {"A": "a", "B": "a"})
+
+    def test_significance_label_uses_asterisks(self) -> None:
+        self.assertEqual(comparison.significance_label(3.1e-4), "***")
+        self.assertEqual(comparison.significance_label(0.006), "**")
+        self.assertEqual(comparison.significance_label(0.03), "*")
+        self.assertEqual(comparison.significance_label(0.2), "n.s.")
 
 
 if __name__ == "__main__":

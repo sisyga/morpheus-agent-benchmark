@@ -1,4 +1,4 @@
-# Morpheus.AI Agents
+# Instructions for coding agents
 
 ## Scope
 - This file instructs agents working on this repository: benchmark scaffold, runner, MCP/CLI utilities, skills, docs, analysis, and tests.

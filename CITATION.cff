@@ -1,13 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below and cite the accompanying preprint."
 type: software
-title: "Morpheus.AI: benchmark and tools for LLM agents that build Morpheus multicellular models"
+title: "Morpheus agent benchmark: code and scoring criteria for testing LLM agents that build multicellular models in Morpheus"
 abstract: >-
   Benchmark runner, Morpheus agent skill, Model Context Protocol (MCP) server, biological scoring
   criteria and analysis scripts used to test whether LLM-based coding agents can rebuild published
-  multicellular models in the Morpheus simulator. The release reproduces the subject-facing setup
-  of benchmark version 3 (git tag benchmark-v3) that produced the runs reported in the
-  accompanying preprint.
+  multicellular models in the Morpheus simulator. The release contains the subject-facing setup
+  of benchmark version 3, which produced the main results of the accompanying preprint.
 authors:
   - given-names: Prerana
     family-names: Chandratre

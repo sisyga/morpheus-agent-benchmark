@@ -31,7 +31,25 @@ MODEL_GROUP_COLUMNS = [column for column in COMPARISON_GROUP_COLUMNS if column !
 BENCHMARK_COLORS = ["#4477AA", "#EE6677", "#228833", "#CCBB44", "#66CCEE", "#AA3377"]
 BENCHMARK_MARKERS = ["o", "D", "s", "^", "v", "P"]
 MORPHEUS_MODES = ["morpheus_cli", "morpheus_cli_docs", "morpheus_skill", "morpheus_mcp"]
+EXECUTION_BASELINE_MODE = "python_web"
 CONFIDENCE_LEVEL = 0.95
+CI_METHODS = ["bootstrap", "t"]
+BOOTSTRAP_RESAMPLES = 10_000
+BOOTSTRAP_SEED = 20261023
+# Paper-level metric -> (run-record column, label, compared on a log scale as a ratio).
+COMPARISON_METRICS = {
+    "biological_score": ("biological_score_itt", "Biological score", False),
+    "technical_score": ("technical_score_itt", "Technical score", False),
+    "total_cost_usd": ("total_cost_usd", "API cost per run (USD)", True),
+    "subject_active_time_min": ("subject_active_time_min", "Active agent time per run (min)", True),
+    "attempts": ("attempts", "Model revisions per run", False),
+}
+# Figures for the metrics without a dedicated figure of their own.
+EXTRA_METRIC_FIGURES = {
+    "technical_score": "technical_score_by_model_and_mode",
+    "subject_active_time_min": "active_time_by_model_and_mode",
+    "attempts": "revisions_by_model_and_mode",
+}
 REQUIRED_RECORD_COLUMNS = {
     "paper",
     "mode",
@@ -75,6 +93,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Compare runs even if their protocol, time budget, benchmark version, or scorer differ.",
     )
+    parser.add_argument(
+        "--ci",
+        default="bootstrap",
+        choices=CI_METHODS,
+        help="95%% confidence intervals over papers: BCa bootstrap (default) or mean ± t·SD/√n.",
+    )
+    parser.add_argument(
+        "--significance",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Draw significance brackets and letters in the figures (default on); the MD files are always written.",
+    )
     args = parser.parse_args(argv)
     if len(args.benchmark_dirs) < 2:
         parser.error("at least two benchmark folders are required")
@@ -93,6 +123,32 @@ def confidence_half_width(values: pd.Series) -> float:
     return float(t_value * finite.std(ddof=1) / np.sqrt(count))
 
 
+def mean_confidence_interval(values: Iterable[float], method: str = "bootstrap") -> tuple[float, float]:
+    """95% CI of the mean over papers: BCa bootstrap (stays inside the data range) or the t interval."""
+    finite = pd.to_numeric(pd.Series(list(values), dtype=float), errors="coerce").dropna().to_numpy(dtype=float)
+    if len(finite) < 2:
+        return np.nan, np.nan
+    mean = float(finite.mean())
+    if np.allclose(finite, finite[0]):
+        return mean, mean
+    if method == "t":
+        half_width = confidence_half_width(pd.Series(finite))
+        return mean - half_width, mean + half_width
+    result = None
+    for bootstrap_method in ("BCa", "percentile"):
+        result = stats.bootstrap(
+            (finite,),
+            np.mean,
+            confidence_level=CONFIDENCE_LEVEL,
+            n_resamples=BOOTSTRAP_RESAMPLES,
+            method=bootstrap_method,
+            random_state=np.random.default_rng(BOOTSTRAP_SEED),
+        )
+        if np.isfinite(result.confidence_interval.low) and np.isfinite(result.confidence_interval.high):
+            break
+    return float(result.confidence_interval.low), float(result.confidence_interval.high)
+
+
 def never_started_mask(records: pd.DataFrame) -> pd.Series:
     """Runs whose subject never ran: no tokens and no cost, so neither score nor cost is the model's."""
     tokens = pd.to_numeric(records.get("total_tokens_m"), errors="coerce") if "total_tokens_m" in records else None
@@ -101,18 +157,31 @@ def never_started_mask(records: pd.DataFrame) -> pd.Series:
     return no_tokens & (cost <= 0)
 
 
-def aggregate_comparison_records(records: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def present_metrics(frame: pd.DataFrame) -> list[str]:
+    return [metric for metric in COMPARISON_METRICS if metric in frame.columns]
+
+
+def aggregate_comparison_records(
+    records: pd.DataFrame,
+    ci_method: str = "bootstrap",
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     records = with_comparison_defaults(records)
+    metric_aggregations = {
+        metric: (column, "mean")
+        for metric, (column, _, _) in COMPARISON_METRICS.items()
+        if column in records.columns
+    }
+    for metric, (column, _) in metric_aggregations.items():
+        records[column] = pd.to_numeric(records[column], errors="coerce")
     paper_records = (
         records.groupby([*COMPARISON_GROUP_COLUMNS, "paper"], as_index=False, sort=False)
         .agg(
-            biological_score=("biological_score_itt", "mean"),
+            **metric_aggregations,
             biological_score_valid_only=("biological_score", "mean"),
-            total_cost_usd=("total_cost_usd", "mean"),
             execution_count=("repetition", "size"),
         )
     )
-    summary = summarize_paper_means(paper_records, COMPARISON_GROUP_COLUMNS)
+    summary = summarize_paper_means(paper_records, COMPARISON_GROUP_COLUMNS, ci_method)
     return paper_records, summary
 
 
@@ -135,16 +204,21 @@ def with_comparison_defaults(records: pd.DataFrame) -> pd.DataFrame:
     return records
 
 
-def summarize_paper_means(paper_records: pd.DataFrame, group_columns: list[str]) -> pd.DataFrame:
+def summarize_paper_means(
+    paper_records: pd.DataFrame,
+    group_columns: list[str],
+    ci_method: str = "bootstrap",
+) -> pd.DataFrame:
     """Mean, SD, and 95% CI of paper-level means; papers are the unit of replication."""
     rows = []
     for group_values, group in paper_records.groupby(group_columns, sort=False, dropna=False):
         row = dict(zip(group_columns, group_values if isinstance(group_values, tuple) else (group_values,)))
-        for metric in ("biological_score", "total_cost_usd"):
+        for metric in present_metrics(group):
             values = pd.to_numeric(group[metric], errors="coerce").dropna()
             row[f"{metric}_mean"] = float(values.mean()) if len(values) else np.nan
             row[f"{metric}_std"] = float(values.std(ddof=1)) if len(values) > 1 else np.nan
             row[f"{metric}_ci95"] = confidence_half_width(values)
+            row[f"{metric}_ci_low"], row[f"{metric}_ci_high"] = mean_confidence_interval(values, ci_method)
             row[f"{metric}_paper_count"] = int(len(values))
         valid_only = pd.to_numeric(group["biological_score_valid_only"], errors="coerce").dropna()
         row["biological_score_valid_only_mean"] = float(valid_only.mean()) if len(valid_only) else np.nan
@@ -155,19 +229,228 @@ def summarize_paper_means(paper_records: pd.DataFrame, group_columns: list[str])
     return pd.DataFrame(rows)
 
 
-def aggregate_overall_records(paper_records: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def aggregate_overall_records(
+    paper_records: pd.DataFrame,
+    ci_method: str = "bootstrap",
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Per-model summary over the Morpheus modes: average each paper across modes, then across papers."""
     morpheus = paper_records.loc[paper_records["mode"].isin(MORPHEUS_MODES)]
     per_paper = (
         morpheus.groupby([*MODEL_GROUP_COLUMNS, "paper"], as_index=False, sort=False)
         .agg(
-            biological_score=("biological_score", "mean"),
+            **{metric: (metric, "mean") for metric in present_metrics(morpheus)},
             biological_score_valid_only=("biological_score_valid_only", "mean"),
-            total_cost_usd=("total_cost_usd", "mean"),
             execution_count=("execution_count", "sum"),
         )
     )
-    return per_paper, summarize_paper_means(per_paper, MODEL_GROUP_COLUMNS)
+    return per_paper, summarize_paper_means(per_paper, MODEL_GROUP_COLUMNS, ci_method)
+
+
+def holm_adjust(p_values: Iterable[float]) -> np.ndarray:
+    """Holm step-down adjusted p-values; missing p-values stay missing and do not count."""
+    p = np.asarray(list(p_values), dtype=float)
+    adjusted = np.full(len(p), np.nan)
+    valid = np.flatnonzero(np.isfinite(p))
+    order = valid[np.argsort(p[valid], kind="stable")]
+    running_max = 0.0
+    for rank, index in enumerate(order):
+        running_max = max(running_max, (len(order) - rank) * p[index])
+        adjusted[index] = min(1.0, running_max)
+    return adjusted
+
+
+def rank_biserial(differences: np.ndarray) -> float:
+    """Matched-pairs rank-biserial correlation over the non-zero differences (−1 to 1)."""
+    nonzero = differences[differences != 0]
+    if not len(nonzero):
+        return 0.0
+    ranks = stats.rankdata(np.abs(nonzero))
+    return float((ranks[nonzero > 0].sum() - ranks[nonzero < 0].sum()) / ranks.sum())
+
+
+def paired_wilcoxon(a: np.ndarray, b: np.ndarray, log_scale: bool, ci_method: str = "bootstrap") -> dict:
+    """Two-sided Wilcoxon signed-rank test of a − b (log a − log b for ratios) with an exact sign-flip null.
+
+    Zero differences stay in the ranking (Pratt), which suits scores tied at the ceiling.
+    """
+    a = np.asarray(a, dtype=float)
+    b = np.asarray(b, dtype=float)
+    keep = np.isfinite(a) & np.isfinite(b)
+    if log_scale:
+        keep &= (a > 0) & (b > 0)
+    a, b = a[keep], b[keep]
+    result = {
+        "n": int(len(a)),
+        "mean_a": float(a.mean()) if len(a) else np.nan,
+        "mean_b": float(b.mean()) if len(b) else np.nan,
+        "effect_type": "ratio a/b (geometric mean)" if log_scale else "difference a − b",
+        "effect": np.nan,
+        "effect_ci_low": np.nan,
+        "effect_ci_high": np.nan,
+        "statistic": np.nan,
+        "p_value": np.nan,
+        "effect_size_name": "rank-biserial r",
+        "effect_size": np.nan,
+    }
+    if len(a) < 2:
+        return result
+    differences = np.log(a) - np.log(b) if log_scale else a - b
+    low, high = mean_confidence_interval(differences, ci_method)
+    effect = float(differences.mean())
+    if log_scale:
+        effect, low, high = float(np.exp(effect)), float(np.exp(low)), float(np.exp(high))
+    result.update(effect=effect, effect_ci_low=low, effect_ci_high=high, effect_size=rank_biserial(differences))
+    if np.allclose(differences, 0.0):
+        result.update(statistic=0.0, p_value=1.0)
+        return result
+    statistic, p_value = exact_signed_rank_test(differences)
+    result.update(statistic=statistic, p_value=p_value)
+    return result
+
+
+def exact_signed_rank_test(differences: np.ndarray) -> tuple[float, float]:
+    """Wilcoxon signed-rank test with Pratt zeros and the exact sign-flip null, valid with ties.
+
+    Returns W = min(T+, T−) and the two-sided p-value. The null distribution of T+ is built by
+    convolution over the (doubled, hence integer) ranks of the non-zero differences.
+    """
+    ranks = stats.rankdata(np.abs(differences))
+    nonzero = differences != 0
+    doubled = np.rint(2 * ranks[nonzero]).astype(int)
+    t_plus = int(doubled[differences[nonzero] > 0].sum())
+    total = int(doubled.sum())
+    counts = np.zeros(total + 1)
+    counts[0] = 1.0
+    for rank in doubled:
+        counts[rank:] += counts[:-rank].copy()
+    probabilities = counts / counts.sum()
+    centre = total / 2
+    extreme = np.abs(np.arange(total + 1) - centre) >= abs(t_plus - centre) - 1e-9
+    p_value = float(min(1.0, probabilities[extreme].sum()))
+    return min(t_plus, total - t_plus) / 2, p_value
+
+
+def friedman_test(table: pd.DataFrame) -> dict:
+    """Friedman test across the columns of a paper × condition table, using papers with all conditions."""
+    complete = table.dropna()
+    result = {"n": int(len(complete)), "statistic": np.nan, "p_value": np.nan,
+              "effect_size_name": "Kendall's W", "effect_size": np.nan}
+    conditions = complete.shape[1]
+    if len(complete) < 2 or conditions < 3:
+        return result
+    values = complete.to_numpy(dtype=float)
+    if np.allclose(values, values[:, :1]):
+        result.update(statistic=0.0, p_value=1.0, effect_size=0.0)
+        return result
+    statistic, p_value = stats.friedmanchisquare(*values.T)
+    result.update(
+        statistic=float(statistic),
+        p_value=float(p_value),
+        effect_size=float(statistic / (len(complete) * (conditions - 1))),
+    )
+    return result
+
+
+def paper_table(paper_records: pd.DataFrame, metric: str, column: str, keys: list[str]) -> pd.DataFrame:
+    """Paper × condition table of a paper-level metric; ``column`` names the condition."""
+    subset = paper_records.loc[paper_records[column].isin(keys)]
+    table = subset.pivot_table(index="paper", columns=column, values=metric, aggfunc="mean")
+    return table.reindex(columns=keys)
+
+
+def stats_row(
+    family: str,
+    scope: str,
+    metric: str,
+    condition_a: str,
+    condition_b: str,
+    test: str,
+    values: dict,
+    **keys,
+) -> dict:
+    return {"family": family, "scope": scope, "metric": metric, "test": test,
+            "condition_a": condition_a, "condition_b": condition_b, **keys, **values}
+
+
+def mode_label(mode: str) -> str:
+    return analysis.MODE_LABELS.get(mode, mode)
+
+
+def compute_statistical_tests(
+    paper_records: pd.DataFrame,
+    overall_papers: pd.DataFrame,
+    ci_method: str = "bootstrap",
+) -> pd.DataFrame:
+    """Paired tests on paper-level means, Holm-adjusted within each family, scope and metric."""
+    rows = []
+    benchmarks = benchmark_series(paper_records)
+    modes = ordered_modes(paper_records)
+    morpheus_modes = [mode for mode in MORPHEUS_MODES if mode in modes]
+    for metric in present_metrics(paper_records):
+        log_scale = COMPARISON_METRICS[metric][2]
+        for benchmark_id, label in benchmarks:
+            own = paper_records.loc[paper_records["benchmark_id"] == benchmark_id]
+            table = paper_table(own, metric, "mode", modes)
+            if EXECUTION_BASELINE_MODE in table.columns:
+                for mode in morpheus_modes:
+                    pair = table[[mode, EXECUTION_BASELINE_MODE]].dropna()
+                    rows.append(stats_row(
+                        "execution", label, metric, mode_label(mode), mode_label(EXECUTION_BASELINE_MODE),
+                        "Wilcoxon signed-rank",
+                        paired_wilcoxon(pair[mode], pair[EXECUTION_BASELINE_MODE], log_scale, ci_method),
+                    ))
+            if len(morpheus_modes) >= 3:
+                rows.append(stats_row(
+                    "morpheus_modes_omnibus", label, metric, " / ".join(map(mode_label, morpheus_modes)), "",
+                    "Friedman", friedman_test(table[morpheus_modes]),
+                ))
+            for index, mode_a in enumerate(morpheus_modes):
+                for mode_b in morpheus_modes[index + 1:]:
+                    pair = table[[mode_a, mode_b]].dropna()
+                    rows.append(stats_row(
+                        "morpheus_modes_pairwise", label, metric, mode_label(mode_a), mode_label(mode_b),
+                        "Wilcoxon signed-rank", paired_wilcoxon(pair[mode_a], pair[mode_b], log_scale, ci_method),
+                    ))
+            # All mode pairs in one Holm family; these drive the letters in the box plots.
+            for index, mode_a in enumerate(modes):
+                for mode_b in modes[index + 1:]:
+                    pair = table[[mode_a, mode_b]].dropna()
+                    rows.append(stats_row(
+                        "modes_pairwise", label, metric, mode_label(mode_a), mode_label(mode_b),
+                        "Wilcoxon signed-rank", paired_wilcoxon(pair[mode_a], pair[mode_b], log_scale, ci_method),
+                        benchmark=benchmark_id, mode_a=mode_a, mode_b=mode_b,
+                    ))
+        for index, (id_a, label_a) in enumerate(benchmarks):
+            for id_b, label_b in benchmarks[index + 1:]:
+                scope = f"{label_a} vs {label_b}"
+                for mode in modes:
+                    table = paper_table(
+                        paper_records.loc[paper_records["mode"] == mode], metric, "benchmark_id", [id_a, id_b]
+                    ).dropna()
+                    rows.append(stats_row(
+                        "between_models_by_mode", scope, metric, f"{label_a}, {mode_label(mode)}",
+                        f"{label_b}, {mode_label(mode)}", "Wilcoxon signed-rank",
+                        paired_wilcoxon(table[id_a], table[id_b], log_scale, ci_method),
+                        mode=mode, benchmark_a=id_a, benchmark_b=id_b,
+                    ))
+                if metric in overall_papers.columns:
+                    table = paper_table(overall_papers, metric, "benchmark_id", [id_a, id_b]).dropna()
+                    rows.append(stats_row(
+                        "between_models_overall", scope, metric, f"{label_a}, Morpheus modes",
+                        f"{label_b}, Morpheus modes", "Wilcoxon signed-rank",
+                        paired_wilcoxon(table[id_a], table[id_b], log_scale, ci_method),
+                        benchmark_a=id_a, benchmark_b=id_b,
+                    ))
+    tests = pd.DataFrame(rows)
+    if tests.empty:
+        return tests
+    tests["p_holm"] = np.nan
+    for _, group in tests.groupby(["family", "scope", "metric"], sort=False):
+        tests.loc[group.index, "p_holm"] = holm_adjust(group["p_value"])
+    tests["holm_family_size"] = tests.groupby(["family", "scope", "metric"], sort=False)["p_value"].transform(
+        lambda values: int(values.notna().sum())
+    )
+    return tests
 
 
 def default_benchmark_label(summary: dict) -> str:
@@ -288,11 +571,18 @@ def benchmark_style(index: int) -> tuple[str, str]:
     return BENCHMARK_COLORS[index % len(BENCHMARK_COLORS)], BENCHMARK_MARKERS[index % len(BENCHMARK_MARKERS)]
 
 
-def asymmetric_cost_error(mean: float, half_width: float) -> list[list[float]]:
-    """Clip the lower arm above zero so a CI stays drawable on a log cost axis."""
-    if pd.isna(half_width):
+def interval_error(mean: float, low: float, high: float, positive: bool = False) -> list[list[float]]:
+    """Error-bar arms for a CI; ``positive`` keeps the lower end above zero for a log axis."""
+    if pd.isna(mean) or pd.isna(low) or pd.isna(high):
         return [[0.0], [0.0]]
-    return [[min(half_width, mean * 0.999)], [half_width]]
+    lower = mean - low
+    if positive:
+        lower = min(lower, mean * 0.999)
+    return [[max(lower, 0.0)], [max(high - mean, 0.0)]]
+
+
+def summary_error(row: pd.Series, metric: str, positive: bool = False) -> list[list[float]]:
+    return interval_error(row[f"{metric}_mean"], row[f"{metric}_ci_low"], row[f"{metric}_ci_high"], positive)
 
 
 def benchmark_legend(ax: plt.Axes, benchmarks: list[tuple[str, str]], **kwargs) -> None:
@@ -314,8 +604,16 @@ def grouped_metric_boxplots(
     point_column: str,
     ylabel: str,
     ylim: tuple[float | None, float | None],
+    ci_method: str = "bootstrap",
+    tests: pd.DataFrame | None = None,
 ) -> None:
+    """Box plots of paper-level values with the mean and its 95% CI drawn over each box.
+
+    With ``tests``, each mode group gets brackets with the Holm-adjusted p-value of the paired
+    between-model test.
+    """
     modes = ordered_modes(summary)
+    mean_intervals = []
     benchmarks = benchmark_series(summary)
     x = np.arange(len(modes), dtype=float)
     width = 0.8 / len(benchmarks)
@@ -341,14 +639,8 @@ def grouped_metric_boxplots(
                 positions=positions,
                 widths=width * 0.82,
                 patch_artist=True,
-                showmeans=True,
+                showmeans=False,
                 showfliers=False,
-                meanprops={
-                    "marker": "D",
-                    "markerfacecolor": "white",
-                    "markeredgecolor": "black",
-                    "markersize": 4,
-                },
                 medianprops={"color": "black", "linewidth": 1.2},
                 boxprops={"edgecolor": "black", "linewidth": 0.7},
                 whiskerprops={"color": "black", "linewidth": 0.7},
@@ -374,6 +666,15 @@ def grouped_metric_boxplots(
                 alpha=0.75,
                 zorder=3,
             )
+            mean_intervals.append((position, float(points.mean()), *mean_confidence_interval(points, ci_method)))
+    # Drawn after all boxes and points so the CI sits on top of both.
+    positive = ax.get_yscale() == "log"
+    for position, mean, low, high in mean_intervals:
+        ax.errorbar(
+            position, mean, yerr=interval_error(mean, low, high, positive),
+            fmt="D", markersize=4, markerfacecolor="white", markeredgecolor="black",
+            ecolor="black", elinewidth=1.0, capsize=2.5, zorder=4,
+        )
     ax.set_xticks(x)
     ax.set_xticklabels([analysis.MODE_LABELS.get(mode, mode) for mode in modes], rotation=25, ha="right")
     if ylabel:
@@ -382,6 +683,132 @@ def grouped_metric_boxplots(
         ax.set_ylim(bottom=ylim[0], top=ylim[1])
     ax.grid(axis="y", color="#DDDDDD", linewidth=0.6)
     benchmark_legend(ax, benchmarks, loc="upper left", bbox_to_anchor=(1.01, 1.0))
+    if tests is not None and not tests.empty:
+        annotate_between_model_tests(ax, tests, point_column, modes, benchmarks, x, width)
+
+
+def format_p(p_value: float) -> str:
+    if pd.isna(p_value):
+        return "n/a"
+    if p_value < 0.001:
+        return f"{p_value:.1e}"
+    return f"{p_value:.3f}"
+
+
+SIGNIFICANCE_STARS = [(0.001, "***"), (0.01, "**"), (0.05, "*")]
+
+
+def significance_label(p_value: float) -> str:
+    """Asterisks for a figure (* p < 0.05, ** p < 0.01, *** p < 0.001); exact p-values are in the MD files."""
+    if pd.isna(p_value):
+        return "n/a"
+    for threshold, stars in SIGNIFICANCE_STARS:
+        if p_value < threshold:
+            return stars
+    return "n.s."
+
+
+def compact_letter_display(groups: list[str], different: set[frozenset[str]]) -> dict[str, str]:
+    """Letters per group such that two groups share no letter exactly when they differ significantly.
+
+    Insert-and-absorb (Piepho 2004); ``groups`` in display priority, e.g. by descending mean.
+    """
+    columns = [set(groups)]
+    for pair in different:
+        first, second = tuple(pair)
+        split = []
+        for column in columns:
+            if first in column and second in column:
+                split += [column - {first}, column - {second}]
+            else:
+                split.append(column)
+        columns = [column for column in split if not any(column < other for other in split)]
+        columns = [column for index, column in enumerate(columns) if column not in columns[:index]]
+    columns.sort(key=lambda column: min(groups.index(group) for group in column))
+    letters = "abcdefghijklmnopqrstuvwxyz"
+    return {
+        group: "".join(letters[index] for index, column in enumerate(columns) if group in column)
+        for group in groups
+    }
+
+
+def mode_letters(tests: pd.DataFrame, metric: str, benchmark_id: str, alpha: float = 0.05) -> dict[str, str]:
+    if "benchmark" not in tests.columns:
+        return {}
+    rows = tests.loc[
+        (tests["family"] == "modes_pairwise") & (tests["metric"] == metric) & (tests["benchmark"] == benchmark_id)
+    ]
+    if rows.empty:
+        return {}
+    means = {}
+    for _, row in rows.iterrows():
+        means.setdefault(row["mode_a"], row["mean_a"])
+        means.setdefault(row["mode_b"], row["mean_b"])
+    groups = sorted(means, key=lambda mode: -means[mode])
+    different = {
+        frozenset((row["mode_a"], row["mode_b"]))
+        for _, row in rows.iterrows()
+        if pd.notna(row["p_holm"]) and row["p_holm"] < alpha
+    }
+    return compact_letter_display(groups, different)
+
+
+def annotate_between_model_tests(
+    ax: plt.Axes,
+    tests: pd.DataFrame,
+    metric: str,
+    modes: list[str],
+    benchmarks: list[tuple[str, str]],
+    x: np.ndarray,
+    width: float,
+) -> None:
+    """Letters for mode differences within each model, and brackets with the between-model test per mode."""
+    rows = tests.loc[(tests["family"] == "between_models_by_mode") & (tests["metric"] == metric)]
+    offsets = {
+        benchmark_id: (index - (len(benchmarks) - 1) / 2) * width
+        for index, (benchmark_id, _) in enumerate(benchmarks)
+    }
+    pairs = [(a, b) for index, (a, _) in enumerate(benchmarks) for b, _ in benchmarks[index + 1:]]
+    letters = {benchmark_id: mode_letters(tests, metric, benchmark_id) for benchmark_id, _ in benchmarks}
+    # Reserve headroom above the data in axes coordinates, so log and linear axes behave alike.
+    levels = len(pairs) if not rows.empty else 0
+    data_fraction = 0.86 - 0.07 * max(levels - 1, 0) - (0.06 if any(letters.values()) else 0.0)
+    bottom, top = ax.get_ylim()
+    if ax.get_yscale() == "log":
+        ax.set_ylim(bottom, bottom * (top / bottom) ** (1 / data_fraction))
+    else:
+        ticks = [tick for tick in ax.get_yticks() if bottom <= tick <= top]
+        ax.set_ylim(bottom, bottom + (top - bottom) / data_fraction)
+        ax.set_yticks(ticks)
+    transform = ax.get_xaxis_transform()
+    notes = []
+    if any(letters.values()):
+        notes.append("Letters: modes of one model that share\nno letter differ (pairwise Wilcoxon,\nHolm-adjusted, p < 0.05)")
+        for benchmark_index, (benchmark_id, _) in enumerate(benchmarks):
+            color = benchmark_style(benchmark_index)[0]
+            for mode_index, mode in enumerate(modes):
+                if mode in letters[benchmark_id]:
+                    ax.text(x[mode_index] + offsets[benchmark_id], data_fraction + 0.01, letters[benchmark_id][mode],
+                            ha="center", va="bottom", fontsize=8, fontweight="bold", color=color,
+                            transform=transform)
+        data_fraction += 0.06
+    if not rows.empty:
+        notes.insert(0, "Brackets: paired Wilcoxon signed-rank\nacross papers, Holm-adjusted across\nmodes; * p < 0.05, ** p < 0.01,\n*** p < 0.001, n.s. not significant")
+    for level, (id_a, id_b) in enumerate(pairs):
+        y = data_fraction + 0.02 + 0.07 * level
+        for mode_index, mode in enumerate(modes):
+            row = rows.loc[(rows["mode"] == mode) & (rows["benchmark_a"] == id_a) & (rows["benchmark_b"] == id_b)]
+            if row.empty or pd.isna(row.iloc[0]["p_value"]):
+                continue
+            left, right = x[mode_index] + offsets[id_a], x[mode_index] + offsets[id_b]
+            ax.plot([left, left, right, right], [y, y + 0.015, y + 0.015, y], color="black",
+                    linewidth=0.7, transform=transform, clip_on=False)
+            label = significance_label(row.iloc[0]["p_holm"])
+            ax.text((left + right) / 2, y + (0.005 if "*" in label else 0.02), label,
+                    ha="center", va="bottom", fontsize=10 if "*" in label else 7, transform=transform)
+    if notes:
+        ax.text(1.01, 0.0, "\n\n".join(notes), transform=ax.transAxes, ha="left", va="bottom",
+                fontsize=7, color="#555555")
 
 
 def make_biological_score_figure(
@@ -389,9 +816,12 @@ def make_biological_score_figure(
     summary: pd.DataFrame,
     output_dir: Path,
     formats: Iterable[str],
+    ci_method: str = "bootstrap",
+    tests: pd.DataFrame | None = None,
 ) -> None:
     fig, ax = plt.subplots(figsize=(8.6, 4.5), constrained_layout=True)
-    grouped_metric_boxplots(ax, paper_records, summary, "biological_score", "Biological score", (0.0, 1.05))
+    grouped_metric_boxplots(ax, paper_records, summary, "biological_score", "Biological score", (0.0, 1.05),
+                            ci_method, tests)
     analysis.save_figure(fig, output_dir, "biological_score_by_model_and_mode", formats)
     plt.close(fig)
 
@@ -401,13 +831,35 @@ def make_cost_figure(
     summary: pd.DataFrame,
     output_dir: Path,
     formats: Iterable[str],
+    ci_method: str = "bootstrap",
+    tests: pd.DataFrame | None = None,
 ) -> None:
     fig, ax = plt.subplots(figsize=(8.6, 4.5), constrained_layout=True)
     # Set the log scale before drawing so autoscaling works in log space.
     configure_cost_axis(ax, paper_records["total_cost_usd"], "y")
     ax.set_ylabel(ax.get_ylabel().replace("Mean API cost", "API cost"))
-    grouped_metric_boxplots(ax, paper_records, summary, "total_cost_usd", "", (None, None))
+    grouped_metric_boxplots(ax, paper_records, summary, "total_cost_usd", "", (None, None), ci_method, tests)
     analysis.save_figure(fig, output_dir, "api_cost_by_model_and_mode", formats)
+    plt.close(fig)
+
+
+def make_metric_figure(
+    paper_records: pd.DataFrame,
+    summary: pd.DataFrame,
+    metric: str,
+    output_dir: Path,
+    formats: Iterable[str],
+    ci_method: str = "bootstrap",
+    tests: pd.DataFrame | None = None,
+) -> None:
+    _, label, log_scale = COMPARISON_METRICS[metric]
+    fig, ax = plt.subplots(figsize=(8.6, 4.5), constrained_layout=True)
+    values = pd.to_numeric(paper_records[metric], errors="coerce").dropna()
+    if log_scale and len(values) and (values > 0).all():
+        ax.set_yscale("log")
+        label = f"{label}, log scale"
+    grouped_metric_boxplots(ax, paper_records, summary, metric, label, (None, None), ci_method, tests)
+    analysis.save_figure(fig, output_dir, EXTRA_METRIC_FIGURES[metric], formats)
     plt.close(fig)
 
 
@@ -439,8 +891,8 @@ def make_pareto_figure(
             ax.errorbar(
                 row["total_cost_usd_mean"],
                 row["biological_score_mean"],
-                xerr=asymmetric_cost_error(row["total_cost_usd_mean"], row["total_cost_usd_ci95"]),
-                yerr=0 if pd.isna(row["biological_score_ci95"]) else row["biological_score_ci95"],
+                xerr=summary_error(row, "total_cost_usd", positive=True),
+                yerr=summary_error(row, "biological_score"),
                 fmt=marker,
                 markersize=7,
                 markerfacecolor=color,
@@ -481,6 +933,7 @@ def make_overall_figure(
     overall_summary: pd.DataFrame,
     output_dir: Path,
     formats: Iterable[str],
+    tests: pd.DataFrame | None = None,
 ) -> None:
     fig, (score_ax, cost_ax) = plt.subplots(1, 2, figsize=(7.6, 3.6), constrained_layout=True)
     benchmarks = benchmark_series(overall_summary)
@@ -490,13 +943,13 @@ def make_overall_figure(
         color, marker = benchmark_style(index)
         score_ax.errorbar(
             positions[index], row["biological_score_mean"],
-            yerr=0 if pd.isna(row["biological_score_ci95"]) else row["biological_score_ci95"],
+            yerr=summary_error(row, "biological_score"),
             fmt=marker, markersize=8, markerfacecolor=color, markeredgecolor="black",
             ecolor="black", elinewidth=1.0, capsize=4,
         )
         cost_ax.errorbar(
             positions[index], row["total_cost_usd_mean"],
-            yerr=asymmetric_cost_error(row["total_cost_usd_mean"], row["total_cost_usd_ci95"]),
+            yerr=summary_error(row, "total_cost_usd", positive=True),
             fmt=marker, markersize=8, markerfacecolor=color, markeredgecolor="black",
             ecolor="black", elinewidth=1.0, capsize=4,
         )
@@ -509,14 +962,174 @@ def make_overall_figure(
     score_ax.set_ylabel("Mean biological score")
     score_ax.set_ylim(0, 1.05)
     configure_cost_axis(cost_ax, overall_summary["total_cost_usd_mean"], "y")
+    if tests is not None and not tests.empty and len(benchmarks) == 2:
+        for ax, metric in ((score_ax, "biological_score"), (cost_ax, "total_cost_usd")):
+            row = tests.loc[(tests["family"] == "between_models_overall") & (tests["metric"] == metric)]
+            if not row.empty:
+                ax.set_title(significance_label(row.iloc[0]["p_value"]), fontsize=10)
     analysis.save_figure(fig, output_dir, "overall_score_and_cost_by_model", formats)
     plt.close(fig)
+
+
+TEST_FAMILY_TITLES = {
+    "between_models_by_mode": "Between models, per mode (paired by paper; Holm across modes)",
+    "between_models_overall": "Between models, mean over the Morpheus modes (paired by paper)",
+    "execution": "Within each model: each Morpheus mode vs Python + web (Holm across the Morpheus modes)",
+    "morpheus_modes_omnibus": "Within each model: Friedman test across the Morpheus modes",
+    "morpheus_modes_pairwise": "Within each model: Morpheus modes pairwise (post hoc; Holm across pairs)",
+    "modes_pairwise": "Within each model: all modes pairwise, as shown by the letters in the figure (Holm across all pairs)",
+}
+
+
+def format_value(value: float) -> str:
+    if pd.isna(value):
+        return "n/a"
+    return f"{value:.3g}"
+
+
+def methods_text(ci_method: str) -> str:
+    ci = (
+        f"BCa bootstrap over papers ({BOOTSTRAP_RESAMPLES:,} resamples, seed {BOOTSTRAP_SEED})"
+        if ci_method == "bootstrap" else "mean ± t·SD/√n over papers"
+    )
+    return (
+        "Repetitions are averaged per paper first, so the paper is the unit of replication and every model "
+        "and mode is compared on the same papers. Paired comparisons use two-sided Wilcoxon signed-rank tests "
+        "on the paper-level differences, with zero differences kept in the ranking (Pratt) and the exact "
+        "sign-flip null distribution, which stays valid with tied scores. Cost and active time are compared on a log scale, so their "
+        "effect is a geometric-mean ratio. p (Holm) is adjusted within each table section and model; the "
+        "omnibus and overall tests stand alone. Effect size: matched-pairs rank-biserial r (positive: a > b); "
+        f"Friedman: Kendall's W. 95% confidence intervals: {ci}."
+    )
+
+
+def means_table(summary: pd.DataFrame, metric: str, by_mode: bool = True) -> list[str]:
+    header = "| Model | Mode | Papers | Mean | 95% CI |" if by_mode else "| Model | Papers | Mean | 95% CI |"
+    lines = [header, "|---|---|---|---|---|" if by_mode else "|---|---|---|---|"]
+    for _, row in summary.iterrows():
+        cells = [str(row["benchmark_label"])]
+        if by_mode:
+            cells.append(mode_label(str(row["mode"])))
+        cells += [
+            str(int(row[f"{metric}_paper_count"])),
+            format_value(row[f"{metric}_mean"]),
+            f"[{format_value(row[f'{metric}_ci_low'])}, {format_value(row[f'{metric}_ci_high'])}]",
+        ]
+        lines.append("| " + " | ".join(cells) + " |")
+    return lines
+
+
+def tests_table(tests: pd.DataFrame) -> list[str]:
+    if tests.empty:
+        return ["No tests (not enough paired papers)."]
+    if (tests["test"] == "Friedman").all():
+        lines = ["| Model | Conditions | Papers | χ² | p | Kendall's W |", "|---|---|---|---|---|---|"]
+        for _, row in tests.iterrows():
+            lines.append(
+                f"| {row['scope']} | {row['condition_a']} | {int(row['n'])} | {format_value(row['statistic'])} "
+                f"| {format_p(row['p_value'])} | {format_value(row['effect_size'])} |"
+            )
+        return lines
+    lines = [
+        "| Scope | a | b | Papers | Mean a | Mean b | Effect [95% CI] | W | p | p (Holm) | r |",
+        "|---|---|---|---|---|---|---|---|---|---|---|",
+    ]
+    for _, row in tests.iterrows():
+        effect = (
+            f"{'ratio' if row['effect_type'].startswith('ratio') else 'Δ'} {format_value(row['effect'])} "
+            f"[{format_value(row['effect_ci_low'])}, {format_value(row['effect_ci_high'])}]"
+        )
+        lines.append(
+            f"| {row['scope']} | {row['condition_a']} | {row['condition_b']} | {int(row['n'])} "
+            f"| {format_value(row['mean_a'])} | {format_value(row['mean_b'])} | {effect} "
+            f"| {format_value(row['statistic'])} | {format_p(row['p_value'])} | {format_p(row['p_holm'])} "
+            f"| {format_value(row['effect_size'])} |"
+        )
+    return lines
+
+
+def metric_test_sections(tests: pd.DataFrame, metric: str, families: list[str]) -> list[str]:
+    lines = []
+    for family in families:
+        rows = tests.loc[(tests["family"] == family) & (tests["metric"] == metric)] if not tests.empty else tests
+        if rows.empty:
+            continue
+        lines += ["", f"### {TEST_FAMILY_TITLES[family]}", "", *tests_table(rows)]
+    return lines
+
+
+def write_markdown(path: Path, title: str, intro: str, ci_method: str, body: list[str]) -> None:
+    text = [f"# {title}", "", intro, "", "## Methods", "", methods_text(ci_method), *body, ""]
+    path.write_text("\n".join(text), encoding="utf8")
+
+
+def write_statistics_markdown(
+    output_dir: Path,
+    summary: pd.DataFrame,
+    overall_summary: pd.DataFrame,
+    tests: pd.DataFrame,
+    ci_method: str,
+) -> None:
+    """One MD file next to each figure, plus statistical_tests.md with every test."""
+    by_mode_families = [
+        "between_models_by_mode", "modes_pairwise", "execution", "morpheus_modes_omnibus", "morpheus_modes_pairwise",
+    ]
+    figure_metrics = {
+        "biological_score_by_model_and_mode": "biological_score",
+        "api_cost_by_model_and_mode": "total_cost_usd",
+        **{stem: metric for metric, stem in EXTRA_METRIC_FIGURES.items()},
+    }
+    for stem, metric in figure_metrics.items():
+        if f"{metric}_mean" not in summary.columns:
+            continue
+        label = COMPARISON_METRICS[metric][1]
+        write_markdown(
+            output_dir / f"{stem}_stats.md",
+            f"{label}: statistics for {stem}",
+            "Box plots show paper-level means; the diamond and black bar are the mean across papers and its 95% CI. "
+            "The p-values in the figure are the Holm-adjusted between-model tests of the first table section.",
+            ci_method,
+            ["", "## Means across papers", "", *means_table(summary, metric),
+             "", "## Tests", *metric_test_sections(tests, metric, by_mode_families)],
+        )
+    pareto_body = []
+    for metric in ("biological_score", "total_cost_usd"):
+        pareto_body += ["", f"## {COMPARISON_METRICS[metric][1]}", "", *means_table(summary, metric),
+                        *metric_test_sections(tests, metric, ["between_models_by_mode"])]
+    write_markdown(
+        output_dir / "api_cost_biological_score_pareto_by_model_stats.md",
+        "Statistics for api_cost_biological_score_pareto_by_model",
+        "Each point is a model × mode mean across papers with 95% CIs on both axes. Tests within each model are "
+        "in biological_score_by_model_and_mode_stats.md and api_cost_by_model_and_mode_stats.md.",
+        ci_method,
+        pareto_body,
+    )
+    overall_body = []
+    for metric in ("biological_score", "total_cost_usd"):
+        overall_body += ["", f"## {COMPARISON_METRICS[metric][1]}", "",
+                         *means_table(overall_summary, metric, by_mode=False),
+                         *metric_test_sections(tests, metric, ["between_models_overall"])]
+    write_markdown(
+        output_dir / "overall_score_and_cost_by_model_stats.md",
+        "Statistics for overall_score_and_cost_by_model",
+        "Each paper is first averaged over the four Morpheus modes, then over papers.",
+        ci_method,
+        overall_body,
+    )
+    all_body = []
+    for metric in [metric for metric in COMPARISON_METRICS if f"{metric}_mean" in summary.columns]:
+        all_body += ["", f"## {COMPARISON_METRICS[metric][1]}",
+                     *metric_test_sections(tests, metric, [*by_mode_families, "between_models_overall"])]
+    write_markdown(output_dir / "statistical_tests.md", "Statistical tests", "All tests; also in statistical_tests.csv.",
+                   ci_method, all_body)
 
 
 def write_comparison_outputs(
     records: pd.DataFrame,
     output_dir: Path,
     formats: Iterable[str],
+    ci_method: str = "bootstrap",
+    show_significance: bool = True,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     output_dir.mkdir(parents=True, exist_ok=True)
     included, excluded = split_never_started(records)
@@ -525,17 +1138,24 @@ def write_comparison_outputs(
         if column in excluded.columns
     ]
     excluded[excluded_columns].to_csv(output_dir / "benchmark_model_comparison_excluded_runs.csv", index=False)
-    paper_records, summary = aggregate_comparison_records(included)
-    overall_papers, overall_summary = aggregate_overall_records(paper_records)
+    paper_records, summary = aggregate_comparison_records(included, ci_method)
+    overall_papers, overall_summary = aggregate_overall_records(paper_records, ci_method)
+    tests = compute_statistical_tests(paper_records, overall_papers, ci_method)
+    tests.to_csv(output_dir / "statistical_tests.csv", index=False)
     paper_records.to_csv(output_dir / "benchmark_model_comparison_by_paper_mode.csv", index=False)
     summary.to_csv(output_dir / "benchmark_model_comparison_by_model_mode.csv", index=False)
     overall_papers.to_csv(output_dir / "benchmark_model_comparison_overall_by_paper.csv", index=False)
     overall_summary.to_csv(output_dir / "benchmark_model_comparison_overall.csv", index=False)
     analysis.configure_matplotlib()
-    make_biological_score_figure(paper_records, summary, output_dir, formats)
-    make_cost_figure(paper_records, summary, output_dir, formats)
+    figure_tests = tests if show_significance else None
+    make_biological_score_figure(paper_records, summary, output_dir, formats, ci_method, figure_tests)
+    make_cost_figure(paper_records, summary, output_dir, formats, ci_method, figure_tests)
+    for metric in EXTRA_METRIC_FIGURES:
+        if metric in paper_records.columns and paper_records[metric].notna().any():
+            make_metric_figure(paper_records, summary, metric, output_dir, formats, ci_method, figure_tests)
     make_pareto_figure(summary, output_dir, formats)
-    make_overall_figure(overall_summary, output_dir, formats)
+    make_overall_figure(overall_summary, output_dir, formats, figure_tests)
+    write_statistics_markdown(output_dir, summary, overall_summary, tests, ci_method)
     return paper_records, summary
 
 
@@ -549,7 +1169,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Error: {exc}")
         return 2
     excluded = never_started_mask(records)
-    _, summary = write_comparison_outputs(records, output_dir, args.formats)
+    _, summary = write_comparison_outputs(records, output_dir, args.formats, args.ci, args.significance)
     print(f"Wrote comparison for {len(benchmark_dirs)} benchmark runs to {output_dir}")
     if excluded.any():
         counts = records.loc[excluded].groupby("benchmark_label", sort=False).size()
@@ -561,10 +1181,12 @@ def main(argv: list[str] | None = None) -> int:
                 "benchmark_label",
                 "mode",
                 "biological_score_mean",
-                "biological_score_ci95",
+                "biological_score_ci_low",
+                "biological_score_ci_high",
                 "biological_score_paper_count",
                 "total_cost_usd_mean",
-                "total_cost_usd_ci95",
+                "total_cost_usd_ci_low",
+                "total_cost_usd_ci_high",
             ]
         ].to_string(index=False)
     )

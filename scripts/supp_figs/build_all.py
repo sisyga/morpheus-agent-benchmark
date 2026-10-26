@@ -1,4 +1,4 @@
-"""Build the paper-comparison supplementary figures of the Morpheus.AI benchmark.
+"""Build the paper-comparison supplementary figures of the Morpheus agent benchmark.
 
     python scripts/supp_figs/build_all.py --runs <benchmark dir> --out <new output folder> [--only 02_Thapa2024 ...]
 

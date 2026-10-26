@@ -1,6 +1,6 @@
 # Paper-comparison supplementary figures
 
-Script-built supplementary figures of the Morpheus.AI benchmark paper: one figure per benchmark paper
+Script-built supplementary figures of the benchmark preprint (Chandratre et al., 2026): one figure per benchmark paper
 (180 x 185 mm) comparing the agent's reimplementation with the original publication, plus a model-graph
 supplementary figure.
 

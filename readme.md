@@ -1,14 +1,14 @@
-# Morpheus.AI
+# Morpheus agent benchmark
 
-This repository accompanies the Morpheus.AI benchmark study and also serves as a general-purpose Morpheus modeling toolkit. The current workflow uses the Codex SDK, a reusable Morpheus skill, and a thin Python MCP server for deterministic tasks such as PDF staging, XML writing, Morpheus execution, and output inspection.
+This repository holds the code of a benchmark that tests whether LLM-based coding agents can rebuild published multicellular models in the simulator [Morpheus](https://morpheus.gitlab.io). An agent receives one of 15 papers, writes a MorpheusML model of it, runs Morpheus, and revises the model within a fixed time budget. A separate scoring agent can then check the simulation output against paper-specific criteria. The code accompanies the preprint "LLM-based agents can autonomously generate, execute, and refine in silico models" (Chandratre et al., 2026).
 
-At the repository level there are three main pieces:
+The repository has three parts:
 
-- a benchmark runner that tests whether an agent can recreate Morpheus models from published papers;
-- a reusable Morpheus skill and MCP tool layer that can also be used for broader modeling tasks beyond benchmarking;
-- an analysis script that converts completed benchmark folders into CSV summaries and publication-oriented figures.
+- a benchmark runner, built on the Codex SDK, that runs each paper under five tool configurations (modes) and scores the results;
+- a Morpheus skill and a Python MCP server for PDF staging, XML writing, Morpheus execution, and output inspection, which also serve modeling tasks outside the benchmark;
+- analysis scripts that turn finished benchmark folders into CSV tables, statistical tests, and figures.
 
-The benchmark runs, scores, and manual scores reported in the accompanying preprint are archived separately on Zenodo (dataset DOI to be added). This repository holds the code and the scoring criteria. To cite it, use [CITATION.cff](CITATION.cff) or the Zenodo record of the release.
+The benchmark runs, automated scores, and manual scores reported in the preprint are archived in a separate Zenodo dataset (DOI to be added). Cite this code with [CITATION.cff](CITATION.cff) or its Zenodo record.
 
 ## Installation
 
@@ -41,15 +41,16 @@ For Linux commands, WSL2 installation, native Windows sandbox initialization, Mo
 
 1. Run `uv sync --locked` and `npm ci` to install Python and Node dependencies.
 2. Confirm that `codex login status` and `morpheus --help` both work.
-3. Run `npm run benchmark -- --max-papers 1`.
-4. Run `uv run --locked python analyze_benchmark.py benchmark_runs/<timestamp>_benchmark`.
-5. Inspect the new timestamped benchmark folder under `benchmark_runs/`.
+3. Add the paper PDFs to `benchmark_papers/` as described in [benchmark_papers/README.md](benchmark_papers/README.md).
+4. Run `npm run benchmark -- --max-papers 1`.
+5. Run `uv run --locked python analyze_benchmark.py benchmark_runs/<timestamp>_benchmark`.
+6. Inspect the new timestamped benchmark folder under `benchmark_runs/`.
 
 ## What the benchmark does
 
-For each PDF in `benchmark_papers/`, the runner can run one or more benchmark capability modes. The default mode is `morpheus_mcp`, which preserves the original full harness behavior. The available modes are:
+For each PDF in `benchmark_papers/`, the runner can run one or more benchmark capability modes. The default mode is `morpheus_mcp`, which gives the agent every tool. The available modes are:
 
-- `python_web`: web search + Python only. The agent must still produce MorpheusML `model.xml`; the host runs Morpheus afterward for technical scoring.
+- `python_web`: web search + Python only. The agent must still produce MorpheusML `model.xml`; the host runs Morpheus on it afterward so that its output can be scored.
 - `morpheus_cli`: web search + Python + Morpheus CLI, without the Morpheus skill or MCP tools.
 - `morpheus_cli_docs`: Python + Morpheus CLI with internet disabled, using only staged MorpheusML documentation and the basic model template.
 - `morpheus_skill`: web search + Python + Morpheus CLI + Morpheus skill, without MCP tools.
@@ -66,15 +67,17 @@ For each selected paper, mode, and repetition, the runner:
 7. gives the subject one continuous, time-bounded execution; only a classified infrastructure failure may trigger one clean replacement with a new thread and empty workspace;
 8. regenerates deterministic summaries, analysis tables, and figures unless disabled.
 
-Two score tracks are written for each paper, with an optional third biological score track:
+Each run writes up to three scores:
 
-- `technical_evaluation.json`: the legacy 0-7 executability score.
-- `reproduction_report.json`: a structured 0-8 reproduction assessment with four 0-2 criteria:
+- `biological_scores/scorer-v...json`: the 0-1 biological score that the preprint reports, written when biological scoring is enabled (`--score-biological` or `npm run score:biology`). An independent scoring agent checks the run's output against the paper's clauses in `biological_scoring_criteria.json`. Scores are stored by scorer cohort, so rescoring never overwrites earlier scores. A same-named folder next to each score file holds that scorer's `transcript.jsonl` and `codex_home/` snapshot. The benchmark-level `biological_scores/<scorer cohort>/biological_score_details.xlsx` collects the per-run files into one clause-level workbook.
+- `reproduction_report.json`: the agent's own 0-8 assessment of its final model, with four 0-2 criteria:
   - `source_coverage`
   - `mechanism_mapping`
   - `observable_alignment`
   - `parameter_plausibility`
-- `biological_scores/scorer-v...json`: optional 0-1 quantitative biological score from repo-owned criteria in `biological_scoring_criteria.json`, stored by scorer cohort so rescoring never overwrites historical provenance. A same-named folder next to each score file holds that scorer's `transcript.jsonl` and `codex_home/` snapshot. The benchmark-level `biological_scores/<scorer cohort>/biological_score_details.xlsx` collects those per-run files into one clause-level workbook.
+
+  The agent also rates each attempt on this rubric (`attempt_reproduction.json`). These self-scores guide its revisions; the preprint does not use them for evaluation.
+- `technical_evaluation.json`: a deterministic 0-7 executability score of the host's Morpheus run. The preprint does not use it.
 
 The default runner concurrency is one job at a time. Linux and WSL2 can run independent paper/mode/repetition jobs in parallel with `--max-concurrent-jobs`; native Windows clamps benchmark, recovery, and biological-scoring agent concurrency to `1`. Each benchmark invocation writes benchmark-level diagnostics in the timestamped benchmark directory. It does not modify the source PDFs or the Morpheus skill reference material.
 
@@ -107,13 +110,15 @@ The default runner concurrency is one job at a time. Linux and WSL2 can run inde
 - `sync_biological_scoring_criteria.py`
   Synchronizes the runtime JSON with the criteria workbook. It reads clause weights from the tables as written and refuses workbooks whose formula rows or Share column disagree with the clause tables. Run it without `--update` to check for drift, or with `--update` to refresh the JSON.
 - `manual_biological_scores.py`
-  Exports the V3 manual calibration scores. When the workbook has an `Updated_manual_scores_*` sheet (the 05.10.2026 rescoring), its Mean column O is authoritative, keyed by run id and mode column J, and the run's two criteria from columns K and L are joined into `result_criterion`; the extractor refuses the sheet if the Mode or Mean headers move. Workbooks without that sheet fall back to column V of the active sheet, where columns T, U, and AF are retained only as provenance and never override V. The manual score workbooks are archived with the benchmark dataset, not in this repository.
+  Exports the manual scores of a scoring workbook (`Benchmark_Manual_Scores_*.xlsx`, archived with the benchmark dataset) to the CSV files that `biological_score_comparison.py` reads. It takes each run's score from the Mean column of an `Updated_manual_scores_*` sheet, or from column V of the active sheet when the workbook has no such sheet, and refuses a sheet whose Mode or Mean headers have moved.
+- `biological_score_comparison.py`
+  Compares the manual with the automated biological scores of the same runs to validate the scorer.
 - `biological_score_details.py`
   Writes the clause-level scoring workbooks, one per scorer cohort, from the score JSON files a benchmark already contains.
 - `compare_benchmarks.py`
-  Compares complete benchmark runs of two or more models.
+  Compares complete benchmark runs of two or more models, with paired statistical tests.
 - `scripts/`
-  `benchmark_time_left.py` (the subject's time-left command), the Codex smoke checks, `stranded-runs/` (finalizes runs stranded by the 2026-10-11 disk-full incident), and `supp_figs/` (the paper-comparison supplementary figures; see its README).
+  `benchmark_time_left.py` (the subject's time-left command), the Codex smoke checks, `stranded-runs/` (finalizes executions whose host process failed after the subject had finished; written after a full disk on 2026-10-11), and `supp_figs/` (the paper-comparison supplementary figures; see its README).
 - `tests/`
   Python (`pytest`) and TypeScript (`npm run test:ts`) test suites. Tests that need the benchmark paper PDFs skip when the PDFs are missing.
 - `LICENSE`, `NOTICE`, `CITATION.cff`, `.zenodo.json`
@@ -185,8 +190,8 @@ Core run selection:
 
 Model and runtime controls:
 
-- `--model <name>`: override the Codex model, e.g. `gpt-6.1-sol` or `gpt-6-luna` (benchmark v2 used `gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`).
-- `--reasoning-effort <none|low|medium|high|xhigh|max>`: override reasoning effort. `minimal` remains accepted only for legacy configuration compatibility. The default is `gpt-6.1-sol` at `xhigh`.
+- `--model <name>`: override the Codex model, e.g. `gpt-6.1-sol` or `gpt-6-luna`.
+- `--reasoning-effort <none|low|medium|high|xhigh|max>`: override reasoning effort. The default is `gpt-6.1-sol` at `xhigh`.
 - `--total-time-limit-minutes <number>`: total active subject time per paper/mode/repetition. The default is 240 minutes (4 hours).
 - `--finalization-reserve-minutes <number>`: reserve inside that total during which new Morpheus simulations are refused so the subject can inspect artifacts and finalize. The default is 10 minutes.
 - `--max-concurrent-jobs <number>`: run independent paper/mode/repetition jobs in parallel on Linux or WSL2; native Windows records and uses `1`.
@@ -208,8 +213,8 @@ Model and runtime controls:
 - `--no-analysis`: skip the automatic final `analyze_benchmark.py` step.
 
 Recovery and aggregation:
-- `--recover-run <benchmark run dir>`: rerun recorded infrastructure failures that have not used their one clean replacement, launch assignments the queue never started, re-audit stored capability events, then rebuild v2 summaries/reports. Successful assignments and benchmark outcomes such as time limits are not relaunched. Historical v1 runs are read-only.
-- `--combine-runs <benchmark run dir> <benchmark run dir> [...]`: combine completed benchmark folders from the same cohort. When a later folder repeats a paper/mode repetition, its results are appended as additional repetitions (recorded with `sourceBenchmarkRunDir` and `sourceRepetition`) rather than overwriting earlier ones. The combined summary reports the source runs' configuration.
+- `--recover-run <benchmark run dir>`: rerun recorded infrastructure failures that have not used their one clean replacement, launch assignments the queue never started, re-audit stored capability events, then rebuild summaries/reports. Successful assignments and benchmark outcomes such as time limits are not relaunched. Runs of the version 1 protocol (`max_cycles_v1`) are read-only.
+- `--combine-runs <benchmark run dir> <benchmark run dir> [...]`: combine completed benchmark folders from the same cohort, that is, with the same protocol, benchmark version, skill and prompt hashes, time budget, subject and scorer models and efforts, scorer version, job concurrency, and Morpheus thread count. When a later folder repeats a paper/mode repetition, its results are appended as additional repetitions (recorded with `sourceBenchmarkRunDir` and `sourceRepetition`) rather than overwriting earlier ones. The combined summary reports the source runs' configuration.
 - `--combined-run-dir <output dir>`: output folder for a combined run summary.
 
 Subject work is never resumed with mismatched context and workspace state. One classified infrastructure failure may receive one replacement execution during the run or a later explicit `--recover-run`, but that replacement starts with a new execution ID, new thread, new Codex home, empty workspace, and the full configured budget. Infrastructure failures include failures before the subject starts (run creation, paper extraction, command-runner preflight) and Codex exiting with an error mid-execution. Systemic command-runner preflight failures are not replaced automatically because the replacement would fail the same way; they stop the queue instead. A host-side error after the subject has started is not replaced automatically. The automatic post-run recovery pass only performs deterministic postprocessing. Time limits, Morpheus timeouts, malformed final output, and invalid model XML are benchmark outcomes rather than retry reasons.
@@ -229,47 +234,6 @@ uv run --locked python analyze_benchmark.py benchmark_runs/<timestamp>_benchmark
 ```
 
 By default the script writes to `<benchmark_dir>/analysis_figures/`. Use `--out-dir <path>` to choose another output directory and `--formats png svg pdf` to control figure formats. Pass `--no-analysis` to `npm run benchmark -- ...` if you want the benchmark CLI to skip the automatic final analysis step.
-
-To compare complete benchmark runs produced by different models, run:
-
-```powershell
-uv run --locked python compare_benchmarks.py benchmark_runs/<first>_benchmark benchmark_runs/<second>_benchmark [benchmark_runs/<third>_benchmark ...] --out-dir benchmark_model_comparison
-```
-
-The comparison script accepts two or more benchmark folders, with optional `--labels` (one per folder; default `<model> (<reasoning effort>)`). It refuses to compare runs whose protocol, time budget, benchmark version, or scorer cohort differ unless `--force` is passed. Runs whose subject never started (no tokens and no cost) are excluded from both score and cost and listed in `benchmark_model_comparison_excluded_runs.csv`; failed runs that did spend tokens keep their intention-to-treat score. Repetitions are averaged within each paper and mode first, so runs with different repetition counts receive equal paper weighting, and papers are the unit of replication. It writes PNG, PDF, and SVG by default (`--formats` selects a subset): `biological_score_by_model_and_mode` and `api_cost_by_model_and_mode` (box plots of paper-level means, cost on a log axis), `api_cost_biological_score_pareto_by_model` (mode means with 95% confidence intervals, mean ± t·SD/√n across papers, and the Pareto frontier), and `overall_score_and_cost_by_model` (per-model means over the four Morpheus modes with 95% confidence intervals). Figures carry no titles so captions can describe them. Paper-level, model/mode-level, and overall source CSVs are written alongside; the summaries keep the across-paper SD next to the confidence interval.
-
-To score biology for an existing run without rerunning the benchmark, run:
-
-```powershell
-npm run score:biology -- benchmark_runs/<timestamp>_benchmark --model gpt-6-luna --reasoning-effort high --max-concurrent-jobs 4 --skip-scored-attempts
-uv run --locked python analyze_benchmark.py benchmark_runs/<timestamp>_benchmark
-```
-
-The standalone scorer accepts `--model`, `--reasoning-effort`, `--max-concurrent-jobs`, `--criteria-path`, `--turn-timeout-ms`, and `--skip-scored-attempts`. Its concurrency option applies on Linux and WSL2 and is clamped to `1` on native Windows. Each scorer works read-only with the canonical attempt as its sole scoring target. It can also inspect the run's `agent_workspace` and the staged Morpheus skill to interpret assets referenced by the canonical `model.xml`, but outputs or alternative models in that reference workspace are not scoring evidence. Network access, web search, plugins, and Morpheus MCP tools remain disabled. Failed canonical simulations without scoreable output receive `model_failed` and score zero without invoking a scoring agent. Missing evidence without an explicit execution failure receives `insufficient_evidence` and a null score. Partial runs with scoreable output receive credit for demonstrated behavior, using the last observed state for endpoint clauses. Cached scores are reused only when the scorer version/model/effort, criteria SHA-256, and attempt-artifact SHA-256 all match.
-
-### Clause-level scoring workbooks
-
-After scoring, the runner writes `biological_scores/<scorer cohort>/biological_score_details.xlsx` in the benchmark folder; if that step fails, scoring still completes and the log says why. The same workbooks can be rebuilt at any time from score files a benchmark already holds, including cohorts written by earlier scorer versions:
-
-```powershell
-uv run --locked python biological_score_details.py benchmark_runs/<timestamp>_benchmark --list-variants
-uv run --locked python biological_score_details.py benchmark_runs/<timestamp>_benchmark
-```
-
-Each workbook covers one scorer cohort: `scorer-v<version>__<model>__<effort>__criteria-v<version>-<sha12>`, derived from the score files themselves, so legacy scores written before provenance was recorded collect in a `legacy-unversioned` cohort. `Overview` holds the cohort provenance, status counts, and mean score per mode; `Criteria` maps each `cNN` column prefix to its clause id, kind, weight, and description; and one sheet per paper carries a row for every mode and repetition with the clause verdict, observed value, evidence, and rationale side by side, plus the summary, limitations, and total score. Runs the cohort never scored appear with status `missing`, so each sheet is a complete paper-by-mode matrix. Clause metadata comes from `biological_scoring_criteria.json` only when its SHA-256 matches the cohort; otherwise the clause columns fall back to the ids observed in the score files and `Overview` says so. `--variant` limits the export to one cohort, `--manual-csv` adds manual-score deltas, and `--all-runs-sheet` adds a flat cross-paper sheet.
-
-Scorer v8 uses criteria v7 (`Biological_scoring_criteria_v7.xlsx`). Compared with v5, Thapa uses 120 h endpoint ratios (cancer 10–30, non-senescent 5–15, senescent 0); Atwell's U-shape clause scores the realized tissue (at least 10 cells past the apex of the U-turn); Berkhout has six equally weighted clauses including paraxial mesoderm differentiation, somite formation, and surface ectoderm growth; Carpenter evaluates the area ratio at the end relative to A_S and converts A_SC-relative outputs using model.xml; Scheel accepts PNG/VTK evidence without CSV; and Anlas, Malkmus, and Mole wording is clarified. Since criteria v5: Anlas population growth explicitly accepts both exact doubling and exact tripling (2 ≤ final/initial ≤ 3), superseding v4's interval 2 ≤ final/initial < 3. The Anlas axis and Sox/Bra-T opposition clauses require final spatial patterns; cell-level expression anticorrelation alone does not establish spatial opposition. Thapa has one rubric for all observed durations, and Atwell geometry is evaluated from realized output independently of whether it uses an image domain, an analytical domain, or cell trajectories. Paper-specific instructions set the agreed simulation windows; the common subject prompt requests initial and final CSV states with time units.
-
-The scorer reads the synchronized JSON at runtime. To check or refresh it from the criteria workbook (`--workbook` selects another file, e.g. a fresh Numbers export):
-
-```powershell
-uv run --locked python sync_biological_scoring_criteria.py
-uv run --locked python sync_biological_scoring_criteria.py --update
-```
-
-Manual-versus-agent comparison writes the row, paper/mode, mode, and paper-criterion CSV summaries plus `biological_score_discrepancy_report.md`. The criterion CSV counts exact agreements, discrepancies, over-scores, and under-scores for every paper-specific criterion; the report includes overall and scored-only performance statistics, status coverage, common score mismatches, and the largest individual errors. It also reports OLS regression of unbinned agent scores on manual scores (slope, intercept, R²), slope deviations from 1 and 0.5, and mean signed bias (agent minus manual). Perfect agreement has slope 1 and intercept 0; the 0.5 reference is included separately to address the review request. Undefined regressions or R² are reported as NA.
-
-The manual-versus-agent figure uses a 5×5 count heatmap with 0.2-wide score bins and explicit counts in occupied bins. The colour scale starts at one observation, so empty bins fall below it and take the colormap's under colour, which the colorbar shows as an arrow below its lowest count; the plots have no grid lines. The default reversed colour map uses light colours for low counts and dark colours for high counts, with empty bins in white. A second figure, `biological_score_manual_vs_agent_dark`, uses the original colour map, also with white empty bins so they stay distinct from its dark low-count end. The axes span exactly 0–1, so the heatmap fills the frame. Both alternatives are exported as PNG, SVG, and PDF with the same count scale; the dashed diagonal marks perfect agreement. Regenerate these outputs after importing the completed manual scores.
 
 The analysis output includes:
 
@@ -296,9 +260,61 @@ The analysis output includes:
 - `attempt_self_scores_by_paper`
 - `attempt_self_scores_by_mode`
 
-The standalone score figure uses a box-plot grid for technical, reproduction, and available biological score sources across all papers, papers 1-10 with modeling-keyword overlap, and papers 11-15 requiring more biological abstraction. The overview quality panel also uses box plots rather than mean-and-standard-deviation bars. The token and API-cost figures each use an all-paper two-panel layout: stacked component means on the left and total-value box plots on the right. The runtime and outcome cohort figures use three side-by-side stacked-bar panels for the same paper splits.
+The standalone score figure uses a box-plot grid for technical, reproduction, and available biological score sources across all papers, papers 1-10 with modeling-keyword overlap, and papers 11-15 requiring more biological abstraction. The overview quality panel uses box plots as well. The token and API-cost figures each use an all-paper two-panel layout: stacked component means on the left and total-value box plots on the right. The runtime and outcome cohort figures use three side-by-side stacked-bar panels for the same paper splits.
 
 Attempt-level plots use `attempt_reproduction.json` files written by agents inside attempt folders. If an agent attempt folder is missing that file, the analysis script derives the attempt number from the `attempt_###` directory name and keeps its score blank rather than inventing a zero.
+
+To compare complete benchmark runs produced by different models, run:
+
+```powershell
+uv run --locked python compare_benchmarks.py benchmark_runs/<first>_benchmark benchmark_runs/<second>_benchmark [benchmark_runs/<third>_benchmark ...] --out-dir benchmark_model_comparison
+```
+
+The comparison script accepts two or more benchmark folders, with optional `--labels` (one per folder; default `<model> (<reasoning effort>)`). It refuses to compare runs whose protocol, time budget, benchmark version, or scorer cohort differ unless `--force` is passed. Runs whose subject never started (no tokens and no cost) are excluded from both score and cost and listed in `benchmark_model_comparison_excluded_runs.csv`; failed runs that did spend tokens keep their intention-to-treat score. Repetitions are averaged within each paper and mode first, so runs with different repetition counts receive equal paper weighting, and papers are the unit of replication. It writes PNG, PDF, and SVG by default (`--formats` selects a subset): `biological_score_by_model_and_mode` and `api_cost_by_model_and_mode` (box plots of paper-level means, cost on a log axis), `technical_score_by_model_and_mode`, `active_time_by_model_and_mode` and `revisions_by_model_and_mode` (the same box plots for the technical score, subject active time and model revisions), `api_cost_biological_score_pareto_by_model` (mode means with 95% confidence intervals and the Pareto frontier), and `overall_score_and_cost_by_model` (per-model means over the four Morpheus modes with 95% confidence intervals). Confidence intervals are 95% BCa bootstrap intervals over papers (`--ci t` switches to mean ± t·SD/√n). Box plots draw the mean and its CI over each box, a bracket in each mode with asterisks for the significance level (* p < 0.05, ** p < 0.01, *** p < 0.001, n.s.) of the Holm-adjusted paired between-model test, and a compact letter display per model: modes of one model that share no letter differ (pairwise Wilcoxon over all modes, Holm-adjusted, p < 0.05). `--no-significance` leaves brackets and letters out of the figures; the MD files are written either way. Figures carry no titles so captions can describe them. Paper-level, model/mode-level, and overall source CSVs are written alongside; the summaries keep the across-paper SD next to the confidence interval.
+
+Statistics compare the paper-level means paired by paper: two-sided Wilcoxon signed-rank tests with zero differences kept in the ranking (Pratt) and the exact sign-flip null, which stays valid with scores tied at the ceiling; cost and active time are compared on a log scale and reported as geometric-mean ratios. Between models the script tests each mode (Holm across modes) and the Morpheus-mode average; within each model it tests each Morpheus mode against Python + web (Holm across modes), runs a Friedman test across the Morpheus modes, and all Morpheus-mode pairs post hoc (Holm across pairs). Every figure gets a `<figure>_stats.md` next to it with the means, CIs, effects, raw and Holm-adjusted p-values and rank-biserial effect sizes; `statistical_tests.md` and `statistical_tests.csv` hold all tests.
+
+To score biology for an existing run without rerunning the benchmark, run:
+
+```powershell
+npm run score:biology -- benchmark_runs/<timestamp>_benchmark --model gpt-6-luna --reasoning-effort high --max-concurrent-jobs 4 --skip-scored-attempts
+uv run --locked python analyze_benchmark.py benchmark_runs/<timestamp>_benchmark
+```
+
+The standalone scorer accepts `--model`, `--reasoning-effort`, `--max-concurrent-jobs`, `--criteria-path`, `--turn-timeout-ms`, and `--skip-scored-attempts`. Its concurrency option applies on Linux and WSL2 and is clamped to `1` on native Windows. Each scorer works read-only with the canonical attempt as its sole scoring target. It can also inspect the run's `agent_workspace` and the staged Morpheus skill to interpret assets referenced by the canonical `model.xml`, but outputs or alternative models in that reference workspace are not scoring evidence. Network access, web search, plugins, and Morpheus MCP tools remain disabled. Failed canonical simulations without scoreable output receive `model_failed` and score zero without invoking a scoring agent. Missing evidence without an explicit execution failure receives `insufficient_evidence` and a null score. Partial runs with scoreable output receive credit for demonstrated behavior, using the last observed state for endpoint clauses. Cached scores are reused only when the scorer version/model/effort, criteria SHA-256, and attempt-artifact SHA-256 all match.
+
+### Clause-level scoring workbooks
+
+After scoring, the runner writes `biological_scores/<scorer cohort>/biological_score_details.xlsx` in the benchmark folder; if that step fails, scoring still completes and the log says why. The same workbooks can be rebuilt at any time from score files a benchmark already holds, including cohorts written by earlier scorer versions:
+
+```powershell
+uv run --locked python biological_score_details.py benchmark_runs/<timestamp>_benchmark --list-variants
+uv run --locked python biological_score_details.py benchmark_runs/<timestamp>_benchmark
+```
+
+Each workbook covers one scorer cohort: `scorer-v<version>__<model>__<effort>__criteria-v<version>-<sha12>`, derived from the score files themselves; scores written before scorer provenance was recorded collect in a `legacy-unversioned` cohort. `Overview` holds the cohort provenance, status counts, and mean score per mode; `Criteria` maps each `cNN` column prefix to its clause id, kind, weight, and description; and one sheet per paper carries a row for every mode and repetition with the clause verdict, observed value, evidence, and rationale side by side, plus the summary, limitations, and total score. Runs the cohort never scored appear with status `missing`, so each sheet is a complete paper-by-mode matrix. Clause metadata comes from `biological_scoring_criteria.json` only when its SHA-256 matches the cohort; otherwise the clause columns fall back to the ids observed in the score files and `Overview` says so. `--variant` limits the export to one cohort, `--manual-csv` adds manual-score deltas, and `--all-runs-sheet` adds a flat cross-paper sheet.
+
+The scorer of this release (scorer v8) applies criteria v7 from `Biological_scoring_criteria_v7.xlsx`, the version used in the preprint. Each paper's sheet gives the target, the scoring instructions, and the weighted clauses. The common subject prompt asks the agent for initial and final CSV states with time units, so that endpoint clauses can be checked.
+
+The scorer reads the synchronized JSON at runtime. To check or refresh it from the criteria workbook (`--workbook` selects another file, e.g. a fresh Numbers export):
+
+```powershell
+uv run --locked python sync_biological_scoring_criteria.py
+uv run --locked python sync_biological_scoring_criteria.py --update
+```
+
+### Validating the scorer against manual scores
+
+The preprint validates the automated scorer against manual scores of the same runs. To repeat the comparison, export the manual scores of a scoring workbook into the benchmark folder and compare them with the automated scores, which `analyze_benchmark.py` writes to `analysis_figures/benchmark_biological_scores.csv`:
+
+```powershell
+uv run --locked python manual_biological_scores.py <Benchmark_Manual_Scores.xlsx> --output-dir benchmark_runs/<timestamp>_benchmark
+uv run --locked python biological_score_comparison.py benchmark_runs/<timestamp>_benchmark
+```
+
+The comparison writes to `manual_score_comparison/` in the benchmark folder: CSV summaries by run, paper and mode, mode, and paper criterion, and `biological_score_discrepancy_report.md`. The criterion CSV counts exact agreements, discrepancies, over-scores, and under-scores for every paper-specific criterion. The report gives agreement statistics over all runs and over scored runs only, status coverage, common score mismatches, and the largest individual errors. It also reports the ordinary least-squares regression of unbinned automated scores on manual scores (slope, intercept, R²), the slope's deviation from 1 and from 0.5, and the mean signed bias (automated minus manual). Perfect agreement has slope 1 and intercept 0; undefined regressions or R² are reported as NA.
+
+The figure `biological_score_manual_vs_agent` is a 10×10 count heatmap with 0.1-wide score bins (lower edge inclusive; the top bin also holds 1.0) and the count printed in each occupied bin. Scores are fractions k/n of satisfied criteria (n = 3–10), so every bin contains at least one attainable value and 0.8 stays separate from 1.0. The reversed colour map shows low counts light and high counts dark. The colour scale starts at one observation, so empty bins take the colour map's under colour (white), which the colour bar shows as an arrow below its lowest count. A second figure, `biological_score_manual_vs_agent_dark`, uses the non-reversed colour map with the same count scale, again with white empty bins so that they stay distinct from its dark low-count end. Both axes span exactly 0–1, a dashed diagonal marks perfect agreement, and the plots have no grid lines. Both figures are written as PNG, SVG, and PDF.
 
 ## Direct MCP usage
 
@@ -325,17 +341,17 @@ or via `.mcp.json`:
 
 Run these startup forms from the repository root. The benchmark's `mcpCommand` continues to use `python`, which the runner resolves to the project `.venv` interpreter; benchmark agents do not need uv or package downloads at runtime.
 
-This repo does not currently advertise an HTTP `/mcp` endpoint as a supported integration surface.
+The server does not support an HTTP `/mcp` transport.
 
 ## Runtime defaults
 
-Each v2 paper/mode/repetition job receives one continuous subject execution with `totalTimeLimitMs = 14400000` (4 hours) by default. The limit is configurable, not hardcoded:
+Each paper/mode/repetition job receives one continuous subject execution with `totalTimeLimitMs = 14400000` (4 hours) by default. The limit is configurable, not hardcoded:
 
 ```powershell
 npm run benchmark -- --total-time-limit-minutes 300 --finalization-reserve-minutes 10
 ```
 
-The runner starts the authoritative clock only after the Codex child process starts successfully. The master prompt gives the subject the exact total, soft cutoff, and hard cutoff. `benchmark-time-left` reports the current remaining time whenever the subject invokes it. There are no modeling cycles, continuation prompts, or free finalization executions.
+The runner starts the authoritative clock only after the Codex child process starts successfully. The master prompt gives the subject the exact total, soft cutoff, and hard cutoff. `benchmark-time-left` reports the current remaining time whenever the subject invokes it. The runner sends no continuation prompts and grants no extra time for finalization.
 
 Jobs run sequentially by default (`maxConcurrentJobs = 1`). On Linux or WSL2, raise the cap to run independent paper/mode jobs in parallel:
 
@@ -372,7 +388,7 @@ Each invocation creates a master directory such as `benchmark_runs/20260427_1530
 - `benchmark_comparison.json` and `benchmark_comparison.csv`
   Mode-level comparison summaries across the selected capability modes.
 - `benchmark_recovery.json` and `assignment_results/`
-  Incremental v2 configuration/job state and independently committed assignment results used after a host crash.
+  Incremental configuration and job state, and independently committed assignment results, used to recover after a host crash.
 - `<timestamp>_<paper-stem>/`
   One isolated working directory per benchmark paper and mode. Codex runs with this paper directory as its working directory, so it does not see sibling paper outputs.
 
@@ -385,7 +401,7 @@ Inside a paper run directory you will typically find:
 - `codex_home/`
   Sanitized snapshot of the isolated Codex home used for audit.
 - `subject_deadline.json` and `subject_execution.json`
-  Authoritative v2 deadlines, direct active-subject duration, and stop reason.
+  Authoritative deadlines, direct active-subject duration, and stop reason.
 - `paper.txt`
   Extracted text from the benchmark PDF.
 - `paper_visual_manifest.json`
@@ -399,13 +415,13 @@ Inside a paper run directory you will typically find:
 - `agent_workspace/.../attempt_###/attempt_reproduction.json`
   Agent-authored attempt-level reproduction self-score, when the mode can execute Morpheus during the agent turn.
 - `technical_evaluation.json`
-  Executability score and breakdown.
+  Executability score and breakdown (not used in the preprint).
 - `reproduction_report.json`
   The structured reproduction rubric returned by the agent.
 - `transcripts/`
   The single subject interaction log (`subject.jsonl`) plus separate preflight logs when present. Biological scorer transcripts live next to their score files under `biological_scores/`.
 
-For v2, analysis uses the directly recorded `subjectExecutionMs`; it does not reconstruct time from session logs or add timeout upper bounds. Subject Morpheus attempts are counted from attempt folders containing `morpheus_command.json`; host technical reruns are reported separately. The per-run analysis also reports attempt folders missing `model.xml`, `attempt_reproduction.json`, or either execution log. Runs that invoked Morpheus through an absolute binary path are marked `launcher_bypass`, and their agent-side Morpheus timing is left blank. Aggregate outputs include ITT scores (unscoreable/missing subject outcomes contribute zero) and valid-only scores. For the biological ITT score, `model_failed` and `insufficient_evidence` count as zero, while scorer-side failures (`scoring_failed`) and runs that were never scored stay missing; `biological_itt_n` reports how many runs the ITT mean covers. Token usage comes from the subject's `turn.completed` event; time-limited or killed subjects never emit one, so their cumulative usage is read from the last `token_count` event in the subject's Codex session rollout. Reasoning tokens are part of output tokens and are priced once, as output.
+Analysis uses the directly recorded `subjectExecutionMs`; it does not reconstruct time from session logs or add timeout upper bounds. Subject Morpheus attempts are counted from attempt folders containing `morpheus_command.json`; host technical reruns are reported separately. The per-run analysis also reports attempt folders missing `model.xml`, `attempt_reproduction.json`, or either execution log. Runs that invoked Morpheus through an absolute binary path are marked `launcher_bypass`, and their agent-side Morpheus timing is left blank. Aggregate outputs include ITT scores (unscoreable/missing subject outcomes contribute zero) and valid-only scores. For the biological ITT score, `model_failed` and `insufficient_evidence` count as zero, while scorer-side failures (`scoring_failed`) and runs that were never scored stay missing; `biological_itt_n` reports how many runs the ITT mean covers. Token usage comes from the subject's `turn.completed` event; time-limited or killed subjects never emit one, so their cumulative usage is read from the last `token_count` event in the subject's Codex session rollout. Reasoning tokens are part of output tokens and are priced once, as output.
 `benchmark_execution_audit.csv` retains both an infrastructure-invalid original and its clean replacement; assignment-level outcome and duration columns select only the replacement.
 
 ## Benchmark behavior
@@ -414,7 +430,7 @@ For v2, analysis uses the directly recorded `subjectExecutionMs`; it does not re
 - Live web search is available during benchmark runs when the agent genuinely needs outside information, but benchmark judgments should remain grounded in the staged paper assets, the Morpheus skill or MCP reference material, and the Morpheus outputs generated in the run directory.
 - The agent is given paper text and a visual manifest up front. Paper page images are not attached by default; instead, agents render only the specific figure pages they need and inspect local PNGs directly with `view_image` when available.
 - If `benchmark_focus/<paper-stem>.txt` exists, the runner adds it as the showcase/validation target and tells the agent to ground the model in the paper's mechanisms first rather than treating the focus as the sole design target.
-- Agents can also sample representative Morpheus output images and inspect those local PNGs directly. The runner no longer has separate image-review turns, image-review budgets, `outputImagePaths`, or `contactSheetPath` fields.
+- Agents can also sample representative Morpheus output images and inspect those local PNGs directly.
 - The subject receives one continuous active-time budget. Morpheus attempts are individual executions within that budget. CLI modes must use the staged `morpheus` launcher rather than an absolute binary path so timing and attempt metadata are captured.
 - For Morpheus-running modes, prompts ask agents to create a fresh attempt folder for each Morpheus attempt, copy the corresponding `model.xml` into that folder, inspect the outputs, and write `attempt_reproduction.json`.
 - The technical score is deterministic, but the reproduction report is a structured qualitative assessment returned by the agent from the staged evidence.
@@ -424,39 +440,37 @@ For v2, analysis uses the directly recorded `subjectExecutionMs`; it does not re
 
 ## Benchmark versions
 
-`BENCHMARK_VERSION` in `src/benchmark/types.ts` identifies the subject-facing setup: the Morpheus skill, the docs-mode references (`morpheusml-doc.md`, `model-template.md`), prompts, and runner behavior. Each released version is frozen as the git tag `benchmark-v<N>`.
+`BENCHMARK_VERSION` in `src/benchmark/types.ts` identifies the subject-facing setup: the Morpheus skill, the docs-mode references (`morpheusml-doc.md`, `model-template.md`), the prompts, and the runner behavior. This release is version 3. The preprint uses runs of all three versions:
 
-| Version | Protocol | Morpheus skill | Runs |
-| --- | --- | --- | --- |
-| v1 | `max_cycles_v1` | prototype | gpt-5.5 and gpt-5.4-mini (prototype, unpublished) |
-| v2 | `time_limit_v2` | 1.3.0 | gpt-5.6-luna, gpt-5.6-terra, gpt-5.6-sol |
-| v3 | `time_limit_v2` | 1.5.1 | gpt-6.1-sol and gpt-6-luna (final runs of the preprint) |
+| Version | Protocol | Morpheus skill | Subject models | Use in the preprint |
+| --- | --- | --- | --- | --- |
+| v1 | `max_cycles_v1` | prototype | gpt-5.5, gpt-5.4-mini | gpt-5.5 runs scored by hand to validate the automated scorer |
+| v2 | `time_limit_v2` | 1.3.0 | gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna | replication with the GPT-5.6 models |
+| v3 | `time_limit_v2` | 1.5.1 | gpt-6.1-sol, gpt-6-luna | main results |
 
-New runs record `benchmarkVersion` and `benchmarkProvenance` in `benchmark_recovery.json`, `benchmark_summary.json`, and `benchmark_manifest.json`. The provenance holds:
+Version 1 used a different time limit: each Codex turn had a 90-minute wall-clock cap that the agent was not told about, and a timed-out turn restarted in a new thread that kept the workspace. Do not pool version 1 runs with later versions.
+
+Runs record `benchmarkVersion` and `benchmarkProvenance` in `benchmark_recovery.json`, `benchmark_summary.json`, and `benchmark_manifest.json`. The provenance holds:
 
 - the git commit, an exact-match tag, and a dirty-tree flag;
 - SHA-256 hashes (with CRLF normalized) of each staged skill folder and the docs-mode references;
 - `prompts`: SHA-256 hashes of the subject prompt builder (`src/benchmark/prompt.ts`), the MCP server whose instructions and tool descriptions agents read (`morpheus_mcp_server.py`), and the focus-prompt folder;
 - `software`: Node, platform, installed and locked `@openai/codex-sdk`, Codex CLI, Morpheus version and revision, gnuplot, the benchmark Python, hashes of `package-lock.json` and `uv.lock`, and whether `node_modules` and `.venv` contain exactly the locked packages (`npmInstalledMatchesLock`, `pythonInstalledMatchesLock`).
 
-Each run folder also keeps the exact rendered subject prompt as `subject_prompt.txt`. The runner warns at start when `node_modules` drifts from `package-lock.json` (run `npm ci`) or `.venv` from `uv.lock` (run `uv sync --locked`). Runs written before stamping are treated as v1 (`max_cycles_v1`) or v2 (`time_limit_v2`).
+Each run folder also keeps the exact rendered subject prompt as `subject_prompt.txt`. The runner warns at start when `node_modules` drifts from `package-lock.json` (run `npm ci`) or `.venv` from `uv.lock` (run `uv sync --locked`). Version 1 and 2 runs predate this stamping; the code infers their version from the protocol.
 
 Version boundaries are enforced:
 
-- `--recover-run` refuses to launch subject executions (missing assignments or infrastructure-failure replacements) when the run's version, skill hash, or prompt hashes differ from the current checkout. Check out the run's `benchmark-v<N>` tag to recover it. Software differences are logged as warnings. Deterministic postprocessing still works across versions.
+- `--recover-run` refuses to launch subject executions (missing assignments or infrastructure-failure replacements) when the run's version, skill hash, or prompt hashes differ from the current checkout. Version 1 and 2 runs can therefore be analyzed and rescored with this release but not relaunched. Software differences are logged as warnings, and deterministic postprocessing works across versions.
 - `--combine-runs` rejects runs with different versions, skill hashes, or prompt hashes, and logs software differences.
 - Analysis adds a `benchmark_version` column and refuses to pool mixed versions in one mode summary. `compare_benchmarks.py` refuses to compare runs from different benchmark versions unless `--force` is passed.
 - The biological scorer always stages the current skill. It logs a warning when that skill differs from the one the run recorded.
 
-To release a new version, see [Updating the Morpheus skill, prompts, or docs-mode references](SETUP.md#updating-the-morpheus-skill-prompts-or-docs-mode-references).
-
-## Historical v1 caveat
-
-Historical benchmark v1 used a 90-minute **absolute wall-clock limit for each Codex turn**. It was not an inactivity timeout: successful commands, tool output, and ongoing work did not reset it, and the subject prompt did not disclose the deadline. A timed-out turn was usually retried in a fresh Codex thread while keeping workspace artifacts, so conversational context was lost but partial work could persist. Timeout incidence was strongly mode-dependent. These runs remain analyzable as results of that bounded harness, but they must not be pooled with v2 or described as timeout-independent intrinsic tool performance. Paper reporting should disclose the absolute cap, hidden deadline, restart policy, differential timeout rates, and sensitivity analyses.
+To define a new version, see [Updating the Morpheus skill, prompts, or docs-mode references](SETUP.md#updating-the-morpheus-skill-prompts-or-docs-mode-references).
 
 ## Reproducibility of the published runs
 
-The final runs of the preprint (gpt-6.1-sol and gpt-6-luna) recorded benchmark version 3 at commit c945e84 (tag `benchmark-v3`) of the private development repository. Their recorded SHA-256 hashes of the Morpheus skill, the docs-mode references, `src/benchmark/prompt.ts`, `morpheus_mcp_server.py`, `benchmark_focus/`, `package-lock.json`, and `uv.lock` match the files in this release, so recovering or rerunning them with this release passes the runner's provenance checks. Later commits change job scheduling and recovery in the runner, the analysis and comparison scripts, the figure scripts, and the documentation, but none of the files the benchmark subject sees.
+The version 3 runs of the preprint (gpt-6.1-sol and gpt-6-luna) were made in the development repository at commit c945e84, tagged `benchmark-v3`; these identifiers appear in their recorded provenance. The recorded SHA-256 hashes of the Morpheus skill, the docs-mode references, `src/benchmark/prompt.ts`, `morpheus_mcp_server.py`, `benchmark_focus/`, `package-lock.json`, and `uv.lock` match the files in this release, so recovering or rerunning those runs with this release passes the runner's provenance checks. Changes after c945e84 concern job scheduling and recovery in the runner, the analysis and comparison scripts, the figure scripts, the tests, and the documentation; none of them touches a file that the benchmark subject sees.
 
 ## Citation and license
 

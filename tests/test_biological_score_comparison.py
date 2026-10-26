@@ -12,15 +12,16 @@ import biological_score_comparison as comparison
 
 
 class BiologicalScoreComparisonTests(unittest.TestCase):
-    def test_default_grid_includes_endpoints_in_five_bins(self) -> None:
-        rows = pd.DataFrame({"manual_score": [0, 0.1, 0.3, 0.6, 1],
-                             "agent_biological_score": [0, 0.1, 0.3, 0.6, 1]})
+    def test_default_grid_includes_endpoints_in_ten_bins(self) -> None:
+        rows = pd.DataFrame({"manual_score": [0, 0.05, 0.3, 0.8, 0.9, 1],
+                             "agent_biological_score": [0, 0.05, 0.3, 0.8, 0.9, 1]})
         counts, _, _ = comparison.score_count_grid(rows)
-        self.assertEqual(counts.shape, (5, 5))
-        self.assertEqual(counts.sum(), 5)
+        self.assertEqual(counts.shape, (10, 10))
+        self.assertEqual(counts.sum(), 6)
         self.assertEqual(counts[0, 0], 2)
         self.assertEqual(counts[3, 3], 1)
-        self.assertEqual(counts[-1, -1], 1)
+        self.assertEqual(counts[8, 8], 1)
+        self.assertEqual(counts[-1, -1], 2)
 
     def test_regression_uses_unbinned_scores_and_fitted_intercept(self) -> None:
         rows = pd.DataFrame({"manual_score": [0, 0.2, 0.6, 1, float("nan")],
