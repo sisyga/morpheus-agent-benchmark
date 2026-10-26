@@ -288,11 +288,8 @@ class CompareBenchmarksTests(unittest.TestCase):
 
         self.assertEqual(front["name"].tolist(), ["a", "c"])
 
-    def test_configure_pareto_cost_axis_keeps_label_consistent_with_scale(self) -> None:
-        for costs, expected_scale, label_fragment in [
-            ([1.0, 2.0], "log", "log scale"),
-            ([0.0, 2.0], "linear", "linear scale"),
-        ]:
+    def test_configure_pareto_cost_axis_uses_log_scale_only_for_positive_costs(self) -> None:
+        for costs, expected_scale in [([1.0, 2.0], "log"), ([0.0, 2.0], "linear")]:
             with self.subTest(costs=costs):
                 fig, ax = plt.subplots()
                 summary = pd.DataFrame({"total_cost_usd_mean": costs})
@@ -300,7 +297,7 @@ class CompareBenchmarksTests(unittest.TestCase):
                 comparison.configure_pareto_cost_axis(ax, summary)
 
                 self.assertEqual(ax.get_xscale(), expected_scale)
-                self.assertIn(label_fragment, ax.get_xlabel())
+                self.assertEqual(ax.get_xlabel(), "Mean API cost per run (USD)")
                 plt.close(fig)
 
     def test_grouped_metric_boxplots_draw_paper_distributions_and_mean_markers(self) -> None:

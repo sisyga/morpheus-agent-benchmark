@@ -8,6 +8,7 @@ from typing import Iterable
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
+from matplotlib.ticker import FuncFormatter, NullFormatter
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -41,7 +42,7 @@ COMPARISON_METRICS = {
     "biological_score": ("biological_score_itt", "Biological score", False),
     "technical_score": ("technical_score_itt", "Technical score", False),
     "total_cost_usd": ("total_cost_usd", "API cost per run (USD)", True),
-    "subject_active_time_min": ("subject_active_time_min", "Active agent time per run (min)", True),
+    "subject_active_time_min": ("subject_active_time_min", "Active time per run (min)", True),
     "attempts": ("attempts", "Model revisions per run", False),
 }
 # Figures for the metrics without a dedicated figure of their own.
@@ -59,6 +60,41 @@ REQUIRED_RECORD_COLUMNS = {
     "total_cost_usd",
 }
 SCORER_COHORT_PATTERN = re.compile(r"(scorer-v[^/\\]+?)__attempt-")
+# Nature Methods: 180 mm double column, Arial 5–7 pt. The two box plots and the Pareto plot
+# share one row, so each panel is exported at its final size and placed in the figure unscaled.
+MM_PER_INCH = 25.4
+PANEL_SIZE_MM = (59.0, 45.0)
+PANEL_STYLE = {
+    "font.family": "sans-serif",
+    "font.sans-serif": ["Arial", "Liberation Sans", "DejaVu Sans"],
+    "font.size": 6,
+    "axes.labelsize": 6,
+    "axes.titlesize": 7,
+    "xtick.labelsize": 5,
+    "ytick.labelsize": 5,
+    "legend.fontsize": 5,
+    "legend.title_fontsize": 6,
+    "axes.linewidth": 0.5,
+    "xtick.major.width": 0.5,
+    "ytick.major.width": 0.5,
+    "xtick.minor.width": 0.4,
+    "ytick.minor.width": 0.4,
+    "xtick.major.size": 2.0,
+    "ytick.major.size": 2.0,
+    "xtick.minor.size": 1.2,
+    "ytick.minor.size": 1.2,
+    "xtick.major.pad": 1.5,
+    "ytick.major.pad": 1.5,
+    "axes.labelpad": 2.0,
+    "lines.linewidth": 0.75,
+    "legend.handlelength": 1.2,
+    "legend.handletextpad": 0.4,
+    "legend.borderaxespad": 0.2,
+    "legend.labelspacing": 0.25,
+    "legend.columnspacing": 0.8,
+    "svg.fonttype": "none",
+    "pdf.fonttype": 42,
+}
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -104,6 +140,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action=argparse.BooleanOptionalAction,
         default=True,
         help="Draw significance brackets and letters in the figures (default on); the MD files are always written.",
+    )
+    parser.add_argument(
+        "--panel-size-mm",
+        nargs=2,
+        type=float,
+        default=list(PANEL_SIZE_MM),
+        metavar=("WIDTH", "HEIGHT"),
+        help="Exported size of each panel in mm (default: %(default)s, three panels in one 180 mm row).",
     )
     args = parser.parse_args(argv)
     if len(args.benchmark_dirs) < 2:
@@ -539,17 +583,25 @@ def pareto_front(records: pd.DataFrame, cost_column: str, score_column: str) -> 
 
 
 def configure_cost_axis(ax: plt.Axes, costs: pd.Series, axis: str = "x") -> None:
+    """Log axis when every cost is positive; the decade ticks show the scale, so the label leaves it out."""
     positive = (pd.to_numeric(costs, errors="coerce").dropna() > 0).all()
-    scale_label = "log scale" if positive else "linear scale"
-    label = f"Mean API cost per execution (USD, {scale_label})"
+    label = "Mean API cost per run (USD)"
     if axis == "x":
         if positive:
             ax.set_xscale("log")
+            plain_log_ticks(ax.xaxis)
         ax.set_xlabel(label)
     else:
         if positive:
             ax.set_yscale("log")
+            plain_log_ticks(ax.yaxis)
         ax.set_ylabel(label)
+
+
+def plain_log_ticks(axis) -> None:
+    """Label log ticks 0.1, 1, 10: mathtext exponents would print below the 5 pt minimum."""
+    axis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:g}"))
+    axis.set_minor_formatter(NullFormatter())
 
 
 def configure_pareto_cost_axis(ax: plt.Axes, summary: pd.DataFrame) -> None:
@@ -588,13 +640,27 @@ def summary_error(row: pd.Series, metric: str, positive: bool = False) -> list[l
 def benchmark_legend(ax: plt.Axes, benchmarks: list[tuple[str, str]], **kwargs) -> None:
     ax.legend(
         handles=[
-            Patch(facecolor=benchmark_style(index)[0], edgecolor="black", label=label, alpha=0.7)
+            Patch(facecolor=benchmark_style(index)[0], edgecolor="black", linewidth=0.5, label=label, alpha=0.7)
             for index, (_, label) in enumerate(benchmarks)
         ],
         frameon=False,
-        title="Model",
         **kwargs,
     )
+
+
+def panel_figure(size_mm: tuple[float, float], ncols: int = 1) -> tuple[plt.Figure, plt.Axes | np.ndarray]:
+    """A figure at its final printed size; constrained layout keeps labels and legends inside it."""
+    fig, axes = plt.subplots(
+        1, ncols, figsize=(size_mm[0] / MM_PER_INCH, size_mm[1] / MM_PER_INCH), layout="constrained"
+    )
+    fig.get_layout_engine().set(w_pad=1 / 72, h_pad=1 / 72, wspace=0.02, hspace=0.02)
+    return fig, axes
+
+
+def save_panel(fig: plt.Figure, output_dir: Path, stem: str, formats: Iterable[str]) -> None:
+    """Save at exactly the figure size (no tight bounding box), so the SVG drops into the layout unscaled."""
+    for fmt in formats:
+        fig.savefig(output_dir / f"{stem}.{fmt}")
 
 
 def grouped_metric_boxplots(
@@ -641,10 +707,10 @@ def grouped_metric_boxplots(
                 patch_artist=True,
                 showmeans=False,
                 showfliers=False,
-                medianprops={"color": "black", "linewidth": 1.2},
-                boxprops={"edgecolor": "black", "linewidth": 0.7},
-                whiskerprops={"color": "black", "linewidth": 0.7},
-                capprops={"color": "black", "linewidth": 0.7},
+                medianprops={"color": "black", "linewidth": 0.8},
+                boxprops={"edgecolor": "black", "linewidth": 0.5},
+                whiskerprops={"color": "black", "linewidth": 0.5},
+                capprops={"color": "black", "linewidth": 0.5},
             )
             for patch in boxes["boxes"]:
                 patch.set_facecolor(color)
@@ -659,10 +725,10 @@ def grouped_metric_boxplots(
             ax.scatter(
                 np.full(len(points), position) + jitter,
                 points,
-                s=11,
+                s=3,
                 facecolor="white",
                 edgecolor=color,
-                linewidth=0.6,
+                linewidth=0.4,
                 alpha=0.75,
                 zorder=3,
             )
@@ -672,17 +738,19 @@ def grouped_metric_boxplots(
     for position, mean, low, high in mean_intervals:
         ax.errorbar(
             position, mean, yerr=interval_error(mean, low, high, positive),
-            fmt="D", markersize=4, markerfacecolor="white", markeredgecolor="black",
-            ecolor="black", elinewidth=1.0, capsize=2.5, zorder=4,
+            fmt="D", markersize=2.5, markerfacecolor="white", markeredgecolor="black", markeredgewidth=0.5,
+            ecolor="black", elinewidth=0.6, capsize=1.5, capthick=0.6, zorder=4,
         )
     ax.set_xticks(x)
-    ax.set_xticklabels([analysis.MODE_LABELS.get(mode, mode) for mode in modes], rotation=25, ha="right")
+    ax.set_xticklabels([analysis.MODE_LABELS.get(mode, mode) for mode in modes], rotation=30, ha="right",
+                       rotation_mode="anchor")
     if ylabel:
         ax.set_ylabel(ylabel)
     if ylim != (None, None):
         ax.set_ylim(bottom=ylim[0], top=ylim[1])
-    ax.grid(axis="y", color="#DDDDDD", linewidth=0.6)
-    benchmark_legend(ax, benchmarks, loc="upper left", bbox_to_anchor=(1.01, 1.0))
+    ax.grid(axis="y", color="#DDDDDD", linewidth=0.4)
+    ax.set_axisbelow(True)
+    benchmark_legend(ax, benchmarks, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncols=len(benchmarks))
     if tests is not None and not tests.empty:
         annotate_between_model_tests(ax, tests, point_column, modes, benchmarks, x, width)
 
@@ -781,19 +849,16 @@ def annotate_between_model_tests(
         ax.set_ylim(bottom, bottom + (top - bottom) / data_fraction)
         ax.set_yticks(ticks)
     transform = ax.get_xaxis_transform()
-    notes = []
+    # The meaning of letters and brackets goes in the caption; the _stats.md files spell it out.
     if any(letters.values()):
-        notes.append("Letters: modes of one model that share\nno letter differ (pairwise Wilcoxon,\nHolm-adjusted, p < 0.05)")
         for benchmark_index, (benchmark_id, _) in enumerate(benchmarks):
             color = benchmark_style(benchmark_index)[0]
             for mode_index, mode in enumerate(modes):
                 if mode in letters[benchmark_id]:
                     ax.text(x[mode_index] + offsets[benchmark_id], data_fraction + 0.01, letters[benchmark_id][mode],
-                            ha="center", va="bottom", fontsize=8, fontweight="bold", color=color,
+                            ha="center", va="bottom", fontsize=5, fontweight="bold", color=color,
                             transform=transform)
         data_fraction += 0.06
-    if not rows.empty:
-        notes.insert(0, "Brackets: paired Wilcoxon signed-rank\nacross papers, Holm-adjusted across\nmodes; * p < 0.05, ** p < 0.01,\n*** p < 0.001, n.s. not significant")
     for level, (id_a, id_b) in enumerate(pairs):
         y = data_fraction + 0.02 + 0.07 * level
         for mode_index, mode in enumerate(modes):
@@ -802,13 +867,10 @@ def annotate_between_model_tests(
                 continue
             left, right = x[mode_index] + offsets[id_a], x[mode_index] + offsets[id_b]
             ax.plot([left, left, right, right], [y, y + 0.015, y + 0.015, y], color="black",
-                    linewidth=0.7, transform=transform, clip_on=False)
+                    linewidth=0.5, transform=transform, clip_on=False)
             label = significance_label(row.iloc[0]["p_holm"])
-            ax.text((left + right) / 2, y + (0.005 if "*" in label else 0.02), label,
-                    ha="center", va="bottom", fontsize=10 if "*" in label else 7, transform=transform)
-    if notes:
-        ax.text(1.01, 0.0, "\n\n".join(notes), transform=ax.transAxes, ha="left", va="bottom",
-                fontsize=7, color="#555555")
+            ax.text((left + right) / 2, y + (0.0 if "*" in label else 0.02), label,
+                    ha="center", va="bottom", fontsize=7 if "*" in label else 5, transform=transform)
 
 
 def make_biological_score_figure(
@@ -818,11 +880,12 @@ def make_biological_score_figure(
     formats: Iterable[str],
     ci_method: str = "bootstrap",
     tests: pd.DataFrame | None = None,
+    size_mm: tuple[float, float] = PANEL_SIZE_MM,
 ) -> None:
-    fig, ax = plt.subplots(figsize=(8.6, 4.5), constrained_layout=True)
-    grouped_metric_boxplots(ax, paper_records, summary, "biological_score", "Biological score", (0.0, 1.05),
+    fig, ax = panel_figure(size_mm)
+    grouped_metric_boxplots(ax, paper_records, summary, "biological_score", "Score", (0.0, 1.05),
                             ci_method, tests)
-    analysis.save_figure(fig, output_dir, "biological_score_by_model_and_mode", formats)
+    save_panel(fig, output_dir, "biological_score_by_model_and_mode", formats)
     plt.close(fig)
 
 
@@ -833,13 +896,14 @@ def make_cost_figure(
     formats: Iterable[str],
     ci_method: str = "bootstrap",
     tests: pd.DataFrame | None = None,
+    size_mm: tuple[float, float] = PANEL_SIZE_MM,
 ) -> None:
-    fig, ax = plt.subplots(figsize=(8.6, 4.5), constrained_layout=True)
+    fig, ax = panel_figure(size_mm)
     # Set the log scale before drawing so autoscaling works in log space.
     configure_cost_axis(ax, paper_records["total_cost_usd"], "y")
-    ax.set_ylabel(ax.get_ylabel().replace("Mean API cost", "API cost"))
-    grouped_metric_boxplots(ax, paper_records, summary, "total_cost_usd", "", (None, None), ci_method, tests)
-    analysis.save_figure(fig, output_dir, "api_cost_by_model_and_mode", formats)
+    grouped_metric_boxplots(ax, paper_records, summary, "total_cost_usd", "API cost per run (USD)", (None, None),
+                            ci_method, tests)
+    save_panel(fig, output_dir, "api_cost_by_model_and_mode", formats)
     plt.close(fig)
 
 
@@ -851,15 +915,16 @@ def make_metric_figure(
     formats: Iterable[str],
     ci_method: str = "bootstrap",
     tests: pd.DataFrame | None = None,
+    size_mm: tuple[float, float] = PANEL_SIZE_MM,
 ) -> None:
     _, label, log_scale = COMPARISON_METRICS[metric]
-    fig, ax = plt.subplots(figsize=(8.6, 4.5), constrained_layout=True)
+    fig, ax = panel_figure(size_mm)
     values = pd.to_numeric(paper_records[metric], errors="coerce").dropna()
     if log_scale and len(values) and (values > 0).all():
         ax.set_yscale("log")
-        label = f"{label}, log scale"
+        plain_log_ticks(ax.yaxis)
     grouped_metric_boxplots(ax, paper_records, summary, metric, label, (None, None), ci_method, tests)
-    analysis.save_figure(fig, output_dir, EXTRA_METRIC_FIGURES[metric], formats)
+    save_panel(fig, output_dir, EXTRA_METRIC_FIGURES[metric], formats)
     plt.close(fig)
 
 
@@ -867,8 +932,9 @@ def make_pareto_figure(
     summary: pd.DataFrame,
     output_dir: Path,
     formats: Iterable[str],
+    size_mm: tuple[float, float] = PANEL_SIZE_MM,
 ) -> None:
-    fig, ax = plt.subplots(figsize=(8.0, 4.8), constrained_layout=True)
+    fig, ax = panel_figure(size_mm)
     modes = ordered_modes(summary)
     benchmarks = benchmark_series(summary)
     front = pareto_front(summary, "total_cost_usd_mean", "biological_score_mean")
@@ -876,7 +942,7 @@ def make_pareto_figure(
         front["total_cost_usd_mean"],
         front["biological_score_mean"],
         color="#999999",
-        linewidth=1.0,
+        linewidth=0.6,
         linestyle="--",
         zorder=1,
     )
@@ -894,38 +960,40 @@ def make_pareto_figure(
                 xerr=summary_error(row, "total_cost_usd", positive=True),
                 yerr=summary_error(row, "biological_score"),
                 fmt=marker,
-                markersize=7,
+                markersize=3.5,
                 markerfacecolor=color,
                 markeredgecolor="black",
-                markeredgewidth=0.7,
+                markeredgewidth=0.4,
                 ecolor=color,
-                elinewidth=0.9,
-                capsize=2,
+                elinewidth=0.6,
+                capsize=1.2,
+                capthick=0.6,
                 zorder=3,
             )
     configure_pareto_cost_axis(ax, summary)
-    ax.set_ylabel("Mean biological score")
+    ax.set_ylabel("Score")
     ax.set_ylim(0, 1.05)
-    ax.grid(color="#EEEEEE", linewidth=0.6)
+    ax.grid(color="#EEEEEE", linewidth=0.4)
+    ax.set_axisbelow(True)
 
     mode_handles = [
-        Line2D([0], [0], marker="o", linestyle="none", markersize=6, markeredgecolor="black",
-               markerfacecolor=analysis.MODE_COLORS.get(mode, "#777777"),
+        Line2D([0], [0], marker="o", linestyle="none", markersize=3.5, markeredgecolor="black",
+               markeredgewidth=0.4, markerfacecolor=analysis.MODE_COLORS.get(mode, "#777777"),
                label=analysis.MODE_LABELS.get(mode, mode))
         for mode in modes
     ]
     model_handles = [
-        Line2D([0], [0], marker=benchmark_style(index)[1], linestyle="none", markersize=6,
-               markerfacecolor="white", markeredgecolor="black", label=label)
+        Line2D([0], [0], marker=benchmark_style(index)[1], linestyle="none", markersize=3.5,
+               markeredgewidth=0.4, markerfacecolor="white", markeredgecolor="black", label=label)
         for index, (_, label) in enumerate(benchmarks)
     ]
-    frontier_handle = [Line2D([0], [0], color="#999999", linestyle="--", label="Pareto frontier")]
-    mode_legend = ax.legend(handles=mode_handles, frameon=False, title="Mode",
-                            loc="upper left", bbox_to_anchor=(1.01, 1.0))
+    frontier_handle = [Line2D([0], [0], color="#999999", linewidth=0.6, linestyle="--", label="Pareto frontier")]
+    # Both legends sit in the empty high-cost, low-score corner so the panel keeps its full width.
+    mode_legend = ax.legend(handles=mode_handles, frameon=False, loc="lower right")
     ax.add_artist(mode_legend)
-    ax.legend(handles=[*model_handles, *frontier_handle], frameon=False, title="Model",
-              loc="lower left", bbox_to_anchor=(1.01, 0.0))
-    analysis.save_figure(fig, output_dir, "api_cost_biological_score_pareto_by_model", formats)
+    ax.legend(handles=[*model_handles, *frontier_handle], frameon=False, loc="lower right",
+              bbox_to_anchor=(0.6, 0.0))
+    save_panel(fig, output_dir, "api_cost_biological_score_pareto_by_model", formats)
     plt.close(fig)
 
 
@@ -934,31 +1002,27 @@ def make_overall_figure(
     output_dir: Path,
     formats: Iterable[str],
     tests: pd.DataFrame | None = None,
+    size_mm: tuple[float, float] = PANEL_SIZE_MM,
 ) -> None:
-    fig, (score_ax, cost_ax) = plt.subplots(1, 2, figsize=(7.6, 3.6), constrained_layout=True)
+    fig, (score_ax, cost_ax) = panel_figure(size_mm, ncols=2)
     benchmarks = benchmark_series(overall_summary)
     positions = np.arange(len(benchmarks), dtype=float)
     for index, (benchmark_id, _) in enumerate(benchmarks):
         row = overall_summary.loc[overall_summary["benchmark_id"] == benchmark_id].iloc[0]
         color, marker = benchmark_style(index)
-        score_ax.errorbar(
-            positions[index], row["biological_score_mean"],
-            yerr=summary_error(row, "biological_score"),
-            fmt=marker, markersize=8, markerfacecolor=color, markeredgecolor="black",
-            ecolor="black", elinewidth=1.0, capsize=4,
-        )
-        cost_ax.errorbar(
-            positions[index], row["total_cost_usd_mean"],
-            yerr=summary_error(row, "total_cost_usd", positive=True),
-            fmt=marker, markersize=8, markerfacecolor=color, markeredgecolor="black",
-            ecolor="black", elinewidth=1.0, capsize=4,
-        )
+        for ax, metric in ((score_ax, "biological_score"), (cost_ax, "total_cost_usd")):
+            ax.errorbar(
+                positions[index], row[f"{metric}_mean"],
+                yerr=summary_error(row, metric, positive=metric == "total_cost_usd"),
+                fmt=marker, markersize=4, markerfacecolor=color, markeredgecolor="black", markeredgewidth=0.5,
+                ecolor="black", elinewidth=0.6, capsize=2, capthick=0.6,
+            )
     labels = [label for _, label in benchmarks]
     for ax in (score_ax, cost_ax):
         ax.set_xticks(positions)
-        ax.set_xticklabels(labels, rotation=20, ha="right")
+        ax.set_xticklabels(labels, rotation=30, ha="right", rotation_mode="anchor")
         ax.set_xlim(-0.6, len(benchmarks) - 0.4)
-        ax.grid(axis="y", color="#EEEEEE", linewidth=0.6)
+        ax.grid(axis="y", color="#EEEEEE", linewidth=0.4)
     score_ax.set_ylabel("Mean biological score")
     score_ax.set_ylim(0, 1.05)
     configure_cost_axis(cost_ax, overall_summary["total_cost_usd_mean"], "y")
@@ -966,8 +1030,11 @@ def make_overall_figure(
         for ax, metric in ((score_ax, "biological_score"), (cost_ax, "total_cost_usd")):
             row = tests.loc[(tests["family"] == "between_models_overall") & (tests["metric"] == metric)]
             if not row.empty:
-                ax.set_title(significance_label(row.iloc[0]["p_value"]), fontsize=10)
-    analysis.save_figure(fig, output_dir, "overall_score_and_cost_by_model", formats)
+                # A label above the data rather than an axes title.
+                label = significance_label(row.iloc[0]["p_value"])
+                ax.text(0.5, 1.0, label, transform=ax.transAxes, ha="center", va="bottom",
+                        fontsize=7 if "*" in label else 5)
+    save_panel(fig, output_dir, "overall_score_and_cost_by_model", formats)
     plt.close(fig)
 
 
@@ -1087,7 +1154,9 @@ def write_statistics_markdown(
             output_dir / f"{stem}_stats.md",
             f"{label}: statistics for {stem}",
             "Box plots show paper-level means; the diamond and black bar are the mean across papers and its 95% CI. "
-            "The p-values in the figure are the Holm-adjusted between-model tests of the first table section.",
+            "Brackets mark the Holm-adjusted between-model tests of the first table section (* p < 0.05, "
+            "** p < 0.01, *** p < 0.001, n.s. not significant). Letters compare the modes of one model: modes "
+            "that share no letter differ (pairwise Wilcoxon, Holm-adjusted, p < 0.05; second table section).",
             ci_method,
             ["", "## Means across papers", "", *means_table(summary, metric),
              "", "## Tests", *metric_test_sections(tests, metric, by_mode_families)],
@@ -1130,6 +1199,7 @@ def write_comparison_outputs(
     formats: Iterable[str],
     ci_method: str = "bootstrap",
     show_significance: bool = True,
+    panel_size_mm: Iterable[float] = PANEL_SIZE_MM,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     output_dir.mkdir(parents=True, exist_ok=True)
     included, excluded = split_never_started(records)
@@ -1147,14 +1217,16 @@ def write_comparison_outputs(
     overall_papers.to_csv(output_dir / "benchmark_model_comparison_overall_by_paper.csv", index=False)
     overall_summary.to_csv(output_dir / "benchmark_model_comparison_overall.csv", index=False)
     analysis.configure_matplotlib()
+    plt.rcParams.update(PANEL_STYLE)
     figure_tests = tests if show_significance else None
-    make_biological_score_figure(paper_records, summary, output_dir, formats, ci_method, figure_tests)
-    make_cost_figure(paper_records, summary, output_dir, formats, ci_method, figure_tests)
+    size_mm = tuple(panel_size_mm)
+    make_biological_score_figure(paper_records, summary, output_dir, formats, ci_method, figure_tests, size_mm)
+    make_cost_figure(paper_records, summary, output_dir, formats, ci_method, figure_tests, size_mm)
     for metric in EXTRA_METRIC_FIGURES:
         if metric in paper_records.columns and paper_records[metric].notna().any():
-            make_metric_figure(paper_records, summary, metric, output_dir, formats, ci_method, figure_tests)
-    make_pareto_figure(summary, output_dir, formats)
-    make_overall_figure(overall_summary, output_dir, formats, figure_tests)
+            make_metric_figure(paper_records, summary, metric, output_dir, formats, ci_method, figure_tests, size_mm)
+    make_pareto_figure(summary, output_dir, formats, size_mm)
+    make_overall_figure(overall_summary, output_dir, formats, figure_tests, size_mm)
     write_statistics_markdown(output_dir, summary, overall_summary, tests, ci_method)
     return paper_records, summary
 
@@ -1169,7 +1241,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Error: {exc}")
         return 2
     excluded = never_started_mask(records)
-    _, summary = write_comparison_outputs(records, output_dir, args.formats, args.ci, args.significance)
+    _, summary = write_comparison_outputs(
+        records, output_dir, args.formats, args.ci, args.significance, args.panel_size_mm
+    )
     print(f"Wrote comparison for {len(benchmark_dirs)} benchmark runs to {output_dir}")
     if excluded.any():
         counts = records.loc[excluded].groupby("benchmark_label", sort=False).size()
