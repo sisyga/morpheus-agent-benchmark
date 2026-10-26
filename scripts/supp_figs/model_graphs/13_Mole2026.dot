@@ -1,0 +1,1104 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+CPM_0_0_025 [shape=record, label="{CPM|0.025}", URL="morph://MorpheusModel/CPM" ]
+Logger_0_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger" ]
+Gnuplotter_0_12[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Gnuplotter</td></tr>
+<hr/>
+<tr><td>12</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Gnuplotter" ]
+TiffPlotter_0_12[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>TiffPlotter</td></tr>
+<hr/>
+<tr><td>12</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/TiffPlotter" ]
+AXL_activity_0[label="AXL_activity", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[9]"]
+AXL_state_0[label="AXL_state", fillcolor="#d3d247",peripheries=2]
+AXL_tau_h_0[label="AXL_tau_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[46]"]
+CADM1_0[label="CADM1", fillcolor="#d3d247",peripheries=2]
+ECM_0[label="ECM", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[5]"]
+EFNA1_0[label="EFNA1", fillcolor="#d3d247",peripheries=2]
+EPHA2_0[label="EPHA2", fillcolor="#d3d247",peripheries=2]
+FGF2_0[label="FGF2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+MMP_0[label="MMP", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[4]"]
+NECTIN3_0[label="NECTIN3", fillcolor="#d3d247",peripheries=2]
+PROS1_0[label="PROS1", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[2]"]
+TE_cycle_h_0[label="TE_cycle_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[49]"]
+adhesion_strength_0[label="adhesion_strength", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[54]"]
+axl_drive_0[label="axl_drive", fillcolor="#d3d247",peripheries=2]
+cell_center_0[label="cell.center", fillcolor="#b5b426",peripheries=2]
+cell_center_x_0[label="cell.center.x", fillcolor="#d3d247"]
+cell_center_y_0[label="cell.center.y", fillcolor="#d3d247"]
+cell_id_0[label="cell.id", fillcolor="#d3d247",peripheries=2]
+cell_surface_0[label="cell.surface", fillcolor="#d3d247",peripheries=2]
+cell_type_0[label="cell.type", fillcolor="#d3d247",peripheries=2]
+cell_volume_0[label="cell.volume", fillcolor="#d3d247",peripheries=2]
+celltype_epithelium_id_0[label="celltype.epithelium.id", fillcolor="#d3d247"]
+celltype_gland_id_0[label="celltype.gland.id", fillcolor="#d3d247"]
+celltype_invasive_trophoblast_size_0[label="celltype.invasive_trophoblast.size", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]"]
+chem_strength_0[label="chem_strength", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[10]"]
+collapse_rate_h_0[label="collapse_rate_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[48]"]
+contact_hours_0[label="contact_hours", fillcolor="#d3d247",peripheries=2]
+contact_maturation_0[label="contact_maturation", fillcolor="#d3d247",peripheries=2]
+contact_tau_h_0[label="contact_tau_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[41]"]
+division_generation_0[label="division_generation", fillcolor="#d3d247",peripheries=2]
+dpf_0[label="dpf", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[1]"]
+elapsed_hours_0[label="elapsed_hours", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+epithelial_anchor_k_0[label="epithelial_anchor_k", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[59]"]
+epithelial_contact_0[label="epithelial_contact", fillcolor="#d3d247",peripheries=2]
+epithelial_tension_0[label="epithelial_tension", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[53]"]
+fgf_K_0[label="fgf_K", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[43]"]
+fgf_sensed_0[label="fgf_sensed", fillcolor="#d3d247",peripheries=2]
+fgfr1_occupancy_0[label="fgfr1_occupancy", fillcolor="#d3d247",peripheries=2]
+fluid_area_0[label="fluid_area", fillcolor="#d3d247",peripheries=2]
+gland_attraction_on_0[label="gland_attraction_on", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[8]"]
+gland_sensed_0[label="gland_sensed", fillcolor="#d3d247",peripheries=2]
+gland_signal_0[label="gland_signal", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+host_cycle_h_0[label="host_cycle_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[51]"]
+host_support_0[label="host_support", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[3]"]
+invasion_contact_h_0[label="invasion_contact_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[42]"]
+invasive_adhesion_strength_0[label="invasive_adhesion_strength", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[55]"]
+invasive_cycle_h_0[label="invasive_cycle_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[50]"]
+invasive_motility_strength_0[label="invasive_motility_strength", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[57]"]
+is_embryo_0[label="is_embryo", fillcolor="#d3d247",peripheries=2]
+is_trophoblast_0[label="is_trophoblast", fillcolor="#d3d247",peripheries=2]
+junction_softening_strength_0[label="junction_softening_strength", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[56]"]
+matrix_anchor_on_0[label="matrix_anchor_on", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[58]"]
+matrix_penalty_0[label="matrix_penalty", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[52]"]
+matrix_sensed_0[label="matrix_sensed", fillcolor="#d3d247",peripheries=2]
+mmp_sensed_0[label="mmp_sensed", fillcolor="#d3d247",peripheries=2]
+n_invasive_0[label="n_invasive", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[0]"]
+pros_K_0[label="pros_K", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[44]"]
+pros_sensed_0[label="pros_sensed", fillcolor="#d3d247",peripheries=2]
+q_FGF2_0[label="q_FGF2", fillcolor="#d3d247",peripheries=2]
+q_MMP_0[label="q_MMP", fillcolor="#d3d247",peripheries=2]
+q_PROS1_0[label="q_PROS1", fillcolor="#d3d247",peripheries=2]
+q_gland_signal_0[label="q_gland_signal", fillcolor="#d3d247",peripheries=2]
+q_support_0[label="q_support", fillcolor="#d3d247",peripheries=2]
+recognition_on_0[label="recognition_on", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[7]"]
+stromal_anchor_k_0[label="stromal_anchor_k", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[60]"]
+support_K_0[label="support_K", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[45]"]
+support_sensed_0[label="support_sensed", fillcolor="#d3d247",peripheries=2]
+support_tau_h_0[label="support_tau_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[47]"]
+target_area_0[label="target_area", fillcolor="#d3d247",peripheries=2]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="";
+System_4_0_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System" ]
+}
+subgraph cluster_5 {
+label="CellType[medium]";
+cell_volume_5[label="cell.volume", fillcolor="#d3d247"]
+}
+subgraph cluster_6 {
+label="CellType[trophectoderm]";
+Mapper_6_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[2]" ]
+Mapper_6_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[1]" ]
+Mapper_6_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[0]" ]
+NeighborhoodReporter_6_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter" ]
+CellDivision_6_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/CellDivision" ]
+ChangeCellType_6_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>ChangeCellType</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/ChangeCellType" ]
+subgraph cluster_cpm6 {
+label="CPM components";
+VolumeConstraint_6[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/VolumeConstraint"];
+Chemotaxis_6[ shape=Mrecord, label=" Chemotaxis", URL="morph://MorpheusModel/CellTypes/CellType[1]/Chemotaxis"];
+}
+EFNA1_6[label="EFNA1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[0]"]
+FGFR1_6[label="FGFR1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Constant[2]"]
+NECTIN3_6[label="NECTIN3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[1]"]
+cell_center_6[label="cell.center", fillcolor="#b5b426"]
+cell_id_6[label="cell.id", fillcolor="#d3d247"]
+cell_surface_6[label="cell.surface", fillcolor="#d3d247"]
+cell_type_6[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+cell_volume_6[label="cell.volume", fillcolor="#d3d247"]
+contact_hours_6[label="contact_hours", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[2]"]
+contact_maturation_6[label="contact_maturation", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[1]"]
+division_generation_6[label="division_generation", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[7]"]
+epithelial_contact_6[label="epithelial_contact", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[6]"]
+fgf_sensed_6[label="fgf_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[3]"]
+fgfr1_occupancy_6[label="fgfr1_occupancy", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[2]"]
+gland_sensed_6[label="gland_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[4]"]
+is_embryo_6[label="is_embryo", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Constant[0]"]
+is_trophoblast_6[label="is_trophoblast", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Constant[1]"]
+support_sensed_6[label="support_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[5]"]
+target_area_6[label="target_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[0]"]
+subgraph cluster_14 {
+label="Function";
+}
+subgraph cluster_15 {
+label="Function";
+}
+subgraph cluster_16 {
+label="Function";
+}
+subgraph cluster_17 {
+label="";
+System_17_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/System" ]
+}
+subgraph cluster_18 {
+label="";
+}
+}
+subgraph cluster_7 {
+label="CellType[invasive_trophoblast]";
+Mapper_7_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper[2]" ]
+Mapper_7_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper[1]" ]
+Mapper_7_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper[0]" ]
+NeighborhoodReporter_7_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/NeighborhoodReporter" ]
+CellDivision_7_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/CellDivision" ]
+subgraph cluster_cpm7 {
+label="CPM components";
+VolumeConstraint_7[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[2]/VolumeConstraint"];
+Haptotaxis_7[ shape=Mrecord, label=" Haptotaxis", URL="morph://MorpheusModel/CellTypes/CellType[2]/Haptotaxis"];
+Chemotaxis_7[ shape=Mrecord, label=" Chemotaxis", URL="morph://MorpheusModel/CellTypes/CellType[2]/Chemotaxis[0]"];
+}
+EFNA1_7[label="EFNA1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[0]"]
+FGFR1_7[label="FGFR1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Constant[2]"]
+NECTIN3_7[label="NECTIN3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[1]"]
+cell_center_7[label="cell.center", fillcolor="#b5b426"]
+cell_id_7[label="cell.id", fillcolor="#d3d247"]
+cell_surface_7[label="cell.surface", fillcolor="#d3d247"]
+cell_type_7[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]"]
+cell_volume_7[label="cell.volume", fillcolor="#d3d247"]
+contact_hours_7[label="contact_hours", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[2]"]
+contact_maturation_7[label="contact_maturation", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[1]"]
+division_generation_7[label="division_generation", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[7]"]
+epithelial_contact_7[label="epithelial_contact", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[6]"]
+fgf_sensed_7[label="fgf_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[3]"]
+fgfr1_occupancy_7[label="fgfr1_occupancy", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[2]"]
+gland_sensed_7[label="gland_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[4]"]
+is_embryo_7[label="is_embryo", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Constant[0]"]
+is_trophoblast_7[label="is_trophoblast", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Constant[1]"]
+q_MMP_7[label="q_MMP", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[4]"]
+q_PROS1_7[label="q_PROS1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[3]"]
+support_sensed_7[label="support_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[5]"]
+target_area_7[label="target_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[0]"]
+subgraph cluster_19 {
+label="Function";
+}
+subgraph cluster_20 {
+label="Function";
+}
+subgraph cluster_21 {
+label="Function";
+}
+subgraph cluster_22 {
+label="";
+System_22_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/System" ]
+}
+subgraph cluster_23 {
+label="";
+}
+subgraph cluster_24 {
+label="Function";
+}
+subgraph cluster_25 {
+label="Function";
+}
+}
+subgraph cluster_8 {
+label="CellType[epiblast]";
+CellDivision_8_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/CellDivision" ]
+subgraph cluster_cpm8 {
+label="CPM components";
+VolumeConstraint_8[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[3]/VolumeConstraint"];
+}
+cell_center_8[label="cell.center", fillcolor="#b5b426"]
+cell_id_8[label="cell.id", fillcolor="#d3d247"]
+cell_surface_8[label="cell.surface", fillcolor="#d3d247"]
+cell_type_8[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]"]
+cell_volume_8[label="cell.volume", fillcolor="#d3d247"]
+division_generation_8[label="division_generation", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]/Property[1]"]
+is_embryo_8[label="is_embryo", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]/Constant"]
+target_area_8[label="target_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]/Property[0]"]
+subgraph cluster_26 {
+label="";
+System_26_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/System" ]
+}
+subgraph cluster_27 {
+label="";
+}
+}
+subgraph cluster_9 {
+label="CellType[hypoblast]";
+CellDivision_9_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[4]/CellDivision" ]
+subgraph cluster_cpm9 {
+label="CPM components";
+VolumeConstraint_9[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[4]/VolumeConstraint"];
+}
+cell_center_9[label="cell.center", fillcolor="#b5b426"]
+cell_id_9[label="cell.id", fillcolor="#d3d247"]
+cell_surface_9[label="cell.surface", fillcolor="#d3d247"]
+cell_type_9[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[4]"]
+cell_volume_9[label="cell.volume", fillcolor="#d3d247"]
+division_generation_9[label="division_generation", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[4]/Property[1]"]
+is_embryo_9[label="is_embryo", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[4]/Constant"]
+target_area_9[label="target_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[4]/Property[0]"]
+subgraph cluster_28 {
+label="";
+System_28_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[4]/System" ]
+}
+subgraph cluster_29 {
+label="";
+}
+}
+subgraph cluster_10 {
+label="CellType[epithelium]";
+Mapper_10_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[5]/Mapper[1]" ]
+Mapper_10_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[5]/Mapper[0]" ]
+subgraph cluster_cpm10 {
+label="CPM components";
+VolumeConstraint_10[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[5]/VolumeConstraint"];
+DirectedMotion_10[ shape=Mrecord, label=" DirectedMotion", URL="morph://MorpheusModel/CellTypes/CellType[5]/DirectedMotion"];
+}
+CADM1_10[label="CADM1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[5]/Constant[1]"]
+ECM_anchor_10[label="ECM_anchor", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[5]/PropertyVector"]
+EPHA2_10[label="EPHA2", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[5]/Constant[0]"]
+cell_center_10[label="cell.center", fillcolor="#b5b426"]
+cell_id_10[label="cell.id", fillcolor="#d3d247"]
+cell_surface_10[label="cell.surface", fillcolor="#d3d247"]
+cell_type_10[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[5]"]
+cell_volume_10[label="cell.volume", fillcolor="#d3d247"]
+matrix_sensed_10[label="matrix_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[5]/Property[2]"]
+mmp_sensed_10[label="mmp_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[5]/Property[1]"]
+q_FGF2_10[label="q_FGF2", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[5]/Constant[2]"]
+target_area_10[label="target_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[5]/Property[0]"]
+}
+subgraph cluster_11 {
+label="CellType[gland]";
+Mapper_11_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[6]/Mapper[1]" ]
+Mapper_11_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[6]/Mapper[0]" ]
+subgraph cluster_cpm11 {
+label="CPM components";
+VolumeConstraint_11[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[6]/VolumeConstraint"];
+DirectedMotion_11[ shape=Mrecord, label=" DirectedMotion", URL="morph://MorpheusModel/CellTypes/CellType[6]/DirectedMotion"];
+}
+CADM1_11[label="CADM1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[6]/Constant[1]"]
+ECM_anchor_11[label="ECM_anchor", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[6]/PropertyVector"]
+EPHA2_11[label="EPHA2", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[6]/Constant[0]"]
+cell_center_11[label="cell.center", fillcolor="#b5b426"]
+cell_id_11[label="cell.id", fillcolor="#d3d247"]
+cell_surface_11[label="cell.surface", fillcolor="#d3d247"]
+cell_type_11[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[6]"]
+cell_volume_11[label="cell.volume", fillcolor="#d3d247"]
+matrix_sensed_11[label="matrix_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[6]/Property[2]"]
+mmp_sensed_11[label="mmp_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[6]/Property[1]"]
+q_FGF2_11[label="q_FGF2", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[6]/Constant[2]"]
+q_gland_signal_11[label="q_gland_signal", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[6]/Constant[3]"]
+target_area_11[label="target_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[6]/Property[0]"]
+}
+subgraph cluster_12 {
+label="CellType[stroma]";
+Mapper_12_0_025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.025</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[7]/Mapper[1]" ]
+Mapper_12_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[7]/Mapper[0]" ]
+subgraph cluster_cpm12 {
+label="CPM components";
+Haptotaxis_12[ shape=Mrecord, label=" Haptotaxis", URL="morph://MorpheusModel/CellTypes/CellType[7]/Haptotaxis"];
+DirectedMotion_12[ shape=Mrecord, label=" DirectedMotion", URL="morph://MorpheusModel/CellTypes/CellType[7]/DirectedMotion"];
+}
+AXL_state_12[label="AXL_state", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[7]/Property[0]"]
+ECM_anchor_12[label="ECM_anchor", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[7]/PropertyVector"]
+axl_drive_12[label="axl_drive", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[7]/Function[0]"]
+cell_center_12[label="cell.center", fillcolor="#b5b426"]
+cell_id_12[label="cell.id", fillcolor="#d3d247"]
+cell_surface_12[label="cell.surface", fillcolor="#d3d247"]
+cell_type_12[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[7]"]
+cell_volume_12[label="cell.volume", fillcolor="#d3d247"]
+matrix_sensed_12[label="matrix_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[7]/Property[2]"]
+pros_sensed_12[label="pros_sensed", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[7]/Property[1]"]
+q_FGF2_12[label="q_FGF2", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[7]/Constant"]
+q_support_12[label="q_support", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[7]/Function[1]"]
+subgraph cluster_30 {
+label="";
+System_30_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[7]/System" ]
+}
+subgraph cluster_31 {
+label="Function";
+}
+subgraph cluster_32 {
+label="Function";
+}
+}
+subgraph cluster_13 {
+label="CellType[blastocoel]";
+subgraph cluster_cpm13 {
+label="CPM components";
+VolumeConstraint_13[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[8]/VolumeConstraint"];
+}
+cell_center_13[label="cell.center", fillcolor="#b5b426"]
+cell_id_13[label="cell.id", fillcolor="#d3d247"]
+cell_surface_13[label="cell.surface", fillcolor="#d3d247"]
+cell_type_13[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[8]"]
+cell_volume_13[label="cell.volume", fillcolor="#d3d247"]
+fluid_area_13[label="fluid_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[8]/Property"]
+subgraph cluster_33 {
+label="";
+System_33_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[8]/System" ]
+}
+}
+}
+AXL_activity_0 -> axl_drive_12 [penwidth=2, color="#112c5f"] 
+
+AXL_state_0 -> AXL_state_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+AXL_state_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+AXL_state_12 -> AXL_state_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+AXL_state_12 -> q_support_12 [penwidth=2, color="#112c5f"] 
+
+AXL_tau_h_0 -> System_30_0_25 [penwidth=2, color="#112c5f"] 
+
+CADM1_0 -> CADM1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+CADM1_0 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+CADM1_10 -> CADM1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+CADM1_11 -> CADM1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+CPM_0_0_025 -> Haptotaxis_12 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm12] 
+
+CPM_0_0_025 -> VolumeConstraint_10 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm10] 
+
+CPM_0_0_025 -> VolumeConstraint_11 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm11] 
+
+CPM_0_0_025 -> VolumeConstraint_13 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm13] 
+
+CPM_0_0_025 -> VolumeConstraint_6 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm6] 
+
+CPM_0_0_025 -> VolumeConstraint_7 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm7] 
+
+CPM_0_0_025 -> VolumeConstraint_8 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm8] 
+
+CPM_0_0_025 -> VolumeConstraint_9 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm9] 
+
+CPM_0_0_025 -> cell_center_0 [penwidth=3, color="#8f100d"] 
+
+CPM_0_0_025 -> cell_type_0 [penwidth=3, color="#8f100d"] 
+
+CellDivision_6_0_025 -> cell_center_6 [penwidth=3, color="#8f100d"] 
+
+CellDivision_6_0_025 -> division_generation_6 [penwidth=3, color="#8f100d"] 
+
+CellDivision_6_0_025 -> target_area_6 [penwidth=3, color="#8f100d"] 
+
+CellDivision_7_0_025 -> cell_center_7 [penwidth=3, color="#8f100d"] 
+
+CellDivision_7_0_025 -> division_generation_7 [penwidth=3, color="#8f100d"] 
+
+CellDivision_7_0_025 -> target_area_7 [penwidth=3, color="#8f100d"] 
+
+CellDivision_8_0_025 -> cell_center_8 [penwidth=3, color="#8f100d"] 
+
+CellDivision_8_0_025 -> division_generation_8 [penwidth=3, color="#8f100d"] 
+
+CellDivision_8_0_025 -> target_area_8 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_0_025 -> cell_center_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_0_025 -> division_generation_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_0_025 -> target_area_9 [penwidth=3, color="#8f100d"] 
+
+ECM_0 -> Haptotaxis_12 [penwidth=2, color="#112c5f"] 
+
+ECM_0 -> Haptotaxis_7 [penwidth=2, color="#112c5f"] 
+
+ECM_0 -> Mapper_10_0_025 [penwidth=2, color="#112c5f"] 
+
+ECM_0 -> Mapper_11_0_025 [penwidth=2, color="#112c5f"] 
+
+ECM_0 -> Mapper_12_0_025 [penwidth=2, color="#112c5f"] 
+
+ECM_0 -> TiffPlotter_0_12 [penwidth=2, color="#112c5f"] 
+
+ECM_anchor_10 -> DirectedMotion_10 [penwidth=2, color="#112c5f"] 
+
+ECM_anchor_11 -> DirectedMotion_11 [penwidth=2, color="#112c5f"] 
+
+ECM_anchor_12 -> DirectedMotion_12 [penwidth=2, color="#112c5f"] 
+
+EFNA1_0 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+EFNA1_0 -> EFNA1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+EFNA1_6 -> EFNA1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+EFNA1_7 -> EFNA1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+EPHA2_0 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+EPHA2_0 -> EPHA2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+EPHA2_10 -> EPHA2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+EPHA2_11 -> EPHA2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+FGF2_0 -> Chemotaxis_7 [penwidth=2, color="#112c5f"] 
+
+FGF2_0 -> Mapper_6_0_025 [penwidth=2, color="#112c5f"] 
+
+FGF2_0 -> Mapper_7_1 [penwidth=2, color="#112c5f"] 
+
+FGF2_0 -> TiffPlotter_0_12 [penwidth=2, color="#112c5f"] 
+
+FGFR1_6 -> fgfr1_occupancy_6 [penwidth=2, color="#112c5f"] 
+
+FGFR1_7 -> Chemotaxis_7 [penwidth=2, color="#112c5f"] 
+
+FGFR1_7 -> fgfr1_occupancy_7 [penwidth=2, color="#112c5f"] 
+
+MMP_0 -> Mapper_10_0_025 [penwidth=2, color="#112c5f"] 
+
+MMP_0 -> Mapper_11_0_025 [penwidth=2, color="#112c5f"] 
+
+MMP_0 -> TiffPlotter_0_12 [penwidth=2, color="#112c5f"] 
+
+Mapper_10_0_025 -> matrix_sensed_10 [penwidth=3, color="#8f100d"] 
+
+Mapper_10_0_025 -> mmp_sensed_10 [penwidth=3, color="#8f100d"] 
+
+Mapper_11_0_025 -> matrix_sensed_11 [penwidth=3, color="#8f100d"] 
+
+Mapper_11_0_025 -> mmp_sensed_11 [penwidth=3, color="#8f100d"] 
+
+Mapper_12_0_025 -> matrix_sensed_12 [penwidth=3, color="#8f100d"] 
+
+Mapper_12_0_25 -> pros_sensed_12 [penwidth=3, color="#8f100d"] 
+
+Mapper_6_0_025 -> fgf_sensed_6 [penwidth=3, color="#8f100d"] 
+
+Mapper_6_1 -> gland_sensed_6 [penwidth=3, color="#8f100d"] 
+
+Mapper_6_1 -> support_sensed_6 [penwidth=3, color="#8f100d"] 
+
+Mapper_7_0_25 -> support_sensed_7 [penwidth=3, color="#8f100d"] 
+
+Mapper_7_1 -> fgf_sensed_7 [penwidth=3, color="#8f100d"] 
+
+Mapper_7_1 -> gland_sensed_7 [penwidth=3, color="#8f100d"] 
+
+NECTIN3_0 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+NECTIN3_0 -> NECTIN3_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+NECTIN3_6 -> NECTIN3_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+NECTIN3_7 -> NECTIN3_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+NeighborhoodReporter_6_0_25 -> epithelial_contact_6 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_7_0_25 -> epithelial_contact_7 [penwidth=3, color="#8f100d"] 
+
+PROS1_0 -> Mapper_12_0_25 [penwidth=2, color="#112c5f"] 
+
+PROS1_0 -> TiffPlotter_0_12 [penwidth=2, color="#112c5f"] 
+
+System_17_0_25 -> contact_hours_6 [penwidth=3, color="#8f100d"] 
+
+System_17_0_25 -> contact_maturation_6 [penwidth=3, color="#8f100d"] 
+
+System_17_0_25 -> target_area_6 [penwidth=3, color="#8f100d"] 
+
+System_22_0_25 -> contact_hours_7 [penwidth=3, color="#8f100d"] 
+
+System_22_0_25 -> contact_maturation_7 [penwidth=3, color="#8f100d"] 
+
+System_22_0_25 -> target_area_7 [penwidth=3, color="#8f100d"] 
+
+System_26_0_25 -> target_area_8 [penwidth=3, color="#8f100d"] 
+
+System_28_0_25 -> target_area_9 [penwidth=3, color="#8f100d"] 
+
+System_30_0_25 -> AXL_state_12 [penwidth=3, color="#8f100d"] 
+
+System_33_0_25 -> fluid_area_13 [penwidth=3, color="#8f100d"] 
+
+System_4_0_05 -> ECM_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_05 -> FGF2_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_05 -> MMP_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_05 -> PROS1_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_05 -> gland_signal_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_05 -> host_support_0 [penwidth=3, color="#8f100d"] 
+
+TE_cycle_h_0 -> System_17_0_25 [penwidth=2, color="#112c5f"] 
+
+adhesion_strength_0 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+axl_drive_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+axl_drive_0 -> axl_drive_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+axl_drive_12 -> System_30_0_25 [penwidth=2, color="#112c5f"] 
+
+axl_drive_12 -> axl_drive_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_0 -> cell_center_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_0 -> cell_center_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_10 -> DirectedMotion_10 [penwidth=2, color="#112c5f"] 
+
+cell_center_10 -> Mapper_10_0_025 [penwidth=2, color="#112c5f"] 
+
+cell_center_10 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_11 -> DirectedMotion_11 [penwidth=2, color="#112c5f"] 
+
+cell_center_11 -> Mapper_11_0_025 [penwidth=2, color="#112c5f"] 
+
+cell_center_11 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_12 -> DirectedMotion_12 [penwidth=2, color="#112c5f"] 
+
+cell_center_12 -> Mapper_12_0_025 [penwidth=2, color="#112c5f"] 
+
+cell_center_12 -> Mapper_12_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_center_12 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_13 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_6 -> Mapper_6_0_025 [penwidth=2, color="#112c5f"] 
+
+cell_center_6 -> Mapper_6_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_6 -> NeighborhoodReporter_6_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_center_6 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_7 -> Mapper_7_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> Mapper_7_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> NeighborhoodReporter_7_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_8 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_9 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_x_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+cell_id_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+cell_id_0 -> TiffPlotter_0_12 [penwidth=2, color="#112c5f"] 
+
+cell_id_10 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_11 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_12 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_13 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_6 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_7 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_8 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_9 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+cell_surface_10 -> cell_surface_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_11 -> cell_surface_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_12 -> cell_surface_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_13 -> cell_surface_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_6 -> cell_surface_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_7 -> cell_surface_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_8 -> cell_surface_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_9 -> cell_surface_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_0 -> Gnuplotter_0_12 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> NeighborhoodReporter_6_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> NeighborhoodReporter_7_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> TiffPlotter_0_12 [penwidth=2, color="#112c5f"] 
+
+cell_type_10 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_11 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_12 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_13 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_6 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_7 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_8 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_9 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+cell_volume_10 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_11 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_12 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_13 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_5 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_6 -> CellDivision_6_0_025 [penwidth=2, color="#112c5f"] 
+
+cell_volume_6 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_7 -> CellDivision_7_0_025 [penwidth=2, color="#112c5f"] 
+
+cell_volume_7 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_8 -> CellDivision_8_0_025 [penwidth=2, color="#112c5f"] 
+
+cell_volume_8 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_9 -> CellDivision_9_0_025 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+celltype_epithelium_id_0 -> NeighborhoodReporter_6_0_25 [penwidth=2, color="#112c5f"] 
+
+celltype_epithelium_id_0 -> NeighborhoodReporter_7_0_25 [penwidth=2, color="#112c5f"] 
+
+celltype_gland_id_0 -> NeighborhoodReporter_6_0_25 [penwidth=2, color="#112c5f"] 
+
+celltype_gland_id_0 -> NeighborhoodReporter_7_0_25 [penwidth=2, color="#112c5f"] 
+
+celltype_invasive_trophoblast_size_0 -> n_invasive_0 [penwidth=2, color="#112c5f"] 
+
+chem_strength_0 -> Chemotaxis_6 [penwidth=2, color="#112c5f"] 
+
+chem_strength_0 -> Chemotaxis_7 [penwidth=2, color="#112c5f"] 
+
+collapse_rate_h_0 -> System_33_0_25 [penwidth=2, color="#112c5f"] 
+
+contact_hours_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+contact_hours_0 -> contact_hours_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+contact_hours_6 -> ChangeCellType_6_0_025 [penwidth=2, color="#112c5f"] 
+
+contact_hours_6 -> contact_hours_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+contact_hours_7 -> contact_hours_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+contact_maturation_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+contact_maturation_0 -> contact_maturation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+contact_maturation_6 -> ChangeCellType_6_0_025 [penwidth=2, color="#112c5f"] 
+
+contact_maturation_6 -> EFNA1_6 [penwidth=2, color="#112c5f"] 
+
+contact_maturation_6 -> NECTIN3_6 [penwidth=2, color="#112c5f"] 
+
+contact_maturation_6 -> contact_maturation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+contact_maturation_7 -> EFNA1_7 [penwidth=2, color="#112c5f"] 
+
+contact_maturation_7 -> NECTIN3_7 [penwidth=2, color="#112c5f"] 
+
+contact_maturation_7 -> contact_maturation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+contact_tau_h_0 -> System_17_0_25 [penwidth=2, color="#112c5f"] 
+
+contact_tau_h_0 -> System_22_0_25 [penwidth=2, color="#112c5f"] 
+
+division_generation_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+division_generation_0 -> division_generation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+division_generation_6 -> division_generation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+division_generation_7 -> division_generation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+division_generation_8 -> division_generation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+division_generation_9 -> division_generation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+dpf_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+elapsed_hours_0 -> Gnuplotter_0_12 [penwidth=2, color="#112c5f"] 
+
+elapsed_hours_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+elapsed_hours_0 -> dpf_0 [penwidth=2, color="#112c5f"] 
+
+epithelial_anchor_k_0 -> DirectedMotion_10 [penwidth=2, color="#112c5f"] 
+
+epithelial_anchor_k_0 -> DirectedMotion_11 [penwidth=2, color="#112c5f"] 
+
+epithelial_contact_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+epithelial_contact_0 -> epithelial_contact_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+epithelial_contact_6 -> System_17_0_25 [penwidth=2, color="#112c5f"] 
+
+epithelial_contact_6 -> epithelial_contact_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+epithelial_contact_7 -> System_22_0_25 [penwidth=2, color="#112c5f"] 
+
+epithelial_contact_7 -> epithelial_contact_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+epithelial_tension_0 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+fgf_K_0 -> Chemotaxis_7 [penwidth=2, color="#112c5f"] 
+
+fgf_K_0 -> fgfr1_occupancy_6 [penwidth=2, color="#112c5f"] 
+
+fgf_K_0 -> fgfr1_occupancy_7 [penwidth=2, color="#112c5f"] 
+
+fgf_sensed_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+fgf_sensed_0 -> fgf_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+fgf_sensed_6 -> ChangeCellType_6_0_025 [penwidth=2, color="#112c5f"] 
+
+fgf_sensed_6 -> fgf_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+fgf_sensed_6 -> fgfr1_occupancy_6 [penwidth=2, color="#112c5f"] 
+
+fgf_sensed_7 -> fgf_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+fgf_sensed_7 -> fgfr1_occupancy_7 [penwidth=2, color="#112c5f"] 
+
+fgfr1_occupancy_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+fgfr1_occupancy_0 -> fgfr1_occupancy_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+fgfr1_occupancy_6 -> fgfr1_occupancy_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+fgfr1_occupancy_7 -> fgfr1_occupancy_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+fluid_area_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+fluid_area_0 -> fluid_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+fluid_area_13 -> VolumeConstraint_13 [penwidth=2, color="#112c5f"] 
+
+fluid_area_13 -> fluid_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+gland_attraction_on_0 -> Chemotaxis_6 [penwidth=2, color="#112c5f"] 
+
+gland_attraction_on_0 -> Chemotaxis_7 [penwidth=2, color="#112c5f"] 
+
+gland_sensed_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+gland_sensed_0 -> gland_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+gland_sensed_6 -> gland_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+gland_sensed_7 -> gland_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+gland_signal_0 -> Chemotaxis_6 [penwidth=2, color="#112c5f"] 
+
+gland_signal_0 -> Chemotaxis_7 [penwidth=2, color="#112c5f"] 
+
+gland_signal_0 -> Mapper_6_1 [penwidth=2, color="#112c5f"] 
+
+gland_signal_0 -> Mapper_7_1 [penwidth=2, color="#112c5f"] 
+
+gland_signal_0 -> TiffPlotter_0_12 [penwidth=2, color="#112c5f"] 
+
+host_cycle_h_0 -> System_22_0_25 [penwidth=2, color="#112c5f"] 
+
+host_support_0 -> Chemotaxis_7 [penwidth=2, color="#112c5f"] 
+
+host_support_0 -> Mapper_6_1 [penwidth=2, color="#112c5f"] 
+
+host_support_0 -> Mapper_7_0_25 [penwidth=2, color="#112c5f"] 
+
+host_support_0 -> TiffPlotter_0_12 [penwidth=2, color="#112c5f"] 
+
+invasion_contact_h_0 -> ChangeCellType_6_0_025 [penwidth=2, color="#112c5f"] 
+
+invasive_adhesion_strength_0 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+invasive_cycle_h_0 -> System_22_0_25 [penwidth=2, color="#112c5f"] 
+
+invasive_motility_strength_0 -> Chemotaxis_7 [penwidth=2, color="#112c5f"] 
+
+is_embryo_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+is_embryo_0 -> is_embryo_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+is_embryo_6 -> is_embryo_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+is_embryo_7 -> is_embryo_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+is_embryo_8 -> is_embryo_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+is_embryo_9 -> is_embryo_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+is_trophoblast_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+is_trophoblast_0 -> is_trophoblast_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+is_trophoblast_6 -> is_trophoblast_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+is_trophoblast_7 -> is_trophoblast_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+junction_softening_strength_0 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+matrix_anchor_on_0 -> DirectedMotion_10 [penwidth=2, color="#112c5f"] 
+
+matrix_anchor_on_0 -> DirectedMotion_11 [penwidth=2, color="#112c5f"] 
+
+matrix_anchor_on_0 -> DirectedMotion_12 [penwidth=2, color="#112c5f"] 
+
+matrix_penalty_0 -> Haptotaxis_7 [penwidth=2, color="#112c5f"] 
+
+matrix_sensed_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+matrix_sensed_0 -> matrix_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+matrix_sensed_10 -> DirectedMotion_10 [penwidth=2, color="#112c5f"] 
+
+matrix_sensed_10 -> matrix_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+matrix_sensed_11 -> DirectedMotion_11 [penwidth=2, color="#112c5f"] 
+
+matrix_sensed_11 -> matrix_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+matrix_sensed_12 -> DirectedMotion_12 [penwidth=2, color="#112c5f"] 
+
+matrix_sensed_12 -> matrix_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+mmp_sensed_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+mmp_sensed_0 -> mmp_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+mmp_sensed_10 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+mmp_sensed_10 -> mmp_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+mmp_sensed_11 -> CPM_0_0_025 [penwidth=2, color="#112c5f"] 
+
+mmp_sensed_11 -> mmp_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+n_invasive_0 -> System_33_0_25 [penwidth=2, color="#112c5f"] 
+
+pros_K_0 -> axl_drive_12 [penwidth=2, color="#112c5f"] 
+
+pros_sensed_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+pros_sensed_0 -> pros_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+pros_sensed_12 -> axl_drive_12 [penwidth=2, color="#112c5f"] 
+
+pros_sensed_12 -> pros_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_FGF2_0 -> System_4_0_05 [penwidth=2, color="#112c5f"] 
+
+q_FGF2_0 -> q_FGF2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_FGF2_10 -> q_FGF2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_FGF2_11 -> q_FGF2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_FGF2_12 -> q_FGF2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_MMP_0 -> System_4_0_05 [penwidth=2, color="#112c5f"] 
+
+q_MMP_0 -> q_MMP_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_MMP_7 -> q_MMP_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_PROS1_0 -> System_4_0_05 [penwidth=2, color="#112c5f"] 
+
+q_PROS1_0 -> q_PROS1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_PROS1_7 -> q_PROS1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_gland_signal_0 -> System_4_0_05 [penwidth=2, color="#112c5f"] 
+
+q_gland_signal_0 -> q_gland_signal_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_gland_signal_11 -> q_gland_signal_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_support_0 -> System_4_0_05 [penwidth=2, color="#112c5f"] 
+
+q_support_0 -> q_support_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+q_support_12 -> q_support_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+recognition_on_0 -> EFNA1_6 [penwidth=2, color="#112c5f"] 
+
+recognition_on_0 -> EFNA1_7 [penwidth=2, color="#112c5f"] 
+
+recognition_on_0 -> NECTIN3_6 [penwidth=2, color="#112c5f"] 
+
+recognition_on_0 -> NECTIN3_7 [penwidth=2, color="#112c5f"] 
+
+recognition_on_0 -> System_17_0_25 [penwidth=2, color="#112c5f"] 
+
+recognition_on_0 -> System_22_0_25 [penwidth=2, color="#112c5f"] 
+
+stromal_anchor_k_0 -> DirectedMotion_12 [penwidth=2, color="#112c5f"] 
+
+support_K_0 -> System_22_0_25 [penwidth=2, color="#112c5f"] 
+
+support_sensed_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+support_sensed_0 -> support_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+support_sensed_6 -> support_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+support_sensed_7 -> System_22_0_25 [penwidth=2, color="#112c5f"] 
+
+support_sensed_7 -> support_sensed_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+support_tau_h_0 -> System_4_0_05 [penwidth=2, color="#112c5f"] 
+
+target_area_0 -> Logger_0_1 [penwidth=2, color="#112c5f"] 
+
+target_area_0 -> target_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+target_area_10 -> VolumeConstraint_10 [penwidth=2, color="#112c5f"] 
+
+target_area_10 -> target_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+target_area_11 -> VolumeConstraint_11 [penwidth=2, color="#112c5f"] 
+
+target_area_11 -> target_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+target_area_6 -> CellDivision_6_0_025 [penwidth=2, color="#112c5f"] 
+
+target_area_6 -> VolumeConstraint_6 [penwidth=2, color="#112c5f"] 
+
+target_area_6 -> target_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+target_area_7 -> CellDivision_7_0_025 [penwidth=2, color="#112c5f"] 
+
+target_area_7 -> VolumeConstraint_7 [penwidth=2, color="#112c5f"] 
+
+target_area_7 -> target_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+target_area_8 -> CellDivision_8_0_025 [penwidth=2, color="#112c5f"] 
+
+target_area_8 -> VolumeConstraint_8 [penwidth=2, color="#112c5f"] 
+
+target_area_8 -> target_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+target_area_9 -> CellDivision_9_0_025 [penwidth=2, color="#112c5f"] 
+
+target_area_9 -> VolumeConstraint_9 [penwidth=2, color="#112c5f"] 
+
+target_area_9 -> target_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+}

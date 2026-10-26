@@ -1,0 +1,14 @@
+# Python 3.12; install into a separate virtual environment (not the project's uv environment), e.g.
+#   uv venv ~/.venvs/morpheus_supp_figs --python 3.12
+#   uv pip install --python ~/.venvs/morpheus_supp_figs -r scripts/supp_figs/requirements.txt
+# Versions used for the published figures:
+numpy==2.5.4
+pandas==3.1.0
+matplotlib==3.11.2
+pillow==13.0.0
+pymupdf==2.0
+scipy==1.18.1
+pyvista==0.49.1
+vtk==9.7.1
+# szabo_recalibration.py only: numpy, pandas, pillow, scipy
+# External programs: Graphviz `dot` (tested 16.1.0) on PATH; Morpheus 2.4.1 only to regenerate model_graphs/.

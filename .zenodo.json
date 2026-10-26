@@ -1,0 +1,55 @@
+{
+  "upload_type": "software",
+  "title": "Morpheus.AI: benchmark and tools for LLM agents that build Morpheus multicellular models",
+  "description": "<p>Benchmark runner, Morpheus agent skill, Model Context Protocol (MCP) server, biological scoring criteria and analysis scripts used to test whether LLM-based coding agents can rebuild published multicellular models in the Morpheus simulator. The release reproduces the subject-facing setup of benchmark version 3 (git tag benchmark-v3) that produced the runs reported in the accompanying preprint.</p><p>The benchmark paper PDFs are not included; benchmark_papers/papers.csv lists their DOIs and the SHA-256 checksums of the files used. Benchmark runs and manual scores are archived in a separate dataset.</p>",
+  "creators": [
+    {
+      "name": "Chandratre, Prerana",
+      "affiliation": "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+    },
+    {
+      "name": "Sharma, Anjali",
+      "affiliation": "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+    },
+    {
+      "name": "Bürger Michaelis, Justin",
+      "affiliation": "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+    },
+    {
+      "name": "Jahn, Diego",
+      "affiliation": "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+    },
+    {
+      "name": "Starruß, Jörn",
+      "affiliation": "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+    },
+    {
+      "name": "Brusch, Lutz",
+      "affiliation": "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+    },
+    {
+      "name": "Syga, Simon",
+      "affiliation": "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+    }
+  ],
+  "license": "apache-2.0",
+  "access_right": "open",
+  "keywords": [
+    "large language models",
+    "AI agents",
+    "benchmark",
+    "multicellular modeling",
+    "Morpheus",
+    "cellular Potts model",
+    "Model Context Protocol",
+    "systems biology"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.1093/bioinformatics/btt772",
+      "relation": "references",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    }
+  ]
+}

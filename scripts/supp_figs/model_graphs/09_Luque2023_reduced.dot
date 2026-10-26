@@ -1,0 +1,734 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+Mapper_0_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[1]" ]
+Mapper_0_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[0]" ]
+CPM_0_0_01 [shape=record, label="{CPM|0.01}", URL="morph://MorpheusModel/CPM" ]
+GF_decay_min_0[label="GF_decay_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[14]"]
+GF_prol_0[label="GF_prol", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[13]"]
+O2_prol_mmHg_0[label="O2_prol_mmHg", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[12]"]
+U_cancer_min_0[label="U_cancer_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[10]"]
+U_liver_min_0[label="U_liver_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[9]"]
+V0_0[label="V0", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+VN0_0[label="VN0", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+cancer_mean_O2_mmHg_0[label="cancer_mean_O2_mmHg", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[4]"]
+cancer_mean_volume_fold_0[label="cancer_mean_volume_fold", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[8]"]
+cancer_volume_um3_0[label="cancer_volume_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[1]"]
+celltype_liver_id_0[label="celltype.liver.id", fillcolor="#d3d247"]
+decay_oxygen_min_0[label="decay_oxygen_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[8]"]
+dx_0[label="dx", fillcolor="#d3d247"]
+growth_factor_0[label="growth_factor", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[2]"]
+homeostatic_signal_X_0[label="homeostatic_signal_X", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[9]"]
+hypertrophy_hold_days_0[label="hypertrophy_hold_days", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[18]"]
+hypertrophy_wait_days_0[label="hypertrophy_wait_days", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[17]"]
+liver_mean_O2_mmHg_0[label="liver_mean_O2_mmHg", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[3]"]
+liver_mean_volume_fold_0[label="liver_mean_volume_fold", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[7]"]
+liver_min_O2_mmHg_0[label="liver_min_O2_mmHg", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[5]"]
+liver_volume_um3_0[label="liver_volume_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+nearby_cells_0[label="nearby_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[2]"]
+oxygen_mmHg_0[label="oxygen_mmHg", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[3]"]
+oxygen_slowdown_0[label="oxygen_slowdown", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[6]"]
+phenotype_step_days_0[label="phenotype_step_days", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[15]"]
+potential_vessel_0[label="potential_vessel", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+section_thickness_um_0[label="section_thickness_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+time_days_0[label="time_days", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+uptake_field_min_0[label="uptake_field_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[4]"]
+vessel_0[label="vessel", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+vessel_area_nodes_0[label="vessel_area_nodes", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[6]"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="Function";
+}
+subgraph cluster_5 {
+label="Function";
+}
+subgraph cluster_6 {
+label="";
+System_6_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System[0]" ]
+}
+subgraph cluster_7 {
+label="";
+System_7_0_125[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.125</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System[1]" ]
+}
+subgraph cluster_8 {
+label="";
+System_8_0_00025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.00025</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System[2]" ]
+}
+subgraph cluster_9 {
+label="";
+Event_9_0_00025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<hr/>
+<tr><td>0.00025</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Event" ]
+}
+subgraph cluster_10 {
+label="CellType[medium]";
+oxygen_uptake_10[label="oxygen_uptake", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[0]/Constant"]
+}
+subgraph cluster_11 {
+label="CellType[liver]";
+Mapper_11_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[0]" ]
+NeighborhoodReporter_11_0_125[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>0.125</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter" ]
+Mapper_11_0_125[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.125</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[1]" ]
+CellDivision_11_0_01[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<hr/>
+<tr><td>0.01</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/CellDivision" ]
+Mapper_11_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[2]" ]
+Mapper_11_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[3]" ]
+Mapper_11_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[4]" ]
+Mapper_11_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[5]" ]
+subgraph cluster_cpm11 {
+label="CPM components";
+VolumeConstraint_11[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/VolumeConstraint"];
+}
+G1_wait_days_11[label="G1_wait_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Constant[0]"]
+area_target_nodes_11[label="area_target_nodes", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[2]"]
+cell_center_11[label="cell.center", fillcolor="#b5b426"]
+cell_id_11[label="cell.id", fillcolor="#d3d247"]
+cell_type_11[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+cell_volume_11[label="cell.volume", fillcolor="#d3d247"]
+cell_O2_mmHg_11[label="cell_O2_mmHg", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[9]"]
+cycle_phase_11[label="cycle_phase", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[3]"]
+cytoplasmic_solid_um3_11[label="cytoplasmic_solid_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[2]"]
+division_eligible_11[label="division_eligible", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[11]"]
+divisions_11[label="divisions", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[5]"]
+fluid_um3_11[label="fluid_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[0]"]
+hypertrophy_age_days_11[label="hypertrophy_age_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[7]"]
+hypertrophy_factor_11[label="hypertrophy_factor", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[8]"]
+hypertrophy_phase_11[label="hypertrophy_phase", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[6]"]
+neighbor_cells_11[label="neighbor_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[12]"]
+nuclear_solid_um3_11[label="nuclear_solid_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[1]"]
+phase_age_days_11[label="phase_age_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[4]"]
+postmitotic_days_11[label="postmitotic_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Constant[2]"]
+premitotic_days_11[label="premitotic_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Constant[1]"]
+volume_fold_11[label="volume_fold", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[1]"]
+volume_um3_11[label="volume_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[0]"]
+subgraph cluster_13 {
+label="Function";
+}
+subgraph cluster_14 {
+label="Function";
+}
+subgraph cluster_15 {
+label="Function";
+}
+subgraph cluster_16 {
+label="Function";
+}
+subgraph cluster_17 {
+label="Function";
+}
+subgraph cluster_18 {
+label="Function";
+}
+subgraph cluster_19 {
+label="Function";
+}
+subgraph cluster_20 {
+label="Function";
+}
+subgraph cluster_21 {
+label="";
+System_21_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/System" ]
+}
+subgraph cluster_22 {
+label="";
+Event_22_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[0]" ]
+}
+subgraph cluster_23 {
+label="";
+Event_23_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[1]" ]
+}
+subgraph cluster_24 {
+label="";
+Event_24_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[2]" ]
+}
+subgraph cluster_25 {
+label="";
+}
+subgraph cluster_26 {
+label="";
+Event_26_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[3]" ]
+}
+}
+subgraph cluster_12 {
+label="CellType[cancer]";
+Mapper_12_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper[0]" ]
+NeighborhoodReporter_12_0_125[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>0.125</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/NeighborhoodReporter" ]
+Mapper_12_0_125[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.125</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper[1]" ]
+CellDivision_12_0_01[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<hr/>
+<tr><td>0.01</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/CellDivision" ]
+Mapper_12_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper[2]" ]
+Mapper_12_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper[3]" ]
+Mapper_12_0_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.25</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper[4]" ]
+subgraph cluster_cpm12 {
+label="CPM components";
+VolumeConstraint_12[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[2]/VolumeConstraint"];
+}
+G1_wait_days_12[label="G1_wait_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Constant[0]"]
+area_target_nodes_12[label="area_target_nodes", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[2]"]
+cell_center_12[label="cell.center", fillcolor="#b5b426"]
+cell_id_12[label="cell.id", fillcolor="#d3d247"]
+cell_type_12[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]"]
+cell_volume_12[label="cell.volume", fillcolor="#d3d247"]
+cell_O2_mmHg_12[label="cell_O2_mmHg", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[9]"]
+cycle_phase_12[label="cycle_phase", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[3]"]
+cytoplasmic_solid_um3_12[label="cytoplasmic_solid_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[2]"]
+divisions_12[label="divisions", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[5]"]
+effective_rC_day_12[label="effective_rC_day", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[6]"]
+effective_rN_day_12[label="effective_rN_day", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[7]"]
+fluid_um3_12[label="fluid_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[0]"]
+hypertrophy_age_days_12[label="hypertrophy_age_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[7]"]
+hypertrophy_factor_12[label="hypertrophy_factor", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[8]"]
+hypertrophy_phase_12[label="hypertrophy_phase", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[6]"]
+neighbor_cells_12[label="neighbor_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[12]"]
+nuclear_solid_um3_12[label="nuclear_solid_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[1]"]
+oncoprotein_12[label="oncoprotein", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[10]"]
+phase_age_days_12[label="phase_age_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[4]"]
+postmitotic_days_12[label="postmitotic_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Constant[2]"]
+premitotic_days_12[label="premitotic_days", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Constant[1]"]
+volume_fold_12[label="volume_fold", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[1]"]
+volume_um3_12[label="volume_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function[0]"]
+subgraph cluster_27 {
+label="Function";
+}
+subgraph cluster_28 {
+label="Function";
+}
+subgraph cluster_29 {
+label="Function";
+}
+subgraph cluster_30 {
+label="Function";
+}
+subgraph cluster_31 {
+label="Function";
+}
+subgraph cluster_32 {
+label="Function";
+}
+subgraph cluster_33 {
+label="Function";
+}
+subgraph cluster_34 {
+label="Function";
+}
+subgraph cluster_35 {
+label="";
+System_35_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/System" ]
+}
+subgraph cluster_36 {
+label="";
+Event_36_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Event[0]" ]
+}
+subgraph cluster_37 {
+label="";
+}
+subgraph cluster_38 {
+label="";
+Event_38_0_0041666666667[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<hr/>
+<tr><td>0.00416667</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Event[1]" ]
+}
+}
+}
+CPM_0_0_01 -> VolumeConstraint_11 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm11] 
+
+CPM_0_0_01 -> VolumeConstraint_12 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm12] 
+
+CPM_0_0_01 -> cell_center_11 [penwidth=3, color="#8f100d"] 
+
+CPM_0_0_01 -> cell_center_12 [penwidth=3, color="#8f100d"] 
+
+CPM_0_0_01 -> cell_type_11 [penwidth=3, color="#8f100d"] 
+
+CPM_0_0_01 -> cell_type_12 [penwidth=3, color="#8f100d"] 
+
+CellDivision_11_0_01 -> cell_center_11 [penwidth=3, color="#8f100d"] 
+
+CellDivision_11_0_01 -> cycle_phase_11 [penwidth=3, color="#8f100d"] 
+
+CellDivision_11_0_01 -> cytoplasmic_solid_um3_11 [penwidth=3, color="#8f100d"] 
+
+CellDivision_11_0_01 -> divisions_11 [penwidth=3, color="#8f100d"] 
+
+CellDivision_11_0_01 -> fluid_um3_11 [penwidth=3, color="#8f100d"] 
+
+CellDivision_11_0_01 -> nuclear_solid_um3_11 [penwidth=3, color="#8f100d"] 
+
+CellDivision_11_0_01 -> phase_age_days_11 [penwidth=3, color="#8f100d"] 
+
+CellDivision_12_0_01 -> cell_center_12 [penwidth=3, color="#8f100d"] 
+
+CellDivision_12_0_01 -> cycle_phase_12 [penwidth=3, color="#8f100d"] 
+
+CellDivision_12_0_01 -> cytoplasmic_solid_um3_12 [penwidth=3, color="#8f100d"] 
+
+CellDivision_12_0_01 -> divisions_12 [penwidth=3, color="#8f100d"] 
+
+CellDivision_12_0_01 -> fluid_um3_12 [penwidth=3, color="#8f100d"] 
+
+CellDivision_12_0_01 -> nuclear_solid_um3_12 [penwidth=3, color="#8f100d"] 
+
+CellDivision_12_0_01 -> phase_age_days_12 [penwidth=3, color="#8f100d"] 
+
+Event_22_0_0041666666667 -> hypertrophy_factor_11 [penwidth=3, color="#8f100d"] 
+
+Event_22_0_0041666666667 -> hypertrophy_phase_11 [penwidth=3, color="#8f100d"] 
+
+Event_23_0_0041666666667 -> hypertrophy_factor_11 [penwidth=3, color="#8f100d"] 
+
+Event_23_0_0041666666667 -> hypertrophy_phase_11 [penwidth=3, color="#8f100d"] 
+
+Event_24_0_0041666666667 -> cycle_phase_11 [penwidth=3, color="#8f100d"] 
+
+Event_24_0_0041666666667 -> phase_age_days_11 [penwidth=3, color="#8f100d"] 
+
+Event_26_0_0041666666667 -> cycle_phase_11 [penwidth=3, color="#8f100d"] 
+
+Event_26_0_0041666666667 -> phase_age_days_11 [penwidth=3, color="#8f100d"] 
+
+Event_36_0_0041666666667 -> cycle_phase_12 [penwidth=3, color="#8f100d"] 
+
+Event_36_0_0041666666667 -> phase_age_days_12 [penwidth=3, color="#8f100d"] 
+
+Event_38_0_0041666666667 -> cycle_phase_12 [penwidth=3, color="#8f100d"] 
+
+Event_38_0_0041666666667 -> phase_age_days_12 [penwidth=3, color="#8f100d"] 
+
+Event_9_0_00025 -> oxygen_mmHg_0 [penwidth=3, color="#8f100d"] 
+
+G1_wait_days_11 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+G1_wait_days_12 -> Event_36_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+GF_decay_min_0 -> System_6_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+GF_prol_0 -> Event_22_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+GF_prol_0 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+GF_prol_0 -> Event_36_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+Mapper_0_0_0041666666667 -> uptake_field_min_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_25 -> vessel_area_nodes_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_11_0_0041666666667 -> cell_O2_mmHg_11 [penwidth=3, color="#8f100d"] 
+
+Mapper_11_0_0041666666667 -> liver_volume_um3_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_11_0_125 -> nearby_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_11_0_25 -> liver_mean_O2_mmHg_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_11_0_25 -> liver_mean_volume_fold_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_11_0_25 -> liver_min_O2_mmHg_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_12_0_0041666666667 -> cell_O2_mmHg_12 [penwidth=3, color="#8f100d"] 
+
+Mapper_12_0_125 -> nearby_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_12_0_25 -> cancer_mean_O2_mmHg_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_12_0_25 -> cancer_mean_volume_fold_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_12_0_25 -> cancer_volume_um3_0 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_11_0_125 -> neighbor_cells_11 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_12_0_125 -> neighbor_cells_12 [penwidth=3, color="#8f100d"] 
+
+O2_prol_mmHg_0 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+System_21_0_0041666666667 -> cytoplasmic_solid_um3_11 [penwidth=3, color="#8f100d"] 
+
+System_21_0_0041666666667 -> fluid_um3_11 [penwidth=3, color="#8f100d"] 
+
+System_21_0_0041666666667 -> hypertrophy_age_days_11 [penwidth=3, color="#8f100d"] 
+
+System_21_0_0041666666667 -> nuclear_solid_um3_11 [penwidth=3, color="#8f100d"] 
+
+System_21_0_0041666666667 -> phase_age_days_11 [penwidth=3, color="#8f100d"] 
+
+System_35_0_0041666666667 -> cytoplasmic_solid_um3_12 [penwidth=3, color="#8f100d"] 
+
+System_35_0_0041666666667 -> fluid_um3_12 [penwidth=3, color="#8f100d"] 
+
+System_35_0_0041666666667 -> hypertrophy_age_days_12 [penwidth=3, color="#8f100d"] 
+
+System_35_0_0041666666667 -> nuclear_solid_um3_12 [penwidth=3, color="#8f100d"] 
+
+System_35_0_0041666666667 -> phase_age_days_12 [penwidth=3, color="#8f100d"] 
+
+System_6_0_0041666666667 -> growth_factor_0 [penwidth=3, color="#8f100d"] 
+
+System_6_0_0041666666667 -> homeostatic_signal_X_0 [penwidth=3, color="#8f100d"] 
+
+System_7_0_125 -> vessel_0 [penwidth=3, color="#8f100d"] 
+
+System_8_0_00025 -> oxygen_mmHg_0 [penwidth=3, color="#8f100d"] 
+
+U_cancer_min_0 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+U_liver_min_0 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+V0_0 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+V0_0 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+V0_0 -> System_21_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+V0_0 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+VN0_0 -> System_21_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+VN0_0 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+area_target_nodes_11 -> VolumeConstraint_11 [penwidth=2, color="#112c5f"] 
+
+area_target_nodes_12 -> VolumeConstraint_12 [penwidth=2, color="#112c5f"] 
+
+cell_O2_mmHg_11 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cell_O2_mmHg_11 -> Mapper_11_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_O2_mmHg_12 -> Event_36_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cell_O2_mmHg_12 -> Mapper_12_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_center_11 -> Mapper_11_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cell_center_11 -> Mapper_11_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_center_11 -> Mapper_11_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_center_11 -> NeighborhoodReporter_11_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_center_12 -> Mapper_12_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cell_center_12 -> Mapper_12_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_center_12 -> Mapper_12_0_25 [penwidth=2, color="#112c5f"] 
+
+cell_center_12 -> NeighborhoodReporter_12_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_id_11 -> NeighborhoodReporter_11_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_id_11 -> NeighborhoodReporter_12_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_id_11 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_id_12 -> NeighborhoodReporter_11_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_id_12 -> NeighborhoodReporter_12_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_id_12 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_type_11 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_type_12 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+cell_volume_11 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+cell_volume_11 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cell_volume_12 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+cell_volume_12 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+celltype_liver_id_0 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+cycle_phase_11 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+cycle_phase_11 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cycle_phase_11 -> Event_26_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cycle_phase_11 -> System_21_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cycle_phase_12 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+cycle_phase_12 -> Event_36_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cycle_phase_12 -> Event_38_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cycle_phase_12 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_11 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_11 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_11 -> Mapper_11_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_11 -> Mapper_11_0_25 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_11 -> System_21_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_11 -> volume_um3_11 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_12 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_12 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_12 -> Mapper_12_0_25 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_12 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+cytoplasmic_solid_um3_12 -> volume_um3_12 [penwidth=2, color="#112c5f"] 
+
+decay_oxygen_min_0 -> System_8_0_00025 [penwidth=2, color="#112c5f"] 
+
+division_eligible_11 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+divisions_11 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+dx_0 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+effective_rC_day_12 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+effective_rN_day_12 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_11 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_11 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_11 -> Mapper_11_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_11 -> Mapper_11_0_25 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_11 -> System_21_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_11 -> volume_um3_11 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_12 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_12 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_12 -> Mapper_12_0_25 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_12 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+fluid_um3_12 -> volume_um3_12 [penwidth=2, color="#112c5f"] 
+
+growth_factor_0 -> Event_22_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+growth_factor_0 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+homeostatic_signal_X_0 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+homeostatic_signal_X_0 -> Event_36_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_factor_11 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_factor_11 -> System_21_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_factor_12 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_factor_12 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_hold_days_0 -> Event_23_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_phase_11 -> Event_22_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_phase_11 -> Event_23_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_phase_11 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_phase_11 -> System_21_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_phase_12 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+hypertrophy_wait_days_0 -> Event_22_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+liver_volume_um3_0 -> System_6_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+nearby_cells_0 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+neighbor_cells_11 -> Mapper_11_0_125 [penwidth=2, color="#112c5f"] 
+
+neighbor_cells_12 -> Mapper_12_0_125 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_11 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_11 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_11 -> Mapper_11_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_11 -> Mapper_11_0_25 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_11 -> System_21_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_11 -> volume_um3_11 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_12 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_12 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_12 -> Mapper_12_0_25 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_12 -> System_35_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+nuclear_solid_um3_12 -> volume_um3_12 [penwidth=2, color="#112c5f"] 
+
+oncoprotein_12 -> Event_36_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+oxygen_mmHg_0 -> Mapper_11_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+oxygen_mmHg_0 -> Mapper_12_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+oxygen_mmHg_0 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+oxygen_slowdown_0 -> System_8_0_00025 [penwidth=2, color="#112c5f"] 
+
+oxygen_uptake_10 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+phase_age_days_11 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+phase_age_days_11 -> Event_26_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+phase_age_days_12 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+phase_age_days_12 -> Event_38_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+phenotype_step_days_0 -> Event_22_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+phenotype_step_days_0 -> Event_23_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+phenotype_step_days_0 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+phenotype_step_days_0 -> Event_36_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+phenotype_step_days_0 -> System_6_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+postmitotic_days_11 -> Event_26_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+postmitotic_days_12 -> Event_38_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+potential_vessel_0 -> System_7_0_125 [penwidth=2, color="#112c5f"] 
+
+premitotic_days_11 -> CellDivision_11_0_01 [penwidth=2, color="#112c5f"] 
+
+premitotic_days_12 -> CellDivision_12_0_01 [penwidth=2, color="#112c5f"] 
+
+section_thickness_um_0 -> Mapper_0_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+time_days_0 -> Event_22_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+time_days_0 -> Event_23_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+time_days_0 -> Event_24_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+time_days_0 -> Event_26_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+time_days_0 -> Event_36_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+time_days_0 -> Event_38_0_0041666666667 [penwidth=2, color="#112c5f"] 
+
+time_days_0 -> Event_9_0_00025 [penwidth=2, color="#112c5f"] 
+
+uptake_field_min_0 -> System_8_0_00025 [penwidth=2, color="#112c5f"] 
+
+vessel_0 -> Event_9_0_00025 [penwidth=2, color="#112c5f"] 
+
+vessel_0 -> Mapper_0_0_25 [penwidth=2, color="#112c5f"] 
+
+volume_fold_11 -> area_target_nodes_11 [penwidth=2, color="#112c5f"] 
+
+volume_fold_12 -> area_target_nodes_12 [penwidth=2, color="#112c5f"] 
+
+volume_um3_11 -> volume_fold_11 [penwidth=2, color="#112c5f"] 
+
+volume_um3_12 -> volume_fold_12 [penwidth=2, color="#112c5f"] 
+
+}

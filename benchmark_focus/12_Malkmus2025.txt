@@ -1,0 +1,3 @@
+A circular 2D domain, representing the limb bud, get patterned by reactions and diffusion of Sfrp2, WNT2, beta-cat, BMP2, SULF1, Sox9 as shown in Fig.7E which results in spatial patterns as shown in Fig.5 and 6.
+
+Simulate a 36-hour developmental window beginning at E10.5 (t=0) and ending at E10.5 + 36 hours (t_end=36 h). Use the wild-type patterns in Fig.5A,C at +36 hours as the endpoint reference and retain the Fig.7E network.

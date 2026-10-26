@@ -1,0 +1,266 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+CPM_0_1 [shape=record, label="{CPM|1}", URL="morph://MorpheusModel/CPM" ]
+Gnuplotter_0_360[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Gnuplotter</td></tr>
+<hr/>
+<tr><td>360</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Gnuplotter" ]
+TiffPlotter_0_360[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>TiffPlotter</td></tr>
+<hr/>
+<tr><td>360</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/TiffPlotter" ]
+Logger_0_12533150285953452625_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<tr><td><i>'Exact population aggregates'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[0]" ]
+Logger_0_8442351494990330433_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<tr><td><i>'Requested 100 observed states with units'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[1]" ]
+Logger_0_11162328173793431710_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<tr><td><i>'Cell-resolved audit tracks'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[2]" ]
+A_0[label="A", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[2]"]
+P_0[label="P", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+alpha_0[label="alpha", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+area_variance_0[label="area_variance", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[4]"]
+beta_0[label="beta", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+cell_center_0[label="cell.center", fillcolor="#b5b426",peripheries=2]
+cell_id_0[label="cell.id", fillcolor="#d3d247",peripheries=2]
+cell_type_0[label="cell.type", fillcolor="#d3d247",peripheries=2]
+celltype_endothelial_size_0[label="celltype.endothelial.size", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+interior_area_fraction_0[label="interior_area_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[1]"]
+lambda_0[label="lambda", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+lattice_area_fraction_0[label="lattice_area_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[0]"]
+mean_area_0[label="mean_area", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[2]"]
+mean_area_fraction_occupied_0[label="mean_area_fraction_occupied", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[4]"]
+mean_cell_speed_node_per_MCS_0[label="mean_cell_speed_node_per_MCS", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[5]"]
+mean_speed_0[label="mean_speed", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[1]"]
+mean_surface_0[label="mean_surface", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[3]"]
+occupied_nodes_0[label="occupied_nodes", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+polarity_0[label="polarity", fillcolor="#b5b426",peripheries=2]
+polarity_abs_0[label="polarity.abs", fillcolor="#d3d247"]
+polarity_phi_0[label="polarity.phi", fillcolor="#d3d247"]
+r_0[label="r", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[5]"]
+time_0[label="time", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+time_MCS_0[label="time_MCS", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[2]"]
+time_min_0[label="time_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[3]"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="Function";
+}
+subgraph cluster_5 {
+label="Function";
+}
+subgraph cluster_6 {
+label="Function";
+}
+subgraph cluster_7 {
+label="CellType[medium]";
+}
+subgraph cluster_8 {
+label="CellType[endothelial]";
+Mapper_8_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[0]" ]
+Mapper_8_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[1]" ]
+Mapper_8_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[2]" ]
+subgraph cluster_cpm8 {
+label="CPM components";
+VolumeConstraint_8[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/VolumeConstraint"];
+DirectedMotion_8[ shape=Mrecord, label=" DirectedMotion", URL="morph://MorpheusModel/CellTypes/CellType[1]/DirectedMotion"];
+}
+cell_center_8[label="cell.center", fillcolor="#b5b426"]
+cell_center_x_8[label="cell.center.x", fillcolor="#d3d247"]
+cell_center_y_8[label="cell.center.y", fillcolor="#d3d247"]
+cell_id_8[label="cell.id", fillcolor="#d3d247"]
+cell_surface_8[label="cell.surface", fillcolor="#d3d247"]
+cell_type_8[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+cell_volume_8[label="cell.volume", fillcolor="#d3d247"]
+polarity_8[label="polarity", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[0]"]
+polarity_x_8[label="polarity.x", fillcolor="#d3d247"]
+polarity_y_8[label="polarity.y", fillcolor="#d3d247"]
+previous_center_8[label="previous_center", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[1]"]
+velocity_8[label="velocity", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[2]"]
+velocity_abs_8[label="velocity.abs", fillcolor="#d3d247"]
+velocity_x_8[label="velocity.x", fillcolor="#d3d247"]
+velocity_y_8[label="velocity.y", fillcolor="#d3d247"]
+subgraph cluster_9 {
+label="";
+Event_9_2202780243164961657_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Polarity-motion feedback, Eq.10'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event" ]
+}
+}
+}
+A_0 -> VolumeConstraint_8 [penwidth=2, color="#112c5f"] 
+
+CPM_0_1 -> VolumeConstraint_8 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm8] 
+
+CPM_0_1 -> cell_center_0 [penwidth=3, color="#8f100d"] 
+
+CPM_0_1 -> cell_type_0 [penwidth=3, color="#8f100d"] 
+
+Event_9_2202780243164961657_1 -> polarity_8 [penwidth=3, color="#8f100d"] 
+
+Event_9_2202780243164961657_1 -> previous_center_8 [penwidth=3, color="#8f100d"] 
+
+Event_9_2202780243164961657_1 -> velocity_8 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> area_variance_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> mean_area_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> mean_speed_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> mean_surface_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> occupied_nodes_0 [penwidth=3, color="#8f100d"] 
+
+P_0 -> DirectedMotion_8 [penwidth=2, color="#112c5f"] 
+
+alpha_0 -> CPM_0_1 [penwidth=2, color="#112c5f"] 
+
+area_variance_0 -> Logger_0_12533150285953452625_1 [penwidth=2, color="#112c5f"] 
+
+beta_0 -> CPM_0_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_8 -> Event_9_2202780243164961657_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_8 -> Mapper_8_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_8 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_8 -> cell_center_x_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_8 -> cell_center_y_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_x_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+cell_id_0 -> Gnuplotter_0_360 [penwidth=2, color="#112c5f"] 
+
+cell_id_0 -> TiffPlotter_0_360 [penwidth=2, color="#112c5f"] 
+
+cell_id_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+cell_id_8 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+cell_surface_8 -> Mapper_8_1 [penwidth=2, color="#112c5f"] 
+
+cell_type_8 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+cell_volume_8 -> Mapper_8_1 [penwidth=2, color="#112c5f"] 
+
+celltype_endothelial_size_0 -> Logger_0_12533150285953452625_1 [penwidth=2, color="#112c5f"] 
+
+celltype_endothelial_size_0 -> Logger_0_8442351494990330433_1 [penwidth=2, color="#112c5f"] 
+
+interior_area_fraction_0 -> Logger_0_12533150285953452625_1 [penwidth=2, color="#112c5f"] 
+
+interior_area_fraction_0 -> Logger_0_8442351494990330433_1 [penwidth=2, color="#112c5f"] 
+
+lambda_0 -> VolumeConstraint_8 [penwidth=2, color="#112c5f"] 
+
+lattice_area_fraction_0 -> Logger_0_12533150285953452625_1 [penwidth=2, color="#112c5f"] 
+
+lattice_area_fraction_0 -> mean_area_fraction_occupied_0 [penwidth=2, color="#112c5f"] 
+
+mean_area_0 -> Logger_0_12533150285953452625_1 [penwidth=2, color="#112c5f"] 
+
+mean_area_fraction_occupied_0 -> Logger_0_8442351494990330433_1 [penwidth=2, color="#112c5f"] 
+
+mean_cell_speed_node_per_MCS_0 -> Logger_0_8442351494990330433_1 [penwidth=2, color="#112c5f"] 
+
+mean_speed_0 -> Logger_0_12533150285953452625_1 [penwidth=2, color="#112c5f"] 
+
+mean_speed_0 -> mean_cell_speed_node_per_MCS_0 [penwidth=2, color="#112c5f"] 
+
+mean_surface_0 -> Logger_0_12533150285953452625_1 [penwidth=2, color="#112c5f"] 
+
+occupied_nodes_0 -> Logger_0_12533150285953452625_1 [penwidth=2, color="#112c5f"] 
+
+occupied_nodes_0 -> Logger_0_8442351494990330433_1 [penwidth=2, color="#112c5f"] 
+
+occupied_nodes_0 -> interior_area_fraction_0 [penwidth=2, color="#112c5f"] 
+
+occupied_nodes_0 -> lattice_area_fraction_0 [penwidth=2, color="#112c5f"] 
+
+polarity_0 -> Gnuplotter_0_360 [penwidth=2, color="#112c5f"] 
+
+polarity_0 -> polarity_abs_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+polarity_0 -> polarity_phi_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+polarity_8 -> DirectedMotion_8 [penwidth=2, color="#112c5f"] 
+
+polarity_8 -> polarity_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+polarity_8 -> polarity_x_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+polarity_8 -> polarity_y_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+polarity_abs_0 -> Gnuplotter_0_360 [penwidth=2, color="#112c5f"] 
+
+polarity_phi_0 -> Gnuplotter_0_360 [penwidth=2, color="#112c5f"] 
+
+polarity_x_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+polarity_y_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+r_0 -> Event_9_2202780243164961657_1 [penwidth=2, color="#112c5f"] 
+
+time_0 -> Event_9_2202780243164961657_1 [penwidth=2, color="#112c5f"] 
+
+time_0 -> Logger_0_8442351494990330433_1 [penwidth=2, color="#112c5f"] 
+
+time_0 -> time_MCS_0 [penwidth=2, color="#112c5f"] 
+
+time_0 -> time_min_0 [penwidth=2, color="#112c5f"] 
+
+time_MCS_0 -> Logger_0_8442351494990330433_1 [penwidth=2, color="#112c5f"] 
+
+time_min_0 -> Logger_0_8442351494990330433_1 [penwidth=2, color="#112c5f"] 
+
+velocity_8 -> velocity_abs_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+velocity_8 -> velocity_x_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+velocity_8 -> velocity_y_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+velocity_abs_8 -> Mapper_8_1 [penwidth=2, color="#112c5f"] 
+
+velocity_x_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+velocity_y_8 -> Logger_0_11162328173793431710_1 [penwidth=2, color="#112c5f"] 
+
+}

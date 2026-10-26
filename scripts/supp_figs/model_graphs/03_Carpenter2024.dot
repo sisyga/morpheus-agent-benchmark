@@ -1,0 +1,516 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+CPM_0_1 [shape=record, label="{CPM|1}", URL="morph://MorpheusModel/CPM" ]
+Logger_0_79_545454545[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<hr/>
+<tr><td>79.5455</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[0]" ]
+Logger_0_225[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<hr/>
+<tr><td>225</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[1]" ]
+Gnuplotter_0_225[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Gnuplotter</td></tr>
+<hr/>
+<tr><td>225</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Gnuplotter" ]
+TiffPlotter_0_7875[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>TiffPlotter</td></tr>
+<hr/>
+<tr><td>7875</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/TiffPlotter" ]
+A_S_0[label="A_S", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+G0_0[label="G0", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+actual_growth_over_G_0[label="actual_growth_over_G", fillcolor="#d3d247",peripheries=2]
+alpha_0[label="alpha", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[9]"]
+apoptosis_enabled_0[label="apoptosis_enabled", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[10]"]
+apoptotic_0[label="apoptotic", fillcolor="#d3d247",peripheries=2]
+area_over_sizer_0[label="area_over_sizer", fillcolor="#d3d247",peripheries=2]
+birth_time_0[label="birth_time", fillcolor="#d3d247",peripheries=2]
+cell_center_0[label="cell.center", fillcolor="#b5b426",peripheries=2]
+cell_center_x_0[label="cell.center.x", fillcolor="#d3d247"]
+cell_center_y_0[label="cell.center.y", fillcolor="#d3d247"]
+cell_type_0[label="cell.type", fillcolor="#d3d247",peripheries=2]
+cell_volume_0[label="cell.volume", fillcolor="#d3d247",peripheries=2]
+celltype_epithelium_size_0[label="celltype.epithelium.size", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+celltype_medium_id_0[label="celltype.medium.id", fillcolor="#d3d247"]
+cycle_state_0[label="cycle_state", fillcolor="#d3d247",peripheries=2]
+g1_fraction_0[label="g1_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[4]"]
+generation_0[label="generation", fillcolor="#d3d247",peripheries=2]
+growth_fraction_0[label="growth_fraction", fillcolor="#d3d247",peripheries=2]
+k_0[label="k", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+lambda_0[label="lambda", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[5]"]
+local_density_0[label="local_density", fillcolor="#d3d247",peripheries=2]
+mean_area_for_extrusion_0[label="mean_area_for_extrusion", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+mean_cell_area_0[label="mean_cell_area", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[1]"]
+mean_cell_area_in_sizer_units_0[label="mean_cell_area_in_sizer_units", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[5]"]
+mean_cell_area_relative_to_isolated_cell_0[label="mean_cell_area_relative_to_isolated_cell", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[4]"]
+mean_growth_fraction_0[label="mean_growth_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[5]"]
+mean_local_density_0[label="mean_local_density", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[2]"]
+number_apoptotic_0[label="number_apoptotic", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[3]"]
+number_of_cells_0[label="number_of_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[0]"]
+occupied_area_0[label="occupied_area", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[1]"]
+occupied_fraction_0[label="occupied_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[6]"]
+p_apo_max_0[label="p_apo_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[7]"]
+phase_0[label="phase", fillcolor="#d3d247",peripheries=2]
+radius_over_sizer_0[label="radius_over_sizer", fillcolor="#d3d247",peripheries=2]
+rho_half_0[label="rho_half", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[8]"]
+size_0[label="size", fillcolor="#b5b426"]
+size_x_0[label="size.x", fillcolor="#d3d247"]
+size_y_0[label="size.y", fillcolor="#d3d247"]
+sizer_threshold_0[label="sizer_threshold", fillcolor="#d3d247",peripheries=2]
+target_area_0[label="target_area", fillcolor="#d3d247",peripheries=2]
+time_0[label="time", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+time_hours_0[label="time_hours", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[3]"]
+time_tau0_0[label="time_tau0", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[2]"]
+timer_duration_0[label="timer_duration", fillcolor="#d3d247",peripheries=2]
+visual_growth_0[label="visual_growth", fillcolor="#d3d247",peripheries=2]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="Function";
+}
+subgraph cluster_5 {
+label="Function";
+}
+subgraph cluster_6 {
+label="Function";
+}
+subgraph cluster_7 {
+label="Function";
+}
+subgraph cluster_8 {
+label="CellType[medium]";
+cell_volume_8[label="cell.volume", fillcolor="#d3d247"]
+}
+subgraph cluster_9 {
+label="CellType[epithelium]";
+NeighborhoodReporter_9_4705089884688953331_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<tr><td><i>'Sum inverse areas of all contacting cells (Eq 4)'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter" ]
+CellDivision_9_12598290948774926173_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<tr><td><i>'Complete timer and divide perpendicular to long axis (v4 minor label)'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/CellDivision" ]
+Mapper_9_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[0]" ]
+CellDeath_9_13967566349834872016_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDeath</td></tr>
+<tr><td><i>'Live extrusion below quarter mean area; final apoptotic removal'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/CellDeath" ]
+Mapper_9_79_545454545[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>79.5455</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[1]" ]
+Mapper_9_79_545454545[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>79.5455</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[2]" ]
+Mapper_9_79_545454545[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>79.5455</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[3]" ]
+Mapper_9_79_545454545[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>79.5455</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[4]" ]
+Mapper_9_79_545454545[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>79.5455</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[5]" ]
+subgraph cluster_cpm9 {
+label="CPM components";
+VolumeConstraint_9[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/VolumeConstraint"];
+}
+actual_growth_9[label="actual_growth", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[10]"]
+actual_growth_over_G_9[label="actual_growth_over_G", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[2]"]
+apoptotic_9[label="apoptotic", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[5]"]
+applied_growth_fraction_9[label="applied_growth_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[11]"]
+area_over_sizer_9[label="area_over_sizer", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[4]"]
+birth_time_9[label="birth_time", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[7]"]
+cell_center_9[label="cell.center", fillcolor="#b5b426"]
+cell_center_x_9[label="cell.center.x", fillcolor="#d3d247"]
+cell_center_y_9[label="cell.center.y", fillcolor="#d3d247"]
+cell_id_9[label="cell.id", fillcolor="#d3d247"]
+cell_type_9[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+cell_volume_9[label="cell.volume", fillcolor="#d3d247"]
+cycle_state_9[label="cycle_state", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[6]"]
+generation_9[label="generation", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[8]"]
+growth_fraction_9[label="growth_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[1]"]
+local_density_9[label="local_density", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[0]"]
+neighbor_density_9[label="neighbor_density", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[6]"]
+phase_9[label="phase", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[3]"]
+previous_area_9[label="previous_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[9]"]
+radius_over_sizer_9[label="radius_over_sizer", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[5]"]
+sizer_threshold_9[label="sizer_threshold", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[1]"]
+target_area_9[label="target_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[0]"]
+timer_duration_9[label="timer_duration", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[2]"]
+timer_start_9[label="timer_start", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[4]"]
+visual_growth_9[label="visual_growth", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[3]"]
+subgraph cluster_10 {
+label="Function";
+}
+subgraph cluster_11 {
+label="Function";
+}
+subgraph cluster_12 {
+label="Function";
+}
+subgraph cluster_13 {
+label="Function";
+}
+subgraph cluster_14 {
+label="Function";
+}
+subgraph cluster_15 {
+label="Function";
+}
+subgraph cluster_16 {
+label="Function";
+}
+subgraph cluster_17 {
+label="";
+Event_17_3421362984183811008_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Discrete MCS growth from current CPM state (Eq 2)'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[0]" ]
+}
+subgraph cluster_18 {
+label="";
+Event_18_2238906343557801986_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'G1 sizer to S/G2/M timer'</i></td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[1]" ]
+}
+subgraph cluster_19 {
+label="";
+Event_19_14659477492473372853_10[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Density dependent stochastic apoptosis (Eq 3)'</i></td></tr>
+<hr/>
+<tr><td>10</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[2]" ]
+}
+subgraph cluster_20 {
+label="";
+}
+}
+}
+A_S_0 -> Mapper_9_79_545454545 [penwidth=2, color="#112c5f"] 
+
+A_S_0 -> area_over_sizer_9 [penwidth=2, color="#112c5f"] 
+
+A_S_0 -> radius_over_sizer_9 [penwidth=2, color="#112c5f"] 
+
+CPM_0_1 -> VolumeConstraint_9 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm9] 
+
+CPM_0_1 -> cell_center_0 [penwidth=3, color="#8f100d"] 
+
+CPM_0_1 -> cell_type_0 [penwidth=3, color="#8f100d"] 
+
+CellDeath_9_13967566349834872016_1 -> cell_center_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> actual_growth_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> applied_growth_fraction_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> birth_time_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> cell_center_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> generation_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> phase_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> previous_area_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> sizer_threshold_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> target_area_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> timer_duration_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_12598290948774926173_1 -> timer_start_9 [penwidth=3, color="#8f100d"] 
+
+Event_17_3421362984183811008_1 -> actual_growth_9 [penwidth=3, color="#8f100d"] 
+
+Event_17_3421362984183811008_1 -> applied_growth_fraction_9 [penwidth=3, color="#8f100d"] 
+
+Event_17_3421362984183811008_1 -> previous_area_9 [penwidth=3, color="#8f100d"] 
+
+Event_17_3421362984183811008_1 -> target_area_9 [penwidth=3, color="#8f100d"] 
+
+Event_18_2238906343557801986_1 -> phase_9 [penwidth=3, color="#8f100d"] 
+
+Event_18_2238906343557801986_1 -> timer_start_9 [penwidth=3, color="#8f100d"] 
+
+Event_19_14659477492473372853_10 -> apoptotic_9 [penwidth=3, color="#8f100d"] 
+
+Event_19_14659477492473372853_10 -> target_area_9 [penwidth=3, color="#8f100d"] 
+
+G0_0 -> Event_17_3421362984183811008_1 [penwidth=2, color="#112c5f"] 
+
+G0_0 -> actual_growth_over_G_9 [penwidth=2, color="#112c5f"] 
+
+G0_0 -> visual_growth_9 [penwidth=2, color="#112c5f"] 
+
+Mapper_9_1 -> mean_area_for_extrusion_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_9_79_545454545 -> g1_fraction_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_9_79_545454545 -> mean_growth_fraction_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_9_79_545454545 -> mean_local_density_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_9_79_545454545 -> number_apoptotic_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_9_79_545454545 -> occupied_area_0 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_9_4705089884688953331_1 -> neighbor_density_9 [penwidth=3, color="#8f100d"] 
+
+actual_growth_9 -> actual_growth_over_G_9 [penwidth=2, color="#112c5f"] 
+
+actual_growth_9 -> visual_growth_9 [penwidth=2, color="#112c5f"] 
+
+actual_growth_over_G_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+actual_growth_over_G_9 -> actual_growth_over_G_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+alpha_0 -> Event_19_14659477492473372853_10 [penwidth=2, color="#112c5f"] 
+
+apoptosis_enabled_0 -> Event_19_14659477492473372853_10 [penwidth=2, color="#112c5f"] 
+
+apoptotic_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> CellDeath_9_13967566349834872016_1 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> CellDivision_9_12598290948774926173_1 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> Event_17_3421362984183811008_1 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> Event_18_2238906343557801986_1 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> Event_19_14659477492473372853_10 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> Mapper_9_79_545454545 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> VolumeConstraint_9 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> apoptotic_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+apoptotic_9 -> cycle_state_9 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> growth_fraction_9 [penwidth=2, color="#112c5f"] 
+
+apoptotic_9 -> visual_growth_9 [penwidth=2, color="#112c5f"] 
+
+applied_growth_fraction_9 -> growth_fraction_9 [penwidth=2, color="#112c5f"] 
+
+area_over_sizer_0 -> Gnuplotter_0_225 [penwidth=2, color="#112c5f"] 
+
+area_over_sizer_9 -> area_over_sizer_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+birth_time_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+birth_time_9 -> birth_time_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_0 -> cell_center_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_0 -> cell_center_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_9 -> Mapper_9_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_9 -> Mapper_9_79_545454545 [penwidth=2, color="#112c5f"] 
+
+cell_center_9 -> NeighborhoodReporter_9_4705089884688953331_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_9 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_9 -> cell_center_x_9 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_9 -> cell_center_y_9 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_x_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_9 -> radius_over_sizer_9 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_9 -> radius_over_sizer_9 [penwidth=2, color="#112c5f"] 
+
+cell_id_9 -> TiffPlotter_0_7875 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> NeighborhoodReporter_9_4705089884688953331_1 [penwidth=2, color="#112c5f"] 
+
+cell_type_9 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+cell_volume_0 -> NeighborhoodReporter_9_4705089884688953331_1 [penwidth=2, color="#112c5f"] 
+
+cell_volume_8 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_9 -> CellDeath_9_13967566349834872016_1 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> Event_17_3421362984183811008_1 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> Event_18_2238906343557801986_1 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> Mapper_9_1 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> Mapper_9_79_545454545 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> area_over_sizer_9 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> cell_volume_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_9 -> local_density_9 [penwidth=2, color="#112c5f"] 
+
+celltype_epithelium_size_0 -> number_of_cells_0 [penwidth=2, color="#112c5f"] 
+
+celltype_medium_id_0 -> NeighborhoodReporter_9_4705089884688953331_1 [penwidth=2, color="#112c5f"] 
+
+cycle_state_0 -> Gnuplotter_0_225 [penwidth=2, color="#112c5f"] 
+
+cycle_state_9 -> cycle_state_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+g1_fraction_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+generation_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+generation_9 -> generation_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+growth_fraction_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+growth_fraction_9 -> Mapper_9_79_545454545 [penwidth=2, color="#112c5f"] 
+
+growth_fraction_9 -> growth_fraction_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+k_0 -> Event_17_3421362984183811008_1 [penwidth=2, color="#112c5f"] 
+
+lambda_0 -> VolumeConstraint_9 [penwidth=2, color="#112c5f"] 
+
+local_density_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+local_density_9 -> Event_19_14659477492473372853_10 [penwidth=2, color="#112c5f"] 
+
+local_density_9 -> Mapper_9_79_545454545 [penwidth=2, color="#112c5f"] 
+
+local_density_9 -> local_density_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+mean_area_for_extrusion_0 -> CellDeath_9_13967566349834872016_1 [penwidth=2, color="#112c5f"] 
+
+mean_cell_area_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+mean_cell_area_0 -> mean_cell_area_in_sizer_units_0 [penwidth=2, color="#112c5f"] 
+
+mean_cell_area_0 -> mean_cell_area_relative_to_isolated_cell_0 [penwidth=2, color="#112c5f"] 
+
+mean_cell_area_in_sizer_units_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+mean_cell_area_relative_to_isolated_cell_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+mean_growth_fraction_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+mean_local_density_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+neighbor_density_9 -> local_density_9 [penwidth=2, color="#112c5f"] 
+
+number_apoptotic_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+number_of_cells_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+number_of_cells_0 -> mean_cell_area_0 [penwidth=2, color="#112c5f"] 
+
+occupied_area_0 -> mean_cell_area_0 [penwidth=2, color="#112c5f"] 
+
+occupied_area_0 -> occupied_fraction_0 [penwidth=2, color="#112c5f"] 
+
+occupied_fraction_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+p_apo_max_0 -> Event_19_14659477492473372853_10 [penwidth=2, color="#112c5f"] 
+
+phase_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+phase_9 -> CellDivision_9_12598290948774926173_1 [penwidth=2, color="#112c5f"] 
+
+phase_9 -> Event_18_2238906343557801986_1 [penwidth=2, color="#112c5f"] 
+
+phase_9 -> Mapper_9_79_545454545 [penwidth=2, color="#112c5f"] 
+
+phase_9 -> cycle_state_9 [penwidth=2, color="#112c5f"] 
+
+phase_9 -> phase_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+radius_over_sizer_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+radius_over_sizer_9 -> radius_over_sizer_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+rho_half_0 -> Event_19_14659477492473372853_10 [penwidth=2, color="#112c5f"] 
+
+size_0 -> size_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+size_0 -> size_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+size_x_0 -> radius_over_sizer_9 [penwidth=2, color="#112c5f"] 
+
+size_y_0 -> radius_over_sizer_9 [penwidth=2, color="#112c5f"] 
+
+sizer_threshold_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+sizer_threshold_9 -> Event_18_2238906343557801986_1 [penwidth=2, color="#112c5f"] 
+
+sizer_threshold_9 -> sizer_threshold_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+target_area_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+target_area_9 -> VolumeConstraint_9 [penwidth=2, color="#112c5f"] 
+
+target_area_9 -> target_area_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+time_0 -> CellDivision_9_12598290948774926173_1 [penwidth=2, color="#112c5f"] 
+
+time_0 -> Event_17_3421362984183811008_1 [penwidth=2, color="#112c5f"] 
+
+time_0 -> Event_18_2238906343557801986_1 [penwidth=2, color="#112c5f"] 
+
+time_0 -> Event_19_14659477492473372853_10 [penwidth=2, color="#112c5f"] 
+
+time_0 -> Gnuplotter_0_225 [penwidth=2, color="#112c5f"] 
+
+time_0 -> time_hours_0 [penwidth=2, color="#112c5f"] 
+
+time_0 -> time_tau0_0 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+time_tau0_0 -> Logger_0_79_545454545 [penwidth=2, color="#112c5f"] 
+
+timer_duration_0 -> Logger_0_225 [penwidth=2, color="#112c5f"] 
+
+timer_duration_9 -> CellDivision_9_12598290948774926173_1 [penwidth=2, color="#112c5f"] 
+
+timer_duration_9 -> timer_duration_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+timer_start_9 -> CellDivision_9_12598290948774926173_1 [penwidth=2, color="#112c5f"] 
+
+visual_growth_0 -> Gnuplotter_0_225 [penwidth=2, color="#112c5f"] 
+
+visual_growth_9 -> visual_growth_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+}

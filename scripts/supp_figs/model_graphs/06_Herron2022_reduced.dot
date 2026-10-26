@@ -1,0 +1,106 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+Mapper_0_0[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>-1</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[0]" ]
+Mapper_0_0_40404040404[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.40404</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[1]" ]
+Mapper_0_0_40404040404[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.40404</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[2]" ]
+Mapper_0_0_40404040404[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.40404</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[3]" ]
+G_0[label="G", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[2]"]
+K_0[label="K", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[10]"]
+b_0[label="b", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+d_0[label="d", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[13]"]
+domain_radius_max_um_0[label="domain_radius_max_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[6]"]
+domain_radius_min_um_0[label="domain_radius_min_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[5]"]
+e_0[label="e", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[14]"]
+g_0[label="g", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[3]"]
+gap_mean_molecules_per_um2_0[label="gap_mean_molecules_per_um2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[4]"]
+gtpase_mean_molecules_per_um2_0[label="gtpase_mean_molecules_per_um2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[3]"]
+n_0[label="n", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[11]"]
+sigma_0[label="sigma", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[12]"]
+space_0[label="space", fillcolor="#b5b426", URL="morph://MorpheusModel/Space/SpaceSymbol"]
+u_0[label="u", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+u_max_molecules_per_um2_0[label="u_max_molecules_per_um2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[1]"]
+u_mean_molecules_per_um2_0[label="u_mean_molecules_per_um2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[2]"]
+u_min_molecules_per_um2_0[label="u_min_molecules_per_um2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+v_0[label="v", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="";
+System_4_0_0025[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.0025</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System" ]
+}
+subgraph cluster_5 {
+label="Function";
+}
+}
+G_0 -> Mapper_0_0_40404040404 [penwidth=2, color="#112c5f"] 
+
+K_0 -> System_4_0_0025 [penwidth=2, color="#112c5f"] 
+
+Mapper_0_0 -> domain_radius_max_um_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0 -> domain_radius_min_um_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_40404040404 -> gap_mean_molecules_per_um2_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_40404040404 -> gtpase_mean_molecules_per_um2_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_40404040404 -> u_max_molecules_per_um2_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_40404040404 -> u_mean_molecules_per_um2_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_40404040404 -> u_min_molecules_per_um2_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_0025 -> G_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_0025 -> g_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_0025 -> u_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_0025 -> v_0 [penwidth=3, color="#8f100d"] 
+
+b_0 -> System_4_0_0025 [penwidth=2, color="#112c5f"] 
+
+d_0 -> System_4_0_0025 [penwidth=2, color="#112c5f"] 
+
+e_0 -> System_4_0_0025 [penwidth=2, color="#112c5f"] 
+
+g_0 -> Mapper_0_0_40404040404 [penwidth=2, color="#112c5f"] 
+
+n_0 -> System_4_0_0025 [penwidth=2, color="#112c5f"] 
+
+sigma_0 -> System_4_0_0025 [penwidth=2, color="#112c5f"] 
+
+space_0 -> Mapper_0_0 [penwidth=2, color="#112c5f"] 
+
+space_0 -> System_4_0_0025 [penwidth=2, color="#112c5f"] 
+
+u_0 -> Mapper_0_0_40404040404 [penwidth=2, color="#112c5f"] 
+
+v_0 -> Mapper_0_0_40404040404 [penwidth=2, color="#112c5f"] 
+
+}

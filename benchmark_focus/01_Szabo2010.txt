@@ -1,0 +1,3 @@
+Monolayer in Fig.10(d) with adhesion alpha=4
+
+Add quantification and data output to a single csv file for 100 time points of the mean area fraction of the spatial domain that is occupied by cells AND the mean speed (modulus of velocity vector) of cells in unit node per MCS.

@@ -1,0 +1,645 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+CPM_0_0_024 [shape=record, label="{CPM|0.024}", URL="morph://MorpheusModel/CPM" ]
+External_0_120[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>External</td></tr>
+<hr/>
+<tr><td>120</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/External" ]
+Logger_0_13907019680149269916_1_2121212121[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<tr><td><i>'100 population samples in biological hours'</i></td></tr>
+<hr/>
+<tr><td>1.21212</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[0]" ]
+Gnuplotter_0_24[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Gnuplotter</td></tr>
+<hr/>
+<tr><td>24</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Gnuplotter" ]
+Logger_0_698465033113607646_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<tr><td><i>'Senescent death perimeter audit'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[1]" ]
+TiffPlotter_0_1_2121212121[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>TiffPlotter</td></tr>
+<hr/>
+<tr><td>1.21212</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/TiffPlotter" ]
+J_sen_cancer_0[label="J_sen_cancer", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+cancer_area_px_0[label="cancer_area_px", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[2]"]
+cancer_cells_0[label="cancer_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[0]"]
+cell_center_0[label="cell.center", fillcolor="#b5b426",peripheries=2]
+cell_id_0[label="cell.id", fillcolor="#d3d247",peripheries=2]
+cell_type_0[label="cell.type", fillcolor="#d3d247",peripheries=2]
+celltype_CANCER_id_0[label="celltype.CANCER.id", fillcolor="#d3d247"]
+celltype_CANCER_size_0[label="celltype.CANCER.size", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]"]
+celltype_NON_SEN_size_0[label="celltype.NON_SEN.size", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]"]
+celltype_SEN_size_0[label="celltype.SEN.size", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+celltype_WALL_id_0[label="celltype.WALL.id", fillcolor="#d3d247"]
+extrusion_enabled_0[label="extrusion_enabled", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[2]"]
+mcs_hours_0[label="mcs_hours", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+non_sen_area_px_0[label="non_sen_area_px", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[1]"]
+non_senescent_cells_0[label="non_senescent_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[2]"]
+occupied_fraction_0[label="occupied_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[3]"]
+p_background_0[label="p_background", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+perimeter_threshold_0[label="perimeter_threshold", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+sen_area_px_0[label="sen_area_px", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+sen_cancer_contacts_mean_0[label="sen_cancer_contacts_mean", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[3]"]
+sen_cancer_perimeter_max_0[label="sen_cancer_perimeter_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[4]"]
+sen_cancer_perimeter_max_raw_0[label="sen_cancer_perimeter_max_raw", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[5]"]
+sen_cancer_perimeter_mean_0[label="sen_cancer_perimeter_mean", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[4]"]
+senescent_cells_0[label="senescent_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[1]"]
+time_hours_0[label="time_hours", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="Function";
+}
+subgraph cluster_5 {
+label="Function";
+}
+subgraph cluster_6 {
+label="CellType[medium]";
+}
+subgraph cluster_7 {
+label="CellType[SEN]";
+Mapper_7_1450635129188265996_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'SEN occupied area'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[0]" ]
+MotilityReporter_7_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>MotilityReporter</td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/MotilityReporter" ]
+CellDeath_7_4861909553003377623_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDeath</td></tr>
+<tr><td><i>'SEN remove extruded cell'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/CellDeath" ]
+NeighborhoodReporter_7_15966146558407537813_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<tr><td><i>'Cancer-covered perimeter'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter[0]" ]
+NeighborhoodReporter_7_17585451456241580883_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<tr><td><i>'Cancer cell neighbors'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter[1]" ]
+NeighborhoodReporter_7_13908318726120992036_0[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<tr><td><i>'All biological cell neighbors'</i></td></tr>
+<hr/>
+<tr><td>-1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter[2]" ]
+Mapper_7_1_2121212121[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1.21212</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[1]" ]
+Mapper_7_1_2121212121[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1.21212</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[2]" ]
+Mapper_7_1_2121212121[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1.21212</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[3]" ]
+subgraph cluster_cpm7 {
+label="CPM components";
+VolumeConstraint_7[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/VolumeConstraint"];
+DirectedMotion_7[ shape=Mrecord, label=" DirectedMotion", URL="morph://MorpheusModel/CellTypes/CellType[1]/DirectedMotion"];
+}
+Vt_7[label="Vt", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[0]"]
+all_neighbors_7[label="all_neighbors", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[6]"]
+bias_7[label="bias", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[0]"]
+cancer_fraction_7[label="cancer_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function"]
+cancer_neighbors_7[label="cancer_neighbors", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[5]"]
+cancer_perimeter_7[label="cancer_perimeter", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[4]"]
+cell_center_7[label="cell.center", fillcolor="#b5b426"]
+cell_id_7[label="cell.id", fillcolor="#d3d247"]
+cell_surface_7[label="cell.surface", fillcolor="#d3d247"]
+cell_type_7[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+cell_volume_7[label="cell.volume", fillcolor="#d3d247"]
+death_reason_7[label="death_reason", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[2]"]
+instantaneous_velocity_7[label="instantaneous_velocity", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[1]"]
+instantaneous_velocity_x_7[label="instantaneous_velocity.x", fillcolor="#d3d247"]
+instantaneous_velocity_y_7[label="instantaneous_velocity.y", fillcolor="#d3d247"]
+lambdaV_7[label="lambdaV", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[1]"]
+subgraph cluster_11 {
+label="";
+System_11_8843515604900737628_1_2[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<tr><td><i>'Direction memory every 50 MCS'</i></td></tr>
+<hr/>
+<tr><td>1.2</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/System" ]
+}
+subgraph cluster_12 {
+label="";
+Event_12_4469563538183627068_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'SEN background death'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[0]" ]
+}
+subgraph cluster_13 {
+label="Function";
+}
+subgraph cluster_14 {
+label="";
+Event_14_8539728734224338660_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'SEN cancer-contact extrusion'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[1]" ]
+}
+}
+subgraph cluster_8 {
+label="CellType[NON_SEN]";
+MotilityReporter_8_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>MotilityReporter</td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/MotilityReporter" ]
+CellDeath_8_8538265115102097483_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDeath</td></tr>
+<tr><td><i>'NON_SEN remove extruded cell'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/CellDeath" ]
+Mapper_8_15104772418414729383_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'NON_SEN occupied area'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Mapper" ]
+CellDivision_8_7775788615282087459_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<tr><td><i>'NON_SEN source size-triggered division'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/CellDivision" ]
+subgraph cluster_cpm8 {
+label="CPM components";
+VolumeConstraint_8[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[2]/VolumeConstraint"];
+DirectedMotion_8[ shape=Mrecord, label=" DirectedMotion", URL="morph://MorpheusModel/CellTypes/CellType[2]/DirectedMotion"];
+}
+Vt_8[label="Vt", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[0]"]
+bias_8[label="bias", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[2]/PropertyVector[0]"]
+cell_center_8[label="cell.center", fillcolor="#b5b426"]
+cell_id_8[label="cell.id", fillcolor="#d3d247"]
+cell_type_8[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]"]
+cell_volume_8[label="cell.volume", fillcolor="#d3d247"]
+death_reason_8[label="death_reason", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[2]"]
+instantaneous_velocity_8[label="instantaneous_velocity", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[2]/PropertyVector[1]"]
+instantaneous_velocity_x_8[label="instantaneous_velocity.x", fillcolor="#d3d247"]
+instantaneous_velocity_y_8[label="instantaneous_velocity.y", fillcolor="#d3d247"]
+lambdaV_8[label="lambdaV", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Property[1]"]
+pressure_8[label="pressure", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[2]/Function"]
+subgraph cluster_15 {
+label="";
+System_15_8843515604900737628_1_2[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<tr><td><i>'Direction memory every 50 MCS'</i></td></tr>
+<hr/>
+<tr><td>1.2</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/System[0]" ]
+}
+subgraph cluster_16 {
+label="";
+Event_16_11458291563255380173_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'NON_SEN background death'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/Event" ]
+}
+subgraph cluster_17 {
+label="Function";
+}
+subgraph cluster_18 {
+label="";
+System_18_10008616956358291728_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<tr><td><i>'NON_SEN source pressure-limited growth'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[2]/System[1]" ]
+}
+subgraph cluster_19 {
+label="";
+}
+}
+subgraph cluster_9 {
+label="CellType[CANCER]";
+MotilityReporter_9_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>MotilityReporter</td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/MotilityReporter" ]
+CellDeath_9_4765505478687998054_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDeath</td></tr>
+<tr><td><i>'CANCER remove extruded cell'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/CellDeath" ]
+Mapper_9_3799603264162454984_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'CANCER occupied area'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/Mapper" ]
+CellDivision_9_6759980293706648740_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<tr><td><i>'CANCER source size-triggered division'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/CellDivision" ]
+subgraph cluster_cpm9 {
+label="CPM components";
+VolumeConstraint_9[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[3]/VolumeConstraint"];
+DirectedMotion_9[ shape=Mrecord, label=" DirectedMotion", URL="morph://MorpheusModel/CellTypes/CellType[3]/DirectedMotion"];
+}
+Vt_9[label="Vt", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]/Property[0]"]
+bias_9[label="bias", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[3]/PropertyVector[0]"]
+cell_center_9[label="cell.center", fillcolor="#b5b426"]
+cell_id_9[label="cell.id", fillcolor="#d3d247"]
+cell_type_9[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]"]
+cell_volume_9[label="cell.volume", fillcolor="#d3d247"]
+death_reason_9[label="death_reason", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]/Property[2]"]
+instantaneous_velocity_9[label="instantaneous_velocity", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[3]/PropertyVector[1]"]
+instantaneous_velocity_x_9[label="instantaneous_velocity.x", fillcolor="#d3d247"]
+instantaneous_velocity_y_9[label="instantaneous_velocity.y", fillcolor="#d3d247"]
+lambdaV_9[label="lambdaV", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]/Property[1]"]
+pressure_9[label="pressure", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[3]/Function"]
+subgraph cluster_20 {
+label="";
+System_20_8843515604900737628_1_2[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<tr><td><i>'Direction memory every 50 MCS'</i></td></tr>
+<hr/>
+<tr><td>1.2</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/System[0]" ]
+}
+subgraph cluster_21 {
+label="";
+Event_21_11732724818581757258_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'CANCER background death'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/Event" ]
+}
+subgraph cluster_22 {
+label="Function";
+}
+subgraph cluster_23 {
+label="";
+System_23_785319948988936508_0_024[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<tr><td><i>'CANCER source pressure-limited growth'</i></td></tr>
+<hr/>
+<tr><td>0.024</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[3]/System[1]" ]
+}
+subgraph cluster_24 {
+label="";
+}
+}
+subgraph cluster_10 {
+label="CellType[WALL]";
+cell_center_10[label="cell.center", fillcolor="#b5b426"]
+cell_id_10[label="cell.id", fillcolor="#d3d247"]
+cell_type_10[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[4]"]
+}
+}
+CPM_0_0_024 -> VolumeConstraint_7 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm7] 
+
+CPM_0_0_024 -> VolumeConstraint_8 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm8] 
+
+CPM_0_0_024 -> VolumeConstraint_9 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm9] 
+
+CPM_0_0_024 -> cell_center_0 [penwidth=3, color="#8f100d"] 
+
+CPM_0_0_024 -> cell_type_0 [penwidth=3, color="#8f100d"] 
+
+CellDeath_7_4861909553003377623_0_024 -> Vt_7 [penwidth=3, color="#8f100d"] 
+
+CellDeath_7_4861909553003377623_0_024 -> cell_center_7 [penwidth=3, color="#8f100d"] 
+
+CellDeath_8_8538265115102097483_0_024 -> Vt_8 [penwidth=3, color="#8f100d"] 
+
+CellDeath_8_8538265115102097483_0_024 -> cell_center_8 [penwidth=3, color="#8f100d"] 
+
+CellDeath_9_4765505478687998054_0_024 -> Vt_9 [penwidth=3, color="#8f100d"] 
+
+CellDeath_9_4765505478687998054_0_024 -> cell_center_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_8_7775788615282087459_0_024 -> Vt_8 [penwidth=3, color="#8f100d"] 
+
+CellDivision_8_7775788615282087459_0_024 -> cell_center_8 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_6759980293706648740_0_024 -> Vt_9 [penwidth=3, color="#8f100d"] 
+
+CellDivision_9_6759980293706648740_0_024 -> cell_center_9 [penwidth=3, color="#8f100d"] 
+
+Event_12_4469563538183627068_0_024 -> Vt_7 [penwidth=3, color="#8f100d"] 
+
+Event_12_4469563538183627068_0_024 -> death_reason_7 [penwidth=3, color="#8f100d"] 
+
+Event_14_8539728734224338660_0_024 -> Vt_7 [penwidth=3, color="#8f100d"] 
+
+Event_14_8539728734224338660_0_024 -> death_reason_7 [penwidth=3, color="#8f100d"] 
+
+Event_16_11458291563255380173_0_024 -> Vt_8 [penwidth=3, color="#8f100d"] 
+
+Event_16_11458291563255380173_0_024 -> death_reason_8 [penwidth=3, color="#8f100d"] 
+
+Event_21_11732724818581757258_0_024 -> Vt_9 [penwidth=3, color="#8f100d"] 
+
+Event_21_11732724818581757258_0_024 -> death_reason_9 [penwidth=3, color="#8f100d"] 
+
+J_sen_cancer_0 -> CPM_0_0_024 [penwidth=2, color="#112c5f"] 
+
+Mapper_7_1450635129188265996_0_024 -> sen_area_px_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_7_1_2121212121 -> sen_cancer_contacts_mean_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_7_1_2121212121 -> sen_cancer_perimeter_max_raw_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_7_1_2121212121 -> sen_cancer_perimeter_mean_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_15104772418414729383_0_024 -> non_sen_area_px_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_9_3799603264162454984_0_024 -> cancer_area_px_0 [penwidth=3, color="#8f100d"] 
+
+MotilityReporter_7_0_024 -> instantaneous_velocity_7 [penwidth=3, color="#8f100d"] 
+
+MotilityReporter_8_0_024 -> instantaneous_velocity_8 [penwidth=3, color="#8f100d"] 
+
+MotilityReporter_9_0_024 -> instantaneous_velocity_9 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_7_13908318726120992036_0 -> all_neighbors_7 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_7_15966146558407537813_0_024 -> cancer_perimeter_7 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_7_17585451456241580883_0_024 -> cancer_neighbors_7 [penwidth=3, color="#8f100d"] 
+
+System_11_8843515604900737628_1_2 -> bias_7 [penwidth=3, color="#8f100d"] 
+
+System_15_8843515604900737628_1_2 -> bias_8 [penwidth=3, color="#8f100d"] 
+
+System_18_10008616956358291728_0_024 -> Vt_8 [penwidth=3, color="#8f100d"] 
+
+System_20_8843515604900737628_1_2 -> bias_9 [penwidth=3, color="#8f100d"] 
+
+System_23_785319948988936508_0_024 -> Vt_9 [penwidth=3, color="#8f100d"] 
+
+Vt_7 -> CellDeath_7_4861909553003377623_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_7 -> Event_12_4469563538183627068_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_7 -> Event_14_8539728734224338660_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_7 -> Logger_0_698465033113607646_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_7 -> VolumeConstraint_7 [penwidth=2, color="#112c5f"] 
+
+Vt_8 -> CellDeath_8_8538265115102097483_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_8 -> CellDivision_8_7775788615282087459_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_8 -> Event_16_11458291563255380173_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_8 -> VolumeConstraint_8 [penwidth=2, color="#112c5f"] 
+
+Vt_8 -> pressure_8 [penwidth=2, color="#112c5f"] 
+
+Vt_9 -> CellDeath_9_4765505478687998054_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_9 -> CellDivision_9_6759980293706648740_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_9 -> Event_21_11732724818581757258_0_024 [penwidth=2, color="#112c5f"] 
+
+Vt_9 -> VolumeConstraint_9 [penwidth=2, color="#112c5f"] 
+
+Vt_9 -> pressure_9 [penwidth=2, color="#112c5f"] 
+
+bias_7 -> DirectedMotion_7 [penwidth=2, color="#112c5f"] 
+
+bias_8 -> DirectedMotion_8 [penwidth=2, color="#112c5f"] 
+
+bias_9 -> DirectedMotion_9 [penwidth=2, color="#112c5f"] 
+
+cancer_area_px_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+cancer_area_px_0 -> occupied_fraction_0 [penwidth=2, color="#112c5f"] 
+
+cancer_cells_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+cancer_fraction_7 -> Event_14_8539728734224338660_0_024 [penwidth=2, color="#112c5f"] 
+
+cancer_fraction_7 -> Logger_0_698465033113607646_0_024 [penwidth=2, color="#112c5f"] 
+
+cancer_fraction_7 -> Mapper_7_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+cancer_neighbors_7 -> Event_14_8539728734224338660_0_024 [penwidth=2, color="#112c5f"] 
+
+cancer_neighbors_7 -> Logger_0_698465033113607646_0_024 [penwidth=2, color="#112c5f"] 
+
+cancer_neighbors_7 -> Mapper_7_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+cancer_perimeter_7 -> Logger_0_698465033113607646_0_024 [penwidth=2, color="#112c5f"] 
+
+cancer_perimeter_7 -> cancer_fraction_7 [penwidth=2, color="#112c5f"] 
+
+cell_center_10 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_7 -> Mapper_7_1450635129188265996_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> Mapper_7_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> MotilityReporter_7_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> NeighborhoodReporter_7_13908318726120992036_0 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> NeighborhoodReporter_7_15966146558407537813_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> NeighborhoodReporter_7_17585451456241580883_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_center_7 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_8 -> Mapper_8_15104772418414729383_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_center_8 -> MotilityReporter_8_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_center_8 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_9 -> Mapper_9_3799603264162454984_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_center_9 -> MotilityReporter_9_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_center_9 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_0 -> TiffPlotter_0_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+cell_id_10 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_7 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_8 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_id_9 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_surface_7 -> Logger_0_698465033113607646_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_surface_7 -> cancer_fraction_7 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> Gnuplotter_0_24 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> NeighborhoodReporter_7_13908318726120992036_0 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> NeighborhoodReporter_7_15966146558407537813_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> NeighborhoodReporter_7_17585451456241580883_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> TiffPlotter_0_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+cell_type_10 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_7 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_8 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_type_9 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_7 -> Event_12_4469563538183627068_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_7 -> Event_14_8539728734224338660_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_7 -> Logger_0_698465033113607646_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_7 -> Mapper_7_1450635129188265996_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_8 -> CellDivision_8_7775788615282087459_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_8 -> Event_16_11458291563255380173_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_8 -> Mapper_8_15104772418414729383_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_8 -> pressure_8 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> CellDivision_9_6759980293706648740_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> Event_21_11732724818581757258_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> Mapper_9_3799603264162454984_0_024 [penwidth=2, color="#112c5f"] 
+
+cell_volume_9 -> pressure_9 [penwidth=2, color="#112c5f"] 
+
+celltype_CANCER_id_0 -> NeighborhoodReporter_7_15966146558407537813_0_024 [penwidth=2, color="#112c5f"] 
+
+celltype_CANCER_id_0 -> NeighborhoodReporter_7_17585451456241580883_0_024 [penwidth=2, color="#112c5f"] 
+
+celltype_CANCER_size_0 -> cancer_cells_0 [penwidth=2, color="#112c5f"] 
+
+celltype_NON_SEN_size_0 -> non_senescent_cells_0 [penwidth=2, color="#112c5f"] 
+
+celltype_SEN_size_0 -> senescent_cells_0 [penwidth=2, color="#112c5f"] 
+
+celltype_WALL_id_0 -> NeighborhoodReporter_7_13908318726120992036_0 [penwidth=2, color="#112c5f"] 
+
+death_reason_7 -> Logger_0_698465033113607646_0_024 [penwidth=2, color="#112c5f"] 
+
+extrusion_enabled_0 -> Event_14_8539728734224338660_0_024 [penwidth=2, color="#112c5f"] 
+
+instantaneous_velocity_7 -> instantaneous_velocity_x_7 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+instantaneous_velocity_7 -> instantaneous_velocity_y_7 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+instantaneous_velocity_8 -> instantaneous_velocity_x_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+instantaneous_velocity_8 -> instantaneous_velocity_y_8 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+instantaneous_velocity_9 -> instantaneous_velocity_x_9 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+instantaneous_velocity_9 -> instantaneous_velocity_y_9 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+instantaneous_velocity_x_7 -> System_11_8843515604900737628_1_2 [penwidth=2, color="#112c5f"] 
+
+instantaneous_velocity_x_8 -> System_15_8843515604900737628_1_2 [penwidth=2, color="#112c5f"] 
+
+instantaneous_velocity_x_9 -> System_20_8843515604900737628_1_2 [penwidth=2, color="#112c5f"] 
+
+instantaneous_velocity_y_7 -> System_11_8843515604900737628_1_2 [penwidth=2, color="#112c5f"] 
+
+instantaneous_velocity_y_8 -> System_15_8843515604900737628_1_2 [penwidth=2, color="#112c5f"] 
+
+instantaneous_velocity_y_9 -> System_20_8843515604900737628_1_2 [penwidth=2, color="#112c5f"] 
+
+lambdaV_7 -> VolumeConstraint_7 [penwidth=2, color="#112c5f"] 
+
+lambdaV_8 -> VolumeConstraint_8 [penwidth=2, color="#112c5f"] 
+
+lambdaV_8 -> pressure_8 [penwidth=2, color="#112c5f"] 
+
+lambdaV_9 -> VolumeConstraint_9 [penwidth=2, color="#112c5f"] 
+
+lambdaV_9 -> pressure_9 [penwidth=2, color="#112c5f"] 
+
+mcs_hours_0 -> DirectedMotion_7 [penwidth=2, color="#112c5f"] 
+
+mcs_hours_0 -> DirectedMotion_8 [penwidth=2, color="#112c5f"] 
+
+mcs_hours_0 -> DirectedMotion_9 [penwidth=2, color="#112c5f"] 
+
+non_sen_area_px_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+non_sen_area_px_0 -> occupied_fraction_0 [penwidth=2, color="#112c5f"] 
+
+non_senescent_cells_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+occupied_fraction_0 -> Event_14_8539728734224338660_0_024 [penwidth=2, color="#112c5f"] 
+
+occupied_fraction_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+occupied_fraction_0 -> Logger_0_698465033113607646_0_024 [penwidth=2, color="#112c5f"] 
+
+p_background_0 -> Event_12_4469563538183627068_0_024 [penwidth=2, color="#112c5f"] 
+
+p_background_0 -> Event_16_11458291563255380173_0_024 [penwidth=2, color="#112c5f"] 
+
+p_background_0 -> Event_21_11732724818581757258_0_024 [penwidth=2, color="#112c5f"] 
+
+perimeter_threshold_0 -> Event_14_8539728734224338660_0_024 [penwidth=2, color="#112c5f"] 
+
+pressure_8 -> System_18_10008616956358291728_0_024 [penwidth=2, color="#112c5f"] 
+
+pressure_9 -> System_23_785319948988936508_0_024 [penwidth=2, color="#112c5f"] 
+
+sen_area_px_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+sen_area_px_0 -> occupied_fraction_0 [penwidth=2, color="#112c5f"] 
+
+sen_cancer_contacts_mean_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+sen_cancer_perimeter_max_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+sen_cancer_perimeter_max_raw_0 -> sen_cancer_perimeter_max_0 [penwidth=2, color="#112c5f"] 
+
+sen_cancer_perimeter_mean_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+senescent_cells_0 -> Logger_0_13907019680149269916_1_2121212121 [penwidth=2, color="#112c5f"] 
+
+senescent_cells_0 -> sen_cancer_perimeter_max_0 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> DirectedMotion_7 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> DirectedMotion_8 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> DirectedMotion_9 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> Event_12_4469563538183627068_0_024 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> Event_14_8539728734224338660_0_024 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> Event_16_11458291563255380173_0_024 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> Event_21_11732724818581757258_0_024 [penwidth=2, color="#112c5f"] 
+
+time_hours_0 -> Gnuplotter_0_24 [penwidth=2, color="#112c5f"] 
+
+}

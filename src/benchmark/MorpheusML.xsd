@@ -1,0 +1,2923 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:complexType name="Lattice">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:documentation>Specifies the lattice by size, structure and boundary conditions.</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Size">
+            <xs:complexType>
+              <xs:attribute name="value" use="required" type="cpmVectorMathExpression"/>
+              <xs:attribute name="symbol" use="required" type="cpmVectorSymbolDef" default="size"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="NodeLength" type="cpmLength" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Length of a lattice node.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="BoundaryConditions" type="cpmLatticeBoundaryConditions" minOccurs="0">
+					</xs:element>
+          <xs:element name="Domain" type="cpmDomain" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Specify a custom non-rectangular lattice domain using a predefined structure (cirle) or TIFF image.
+							</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Neighborhood" type="cpmNeighborhood"/>
+        </xs:all>
+        <xs:attribute name="class" use="required" type="cpmLatticeStructure">
+          <xs:annotation>
+            <xs:documentation>Lattice structure.
+
+							For non-spatial (ODE) models:
+
+							1D: linear
+							2D: square or hexagonal
+							3D: cubic
+
+							Note:
+							- For non-spatial (ODE) models, choose 'linear' with size: 1 0 0.
+						</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cpmLatticeBoundaryConditions">
+    <xs:all>
+      <xs:element name="Condition" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="type" use="required" type="cpmBoundaryTypes"/>
+          <xs:attribute name="boundary" use="required" type="cpmBoundary"/>
+          <!-- 					<xs:attribute name="value" use="optional" type="cpmDouble" /> -->
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="cpmDomain">
+    <xs:choice maxOccurs="1">
+      <xs:element name="Circle">
+        <xs:complexType>
+          <xs:attribute name="diameter" use="required" type="cpmDouble"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Hexagon">
+        <xs:complexType>
+          <xs:attribute name="diameter" use="required" type="cpmDouble"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Image">
+        <xs:complexType>
+          <xs:attribute name="path" use="required" type="cpmSystemFile"/>
+          <xs:attribute name="invert" use="optional" type="cpmBoolean" default="false"/>
+        </xs:complexType>
+        <xs:annotation>
+          <xs:documentation>TIFF image (or image stack for 3D) that specifies the shape of domain.
+
+						Note:
+						- Non-zero pixels are interpreted as foreground, zero pixels are background.
+						- Only 8-bit TIFF format is supported.
+					</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+    <xs:attribute name="boundary-type" use="required" type="cpmDomainBoundaryTypes"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmBoundaryTypes">
+    <xs:annotation>
+      <xs:documentation>Boundary conditions.
+- Periodic (aka toroidal, wrap-around): specifies that the simulation domain is assumed to be replicated to form an infinite lattice.
+- No-flux (aka Neumann): specifies the zero flux across the interface which leads to mass conservation within the simulation domain.
+- Constant (aka Dirichlet): specifies a specific value to be fixed for the solution on the boundary point.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="periodic"/>
+      <xs:enumeration value="constant"/>
+      <xs:enumeration value="noflux"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmDomainBoundaryTypes">
+    <xs:annotation>
+      <xs:documentation>Domain Boundary conditions.
+- No-flux (aka Neumann): specifies the zero flux across the interface which leads to mass conservation within the simulation domain.
+- Constant (aka Dirichlet): specifies a specific value to be fixed for the solution on the boundary point.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="constant"/>
+      <xs:enumeration value="noflux"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmBoundary">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="x"/>
+      <xs:enumeration value="-x"/>
+      <xs:enumeration value="y"/>
+      <xs:enumeration value="-y"/>
+      <xs:enumeration value="z"/>
+      <xs:enumeration value="-z"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmBoundaryRef">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="x"/>
+      <xs:enumeration value="-x"/>
+      <xs:enumeration value="y"/>
+      <xs:enumeration value="-y"/>
+      <xs:enumeration value="z"/>
+      <xs:enumeration value="-z"/>
+      <xs:enumeration value="domain"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmLatticeStructure">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="linear"/>
+      <xs:enumeration value="square"/>
+      <xs:enumeration value="hexagonal-old"/>
+      <xs:enumeration value="hexagonal"/>
+      <xs:enumeration value="cubic"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="cpmNeighborhood">
+    <xs:annotation>
+      <xs:documentation>Number of neighboring lattice sites to take into account.</xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element name="Order" type="cpmUnsignedInteger" default="1">
+        <xs:annotation>
+          <xs:documentation>Assuming a two dim. lattice order means
+1: 4 neighbors (von Neumann)
+2: 8 neighbors (Moore)
+etc...</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Distance" type="cpmUnsignedDouble" default="1">
+        <xs:annotation>
+          <xs:documentation>Maximal distance to neighbor to take into account (in units of lattice nodes).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Name" type="cpmString">
+        <xs:annotation>
+          <xs:documentation>The only named neighborhood is "FCHC" for cubic lattices.
+						This means: Face Centered HyperCube
+					</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:simpleType name="morphTags">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([\w-:]*)(?:\s*,\s*([\w-:]+))*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="morphPlugin">
+    <xs:attribute name="name" type="cpmString" use="optional"/>
+    <xs:attribute name="tags" type="morphTags" use="optional"/>
+    <xs:all>
+      <xs:element name="Annotation" type="morphText" minOccurs="0"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="morphProcessPlugin">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:attribute name="time-step" type="cpmMathExpression" use="optional" default="1.0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="morphInstantProcessPlugin">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:attribute name="time-step" type="cpmMathExpression" use="required" default="1.0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="morphReporterPlugin">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:attribute name="time-step" type="cpmMathExpression" use="optional" default="1.0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="morphAnalysisPlugin">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:attribute name="time-step" type="cpmMathExpression" use="required" default="1.0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CPMType">
+    <!-- should be an extension of plugin ?? -->
+    <xs:annotation>
+      <xs:documentation>Let's you define all ingredients for a CPM simulation.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="ShapeSurface">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Neighborhood" type="cpmNeighborhood"/>
+          </xs:all>
+          <xs:attribute name="scaling" use="required" type="cpmBoundaryScalingModes" default="norm"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Interaction" type="Interaction"/>
+      <xs:element name="MonteCarloSampler" type="MonteCarloSampler" minOccurs="0"/>
+    </xs:all>
+    <!--		<xs:attribute name="tags"	type="morphTags"			use="optional" />-->
+  </xs:complexType>
+  <xs:simpleType name="cpmBoundaryScalingModes">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="norm"/>
+      <xs:enumeration value="size"/>
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="classic"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="MonteCarloSampler">
+    <xs:all>
+      <xs:element name="MetropolisKinetics">
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation>Specifies the modified Metropolis algorithm used to stochastically find the minimal energy configuration.</xs:documentation>
+          </xs:annotation>
+          <xs:attribute name="temperature" type="cpmMathExpression" use="required" default="1"/>
+          <xs:attribute name="yield" type="cpmMathExpression" use="optional" default="0.0"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Neighborhood" type="cpmNeighborhood"/>
+      <xs:element name="MCSDuration" minOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="value" type="cpmUnsignedDouble" use="required" default="1"/>
+          <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="optional" default="mcs_duration"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="stepper" type="cpmStepper" use="required"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmStepper">
+    <xs:annotation>
+      <xs:documentation>Monte Carlo sampling is done randomly (1) over whole lattice ("random"), or (2) on edges only ("edgelist").
+Typically, "edgelist" is computationally much more efficient since updates can only take place at the interfaces of different domains (cell interfaces).</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="edgelist"/>
+      <xs:enumeration value="random"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Interaction">
+    <xs:all>
+      <xs:element name="Contact" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:group ref="ContactPlugins"/>
+          </xs:all>
+          <xs:attribute name="type1" use="required" type="cpmCellTypeRef"/>
+          <xs:attribute name="type2" use="required" type="cpmCellTypeRef"/>
+          <xs:attribute name="value" use="required" type="cpmMathExpression"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="default" use="optional" type="cpmDouble"/>
+    <!--		<xs:attribute name="collapse" use="optional" type="cpmBoolean" default="true" /> -->
+    <xs:attribute name="negative" use="optional" type="cpmBoolean" default="false">
+      <xs:annotation>
+        <xs:documentation>Use negative surface values when using SurfaceConstraint (Ouchi, 2003)</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="MorpheusModel" type="MorpheusModel"/>
+  <xs:complexType name="MorpheusModel">
+    <xs:all>
+      <xs:element name="Description" type="Description"/>
+      <xs:element name="Time" type="Time"/>
+      <xs:element name="Space" type="Space"/>
+      <xs:element name="Global" type="morphGlobals" minOccurs="0"/>
+      <xs:element name="CPM" type="CPMType" minOccurs="0"/>
+      <xs:element name="CellTypes" type="CellTypes" minOccurs="0"/>
+      <xs:element name="Analysis" type="Analysis" minOccurs="0"/>
+      <xs:element name="CellPopulations" type="CellPopulations" minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="version" type="cpmInteger" use="optional"/>
+  </xs:complexType>
+  <xs:group name="GlobalPlugins">
+    <xs:all>
+      <xs:element name="DelayVariable" type="DelayProperty" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VectorEquation" type="VectorEquation" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Event" type="Event" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="System" type="System" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ConstantVector" type="ConstantVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Variable" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VariableVector" type="PropertyVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Function" type="Function" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VectorFunction" type="VectorFunction" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Field" type="Field" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VectorField" type="cpmVectorField" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Equation" type="Equation" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VectorMapper" type="VectorMapping_t" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Mapper" type="Mapping_t" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="NeighborhoodVectorReporter" type="NeighborhoodVectorReporter" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="NeighborhoodReporter" type="NeighborhoodGlobalReporter" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="Field">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Diffusion" type="cpmDiffusion" minOccurs="0"/>
+          <!-- 			<xs:element name="BoundaryConditions"  type="cpmPDEBoundaryConditions" minOccurs="0" /> -->
+          <xs:element name="BoundaryValue" type="cpmPDEBoundaryValue" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="Reduction" type="cpmBoundary" minOccurs="0"/>
+          <!-- 			<xs:element name="Initial" minOccurs="0">
+						<xs:group  ref="FieldInitPlugins" />
+					</xs:element>-->
+          <xs:element name="Data" type="cpmFieldData" minOccurs="0"/>
+          <xs:element name="TIFFReader" type="TIFFReaderField" minOccurs="0"/>
+        </xs:all>
+        <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:group name="CellTypePlugins">
+    <xs:all>
+      <xs:element name="DelayProperty" type="DelayProperty" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VectorEquation" type="VectorEquation" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Event" type="Event" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="System" type="System" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ConstantVector" type="ConstantVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="PropertyVector" type="PropertyVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Variable" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VariableVector" type="PropertyVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="MembraneProperty" type="MembraneProperty" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Function" type="Function" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VectorFunction" type="VectorFunction" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Equation" type="Equation" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ConnectivityConstraint" type="ConnectivityConstraint" minOccurs="0"/>
+      <xs:element name="LengthConstraint" type="LengthConstraint" minOccurs="0"/>
+      <xs:element name="SurfaceConstraint" type="SurfaceConstraint" minOccurs="0"/>
+      <xs:element name="VolumeConstraint" type="VolumeConstraint" minOccurs="0"/>
+      <xs:element name="MotilityReporter" type="MotilityReporter" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VectorMapper" type="VectorMapping_t" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Mapper" type="Mapping_t" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="NeighborhoodVectorReporter" type="NeighborhoodVectorReporter" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="NeighborhoodReporter" type="NeighborhoodCellTypeReporter" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="StarConvex" type="StarConvex" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Protrusion" type="Protrusion" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="FreezeMotion" type="FreezeMotion" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="PersistentMotion" type="PersistentMotion" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DirectedMotion" type="DirectedMotion" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Haptotaxis" type="Haptotaxis" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Chemotaxis" type="Chemotaxis" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="InsertMedium" type="InsertMedium" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ChangeCellType" type="ChangeCellType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="AddCell" type="AddCell" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="CellDeath" type="CellDeath" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="CellDivision" type="CellDivision" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="MechanicalLink" type="MechanicalLink" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="DelayProperty">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="delay" type="cpmMathExpression" use="required" default="1"/>
+        <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DelayPropertyData">
+    <xs:annotation>
+      <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+      <xs:appinfo>Container</xs:appinfo>
+      <xs:documentation>Specify the numeric property of a cell that can be referenced via a symbol.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+    <xs:attribute name="value" type="cpmDelayData" use="required"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmDelayData">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\s*\(-?\d+(\.\d+)?(e[-\+]?\d{2})?\s*,\s*-?\d+(\.\d+)?(e[-\+]?\d{2})\)\s*\,?)*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="MembraneProperty">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Diffusion" type="cpmDiffusion"/>
+          <!--			<xs:element name="Initial" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Initial condition for MembraneProperty. </xs:documentation>
+				</xs:annotation>
+				<xs:group ref="FieldInitPlugins">
+			</xs:element> -->
+          <xs:element name="TIFFReader" type="TIFFReaderField" minOccurs="0"/>
+          <xs:element name="Data" type="MembranePropertyData" minOccurs="0"/>
+        </xs:all>
+        <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MembranePropertyData">
+    <xs:simpleContent>
+      <xs:extension base="cpmFieldData">
+        <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ConnectivityConstraint">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Shape</xs:appinfo>
+        </xs:annotation>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LengthConstraint">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Shape</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="target" type="cpmMathExpression" use="required" default="1"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required" default="1"/>
+        <xs:attribute name="mode" type="cpmLCTargetMode" use="required" default="length"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmLCTargetMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="length"/>
+      <xs:enumeration value="eccentricity"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SurfaceConstraint">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Shape</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="mode" type="cpmSCTargetMode" use="required" default="aspherity"/>
+        <xs:attribute name="target" type="cpmMathExpression" use="required" default="1"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required" default="1"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmSCTargetMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="surface"/>
+      <xs:enumeration value="aspherity"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="VolumeConstraint">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Shape</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="target" type="cpmMathExpression" use="required" default="1"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required" default="1"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MotilityReporter">
+    <xs:complexContent>
+      <xs:extension base="morphReporterPlugin">
+        <xs:annotation>
+          <xs:appinfo>Reporter</xs:appinfo>
+        </xs:annotation>
+        <xs:all minOccurs="0">
+          <xs:element name="Displacement" type="cpmVectorPropertyRef" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Determine the mean square displacement of the cell in regular time intervals. </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Velocity" type="cpmVectorPropertyRef" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Determine the cell velocity in regular time intervals. </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+        <xs:attribute name="time-step" type="cpmMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="VectorMapping_t">
+    <xs:complexContent>
+      <xs:extension base="morphReporterPlugin">
+        <xs:annotation>
+          <xs:appinfo>Reporter</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Input">
+            <xs:complexType>
+              <xs:attribute name="value" type="cpmVectorMathExpression" use="required"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Output" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:attribute name="symbol-ref" type="cpmDoubleVectorSymbolRef" use="required"/>
+              <xs:attribute name="mapping" type="cpmVectorArrayStatistics" use="optional"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Mapping_t">
+    <xs:complexContent>
+      <xs:extension base="morphReporterPlugin">
+        <xs:annotation>
+          <xs:appinfo>Reporter</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Input">
+            <xs:complexType>
+              <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Output" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+              <xs:attribute name="mapping" type="cpmArrayStatistics" use="optional"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Polarity" type="cpmVectorPropertyRef" minOccurs="0"/>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NeighborhoodVectorReporter" mixed="false">
+    <xs:complexContent>
+      <xs:extension base="morphReporterPlugin">
+        <xs:annotation>
+          <xs:appinfo>Reporter</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Input">
+            <xs:complexType>
+              <xs:all>
+                <xs:element name="LocalSymbolInjection" minOccurs="0" maxOccurs="unbounded">
+                  <xs:complexType>
+                    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+                    <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+                  </xs:complexType>
+                </xs:element>
+              </xs:all>
+              <xs:attribute name="scaling" type="cpmNeighborsReporterInputMode" use="required"/>
+              <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+              <xs:attribute name="exclude-medium" type="cpmBoolean" use="optional"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Output">
+            <xs:complexType>
+              <xs:attribute name="mapping" type="cpmVectorArrayStatistics" use="required"/>
+              <xs:attribute name="symbol-ref" type="cpmVectorSymbolRef" use="required"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:all>
+        <xs:attribute name="name" type="cpmString" use="optional"/>
+        <xs:attribute name="time-step" type="cpmMathExpression" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmVectorArrayStatistics">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="average"/>
+      <xs:enumeration value="sum"/>
+      <xs:enumeration value="discrete"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="NeighborhoodCellTypeReporter" mixed="false">
+    <xs:complexContent>
+      <xs:extension base="morphReporterPlugin">
+        <xs:annotation>
+          <xs:appinfo>Reporter</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Input" minOccurs="1">
+            <xs:complexType>
+              <!--							<xs:all>
+								<xs:element name="LocalSymbol" minOccurs="0"  maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required" />
+										<xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:all>-->
+              <xs:attribute name="scaling" type="cpmNeighborsReporterInputMode" use="required"/>
+              <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+              <xs:attribute name="noflux-cell-medium" type="cpmBoolean" use="optional" default="false"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Output" minOccurs="1" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:attribute name="mapping" type="cpmArrayStatistics" use="required"/>
+              <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NeighborhoodGlobalReporter" mixed="false">
+    <xs:complexContent>
+      <xs:extension base="morphReporterPlugin">
+        <xs:annotation>
+          <xs:appinfo>Reporter</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Input" minOccurs="1">
+            <xs:complexType>
+              <xs:all>
+                <xs:element name="AddLocalSymbol" minOccurs="0" maxOccurs="unbounded">
+                  <xs:complexType>
+                    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+                    <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+                  </xs:complexType>
+                </xs:element>
+              </xs:all>
+              <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Output" minOccurs="1" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:attribute name="mapping" type="cpmArrayStatistics" use="required"/>
+              <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:all>
+        <xs:attribute name="name" type="cpmString" use="optional"/>
+        <xs:attribute name="time-step" type="cpmMathExpression" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmNeighborsReporterInputMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="length"/>
+      <xs:enumeration value="cell"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="StarConvex">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Motility</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="membrane" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="protrusion" type="cpmBoolean" use="optional" default="true"/>
+        <xs:attribute name="retraction" type="cpmBoolean" use="optional" default="true"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Protrusion">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Motility</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="field" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required" default="1"/>
+        <xs:attribute name="maximum" type="cpmMathExpression" use="required" default="20"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FreezeMotion">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Motility</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Condition" type="cpmMathExpression"/>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PersistentMotion">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Motility</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="decay-time" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="protrusion" type="cpmBoolean" use="optional" default="true"/>
+        <xs:attribute name="retraction" type="cpmBoolean" use="optional" default="false"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DirectedMotion">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Motility</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="direction" type="cpmVectorMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="protrusion" type="cpmBoolean" use="optional" default="true"/>
+        <xs:attribute name="retraction" type="cpmBoolean" use="optional" default="true"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Haptotaxis">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Motility</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="attractant" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Chemotaxis">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Motility</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="field" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required" default="1"/>
+        <xs:attribute name="saturation" type="cpmMathExpression" use="optional" default="1"/>
+        <xs:attribute name="retraction" type="cpmBoolean" use="optional" default="true"/>
+        <xs:attribute name="contact-inhibition" type="cpmBoolean" use="optional" default="false"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="InsertMedium">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Miscellaneous</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Condition" type="cpmMathExpression" minOccurs="0"/>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ChangeCellType">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Population</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Condition" type="cpmMathExpression"/>
+          <xs:element name="Triggers" type="TriggeredSystem" minOccurs="0"/>
+        </xs:all>
+        <xs:attribute name="newCellType" type="cpmCellTypeRef" use="required"/>
+        <xs:attribute name="time-step" type="cpmMathExpression" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AddCell">
+    <xs:complexContent>
+      <xs:annotation>
+        <xs:appinfo>Population</xs:appinfo>
+      </xs:annotation>
+      <xs:all>
+        <xs:element name="Count" type="cpmMathExpression"/>
+        <xs:element name="Distribution" type="cpmMathExpression"/>
+        <xs:element name="Triggers" type="TriggeredSystem" minOccurs="0"/>
+      </xs:all>
+      <xs:attribute name="name" type="cpmString" use="optional"/>
+      <xs:attribute name="overwrite" type="cpmBoolean" use="optional" default="false"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmAddCellMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="exclude"/>
+      <xs:enumeration value="overwrite"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="CellDeath">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Population</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Condition" type="cpmMathExpression"/>
+          <xs:element name="Shrinkage" minOccurs="0">
+            <xs:complexType>
+              <xs:attribute name="target-volume" type="cpmDoubleSymbolRef" use="required"/>
+              <xs:attribute name="remove-volume" type="cpmMathExpression" default="3"/>
+              <xs:attribute name="replace-with" type="cpmCellDeathSelectionMode" default="medium"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmCellDeathSelectionMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="medium"/>
+      <xs:enumeration value="longest interface"/>
+      <xs:enumeration value="random neighbor"/>
+      <xs:enumeration value="random neighbor weighted by interface"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="CellDivision">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Population</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Condition" type="cpmMathExpression"/>
+          <xs:element name="Triggers" type="TriggeredSystem" minOccurs="0"/>
+        </xs:all>
+        <xs:attribute name="trigger" type="cpmEventTriggerMode" use="optional" default="on-change"/>
+        <xs:attribute name="division-plane" type="cpmDivisionMode" use="required"/>
+        <xs:attribute name="write-log" type="cpmWriteLogMode" use="optional" default="none"/>
+        <xs:attribute name="daughterID" type="cpmString" use="optional"/>
+        <xs:attribute name="orientation" type="cpmVectorMathExpression" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmDivisionMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="major"/>
+      <xs:enumeration value="minor"/>
+      <xs:enumeration value="random"/>
+      <xs:enumeration value="oriented"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmWriteLogMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="csv"/>
+      <xs:enumeration value="celltype-csv"/>
+      <xs:enumeration value="dot"/>
+      <xs:enumeration value="celltype-dot"/>
+      <xs:enumeration value="newick"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="MechanicalLink">
+    <xs:annotation>
+      <xs:appinfo>Motility</xs:appinfo>
+    </xs:annotation>
+    <xs:attribute name="strength" type="cpmMathExpression" use="required"/>
+    <xs:attribute name="link-probability" type="cpmMathExpression" use="required"/>
+    <xs:attribute name="unlink-probability" type="cpmMathExpression" use="required"/>
+  </xs:complexType>
+  <xs:group name="PDEPlugins">
+    <xs:all>
+      <xs:element name="System" type="System" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ConstantVector" type="ConstantVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Function" type="Function" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Equation" type="Equation" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="System">
+    <xs:complexContent>
+      <xs:extension base="morphProcessPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Math</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:group ref="SystemPlugins"/>
+        </xs:all>
+        <!-- 				<xs:attribute name="ad-solver" type="morphADSolver" use="optional" default="Explicit"/> -->
+        <xs:attribute name="time-scaling" type="cpmDouble" use="optional" default="1.0"/>
+        <xs:attribute name="solver" type="morphSolver" use="required" default="Dormand-Prince [adaptive, O(5)]"/>
+        <xs:attribute name="solver-eps" type="cpmDouble" use="optional" default="1e-4"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="morphSolver">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Dormand-Prince [adaptive, O(5)]"/>
+      <xs:enumeration value="Cash-Karp [adaptive, O(5)]"/>
+      <xs:enumeration value="Bogacki-Shampine [adaptive, O(3)]"/>
+      <xs:enumeration value="Runge-Kutta [fixed, O(4)]"/>
+      <xs:enumeration value="Heun [fixed, O(2)]"/>
+      <xs:enumeration value="Euler [fixed, O(1)]"/>
+      <xs:enumeration value="Euler-Maruyama [stochastic, O(1)]"/>
+      <!-- 			<xs:enumeration value="Cash-Karp+Rosenbrock"/> -->
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="morphADSolver">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Explicit"/>
+      <xs:enumeration value="Implicit"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="DiscreteSystem">
+    <xs:complexContent>
+      <xs:extension base="morphProcessPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Math</xs:appinfo>
+          <xs:documentation>System of equations that is updated synchronously.</xs:documentation>
+        </xs:annotation>
+        <xs:all minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="DiscreteSystemPlugins"/>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TriggeredSystem">
+    <xs:annotation>
+      <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+      <xs:appinfo>Math</xs:appinfo>
+      <xs:documentation>System of equations that is updated synchronously when triggered.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:group ref="DiscreteSystemPlugins"/>
+    </xs:all>
+    <xs:attribute name="name" type="cpmString" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="morphEventCondition">
+    <xs:simpleContent>
+      <xs:extension base="cpmMathExpression">
+        <xs:attribute name="history" use="optional" type="cpmBoolean" default="false"/>
+        <!-- 				<xs:attribute name="persistent" use="optional" type="cpmBoolean" default="true" /> -->
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="Event">
+    <xs:complexContent>
+      <xs:extension base="morphProcessPlugin">
+        <xs:annotation>
+          <xs:appinfo>Math</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Condition" type="morphEventCondition" minOccurs="1" maxOccurs="1"/>
+          <xs:group ref="DiscreteSystemPlugins"/>
+        </xs:all>
+        <xs:attribute name="trigger" type="cpmEventTriggerMode" use="optional" default="on-change"/>
+        <xs:attribute name="compute-time" type="cpmEventDelayMode" use="optional" default="on-trigger"/>
+        <xs:attribute name="delay" type="cpmMathExpression" use="optional" default="0"/>
+        <xs:attribute name="persistent" type="cpmBoolean" use="optional" default="true"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmEventTriggerMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="on-change"/>
+      <xs:enumeration value="when-true"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmEventDelayMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="on-trigger"/>
+      <xs:enumeration value="on-execution"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:group name="InteractionPlugins">
+    <xs:all>
+      <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Function" type="Function" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:group>
+  <xs:group name="ContactPlugins">
+    <xs:all>
+      <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Function" type="Function" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="HeterophilicAdhesion" type="HeterophilicAdhesion" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="HomophilicAdhesion" type="HomophilicAdhesion" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="AddonAdhesion" type="AddonAdhesion" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="HeterophilicAdhesion">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Interaction</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="adhesive1" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="adhesive2" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="equilibriumConstant" type="cpmMathExpression" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="HomophilicAdhesion">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Interaction</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="adhesive" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="equilibriumConstant" type="cpmMathExpression" use="optional"/>
+        <xs:attribute name="name" type="cpmString" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AddonAdhesion">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Interaction</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="adhesive" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="strength" type="cpmMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:group name="AnalysisPlugins">
+    <xs:all>
+      <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ConstantVector" type="ConstantVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Function" type="Function" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VectorFunction" type="VectorFunction" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ModelGraph" type="ModelGraph" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="VtkPlotter" type="VtkPlotter" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="TiffPlotter" type="TiffPlotter" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Logger" type="Logger" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="HistogramLogger" type="HistogramLogger" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Gnuplotter" type="Gnuplotter" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="External" type="External" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DisplacementTracker" type="DisplacementTracker" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ContactLogger" type="ContactLogger" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ClusteringTracker" type="ClusteringTracker" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="CellTracker" type="CellTracker" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="ModelGraph">
+    <xs:attribute name="format" use="required" type="GraphVizFormat" default="dot"/>
+    <xs:attribute name="exclude-symbols" use="optional" type="cpmString"/>
+    <!-- 		<xs:attribute name="exclude-plugins" use="optional" type="cpmString" /> -->
+    <xs:attribute name="include-tags" use="optional" type="cpmString" default="#untagged"/>
+    <xs:attribute name="reduced" use="optional" type="cpmBoolean" default="false"/>
+  </xs:complexType>
+  <xs:simpleType name="GraphVizFormat">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="dot"/>
+      <xs:enumeration value="svg"/>
+      <xs:enumeration value="png"/>
+      <xs:enumeration value="pdf"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="VtkPlotter">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Visualization</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Channel" type="cpmVTKChannel" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:all>
+        <xs:attribute name="mode" use="optional" type="cpmVtkMode" default="binary"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cpmVTKChannel">
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+    <xs:attribute name="celltype" type="cpmCellTypeRef" use="optional" default=""/>
+    <xs:attribute name="outline" type="cpmBoolean" use="optional" default="false"/>
+    <xs:attribute name="no-outline" type="cpmBoolean" use="optional" default="false"/>
+    <xs:attribute name="exclude-medium" type="cpmBoolean" use="optional" default="true"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmVtkMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="ascii"/>
+      <xs:enumeration value="binary"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="TiffPlotter">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Visualization</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="format" use="required" type="cpmTIFFFormatEnum" default="guess"/>
+        <xs:attribute name="compression" use="optional" type="cpmBoolean" default="true"/>
+        <xs:attribute name="timelapse" use="optional" type="cpmBoolean" default="true"/>
+        <xs:attribute name="OME-header" use="optional" type="cpmBoolean" default="true"/>
+        <xs:all>
+          <xs:element name="Channel" type="cpmTIFFChannel" minOccurs="1" maxOccurs="unbounded"/>
+          <xs:element name="CropToCell" type="cpmTIFFCropToCell" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cpmTIFFChannel">
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+    <xs:attribute name="celltype" type="cpmCellTypeRef" use="optional" default=""/>
+    <xs:attribute name="minimum" type="cpmDouble" use="optional" default="0"/>
+    <xs:attribute name="maximum" type="cpmDouble" use="optional" default="1"/>
+    <xs:attribute name="scale" type="cpmBoolean" use="optional" default="false"/>
+    <xs:attribute name="outline" type="cpmBoolean" use="optional" default="false"/>
+    <xs:attribute name="no-outline" type="cpmBoolean" use="optional" default="false"/>
+    <xs:attribute name="exclude-medium" type="cpmBoolean" use="optional" default="true"/>
+  </xs:complexType>
+  <xs:complexType name="cpmTIFFCropToCell">
+    <xs:attribute name="cell-ids" type="cpmString" use="required"/>
+    <xs:attribute name="padding" type="cpmUnsignedInteger" use="optional"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmTIFFFormatEnum">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="8bit"/>
+      <xs:enumeration value="16bit"/>
+      <xs:enumeration value="32bit"/>
+      <xs:enumeration value="guess"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--    <xs:simpleType name="cpmStack3DColorMapEnum">
+        <xs:restriction base="cpmString">
+            <xs:enumeration value="jet"/>
+            <xs:enumeration value="hot"/>
+            <xs:enumeration value="cold"/>
+            <xs:enumeration value="blue"/>
+            <xs:enumeration value="random"/>
+            <xs:enumeration value="positive"/>
+            <xs:enumeration value="negative"/>
+            <xs:enumeration value="cyclic"/>
+            <xs:enumeration value="grey"/>
+        </xs:restriction>
+    </xs:simpleType>-->
+  <xs:complexType name="Logger">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Data analysis</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Input" type="cpmLoggerInput" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="Output" type="cpmLoggerOutput" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="Plots" type="cpmLoggerPlots" minOccurs="0" maxOccurs="1"/>
+          <xs:element name="Restriction" type="cpmLoggerRestrictions" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cpmLoggerInput">
+    <xs:all>
+      <xs:element name="Symbol" type="cpmLoggerSymbol" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+    <xs:attribute name="force-node-granularity" type="cpmBoolean" use="optional" default="true"/>
+    <xs:attribute name="include-boundary" type="cpmBoolean" use="optional" default="true"/>
+  </xs:complexType>
+  <xs:complexType name="cpmLoggerSymbol">
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+  </xs:complexType>
+  <!--  -->
+  <xs:complexType name="cpmLoggerOutput">
+    <xs:choice minOccurs="1" maxOccurs="1">
+      <xs:element name="TextOutput" type="cpmLoggerTextOutput"/>
+      <!-- 			<xs:element name="HDF5Output" 	type="cpmLoggerHDF5Output"	minOccurs="0" maxOccurs="1" /> -->
+    </xs:choice>
+  </xs:complexType>
+  <!--  -->
+  <xs:complexType name="cpmLoggerPlots">
+    <xs:all>
+      <xs:element name="Plot" type="cpmLoggerCSVPlot" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="SurfacePlot" type="cpmLoggerMatrixPlot" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:complexType>
+  <!--  -->
+  <xs:complexType name="cpmLoggerTextOutput">
+    <xs:attribute name="file-format" type="cpmLoggerOutputFormats" use="optional" default="csv"/>
+    <xs:attribute name="header" type="cpmBoolean" use="optional" default="true"/>
+    <xs:attribute name="header-guarding" type="cpmBoolean" use="optional" default="true"/>
+    <xs:attribute name="separator" type="cpmLoggerOutputSeparator" use="optional" default="tab"/>
+    <xs:attribute name="file-name" type="cpmString" use="optional" default="automatic"/>
+    <xs:attribute name="file-numbering" type="cpmFileNumbering" use="optional" default="time"/>
+    <xs:attribute name="file-separation" type="cpmLoggerFileSeparation" use="optional" default="none"/>
+    <!-- 		<xs:attribute name="name"	type="cpmString" use="optional" /> -->
+  </xs:complexType>
+  <xs:simpleType name="cpmLoggerOutputSeparator">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="tab"/>
+      <xs:enumeration value="comma"/>
+      <xs:enumeration value="semicolon"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmLoggerFileSeparation">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="time"/>
+      <xs:enumeration value="cell"/>
+      <xs:enumeration value="time+cell"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmFileNumbering">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="time"/>
+      <xs:enumeration value="sequential"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmLoggerOutputFormats">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="csv"/>
+      <xs:enumeration value="matrix"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--   -->
+  <xs:complexType name="cpmLoggerRestrictions">
+    <xs:choice minOccurs="0">
+      <xs:element name="Slice" type="cpmLoggerSlice" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Celltype" type="cpmLoggerCellType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Cells" type="cpmLoggerCells" minOccurs="0" maxOccurs="1"/>
+    </xs:choice>
+    <xs:attribute name="condition" type="cpmMathExpression" use="optional" default="1"/>
+    <xs:attribute name="exclude-medium" type="cpmBoolean" use="optional" default="true"/>
+    <xs:attribute name="domain-only" type="cpmBoolean" use="optional" default="true"/>
+  </xs:complexType>
+  <xs:complexType name="cpmLoggerSlice">
+    <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+    <xs:attribute name="axis" type="cpmLoggerSliceAxis" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmLoggerCellType">
+    <xs:attribute name="celltype" type="cpmCellTypeRef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmLoggerCells">
+    <xs:attribute name="cell-ids" type="cpmString" use="required" default="1"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmLoggerSliceAxis">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="x"/>
+      <xs:enumeration value="y"/>
+      <xs:enumeration value="z"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--  -->
+  <xs:complexType name="cpmLoggerCSVPlot">
+    <xs:all>
+      <xs:element name="X-axis" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="minimum" type="cpmMathExpression" use="optional"/>
+          <xs:attribute name="maximum" type="cpmMathExpression" use="optional"/>
+          <xs:attribute name="logarithmic" type="cpmBoolean" use="optional"/>
+          <xs:all>
+            <xs:element name="Symbol" type="cpmLoggerPlotColumn" minOccurs="1" maxOccurs="1"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Y-axis" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="minimum" type="cpmMathExpression" use="optional"/>
+          <xs:attribute name="maximum" type="cpmMathExpression" use="optional"/>
+          <xs:attribute name="logarithmic" type="cpmBoolean" use="optional"/>
+          <xs:all maxOccurs="unbounded">
+            <xs:element name="Symbol" type="cpmLoggerPlotColumn" minOccurs="0"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Color-bar" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="minimum" type="cpmMathExpression" use="optional"/>
+          <xs:attribute name="maximum" type="cpmMathExpression" use="optional"/>
+          <xs:attribute name="logarithmic" type="cpmBoolean" use="optional"/>
+          <xs:attribute name="palette" type="cpmLoggerPalette" use="optional"/>
+          <xs:attribute name="reverse-palette" type="cpmBoolean" use="optional" default="false"/>
+          <xs:all>
+            <xs:element name="Symbol" type="cpmLoggerPlotColumn" minOccurs="1" maxOccurs="1"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Range" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Time" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:attribute name="mode" type="cpmPlotTimeRange" use="required" default="all"/>
+                <xs:attribute name="history" type="cpmDouble" use="optional" default="1.0"/>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Data" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:attribute name="first-line" type="cpmMathExpression" use="optional" default="1"/>
+                <xs:attribute name="last-line" type="cpmMathExpression" use="optional"/>
+                <xs:attribute name="increment" type="cpmMathExpression" use="optional" default="1"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Terminal" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="terminal" type="cpmLoggerTerminalEnum" use="required" default="png"/>
+          <xs:attribute name="plot-size" type="cpmDoubleVector" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Style" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="decorate" type="cpmBoolean" use="optional" default="true"/>
+          <xs:attribute name="style" type="cpmPlotLinesPoints" use="required" default="points"/>
+          <xs:attribute name="point-size" type="cpmDouble" use="optional" default="1.0"/>
+          <xs:attribute name="line-width" type="cpmDouble" use="optional" default="1.0"/>
+          <xs:attribute name="grid" type="cpmBoolean" use="optional" default="false"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="time-step" type="cpmDouble" use="optional" default="-1"/>
+    <xs:attribute name="log-commands" use="optional" type="cpmBoolean" default="false"/>
+    <xs:attribute name="title" type="cpmString" use="optional" default=""/>
+    <xs:attribute name="file-numbering" type="cpmFileNumbering" use="optional" default="time"/>
+  </xs:complexType>
+  <xs:complexType name="cpmLoggerMatrixPlot">
+    <xs:all>
+      <xs:element name="Color-bar" minOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="minimum" type="cpmDouble" use="optional"/>
+          <xs:attribute name="maximum" type="cpmDouble" use="optional"/>
+          <xs:attribute name="logarithmic" type="cpmBoolean" use="optional"/>
+          <xs:attribute name="palette" type="cpmLoggerPalette" use="optional"/>
+          <xs:attribute name="reverse-palette" type="cpmBoolean" use="optional" default="false"/>
+          <xs:all>
+            <xs:element name="Symbol" type="cpmLoggerPlotColumn" minOccurs="1" maxOccurs="1"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Terminal" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="terminal" type="cpmLoggerTerminalEnum" use="required" default="png"/>
+          <xs:attribute name="plot-size" type="cpmDoubleVector" use="optional"/>
+          <xs:attribute name="file-numbering" type="cpmFileNumbering" use="optional" default="time"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="time-step" type="cpmDouble" use="optional" default="-1"/>
+    <xs:attribute name="log-commands" use="optional" type="cpmBoolean" default="false"/>
+    <xs:attribute name="file-numbering" type="cpmFileNumbering" use="optional" default="time"/>
+  </xs:complexType>
+  <xs:complexType name="cpmLoggerPlotColumn">
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmLoggerTerminalEnum">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="screen"/>
+      <xs:enumeration value="png"/>
+      <xs:enumeration value="jpeg"/>
+      <xs:enumeration value="gif"/>
+      <xs:enumeration value="svg"/>
+      <xs:enumeration value="postscript"/>
+      <xs:enumeration value="pdf"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmLoggerPalette">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="hot"/>
+      <xs:enumeration value="afmhot"/>
+      <xs:enumeration value="ocean"/>
+      <xs:enumeration value="grv"/>
+      <xs:enumeration value="rainbow"/>
+      <xs:enumeration value="gray"/>
+      <xs:enumeration value="default"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmLoggerMappingField">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="all"/>
+      <xs:enumeration value="min_max"/>
+      <xs:enumeration value="sum"/>
+      <xs:enumeration value="average"/>
+      <xs:enumeration value="variance"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmPlotTimeRange">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="all"/>
+      <xs:enumeration value="since last plot"/>
+      <xs:enumeration value="history"/>
+      <xs:enumeration value="current"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmPlotLinesPoints">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="points"/>
+      <xs:enumeration value="lines"/>
+      <xs:enumeration value="linespoints"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmLoggerMapping">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="all"/>
+      <xs:enumeration value="average"/>
+      <xs:enumeration value="min_max"/>
+      <xs:enumeration value="single"/>
+      <xs:enumeration value="sum"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--                                                                                      -->
+  <xs:complexType name="HistogramLogger">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:all>
+          <xs:element name="Column" type="cpmHistogramColumn" minOccurs="1" maxOccurs="unbounded"/>
+          <xs:element name="Plot" type="cpmHistogramPlot" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="number-of-bins" use="required" type="cpmUnsignedInteger" default="10"/>
+        <xs:attribute name="normalized" use="required" type="cpmBoolean"/>
+        <xs:attribute name="minimum" use="optional" type="cpmDouble"/>
+        <xs:attribute name="maximum" use="optional" type="cpmDouble"/>
+        <xs:attribute name="logarithmic-bins" use="optional" type="cpmBoolean"/>
+        <xs:attribute name="logarithmic-freq" use="optional" type="cpmBoolean"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cpmHistogramColumn">
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+    <xs:attribute name="label" type="cpmString" use="optional"/>
+    <xs:attribute name="celltype" type="cpmCellTypeRef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmHistogramPlot">
+    <xs:attribute name="terminal" type="cpmGnuplotTerminalEnum" use="required"/>
+    <xs:attribute name="minimum" use="optional" type="cpmDouble"/>
+    <xs:attribute name="maximum" use="optional" type="cpmDouble"/>
+    <xs:attribute name="log-commands" use="optional" type="cpmBoolean"/>
+  </xs:complexType>
+  <xs:complexType name="Gnuplotter">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Visualization</xs:appinfo>
+        </xs:annotation>
+        <xs:all maxOccurs="unbounded">
+          <xs:element name="Terminal" type="cpmGnuplotTerminal"/>
+          <xs:element name="Plot" type="morphGnuplotPlot" maxOccurs="unbounded"/>
+        </xs:all>
+        <xs:attribute name="log-commands" use="optional" type="cpmBoolean" default="false"/>
+        <xs:attribute name="file-numbering" use="optional" type="cpmFileNumbering" default="time"/>
+        <xs:attribute name="decorate" type="cpmBoolean" use="optional" default="true"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="morphGnuplotPlot">
+    <xs:annotation>
+      <xs:documentation>
+			</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="Cells" type="cpmCellPlotRef" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="CellLabels" type="cpmLabelPlotRef" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="CellArrows" type="cpmArrowPlotRef" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="CellLinks" type="cpmCellLinkPlot" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="VectorField" type="cpmVectorPlotRef" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Field" type="cpmFieldPlotRef" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+    <xs:attribute name="title" use="optional" type="cpmString"/>
+    <xs:attribute name="slice" type="cpmUnsignedInteger" use="optional">
+      <xs:annotation>
+        <xs:documentation>Z-slice of 3D lattice to plot (for z-stack plots).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="cpmCellLinkPlot">
+    <xs:attribute name="color" type="cpmColors" use="required" default="black"/>
+  </xs:complexType>
+  <xs:complexType name="cpmCellPlotRef">
+    <xs:all>
+      <xs:element name="ColorMap" type="cpmColorMap" minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="value" type="cpmDoubleSymbolRef" use="optional">
+      <xs:annotation>
+        <xs:documentation>Value/Expression to be used to color the cell area</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="min" type="cpmDouble" use="optional">
+      <xs:annotation>
+        <xs:documentation>Minimum of colorbox.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="max" type="cpmDouble" use="optional">
+      <xs:annotation>
+        <xs:documentation>Maximum of colorbox.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="flooding" type="cpmBoolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Default is True. If true the inner of the cell is flooded with a color, if False individual points of the cell are drawn with the given pointsize. Membrane properties can only be plotted with flooding set to False.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="per-frame-range" type="cpmBoolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>Default is False. Per frame reset of the value range of the referred symbol .</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="opacity" type="cpmDouble" use="optional" default="1.0">
+      <xs:annotation>
+        <xs:documentation>Make cells gradually transparant, useful for superimposed frames.
+
+((NOTE WdB)) I don't think this works at the moment. Gnuplot support transparency in filled curves, but not in points. Currently, however, cells are not not floodfilled but filled using points.
+((NOTE JS))  That feature is exclusively working with the flooding option in cell plots.
+</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <!--		<xs:simpleType name="cpmcpmCellPlotModeEnum">
+		<xs:restriction base="cpmString">
+			<xs:enumeration value="cell type"/>
+			<xs:enumeration value="cell id"/>
+			<xs:enumeration value="property"/>
+			<xs:enumeration value="membrane property"/>
+		</xs:restriction>
+	</xs:simpleType>-->
+  <xs:complexType name="cpmGnuplotCellLabels">
+    <xs:annotation>
+      <xs:documentation>Plots values of cell ID, type or property in the center of cells.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="fontsize" type="cpmUnsignedInteger" use="optional"/>
+    <xs:attribute name="fontcolor" type="cpmColors" use="optional"/>
+    <xs:attribute name="precision" type="cpmInteger" use="optional">
+      <xs:annotation>
+        <xs:documentation>When printing double-valued property, this sets the decimal precision (e.g. 1, 1.0 or 1.00).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="scientific" type="cpmBoolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Prints values in scientific notation (e.g. 1e-3).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="cpmLabelPlotRef">
+    <xs:annotation>
+      <xs:documentation>Plots values of cell ID, type or property in the center of cells.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="value" type="cpmMathExpression" use="required">
+      <xs:annotation>
+        <xs:documentation>Symbol referring to a cell property or membrane property.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="fontsize" type="cpmUnsignedInteger" use="optional"/>
+    <xs:attribute name="fontcolor" type="cpmColors" use="optional"/>
+    <xs:attribute name="precision" type="cpmInteger" use="optional">
+      <xs:annotation>
+        <xs:documentation>When printing double-valued property, this sets the decimal precision (e.g. 1, 1.0 or 1.00).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="scientific" type="cpmBoolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Prints values in scientific notation (e.g. 1e-3).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="cpmArrowPlotRef">
+    <xs:annotation>
+      <xs:documentation>Plots arrows representing cell properties at the center of cells.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="orientation" type="cpmVectorMathExpression" use="required"/>
+    <xs:attribute name="style" type="cpmArrowStyle" use="optional" default="1"/>
+    <xs:attribute name="center" type="cpmArrowCenter" use="optional" default="midpoint"/>
+  </xs:complexType>
+  <xs:complexType name="cpmVectorPlotRef">
+    <xs:annotation>
+      <xs:documentation>Plots arrows representing two pde layers as x and y axis of a vector.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="value" type="cpmVectorMathExpression" use="required"/>
+    <xs:attribute name="style" type="cpmArrowStyle" use="optional" default="1">
+      <xs:annotation>
+        <xs:documentation>Choose from one of 8 predefined styles.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="coarsening" type="cpmInteger" use="optional" default="1">
+      <xs:annotation>
+        <xs:documentation>
+					Reduces the density of vectors to be plotted.
+
+					No averaging is performed, rather values are skipped.
+				</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="color" type="cpmColors" use="required" default="black"/>
+    <xs:attribute name="center" type="cpmArrowCenter" use="optional" default="midpoint"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmArrowStyle">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+      <xs:enumeration value="4"/>
+      <xs:enumeration value="5"/>
+      <xs:enumeration value="6"/>
+      <xs:enumeration value="7"/>
+      <xs:enumeration value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmArrowCenter">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="midpoint"/>
+      <xs:enumeration value="origin"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="cpmFieldPlotRef">
+    <xs:annotation>
+      <xs:documentation>Plots values of a PDE layer specified by symbol-ref using colors. Colors can be specified by colormap.</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0">
+      <xs:element name="ColorMap" type="cpmColorMap"/>
+    </xs:choice>
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required">
+      <xs:annotation>
+        <xs:documentation>Symbol referring to a PDE reaction-diffusion layer.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="min" type="cpmDouble" use="optional"/>
+    <xs:attribute name="max" type="cpmDouble" use="optional"/>
+    <xs:attribute name="data-cropping" type="cpmBoolean" use="optional"/>
+    <!-- 		<xs:attribute name="slice"	type="cpmUnsignedInteger" use="optional"/> -->
+    <xs:attribute name="coarsening" type="cpmInteger" use="optional"/>
+    <xs:attribute name="isolines" type="cpmUnsignedInteger" use="optional"/>
+    <xs:attribute name="surface" type="cpmBoolean" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="cpmGnuplotTerminal">
+    <xs:annotation>
+      <xs:documentation>Gnuplot terminals to plot to screen or file. Note: availability of terminals depends solely on local Gnuplot installation!
+Plot to screen: x11 (default), wxt (unix), aqua (MacOS).
+Plot to file  : png, jpeg, gif, postscript, pdf.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="cpmGnuplotTerminalEnum" use="required" default="png"/>
+    <!--		<xs:attribute name="pointsize" use="optional" type="cpmUnsignedDouble" default="1">
+			<xs:annotation>
+				<xs:documentation>Size of pixel in plot. Varies for various terminals.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>-->
+    <xs:attribute name="persist" use="optional" type="cpmBoolean">
+      <xs:annotation>
+        <xs:documentation>If true, plot will persist (i.e. not closed) after simulation has finished.
+
+Note: This option is only applicable when plotting on-screen (using x11, wxt, or aqua terminals).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="size" type="cpmIntegerVector" use="optional">
+      <xs:annotation>
+        <xs:documentation>Overrides the default output size of the terminal.
+</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:simpleType name="cpmGnuplotTerminalEnum">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="screen"/>
+      <xs:enumeration value="png"/>
+      <xs:enumeration value="jpeg"/>
+      <xs:enumeration value="gif"/>
+      <xs:enumeration value="svg"/>
+      <xs:enumeration value="eps"/>
+      <xs:enumeration value="postscript"/>
+      <xs:enumeration value="pdf"/>
+      <xs:enumeration value="windows"/>
+      <xs:enumeration value="x11"/>
+      <xs:enumeration value="wxt"/>
+      <xs:enumeration value="aqua"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="cpmColorMap">
+    <xs:annotation>
+      <xs:documentation>Defines a mapping from values to colors. Gnuplot will create a gradual colorscale between the colors defined here.</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="2" maxOccurs="unbounded">
+      <xs:element name="Color" type="cpmColorMapColor"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="cpmColorMapColor">
+    <xs:attribute name="value" type="cpmDouble" use="required"/>
+    <xs:attribute name="color" type="cpmColors" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="External">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Data analysis</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Command" type="cpmMathExpression"/>
+          <xs:element name="Environment" type="ExternalEnvVarCommand" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:all>
+        <xs:attribute name="detach" type="cpmBoolean" use="optional" default="true"/>
+        <xs:attribute name="timeout" type="cpmInteger" use="optional" default="30"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ExternalEnvVarCommand">
+    <xs:attribute name="variable" type="cpmString" use="required"/>
+    <xs:attribute name="value" type="cpmString" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="DisplacementTracker">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Data analysis</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="name" type="cpmString" use="optional"/>
+        <xs:attribute name="time-step" type="cpmMathExpression" use="required"/>
+        <xs:attribute name="celltype" use="required" type="cpmCellTypeRef">
+          <xs:annotation>
+            <xs:documentation>Name of celltype to track displacement of.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ContactLogger">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Data Export</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="celltype-from" type="cpmCellTypeRef" use="optional"/>
+        <xs:attribute name="celltype-to" type="cpmCellTypeRef" use="optional"/>
+        <xs:attribute name="ignore-medium" type="cpmBoolean" use="optional" default="true"/>
+        <xs:attribute name="log-duration" type="cpmBoolean" use="optional" default="false"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ClusteringTracker">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Data analysis</xs:appinfo>
+        </xs:annotation>
+        <xs:annotation>
+          <xs:appinfo>Data Analysis</xs:appinfo>
+          <xs:documentation>Plugin for analysis of cluster sizes.</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="ClusterID" type="cpmDoublePropertyRef" minOccurs="0"/>
+        </xs:all>
+        <xs:attribute name="celltype" type="cpmCellTypeRefList"/>
+        <xs:attribute name="exclude" type="cpmMathExpression" use="optional" default="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmCellTypeRefList">
+    <xs:restriction base="cpmString">
+      <xs:pattern value="\w+\s*(,\s*\w+\s*)"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="CellTracker">
+    <xs:complexContent>
+      <xs:extension base="morphAnalysisPlugin">
+        <xs:annotation>
+          <xs:appinfo>Data analysis</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="format" type="cpmCellTrackerFormat" use="required"/>
+        <!-- <xs:attribute name="celltype" type="cpmCellTypeRef" /> -->
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmCellTrackerFormat">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="ISBI 2012 (XML)"/>
+      <xs:enumeration value="MTrackJ (MDF)"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:group name="DiscreteSystemPlugins">
+    <xs:all>
+      <xs:element name="VectorRule" type="VectorEquation" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ConstantVector" type="ConstantVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Intermediate" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="IntermediateVector" type="PropertyVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Function" type="Function" minOccurs="0" maxOccurs="unbounded"/>
+      <!-- 			<xs:element name="VectorFunction" 		type="VectorFunction"/> -->
+      <xs:element name="Rule" type="Equation" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:group>
+  <xs:group name="SystemPlugins">
+    <xs:all>
+      <xs:element name="VectorRule" type="VectorEquation" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ConstantVector" type="ConstantVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Intermediate" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="IntermediateVector" type="PropertyVector" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Function" type="Function" minOccurs="0" maxOccurs="unbounded"/>
+      <!-- 			<xs:element name="VectorFunction" 		type="VectorFunction"/> -->
+      <xs:element name="Rule" type="Equation" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DiffEqn" type="DiffEqn" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="VectorEquation">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Math</xs:appinfo>
+          <xs:documentation>Defines an equation to apply on a cell property (referenced by symbol) at each time step.</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Expression" type="cpmVectorMathExpression"/>
+        </xs:all>
+        <xs:attribute name="symbol-ref" type="cpmVectorSymbolRef" use="required"/>
+        <xs:attribute name="notation" type="morphVectorNotation" default="x,y,z" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Constant">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ConstantVector">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="symbol" type="cpmVectorSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmVectorMathExpression" use="required"/>
+        <xs:attribute name="notation" type="morphVectorNotation" use="optional" default="x,y,z"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Property">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PropertyVector">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="symbol" type="cpmVectorSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmVectorMathExpression" use="required"/>
+        <xs:attribute name="notation" type="morphVectorNotation" use="optional" default="x,y,z"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PropertyQueue">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Duration" minOccurs="1" type="cpmTime"/>
+        </xs:all>
+        <xs:attribute name="symbol" type="cpmQueueSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmDoubleQueue" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PropertyData">
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+    <xs:attribute name="value" type="cpmDouble" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="PropertyVectorData">
+    <xs:attribute name="symbol-ref" type="cpmVectorSymbolRef" use="required"/>
+    <xs:attribute name="value" type="cpmDoubleVector" use="required"/>
+  </xs:complexType>
+  <!--	<xs:complexType name="PropertyQueueData">
+		<xs:annotation>
+			<xs:appinfo>Container</xs:appinfo>
+			<xs:documentation>Specify the queue property for each cell that can be referenced via a symbol.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="symbol-ref"	type="cpmQueueSymbolRef"		use="required" />
+		<xs:attribute name="value"	type="cpmDoubleQueue"		use="required" />
+	</xs:complexType>-->
+  <xs:group name="PropertyDataGroup">
+    <xs:all>
+      <xs:element name="PropertyData" type="PropertyData" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="PropertyVectorData" type="PropertyVectorData" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DelayPropertyData" type="DelayPropertyData" minOccurs="0" maxOccurs="unbounded"/>
+      <!-- 			<xs:element name="PropertyArrayData" type="PropertyArrayData" /> -->
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="Function">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Math</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Expression" type="cpmMathExpression"/>
+          <xs:element name="Parameter" type="funParameter" minOccurs="0" maxOccurs="unbounded"/>
+          <!-- 			<xs:element name="VectorParameter"	type="funVectorParameter" minOccurs="0" maxOccurs="unbounded"/> -->
+        </xs:all>
+        <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="VectorFunction">
+    <xs:annotation>
+      <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+      <xs:appinfo>Math</xs:appinfo>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="Expression" type="cpmVectorMathExpression"/>
+      <xs:element name="Parameter" type="funParameter" minOccurs="0" maxOccurs="unbounded"/>
+      <!-- 			<xs:element name="VectorParameter"	type="funVectorParameter" minOccurs="0" maxOccurs="unbounded"/> -->
+    </xs:all>
+    <xs:attribute name="name" type="cpmString" use="optional"/>
+    <xs:attribute name="symbol" type="cpmVectorSymbolDef" use="required"/>
+    <xs:attribute name="notation" type="morphVectorNotation" default="x,y,z" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="funParameter">
+    <xs:annotation>
+      <xs:documentation>Defines function Parameter</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="cpmString" use="optional"/>
+    <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="funVectorParameter">
+    <xs:annotation>
+      <xs:documentation>Defines function vector parameter</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="cpmString" use="optional"/>
+    <xs:attribute name="symbol" type="cpmVectorSymbolDef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="Equation">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Math</xs:appinfo>
+          <xs:documentation>Defines an equation to apply on a cell property (referenced by symbol) at each time step.</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Expression" type="cpmMathExpression"/>
+        </xs:all>
+        <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DiffEqn">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <!--PLUGIN CLASSES: Container / Shape / Motility / Math / Reporter / Misc-->
+          <xs:appinfo>Math</xs:appinfo>
+          <xs:documentation>Defines a differential equation to apply on a symbol at each time step.</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Expression" type="cpmMathExpression"/>
+          <!--					<xs:element name="Diffusion" minOccurs="0">
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:extension base="cpmMathExpression">
+									<xs:attribute name="well-mixed" type="cpmBoolean" use="optional" />
+								</xs:extension>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>-->
+          <!-- 					<xs:element name="Advection"	type="cpmVectorMathExpression" minOccurs="0"/> -->
+        </xs:all>
+        <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:group name="PopulationInitPlugins">
+    <xs:all>
+      <xs:element name="InitPoissonDisc" type="InitPoissonDisc" minOccurs="0"/>
+      <xs:element name="TIFFReader" type="TIFFReaderPop" minOccurs="0"/>
+      <xs:element name="InitVoronoi" type="InitVoronoi" minOccurs="0"/>
+      <xs:element name="InitRectangle" type="InitRectangle" minOccurs="0"/>
+      <xs:element name="InitHexLattice" type="InitHexLattice" minOccurs="0"/>
+      <xs:element name="InitDistribute" type="InitDistribute"/>
+      <xs:element name="InitCircle" type="InitCircle" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="InitCellObjects" type="InitCellObjects" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="InitCellLattice" type="InitCellLattice" minOccurs="0"/>
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="InitPoissonDisc">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="number-of-cells" use="required" type="cpmMathExpression" default="100"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="InitVoronoi">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="InitRectangle">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Dimensions" type="cpmInitRectDimension" minOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="number-of-cells" use="required" type="cpmMathExpression" default="100"/>
+        <xs:attribute name="random-offset" use="optional" type="cpmMathExpression" default="0"/>
+        <xs:attribute name="mode" use="required" type="cpmInitRectangleMode" default="regular"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cpmInitRectDimension">
+    <xs:attribute name="size" type="cpmVectorMathExpression" use="required" default="1.0, 1.0, 1.0"/>
+    <xs:attribute name="origin" type="cpmVectorMathExpression" use="required" default="0.0, 0.0, 0.0"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmInitRectangleMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="regular"/>
+      <xs:enumeration value="random"/>
+      <xs:enumeration value="grid"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="InitHexLattice">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="mode" type="cpmInitHexLatticeMode" use="optional" default="left"/>
+        <xs:attribute name="randomness" type="cpmDouble" use="optional" default="0.0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmInitHexLatticeMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="left"/>
+      <xs:enumeration value="right"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="InitDistribute">
+    <xs:annotation>
+      <xs:appinfo>Initialization</xs:appinfo>
+    </xs:annotation>
+    <xs:attribute name="number-of-cells" use="required" type="cpmMathExpression" default="100"/>
+    <xs:attribute name="probability" use="required" type="cpmMathExpression" default="0.1"/>
+    <xs:attribute name="mode" use="optional" type="morphInitDistribMode" default="regular"/>
+  </xs:complexType>
+  <xs:simpleType name="morphInitDistribMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="regular"/>
+      <xs:enumeration value="random"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="InitCircle">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Dimensions" type="cpmInitCircleDimension" minOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="number-of-cells" use="required" type="cpmMathExpression" default="100"/>
+        <xs:attribute name="mode" use="required" type="cpmInitCircleMode" default="regular"/>
+        <xs:attribute name="random_displacement" use="optional" type="cpmMathExpression" default="0.0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cpmInitCircleDimension">
+    <xs:attribute name="radius" type="cpmMathExpression" use="required" default="10.0"/>
+    <xs:attribute name="center" type="cpmVectorMathExpression" use="required" default="0.0, 0.0, 0.0"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmInitCircleMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="regular"/>
+      <xs:enumeration value="random"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="InitCellObjects">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="Arrangement" type="cpmInitObjectArrangement" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:all>
+        <xs:attribute name="mode" use="required" type="cpmInitializationMode"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="cpmInitializationMode">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="distance"/>
+      <xs:enumeration value="order"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="cpmInitObjectArrangement">
+    <xs:choice minOccurs="1" default="Sphere">
+      <xs:element name="Sphere" type="cpmSphere"/>
+      <xs:element name="Ellipsoid" type="cpmEllipsoid"/>
+      <xs:element name="Cylinder" type="cpmCylinder"/>
+      <xs:element name="Box" type="cpmBoxObject"/>
+      <xs:element name="Point" type="cpmPointObject"/>
+    </xs:choice>
+    <xs:attribute name="repetitions" type="cpmVectorMathExpression" use="required" default="1, 1, 1"/>
+    <xs:attribute name="displacements" type="cpmVectorMathExpression" use="required" default="1, 1, 1"/>
+    <xs:attribute name="random_displacement" type="cpmDouble" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="cpmPointObject">
+    <xs:attribute name="center" type="cpmVectorMathExpression" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmBoxObject">
+    <xs:attribute name="origin" type="cpmVectorMathExpression" use="required"/>
+    <xs:attribute name="size" type="cpmVectorMathExpression" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmSphere">
+    <xs:attribute name="center" type="cpmVectorMathExpression" use="required"/>
+    <xs:attribute name="radius" type="cpmMathExpression" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmEllipsoid">
+    <xs:attribute name="center" type="cpmVectorMathExpression" use="required"/>
+    <xs:attribute name="axes" type="cpmVectorMathExpression" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmCylinder">
+    <xs:attribute name="origin" type="cpmVectorMathExpression" use="required"/>
+    <xs:attribute name="length" type="cpmVectorMathExpression" use="required"/>
+    <xs:attribute name="radius" type="cpmMathExpression" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="InitCellLattice">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:group name="FieldInitPlugins">
+    <xs:choice>
+      <xs:element name="Data" type="cpmFieldData"/>
+    </xs:choice>
+    <xs:all>
+      <xs:element name="TIFFReader" type="TIFFReaderField" minOccurs="0"/>
+    </xs:all>
+  </xs:group>
+  <xs:complexType name="cpmDiffusion">
+    <xs:annotation>
+      <xs:documentation>Diffusion coefficient</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="rate" type="cpmUnsignedDouble"/>
+    <!--   		<xs:attribute name="unit" type="cpmDiffusionUnit" use="optional" />   -->
+    <xs:attribute name="well-mixed" type="cpmBoolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Complete spatial mixing, while conserving mass.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:simpleType name="cpmDiffusionUnit">
+    <xs:annotation>
+      <xs:documentation>Unit of diffusion constant</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="m&#xB2;/s"/>
+      <xs:enumeration value="mm&#xB2;/s"/>
+      <xs:enumeration value="&#xB5;m&#xB2;/s"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="cpmPDEBoundaryConditions">
+    <xs:all>
+      <xs:element name="Condition" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="boundary" use="required" type="cpmBoundaryRef"/>
+          <xs:attribute name="value" use="required" type="cpmDouble"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="cpmPDEBoundaryValue">
+    <xs:attribute name="boundary" use="required" type="cpmBoundaryRef"/>
+    <xs:attribute name="value" use="required" type="cpmMathExpression"/>
+  </xs:complexType>
+  <xs:complexType name="cpmFieldData">
+    <xs:simpleContent>
+      <xs:extension base="xs:normalizedString">
+        <xs:attribute name="filename" use="optional" type="cpmSystemFile"/>
+        <xs:attribute name="encoding" use="required" type="morphDataEncoding" default="base64"/>
+        <xs:attribute name="word-size" use="optional" type="xs:integer" default="4"/>
+        <xs:attribute name="index" use="optional" type="xs:integer" default="0"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="morphDataEncoding">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="ascii"/>
+      <xs:enumeration value="base64"/>
+      <xs:enumeration value="binary"/>
+      <xs:enumeration value="tiff"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="cpmVectorField">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Container</xs:appinfo>
+        </xs:annotation>
+        <xs:all>
+          <xs:element name="BoundaryValue" type="cpmVectorBoundaryValue" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="Reduction" type="cpmBoundary" minOccurs="0"/>
+          <!-- 			<xs:element name="Initial" minOccurs="0">
+						<xs:group  ref="FieldInitPlugins" />
+					</xs:element>-->
+          <xs:element name="Data" type="cpmFieldData" minOccurs="0"/>
+        </xs:all>
+        <xs:attribute name="symbol" type="cpmVectorSymbolDef" use="required"/>
+        <xs:attribute name="value" type="cpmVectorMathExpression" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cpmVectorBoundaryValue">
+    <xs:attribute name="boundary" use="required" type="cpmBoundaryRef"/>
+    <xs:attribute name="value" use="required" type="cpmVectorMathExpression"/>
+  </xs:complexType>
+  <xs:complexType name="TIFFReaderPop">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="filename" use="required" type="cpmSystemFile"/>
+        <xs:attribute name="offset" use="optional" type="cpmIntegerVector" default="0,0,0"/>
+        <xs:attribute name="keep_ID" use="optional" type="cpmBoolean" default="false"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TIFFReaderField">
+    <xs:complexContent>
+      <xs:extension base="morphPlugin">
+        <xs:annotation>
+          <xs:appinfo>Initialization</xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="filename" use="required" type="cpmSystemFile"/>
+        <xs:attribute name="offset" use="optional" type="cpmIntegerVector" default="0,0,0"/>
+        <xs:attribute name="scaling" use="optional" type="cpmDouble" default="1.0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="morphGlobals">
+    <xs:all>
+      <xs:group ref="GlobalPlugins"/>
+    </xs:all>
+    <xs:annotation><xs:documentation>Define globally available Constants and Variables (Globals / Fields)
+			</xs:documentation>&#xB0;
+		</xs:annotation>
+  </xs:complexType>
+  <xs:complexType name="cpmCPMBoundaryConditions">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element name="Condition">
+        <xs:complexType>
+          <xs:attribute name="boundary" use="required" type="cpmBoundary"/>
+          <xs:attribute name="value" use="required" type="cpmCellTypeRef"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="cpmCPMBoundaryValue">
+    <xs:attribute name="boundary" use="required" type="cpmBoundaryRef"/>
+    <xs:attribute name="value" use="required" type="cpmCellTypeRef"/>
+  </xs:complexType>
+  <xs:complexType name="CellTypes">
+    <xs:all>
+      <xs:element name="CellType" type="CellType" minOccurs="1" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Specification of cell state and behaviors, for cell-based models.
+					</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="CellType">
+    <xs:all>
+      <xs:element name="Annotation" type="morphText" minOccurs="0"/>
+      <xs:group ref="CellTypePlugins"/>
+    </xs:all>
+    <xs:attribute name="class" type="cpmCelltypeClass" use="required" default="biological"/>
+    <xs:attribute name="name" type="cpmCellTypeDef" use="required"/>
+    <xs:attribute name="tags" type="morphTags" use="optional"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmCelltypeClass">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="biological"/>
+      <xs:enumeration value="medium"/>
+      <!-- 			<xs:enumeration value="supercell"/> -->
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="CellPopulations">
+    <xs:all>
+      <xs:element name="Population" type="Population" maxOccurs="unbounded"/>
+      <xs:element name="BoundaryValue" type="cpmCPMBoundaryValue" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="Population">
+    <xs:all minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="PopulationInitPlugins"/>
+      <xs:element name="Annotation" type="morphText" minOccurs="0"/>
+      <xs:element name="Cell" type="cpmCell" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="InitProperty" type="cpmPopulationProperty" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="InitVectorProperty" type="cpmPopulationVectorProperty" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:all>
+    <xs:attribute name="type" type="cpmCellTypeRef" use="required">
+      <xs:annotation>
+        <xs:documentation>Cell type to create at initialization.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="size" type="cpmUnsignedInteger" use="required" default="1">
+      <xs:annotation>
+        <xs:documentation>Number of cells to create at initialization.
+
+				Note:
+				- By default, cells are created in random locations, unless initializers such as 'InitRectangle' are used.
+				- If the number of cells created by initializers such as 'InitRectangle' is smaller than the number specified here, the remaining cells are created in random locations.
+
+				</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="name" type="cpmString" use="optional">
+      <xs:annotation>
+        <xs:documentation>Name of population.
+
+					For user convenience, used in GUI only.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="cpmPopulationProperty">
+    <xs:annotation>
+      <xs:documentation>Initializes a cell property of a population of cells with a particular value or evaluated function.
+
+This allows the user to create populations a heterogeneous initial population. That is, a population of cells that share the celltype, but differ in some property value. Or simply to create a (random) distribution among cell properties.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="Expression" type="cpmMathExpression"/>
+    </xs:all>
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef"/>
+  </xs:complexType>
+  <xs:complexType name="cpmPopulationVectorProperty">
+    <xs:all>
+      <xs:element name="Expression" type="cpmVectorMathExpression"/>
+    </xs:all>
+    <xs:attribute name="symbol-ref" type="cpmVectorSymbolRef"/>
+    <xs:attribute name="notation" type="morphVectorNotation" use="optional" default="x,y,z"/>
+  </xs:complexType>
+  <xs:complexType name="cpmCell">
+    <xs:all>
+      <xs:group ref="PropertyDataGroup"/>
+      <xs:element name="MembranePropertyData" type="MembranePropertyData" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Sets values for MembraneProperty. Overrides initial values.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Center" type="cpmDoubleVector" minOccurs="0"/>
+      <xs:element name="Nodes" type="cpmNodes"/>
+      <!--		<xs:element name="SubCell">
+			<xs:complexType>
+				<xs:attribute name="cell-id" type="cpmUnsignedInteger" />
+			</xs:complexType>
+		</xs:element>-->
+    </xs:all>
+    <!--<xs:attribute name="volume" type="cpmUnsignedInteger"/>-->
+    <xs:attribute name="id" type="cpmUnsignedInteger"/>
+    <xs:attribute name="name" type="cpmString" use="optional"/>
+  </xs:complexType>
+  <xs:simpleType name="cpmNodes">
+    <xs:restriction base="xs:string">
+      <!-- This pattern specifies a generic 3D coordinate type with whitespaces as separators (allowing for commas, decimal)
+			NOTE: The regular expression is commented out to speed up loading of large populations (or large 3D cells).
+		  -->
+      <!-- 		  <xs:pattern value="(-?\d+\s-?\d+\s-?\d+;)*(-?\d+\s-?\d+\s-?\d+)"/> -->
+      <xs:pattern value=".*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Analysis">
+    <xs:all>
+      <xs:group ref="AnalysisPlugins"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="Description">
+    <xs:all>
+      <xs:element name="Details" type="morphText">
+        <xs:annotation>
+          <xs:documentation>Text to describe and annotate model, put references and track changes.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Title" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Model title.
+
+						Used as name for output directory.
+						</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="Time">
+    <xs:annotation>
+      <xs:documentation>Specifies global time of simulation.
+
+- Length of simulation, when and where to write output.
+- Interpretation of spatial and temporal spaces.</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="RandomSeed" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Seed for the random number generator (RNG).
+
+If not specified, the seed is set randomly (using ctime).
+
+To exactly reproduce simulation results, choose the same random seed. Note that in multicore simulations (number of openMP threads &gt; 1), the random numbers also depend on the number of threads, as each threads has its own RNG (see File-&gt;Settings/Preferences-&gt;Threads per job).
+
+</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="value" type="cpmInteger" use="required"/>
+          <xs:all>
+            <xs:element name="Annotation" type="morphText" minOccurs="0"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="TimeSymbol">
+        <xs:annotation>
+          <xs:documentation>Specifies the symbol used for simulation time.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="required" default="time"/>
+          <xs:attribute name="name" type="cpmString" use="optional" default="Time"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="StartTime" minOccurs="1" type="cpmTime" default="0">
+        <xs:annotation>
+          <xs:documentation>Initial time of the simulation.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="StopTime" minOccurs="1" type="cpmTime" default="1">
+        <xs:annotation>
+          <xs:documentation>Termination time of simulation.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="StopCondition" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Terminate simulation when condition is satisfied.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Annotation" type="morphText" minOccurs="0"/>
+            <xs:element name="Condition" type="cpmMathExpression"/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SaveInterval" minOccurs="0" type="cpmTime">
+        <xs:annotation>
+          <xs:documentation>Interval to save simulation state for checkpointing.
+
+Filename = [title][time].xml.gz
+
+Special cases:
+  0: Write only at start and end
+ -1: Do not save simulation state
+
+ Note:
+  - 3D simulations can generate large checkpointing files.
+  - Large PDE simulations can generate large checkpointing files.
+</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="Space">
+    <xs:all>
+      <xs:element name="SpaceSymbol" minOccurs="1">
+        <xs:annotation>
+          <xs:documentation>Symbol representing the current lattice position.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="symbol" type="cpmVectorSymbolDef" use="required" default="space"/>
+          <xs:attribute name="name" type="cpmString" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Lattice" minOccurs="1" type="Lattice"/>
+      <xs:element name="MembraneLattice" type="MembraneLattice" minOccurs="0"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="MembraneLattice">
+    <xs:annotation>
+      <xs:documentation>Resolution of spatial discretization of MembraneProperties.
+
+Defines the size of 1D/2D lattice on which the PDEs of MembraneProperties are modeled. Is identical for all MembraneProperties of all cells defining one.
+
+The NodeLength of each lattice node is computed from the length scale set for the CPM and the volume of the cell (under the assumption of a spherical cell).
+
+Note:
+- high resolution can seriously impact performance.
+</xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="Annotation" type="morphText" minOccurs="0"/>
+      <xs:element name="SpaceSymbol" minOccurs="1">
+        <xs:annotation>
+          <xs:documentation>Symbol representing the current lattice position.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="symbol" type="cpmVectorSymbolDef" use="required"/>
+          <xs:attribute name="name" type="cpmString" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Resolution" minOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="value" type="cpmUnsignedInteger" use="required" default="100"/>
+          <xs:attribute name="symbol" type="cpmVectorSymbolDef" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="cpmCPMBoundaryConditions">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element name="Condition">
+        <xs:complexType>
+          <xs:attribute name="boundary" use="required" type="cpmBoundary"/>
+          <xs:attribute name="value" use="required" type="cpmCellTypeRef"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="cpmCPMBoundaryValue">
+    <xs:attribute name="boundary" use="required" type="cpmBoundaryRef"/>
+    <xs:attribute name="value" use="required" type="cpmCellTypeRef"/>
+  </xs:complexType>
+  <xs:complexType name="cpmPluginParameter_Double">
+    <xs:attribute name="value" type="cpmDouble" use="optional" default="0"/>
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="optional" default=""/>
+  </xs:complexType>
+  <xs:complexType name="cpmPluginParameter_DoubleVector">
+    <xs:attribute name="value" type="cpmDoubleVector" use="optional" default="1 0 0"/>
+    <xs:attribute name="symbol-ref" type="cpmVectorSymbolRef" use="optional" default=""/>
+  </xs:complexType>
+  <xs:complexType name="cpmTime">
+    <xs:all>
+      <xs:element name="Annotation" type="morphText" minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="value" type="cpmUnsignedDouble" use="required" default="0"/>
+    <!--<xs:attribute name="unit" type="cpmTimeUnit" use="optional" default="sec"/>-->
+    <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="cpmLength">
+    <xs:all>
+      <xs:element name="Annotation" type="morphText" minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="value" type="cpmUnsignedDouble" use="required"/>
+    <!-- 		<xs:attribute name="unit" type="cpmLengthUnit" use="optional" default="micron"/> -->
+    <xs:attribute name="symbol" type="cpmDoubleSymbolDef" use="optional"/>
+  </xs:complexType>
+  <!-- SYMBOLIC TYPES -->
+  <xs:simpleType name="cpmDoubleSymbolDef">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmDoubleSymbolRef">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="cell.id"/>
+      <!-- 			<xs:enumeration value="cell.super_id"/> -->
+      <!-- 			<xs:enumeration value="cell.sub_id"/> -->
+      <xs:enumeration value="cell.type"/>
+      <xs:enumeration value="cell.volume"/>
+      <xs:enumeration value="cell.length"/>
+      <xs:enumeration value="cell.surface"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmVectorSymbolDef">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmVectorSymbolRef">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="cell.center"/>
+      <xs:enumeration value="cell.orientation"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmQueueSymbolDef">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmQueueSymbolRef">
+    <xs:restriction base="xs:token">
+		</xs:restriction>
+  </xs:simpleType>
+  <!-- CELL TYPES DEF AND REF-->
+  <xs:simpleType name="cpmCellTypeDef">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmCellTypeRef">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <!-- NUMERIC TYPES -->
+  <xs:simpleType name="cpmInteger">
+    <xs:restriction base="xs:integer"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmBoolean">
+    <xs:restriction base="xs:boolean"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmDouble">
+    <xs:restriction base="xs:double"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmString">
+    <xs:restriction base="xs:normalizedString"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmText">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="morphText">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmUnsignedInteger">
+    <xs:restriction base="xs:integer">
+      <!-- 			<xs:minInclusive value="0"/> -->
+      <xs:pattern value="\d+"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmUnsignedDouble">
+    <xs:restriction base="xs:double">
+      <!-- 			<xs:minInclusive value="0.0"/> -->
+      <xs:pattern value="\d+(\.\d+)?(e[-\+]?\d{1,2})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmDoubleVector">
+    <xs:restriction base="xs:string">
+      <!-- This pattern specifies a generic 3D coordinate type with whitespaces as separators (allowing for commas, decimal) -->
+      <!--<xs:pattern value="-?[\d]+([\.¦,][\d]+)?\s+-?[\d]+([\.¦,][\d]+)?\s+-?[\d]+([\.¦,][\d]+)?"/>-->
+      <xs:pattern value="-?\d+(\.\d+)?(e[-\+]?\d{1,2})?\s*[\s,]\s*-?\d+(\.\d+)?(e[-\+]?\d{1,2})?\s*[\s,]\s*-?\d+(\.\d+)?(e[-\+]?\d{1,2})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="morphVectorNotation">
+    <xs:restriction base="xs:normalizedString">
+      <xs:enumeration value="x,y,z"/>
+      <!-- 			<xs:enumeration value="orthogonal" /> -->
+      <xs:enumeration value="r,&#x3C6;,&#x3B8;"/>
+      <xs:enumeration value="&#x3C6;,&#x3B8;,r"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmDoubleQueue">
+    <xs:restriction base="xs:string">
+      <!-- This pattern specifies a generic 3D coordinate type with whitespaces as separators (allowing for commas, decimal) -->
+      <!--<xs:pattern value="-?[\d]+([\.¦,][\d]+)?\s+-?[\d]+([\.¦,][\d]+)?\s+-?[\d]+([\.¦,][\d]+)?"/>-->
+      <xs:pattern value="(-?\d+(\.\d+)?(e[-\+]?\d{1,2})?\s*[\s,]\s*)*-?\d+(\.\d+)?(e[-\+]?\d{1,2})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmIntegerVector">
+    <xs:restriction base="xs:string">
+      <!-- This pattern specifies a generic 3D coordinate type with whitespaces as separators (allowing for commas, decimal) -->
+      <!-- 			<xs:pattern value="-?[\d]+\s+-?[\d]+\s+-?[\d]+"/> -->
+      <xs:pattern value="-?\d+\s*[\s,]\s*-?\d+\s*[\s,]\s*-?\d+"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmArrayStatistics">
+    <xs:restriction base="cpmString">
+      <xs:enumeration value="average"/>
+      <xs:enumeration value="sum"/>
+      <xs:enumeration value="variance"/>
+      <xs:enumeration value="minimum"/>
+      <xs:enumeration value="maximum"/>
+      <xs:enumeration value="discrete"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="cpmAdhesive">
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+  </xs:complexType>
+  <!--	<xs:simpleType name="cpmValueTypes">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Double"/>
+			<xs:enumeration value="Integer"/>
+			<xs:enumeration value="Boolean"/>
+			<xs:enumeration value="Vector"/>
+		</xs:restriction>
+	</xs:simpleType>-->
+  <xs:group name="cpmValueTypes">
+    <xs:choice>
+      <xs:element name="Double" type="cpmDouble"/>
+      <xs:element name="Vector" type="cpmDoubleVector"/>
+      <xs:element name="Boolean" type="cpmBoolean"/>
+      <xs:element name="Integer" type="cpmInteger"/>
+      <xs:element name="DoubleQueue" type="cpmDoubleQueue"/>
+    </xs:choice>
+  </xs:group>
+  <xs:simpleType name="cpmTimeUnit">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="sec"/>
+      <xs:enumeration value="msec"/>
+      <xs:enumeration value="min"/>
+      <xs:enumeration value="hour"/>
+      <xs:enumeration value="days"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmLengthUnit">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="micron"/>
+      <xs:enumeration value="nanon"/>
+      <xs:enumeration value="meter"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmColors">
+    <xs:restriction base="xs:normalizedString">
+      <xs:enumeration value="red"/>
+      <xs:enumeration value="green"/>
+      <xs:enumeration value="blue"/>
+      <xs:enumeration value="yellow"/>
+      <xs:enumeration value="black"/>
+      <xs:enumeration value="gray"/>
+      <xs:enumeration value="white"/>
+      <xs:enumeration value="light-blue"/>
+      <xs:enumeration value="light-green"/>
+      <xs:enumeration value="light-red"/>
+      <xs:enumeration value="dark-green"/>
+      <xs:enumeration value="dark-blue"/>
+      <xs:enumeration value="beige"/>
+      <xs:enumeration value="bisque"/>
+      <xs:enumeration value="brown4"/>
+      <xs:enumeration value="chartreuse"/>
+      <xs:enumeration value="coral"/>
+      <xs:enumeration value="cyan"/>
+      <xs:enumeration value="dark-goldenrod"/>
+      <xs:enumeration value="dark-gray"/>
+      <xs:enumeration value="dark-khaki"/>
+      <xs:enumeration value="dark-olivegreen"/>
+      <xs:enumeration value="dark-pink"/>
+      <xs:enumeration value="dark-plum"/>
+      <xs:enumeration value="dark-salmon"/>
+      <xs:enumeration value="dark-turquoise"/>
+      <xs:enumeration value="dark-violet"/>
+      <xs:enumeration value="forest-green"/>
+      <xs:enumeration value="gold"/>
+      <xs:enumeration value="gray0"/>
+      <xs:enumeration value="gray10"/>
+      <xs:enumeration value="gray100"/>
+      <xs:enumeration value="gray20"/>
+      <xs:enumeration value="gray30"/>
+      <xs:enumeration value="gray40"/>
+      <xs:enumeration value="gray50"/>
+      <xs:enumeration value="gray60"/>
+      <xs:enumeration value="gray70"/>
+      <xs:enumeration value="gray80"/>
+      <xs:enumeration value="gray90"/>
+      <xs:enumeration value="green"/>
+      <xs:enumeration value="greenyellow"/>
+      <xs:enumeration value="grey"/>
+      <xs:enumeration value="grey100"/>
+      <xs:enumeration value="grey70"/>
+      <xs:enumeration value="grey80"/>
+      <xs:enumeration value="grey90"/>
+      <xs:enumeration value="honeydew"/>
+      <xs:enumeration value="khaki"/>
+      <xs:enumeration value="khaki1"/>
+      <xs:enumeration value="lemonchiffon"/>
+      <xs:enumeration value="light-coral"/>
+      <xs:enumeration value="light-cyan"/>
+      <xs:enumeration value="light-goldenrod"/>
+      <xs:enumeration value="light-gray"/>
+      <xs:enumeration value="light-grey"/>
+      <xs:enumeration value="light-magenta"/>
+      <xs:enumeration value="light-pink"/>
+      <xs:enumeration value="light-salmon"/>
+      <xs:enumeration value="light-turquoise"/>
+      <xs:enumeration value="magenta"/>
+      <xs:enumeration value="medium-blue"/>
+      <xs:enumeration value="mediumpurple3"/>
+      <xs:enumeration value="midnight-blue"/>
+      <xs:enumeration value="navy"/>
+      <xs:enumeration value="olive"/>
+      <xs:enumeration value="orange"/>
+      <xs:enumeration value="orange-red"/>
+      <xs:enumeration value="orangered4"/>
+      <xs:enumeration value="orchid4"/>
+      <xs:enumeration value="pink"/>
+      <xs:enumeration value="plum"/>
+      <xs:enumeration value="salmon"/>
+      <xs:enumeration value="sandybrown"/>
+      <xs:enumeration value="seagreen"/>
+      <xs:enumeration value="sea-green"/>
+      <xs:enumeration value="sienna1"/>
+      <xs:enumeration value="sienna4"/>
+      <xs:enumeration value="skyblue"/>
+      <xs:enumeration value="slateblue1"/>
+      <xs:enumeration value="slategray"/>
+      <xs:enumeration value="slategrey"/>
+      <xs:enumeration value="spring-green"/>
+      <xs:enumeration value="tan1"/>
+      <xs:enumeration value="violet"/>
+      <xs:enumeration value="white"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cpmFilename">
+    <xs:annotation>
+      <xs:documentation>File name.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:normalizedString"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmSystemFile">
+    <xs:annotation>
+      <xs:documentation>Path to an existing file.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:normalizedString"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmSystemPath">
+    <xs:annotation>
+      <xs:documentation>Existing system path.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:normalizedString"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmMathExpression">
+    <xs:annotation>
+      <xs:documentation>Expression to be evaluated during run-time.
+
+Operators:
++, -, *, /, ^, =, &gt;=, !=, ==, &lt;, &gt;
+
+Functions:
+if([condition], [then], [else]), and, or, xor, sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh, log2, log10, ln, exp, pow, sqrt, sign, rint, abs, min, max, sum, avg, mod
+
+Random number generators:
+rand_uni([min], [max])
+rand_norm([mean], [stdev])
+rand_gamma([shape], [scale])
+rand_bool()
+
+
+</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:normalizedString"/>
+  </xs:simpleType>
+  <xs:simpleType name="cpmVectorMathExpression">
+    <!--		<xs:annotation>
+			<xs:documentation>Vector Expression to be evaluated during run-time.
+
+				Vectors Expressions consist of three comma separated scalar expressions (a, b, c).
+				Either, they represent euclidian x,y,z coordinates or spherical phi,theta, radius coordinates,
+				in case the spherical attribute was set to true.
+
+				Operators:
+				+, -, *, /, ^, =, >=, !=, ==, &lt;, >
+
+				Functions:
+				if([condition], [then], [else]), and, or, xor, sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh, log2, log10, ln, exp, pow, sqrt, sign, rint, abs, min, max, sum, avg, mod
+
+				Random number generators:
+				rand_uni([min], [max])
+				rand_norm([mean], [stdev])
+				rand_gamma([shape], [scale])
+				rand_bool()
+			</xs:documentation>
+		</xs:annotation>-->
+    <xs:restriction base="xs:normalizedString"/>
+  </xs:simpleType>
+  <xs:complexType name="cpmLayerRef">
+    <xs:annotation>
+      <xs:documentation>Symbol referring to a PDE reaction-diffusion layer.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmDoublePropertyRef">
+    <xs:annotation>
+      <xs:documentation>Symbol referring to a cell property.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmVectorPropertyRef">
+    <xs:annotation>
+      <xs:documentation>Symbol referring to a vector cell property.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="symbol-ref" type="cpmVectorSymbolRef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmDoubleGlobalRef">
+    <xs:annotation>
+      <xs:documentation>Symbol referring to a Global.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmVectorGlobalRef">
+    <xs:annotation>
+      <xs:documentation>Symbol referring to a vector Global.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="symbol-ref" type="cpmVectorSymbolRef" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="cpmMembraneRef">
+    <xs:annotation>
+      <xs:documentation>Symbol referring to a cell membrane property.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="symbol-ref" type="cpmDoubleSymbolRef" use="required"/>
+  </xs:complexType>
+</xs:schema>

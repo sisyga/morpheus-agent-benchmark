@@ -1,0 +1,216 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+NeighborhoodReporter_0_0_001[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>0.001</td></tr></table></font>>, URL="morph://MorpheusModel/Global/NeighborhoodReporter[0]" ]
+NeighborhoodReporter_0_0[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>-1</td></tr></table></font>>, URL="morph://MorpheusModel/Global/NeighborhoodReporter[1]" ]
+NeighborhoodReporter_0_0[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>-1</td></tr></table></font>>, URL="morph://MorpheusModel/Global/NeighborhoodReporter[2]" ]
+External_0_100[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>External</td></tr>
+<hr/>
+<tr><td>100</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/External" ]
+Logger_0_1_0101010101[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<hr/>
+<tr><td>1.0101</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger" ]
+ContactLogger_0_100[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>ContactLogger</td></tr>
+<hr/>
+<tr><td>100</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/ContactLogger" ]
+ClusteringTracker_0_1_0101010101[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>ClusteringTracker</td></tr>
+<hr/>
+<tr><td>1.0101</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/ClusteringTracker" ]
+Gnuplotter_0_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Gnuplotter</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Gnuplotter" ]
+D_0[label="D", fillcolor="#d3d247",peripheries=2]
+D_input_0[label="D_input", fillcolor="#d3d247",peripheries=2]
+D_threshold_0[label="D_threshold", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[6]"]
+N_0[label="N", fillcolor="#d3d247",peripheries=2]
+a_0[label="a", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+b_0[label="b", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[2]"]
+cell_center_0[label="cell.center", fillcolor="#b5b426",peripheries=2]
+cell_center_x_0[label="cell.center.x", fillcolor="#d3d247"]
+cell_center_y_0[label="cell.center.y", fillcolor="#d3d247"]
+cell_id_0[label="cell.id", fillcolor="#d3d247",peripheries=2]
+cluster_id_0[label="cluster_id", fillcolor="#d3d247",peripheries=2]
+epsilon_0[label="epsilon", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+h_0[label="h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+high_D_0[label="high_D", fillcolor="#d3d247",peripheries=2]
+k_0[label="k", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+nu_0[label="nu", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[5]"]
+r1_count_0[label="r1_count", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+r2_count_0[label="r2_count", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[2]"]
+signal_0[label="signal", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+size_0[label="size", fillcolor="#b5b426"]
+size_x_0[label="size.x", fillcolor="#d3d247"]
+size_y_0[label="size.y", fillcolor="#d3d247"]
+space_0[label="space", fillcolor="#b5b426", URL="morph://MorpheusModel/Space/SpaceSymbol"]
+space_x_0[label="space.x", fillcolor="#d3d247"]
+space_y_0[label="space.y", fillcolor="#d3d247"]
+t_0[label="t", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+subgraph cluster_1 {
+label="CellType[epithelium]";
+Mapper_1_0_001[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.001</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType/Mapper" ]
+D_1[label="D", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType/Property[1]"]
+D_input_1[label="D_input", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType/Property[2]"]
+N_1[label="N", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType/Property[0]"]
+cell_center_1[label="cell.center", fillcolor="#b5b426"]
+cell_id_1[label="cell.id", fillcolor="#d3d247"]
+cluster_id_1[label="cluster_id", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType/Property[3]"]
+high_D_1[label="high_D", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType/Function"]
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="";
+System_3_0_001[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.001</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType/System" ]
+}
+}
+subgraph cluster_4 {
+label="CellType[Medium]";
+}
+}
+ClusteringTracker_0_1_0101010101 -> cluster_id_1 [penwidth=3, color="#8f100d"] 
+
+D_0 -> D_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+D_0 -> Gnuplotter_0_1 [penwidth=2, color="#112c5f"] 
+
+D_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+D_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+D_1 -> ClusteringTracker_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+D_1 -> D_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+D_1 -> high_D_1 [penwidth=2, color="#112c5f"] 
+
+D_input_0 -> D_input_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+D_input_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+D_input_1 -> D_input_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+D_input_1 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+D_threshold_0 -> ClusteringTracker_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+D_threshold_0 -> high_D_1 [penwidth=2, color="#112c5f"] 
+
+Mapper_1_0_001 -> D_input_1 [penwidth=3, color="#8f100d"] 
+
+N_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+N_0 -> N_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+N_1 -> N_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+NeighborhoodReporter_0_0 -> r1_count_0 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_0_0 -> r2_count_0 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_0_0_001 -> signal_0 [penwidth=3, color="#8f100d"] 
+
+System_3_0_001 -> D_1 [penwidth=3, color="#8f100d"] 
+
+System_3_0_001 -> N_1 [penwidth=3, color="#8f100d"] 
+
+a_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+b_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+cell_center_0 -> NeighborhoodReporter_0_0 [penwidth=2, color="#112c5f"] 
+
+cell_center_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+cell_center_0 -> cell_center_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_0 -> cell_center_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_1 -> ContactLogger_0_100 [penwidth=2, color="#112c5f"] 
+
+cell_center_1 -> Mapper_1_0_001 [penwidth=2, color="#112c5f"] 
+
+cell_center_1 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_x_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+cell_id_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+cell_id_1 -> cell_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cluster_id_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+cluster_id_0 -> cluster_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cluster_id_1 -> cluster_id_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+epsilon_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+h_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+high_D_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+high_D_0 -> high_D_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+high_D_1 -> high_D_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+k_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+nu_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+r1_count_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+r2_count_0 -> Logger_0_1_0101010101 [penwidth=2, color="#112c5f"] 
+
+signal_0 -> Mapper_1_0_001 [penwidth=2, color="#112c5f"] 
+
+size_0 -> size_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+size_0 -> size_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+size_x_0 -> NeighborhoodReporter_0_0 [penwidth=2, color="#112c5f"] 
+
+size_x_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+size_y_0 -> NeighborhoodReporter_0_0 [penwidth=2, color="#112c5f"] 
+
+size_y_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+space_0 -> space_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+space_0 -> space_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+space_x_0 -> NeighborhoodReporter_0_0 [penwidth=2, color="#112c5f"] 
+
+space_x_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+space_y_0 -> NeighborhoodReporter_0_0 [penwidth=2, color="#112c5f"] 
+
+space_y_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+t_0 -> Gnuplotter_0_1 [penwidth=2, color="#112c5f"] 
+
+}

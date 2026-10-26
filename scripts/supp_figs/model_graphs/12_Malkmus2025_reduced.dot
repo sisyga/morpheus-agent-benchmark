@@ -1,0 +1,44 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+BMP2_0[label="BMP2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[3]"]
+SULF1_0[label="SULF1", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[4]"]
+Sfrp2_0[label="Sfrp2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+Sox9_0[label="Sox9", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[5]"]
+WNT2_0[label="WNT2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+beta_cat_0[label="beta_cat", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[2]"]
+k_0[label="k", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="";
+System_4_0_005[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.005</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System" ]
+}
+}
+System_4_0_005 -> BMP2_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_005 -> SULF1_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_005 -> Sfrp2_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_005 -> Sox9_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_005 -> WNT2_0 [penwidth=3, color="#8f100d"] 
+
+System_4_0_005 -> beta_cat_0 [penwidth=3, color="#8f100d"] 
+
+k_0 -> System_4_0_005 [penwidth=2, color="#112c5f"] 
+
+}

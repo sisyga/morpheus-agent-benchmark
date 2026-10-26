@@ -1,0 +1,43 @@
+# Python
+.venv/
+.venv1/
+.uv-cache/
+__pycache__/
+*.pyc
+node_modules/
+
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+*.code-workspace
+
+# Other local projects (do NOT push)
+fastapi_app/
+openai-integration/
+server-setup/
+MWE/
+corpus/
+
+# Local files
+.codex
+.tmp_test_runs/
+correction.json
+runs/
+benchmark_runs/
+biological_benchmark_runs/
+example_scores/
+.tmp_test-runs/
+.tmp_smoke-runs/
+.tmp_pip/
+docs/**
+.worktrees/
+tmp/refactor-morpheus-ai.md
+bug_reports/
+analysis_reports/
+
+# Benchmark paper PDFs are not redistributed; see benchmark_papers/README.md
+benchmark_papers/*.pdf
+biological_benchmark_papers/
+smoke_reports/

@@ -1,0 +1,123 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+CPM_0_1 [shape=record, label="{CPM|1}", URL="morph://MorpheusModel/CPM" ]
+A_0[label="A", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[2]"]
+P_0[label="P", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+alpha_0[label="alpha", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+area_variance_0[label="area_variance", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[4]"]
+beta_0[label="beta", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+lambda_0[label="lambda", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+mean_area_0[label="mean_area", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[2]"]
+mean_speed_0[label="mean_speed", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[1]"]
+mean_surface_0[label="mean_surface", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[3]"]
+occupied_nodes_0[label="occupied_nodes", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+r_0[label="r", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[5]"]
+time_0[label="time", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="Function";
+}
+subgraph cluster_5 {
+label="Function";
+}
+subgraph cluster_6 {
+label="Function";
+}
+subgraph cluster_7 {
+label="CellType[medium]";
+}
+subgraph cluster_8 {
+label="CellType[endothelial]";
+Mapper_8_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[0]" ]
+Mapper_8_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[1]" ]
+Mapper_8_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[2]" ]
+subgraph cluster_cpm8 {
+label="CPM components";
+VolumeConstraint_8[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/VolumeConstraint"];
+DirectedMotion_8[ shape=Mrecord, label=" DirectedMotion", URL="morph://MorpheusModel/CellTypes/CellType[1]/DirectedMotion"];
+}
+cell_center_8[label="cell.center", fillcolor="#b5b426"]
+cell_surface_8[label="cell.surface", fillcolor="#d3d247"]
+cell_type_8[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+cell_volume_8[label="cell.volume", fillcolor="#d3d247"]
+polarity_8[label="polarity", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[0]"]
+previous_center_8[label="previous_center", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[1]"]
+velocity_8[label="velocity", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[2]"]
+subgraph cluster_9 {
+label="";
+Event_9_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event" ]
+}
+}
+}
+A_0 -> VolumeConstraint_8 [penwidth=2, color="#112c5f"] 
+
+CPM_0_1 -> VolumeConstraint_8 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm8] 
+
+CPM_0_1 -> cell_center_8 [penwidth=3, color="#8f100d"] 
+
+CPM_0_1 -> cell_type_8 [penwidth=3, color="#8f100d"] 
+
+Event_9_1 -> polarity_8 [penwidth=3, color="#8f100d"] 
+
+Event_9_1 -> previous_center_8 [penwidth=3, color="#8f100d"] 
+
+Event_9_1 -> velocity_8 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> area_variance_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> mean_area_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> mean_speed_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> mean_surface_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_8_1 -> occupied_nodes_0 [penwidth=3, color="#8f100d"] 
+
+P_0 -> DirectedMotion_8 [penwidth=2, color="#112c5f"] 
+
+alpha_0 -> CPM_0_1 [penwidth=2, color="#112c5f"] 
+
+beta_0 -> CPM_0_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_8 -> Event_9_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_8 -> Mapper_8_1 [penwidth=2, color="#112c5f"] 
+
+cell_surface_8 -> Mapper_8_1 [penwidth=2, color="#112c5f"] 
+
+cell_volume_8 -> Mapper_8_1 [penwidth=2, color="#112c5f"] 
+
+lambda_0 -> VolumeConstraint_8 [penwidth=2, color="#112c5f"] 
+
+polarity_8 -> DirectedMotion_8 [penwidth=2, color="#112c5f"] 
+
+r_0 -> Event_9_1 [penwidth=2, color="#112c5f"] 
+
+time_0 -> Event_9_1 [penwidth=2, color="#112c5f"] 
+
+velocity_8 -> Mapper_8_1 [penwidth=2, color="#112c5f"] 
+
+}

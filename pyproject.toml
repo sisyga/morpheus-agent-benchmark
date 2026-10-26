@@ -1,0 +1,30 @@
+[project]
+name = "morpheus-ai"
+version = "0.1.0"
+description = "Morpheus modeling utilities and benchmark analysis"
+readme = "readme.md"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib>=3.10.7,<4",
+    "mcp>=1.25.0,<2",
+    "numpy>=2.3.5,<3",
+    "openpyxl>=3.1.5,<4",
+    "pandas>=2.3.3,<3",
+    "pillow>=11.2.1,<12",
+    "pymupdf>=1.26.0,<2",
+    "pypdf>=5.4.0,<6",
+    "python-dotenv>=1.2.1,<2",
+    "scipy>=1.16.3,<2",
+    "xmlschema>=4.2.0,<5",
+]
+
+[dependency-groups]
+dev = ["pytest>=9.1.1,<10"]
+
+[tool.uv]
+package = false
+# Build .venv on a uv-managed interpreter so the benchmark sandbox sees only uv-controlled Python.
+python-preference = "only-managed"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

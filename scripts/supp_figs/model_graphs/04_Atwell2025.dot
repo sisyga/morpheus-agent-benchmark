@@ -1,0 +1,1354 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+CPM_0_0_0013939393939 [shape=record, label="{CPM|0.00139394}", URL="morph://MorpheusModel/CPM" ]
+Logger_0_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[0]" ]
+Gnuplotter_0_17_25[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Gnuplotter</td></tr>
+<hr/>
+<tr><td>17.25</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Gnuplotter" ]
+Logger_0_0_5[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<hr/>
+<tr><td>0.5</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[1]" ]
+adult_time_hph_0[label="adult_time_hph", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[9]"]
+apoptosis_probability_per_h_0[label="apoptosis_probability_per_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[29]"]
+base_z_um_0[label="base_z_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[6]"]
+cache_A_0[label="cache_A", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[25]"]
+cache_Dx_0[label="cache_Dx", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[28]"]
+cache_P_0[label="cache_P", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[24]"]
+cache_R_0[label="cache_R", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[26]"]
+cache_Tx_0[label="cache_Tx", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[27]"]
+candidate_oocyte_id_0[label="candidate_oocyte_id", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[3]"]
+candidate_sperm_id_0[label="candidate_sperm_id", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[4]"]
+cell_center_0[label="cell.center", fillcolor="#b5b426",peripheries=2]
+cell_center_x_0[label="cell.center.x", fillcolor="#d3d247"]
+cell_center_y_0[label="cell.center.y", fillcolor="#d3d247"]
+cell_center_z_0[label="cell.center.z", fillcolor="#d3d247"]
+cell_type_0[label="cell.type", fillcolor="#d3d247",peripheries=2]
+celltype_germ_id_0[label="celltype.germ.id", fillcolor="#d3d247"]
+colour_0[label="colour", fillcolor="#d3d247",peripheries=2]
+confinement_meiotic_0[label="confinement_meiotic", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+confinement_mitotic_0[label="confinement_mitotic", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+cycle_duration_h_0[label="cycle_duration_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[2]"]
+distal_length_um_0[label="distal_length_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[8]"]
+distal_y_um_0[label="distal_y_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[12]"]
+dt_h_0[label="dt_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+dtc_speed_um_h_0[label="dtc_speed_um_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[4]"]
+dtc_x_um_0[label="dtc_x_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[13]"]
+dtc_y_um_0[label="dtc_y_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[14]"]
+dtc_z_um_0[label="dtc_z_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[15]"]
+elapsed_hours_0[label="elapsed_hours", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[0]"]
+fig3_blue_cells_0[label="fig3_blue_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[17]"]
+fig3_green_cells_0[label="fig3_green_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[16]"]
+fig3_pink_cells_0[label="fig3_pink_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[18]"]
+fig3_yellow_cells_0[label="fig3_yellow_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[15]"]
+force_to_cpm_coupling_0[label="force_to_cpm_coupling", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[41]"]
+g1_fraction_0[label="g1_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[18]"]
+g2_arrested_cells_0[label="g2_arrested_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[19]"]
+g2_fraction_0[label="g2_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[20]"]
+gonad_length_um_0[label="gonad_length_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[9]"]
+gonad_radius_um_0[label="gonad_radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[3]"]
+lumen_energy_0[label="lumen_energy", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[34]"]
+max_proliferative_distance_um_0[label="max_proliferative_distance_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[21]"]
+mean_compression_0[label="mean_compression", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[22]"]
+meiotic_S_cells_0[label="meiotic_S_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[12]"]
+meiotic_cells_0[label="meiotic_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[9]"]
+meiotic_prophase_cells_0[label="meiotic_prophase_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[13]"]
+meiotic_radius_um_0[label="meiotic_radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[24]"]
+migration_length_um_0[label="migration_length_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+min_meiotic_distance_um_0[label="min_meiotic_distance_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[20]"]
+mitotic_radius_um_0[label="mitotic_radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[23]"]
+notch_bind_um_0[label="notch_bind_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[12]"]
+notch_loss_um_0[label="notch_loss_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[13]"]
+oocyte_growth_um_0[label="oocyte_growth_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[15]"]
+oocyte_radius_um_0[label="oocyte_radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[25]"]
+oogenic_cells_0[label="oogenic_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[11]"]
+origin_x_um_0[label="origin_x_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+outlet_length_um_0[label="outlet_length_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[32]"]
+ovulated_oocytes_0[label="ovulated_oocytes", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[7]"]
+phase_cv_0[label="phase_cv", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[22]"]
+proliferative_cells_0[label="proliferative_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[8]"]
+proximal_length_um_0[label="proximal_length_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[6]"]
+proximal_y_um_0[label="proximal_y_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[5]"]
+radius_growth_um_h_0[label="radius_growth_um_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[27]"]
+radius_um_0[label="radius_um", fillcolor="#d3d247",peripheries=2]
+remove_oocyte_id_0[label="remove_oocyte_id", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[5]"]
+remove_sperm_id_0[label="remove_sperm_id", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[6]"]
+s_fraction_0[label="s_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[19]"]
+sex_decision_um_0[label="sex_decision_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[14]"]
+source_drag_eta_0[label="source_drag_eta", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[40]"]
+space_0[label="space", fillcolor="#b5b426", URL="morph://MorpheusModel/Space/SpaceSymbol"]
+space_x_0[label="space.x", fillcolor="#d3d247"]
+space_y_0[label="space.y", fillcolor="#d3d247"]
+space_z_0[label="space.z", fillcolor="#d3d247"]
+sperm_cells_0[label="sperm_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[10]"]
+sperm_delay_h_0[label="sperm_delay_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[28]"]
+sperm_radius_um_0[label="sperm_radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[26]"]
+spermatogenic_cells_0[label="spermatogenic_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[14]"]
+stage_fraction_0[label="stage_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[1]"]
+stretch_um_0[label="stretch_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[5]"]
+surface_energy_0[label="surface_energy", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[37]"]
+time_hph_0[label="time_hph", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+tip_gap_um_0[label="tip_gap_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[2]"]
+total_cells_0[label="total_cells", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[23]"]
+turn_angle_0[label="turn_angle", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[7]"]
+turn_radius_um_0[label="turn_radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[7]"]
+turn_start_length_um_0[label="turn_start_length_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[1]"]
+turn_time_hph_0[label="turn_time_hph", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[8]"]
+turn_x_um_0[label="turn_x_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[10]"]
+turn_y_um_0[label="turn_y_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[11]"]
+volume_energy_0[label="volume_energy", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[35]"]
+wall_energy_0[label="wall_energy", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[33]"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="Function";
+}
+subgraph cluster_5 {
+label="Function";
+}
+subgraph cluster_6 {
+label="Function";
+}
+subgraph cluster_7 {
+label="Function";
+}
+subgraph cluster_8 {
+label="Function";
+}
+subgraph cluster_9 {
+label="Function";
+}
+subgraph cluster_10 {
+label="Function";
+}
+subgraph cluster_11 {
+label="Function";
+}
+subgraph cluster_12 {
+label="Function";
+}
+subgraph cluster_13 {
+label="Function";
+}
+subgraph cluster_14 {
+label="Function";
+}
+subgraph cluster_15 {
+label="Function";
+}
+subgraph cluster_16 {
+label="Function";
+}
+subgraph cluster_17 {
+label="Function";
+}
+subgraph cluster_18 {
+label="Function";
+}
+subgraph cluster_19 {
+label="Function";
+}
+subgraph cluster_20 {
+label="Function";
+}
+subgraph cluster_21 {
+label="Function";
+}
+subgraph cluster_22 {
+label="Function";
+}
+subgraph cluster_23 {
+label="";
+Event_23_10717914839958052954_0_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Refresh prescribed geometry until adulthood'</i></td></tr>
+<hr/>
+<tr><td>0.1</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Event[0]" ]
+}
+subgraph cluster_24 {
+label="";
+Event_24_14854328800555353833_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Start prescribed DTC turn'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Event[1]" ]
+}
+subgraph cluster_25 {
+label="";
+System_25_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System" ]
+}
+subgraph cluster_26 {
+label="Function";
+}
+subgraph cluster_27 {
+label="Function";
+}
+subgraph cluster_28 {
+label="Function";
+}
+subgraph cluster_29 {
+label="Function";
+}
+subgraph cluster_30 {
+label="Function";
+}
+subgraph cluster_31 {
+label="CellType[medium]";
+radius_um_31[label="radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[0]/Constant"]
+}
+subgraph cluster_32 {
+label="CellType[germ]";
+CellDivision_32_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/CellDivision" ]
+CellDeath_32_16095614647922351889_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDeath</td></tr>
+<tr><td><i>'Oogenic apoptosis or paired fertilisation'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/CellDeath" ]
+Mapper_32_16863994255538929406_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'proliferative_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[0]" ]
+Mapper_32_16638279919840844259_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'meiotic_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[1]" ]
+Mapper_32_12969002592451609664_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'sperm_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[2]" ]
+Mapper_32_9831760810789967920_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'oogenic_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[3]" ]
+Mapper_32_17259054671321069058_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'meiotic_S_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[4]" ]
+Mapper_32_13811726533471183999_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'meiotic_prophase_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[5]" ]
+Mapper_32_14185624642085060350_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'spermatogenic_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[6]" ]
+Mapper_32_15510404237877708075_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'fig3_yellow_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[7]" ]
+Mapper_32_17856611965899531936_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'fig3_green_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[8]" ]
+Mapper_32_12937818463083912264_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'fig3_blue_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[9]" ]
+Mapper_32_13658588964856872742_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'fig3_pink_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[10]" ]
+Mapper_32_8251903224406133923_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'g2_arrested_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[11]" ]
+Mapper_32_4379038345095428088_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'min_meiotic_distance_um'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[12]" ]
+Mapper_32_216054589962552780_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'max_proliferative_distance_um'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[13]" ]
+Mapper_32_3464939988579920798_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'mean_compression'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[14]" ]
+Mapper_32_10313955294090051622_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'tip_gap_um'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[15]" ]
+Mapper_32_12493224585049534561_0_69696969697[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'total_cells'</i></td></tr>
+<hr/>
+<tr><td>0.69697</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[16]" ]
+Mapper_32_446672808456633401_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'candidate_oocyte_id'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[17]" ]
+Mapper_32_15426021596564223200_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<tr><td><i>'candidate_sperm_id'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[18]" ]
+NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodVectorReporter</td></tr>
+<tr><td><i>'Published logarithmic overlap repulsion'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodVectorReporter" ]
+NeighborhoodReporter_32_6148636045787366049_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<tr><td><i>'Source compressed-volume estimator'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter[0]" ]
+NeighborhoodReporter_32_6148636045787366049_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<tr><td><i>'Source compressed-volume estimator'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter[1]" ]
+subgraph cluster_cpm32 {
+label="CPM components";
+VolumeConstraint_32[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/VolumeConstraint"];
+Haptotaxis_32[ shape=Mrecord, label=" Haptotaxis", URL="morph://MorpheusModel/CellTypes/CellType[1]/Haptotaxis[0]"];
+SurfaceConstraint_32[ shape=Mrecord, label=" SurfaceConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/SurfaceConstraint"];
+DirectedMotion_32_14870545971486627187[ shape=Mrecord, label=" DirectedMotion\n'Source repulsion and soft centre projection; no axial cue'", URL="morph://MorpheusModel/CellTypes/CellType[1]/DirectedMotion"];
+}
+ancestor_32[label="ancestor", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[10]"]
+boundary_correction_32[label="boundary_correction", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[1]"]
+boundary_correction_x_32[label="boundary_correction.x", fillcolor="#d3d247"]
+boundary_correction_y_32[label="boundary_correction.y", fillcolor="#d3d247"]
+boundary_correction_z_32[label="boundary_correction.z", fillcolor="#d3d247"]
+cell_center_32[label="cell.center", fillcolor="#b5b426"]
+cell_center_x_32[label="cell.center.x", fillcolor="#d3d247"]
+cell_center_y_32[label="cell.center.y", fillcolor="#d3d247"]
+cell_center_z_32[label="cell.center.z", fillcolor="#d3d247"]
+cell_id_32[label="cell.id", fillcolor="#d3d247"]
+cell_type_32[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+cell_volume_32[label="cell.volume", fillcolor="#d3d247"]
+colour_32[label="colour", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[7]"]
+compression_ratio_32[label="compression_ratio", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[1]"]
+distance_from_dtc_um_32[label="distance_from_dtc_um", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[2]"]
+division_ready_32[label="division_ready", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[9]"]
+effective_radius_um_32[label="effective_radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[8]"]
+fate_32[label="fate", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[6]"]
+fate_clock_h_32[label="fate_clock_h", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[7]"]
+g2_arrest_h_32[label="g2_arrest_h", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[11]"]
+g2_arrested_32[label="g2_arrested", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[6]"]
+gld1_active_32[label="gld1_active", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[4]"]
+gld2_active_32[label="gld2_active", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[5]"]
+glp1_32[label="glp1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[5]"]
+initial_cycle_position_32[label="initial_cycle_position", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[0]"]
+occupied_fraction_32[label="occupied_fraction", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[9]"]
+overlap_neighbours_32[label="overlap_neighbours", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[12]"]
+pair_force_32[label="pair_force", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[0]"]
+pair_force_x_32[label="pair_force.x", fillcolor="#d3d247"]
+pair_force_y_32[label="pair_force.y", fillcolor="#d3d247"]
+pair_force_z_32[label="pair_force.z", fillcolor="#d3d247"]
+phase_32[label="phase", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[2]"]
+phase_clock_h_32[label="phase_clock_h", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[3]"]
+phase_duration_h_32[label="phase_duration_h", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[4]"]
+radius_um_32[label="radius_um", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[1]"]
+rest_volume_um3_32[label="rest_volume_um3", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Function[0]"]
+sperm_divisions_32[label="sperm_divisions", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[8]"]
+summed_overlap_um_32[label="summed_overlap_um", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[13]"]
+subgraph cluster_33 {
+label="Function";
+}
+subgraph cluster_34 {
+label="Function";
+}
+subgraph cluster_35 {
+label="Function";
+}
+subgraph cluster_36 {
+label="Function";
+}
+subgraph cluster_37 {
+label="Function";
+}
+subgraph cluster_38 {
+label="Function";
+}
+subgraph cluster_39 {
+label="Function";
+}
+subgraph cluster_40 {
+label="Function";
+}
+subgraph cluster_41 {
+label="";
+System_41_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/System" ]
+}
+subgraph cluster_42 {
+label="";
+Event_42_2041507080380771464_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Bind GLP1 near DTC'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[0]" ]
+}
+subgraph cluster_43 {
+label="";
+Event_43_2013676635231239418_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Irreversible GLP1 loss'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[1]" ]
+}
+subgraph cluster_44 {
+label="";
+Event_44_17414476401269878542_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Commit to meiosis during G1'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[2]" ]
+}
+subgraph cluster_45 {
+label="";
+Event_45_15551720897453393224_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'G1 to S'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[3]" ]
+}
+subgraph cluster_46 {
+label="";
+Event_46_1925139527027770912_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'S to G2'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[4]" ]
+}
+subgraph cluster_47 {
+label="";
+Event_47_17778754476098210886_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'G2 to M; mitotic division'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[5]" ]
+}
+subgraph cluster_48 {
+label="";
+Event_48_17755705636980795639_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'M to G1'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[6]" ]
+}
+subgraph cluster_49 {
+label="";
+Event_49_5221067959244353195_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Nonproliferative G1 to meiotic S'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[7]" ]
+}
+subgraph cluster_50 {
+label="";
+Event_50_9125923240103860007_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Meiotic S to prophase'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[8]" ]
+}
+subgraph cluster_51 {
+label="";
+Event_51_10066373598766471508_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Sex determination at 200 um'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[9]" ]
+}
+subgraph cluster_52 {
+label="";
+Event_52_16225650449205574491_0_0013939393939[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Event</td></tr>
+<tr><td><i>'Oocyte maturation'</i></td></tr>
+<hr/>
+<tr><td>0.00139394</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Event[10]" ]
+}
+subgraph cluster_53 {
+label="";
+}
+subgraph cluster_54 {
+label="Function";
+}
+subgraph cluster_55 {
+label="Function";
+}
+}
+}
+CPM_0_0_0013939393939 -> VolumeConstraint_32 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm32] 
+
+CPM_0_0_0013939393939 -> cell_center_0 [penwidth=3, color="#8f100d"] 
+
+CPM_0_0_0013939393939 -> cell_type_0 [penwidth=3, color="#8f100d"] 
+
+CellDeath_32_16095614647922351889_0_0013939393939 -> cell_center_32 [penwidth=3, color="#8f100d"] 
+
+CellDivision_32_0_0013939393939 -> cell_center_32 [penwidth=3, color="#8f100d"] 
+
+CellDivision_32_0_0013939393939 -> division_ready_32 [penwidth=3, color="#8f100d"] 
+
+CellDivision_32_0_0013939393939 -> fate_32 [penwidth=3, color="#8f100d"] 
+
+CellDivision_32_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+CellDivision_32_0_0013939393939 -> radius_um_32 [penwidth=3, color="#8f100d"] 
+
+CellDivision_32_0_0013939393939 -> sperm_divisions_32 [penwidth=3, color="#8f100d"] 
+
+Event_23_10717914839958052954_0_1 -> confinement_meiotic_0 [penwidth=3, color="#8f100d"] 
+
+Event_23_10717914839958052954_0_1 -> confinement_mitotic_0 [penwidth=3, color="#8f100d"] 
+
+Event_24_14854328800555353833_0_0013939393939 -> turn_start_length_um_0 [penwidth=3, color="#8f100d"] 
+
+Event_42_2041507080380771464_0_0013939393939 -> glp1_32 [penwidth=3, color="#8f100d"] 
+
+Event_43_2013676635231239418_0_0013939393939 -> glp1_32 [penwidth=3, color="#8f100d"] 
+
+Event_44_17414476401269878542_0_0013939393939 -> phase_32 [penwidth=3, color="#8f100d"] 
+
+Event_44_17414476401269878542_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_44_17414476401269878542_0_0013939393939 -> phase_duration_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_45_15551720897453393224_0_0013939393939 -> phase_32 [penwidth=3, color="#8f100d"] 
+
+Event_45_15551720897453393224_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_45_15551720897453393224_0_0013939393939 -> phase_duration_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_46_1925139527027770912_0_0013939393939 -> phase_32 [penwidth=3, color="#8f100d"] 
+
+Event_46_1925139527027770912_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_46_1925139527027770912_0_0013939393939 -> phase_duration_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_47_17778754476098210886_0_0013939393939 -> division_ready_32 [penwidth=3, color="#8f100d"] 
+
+Event_47_17778754476098210886_0_0013939393939 -> phase_32 [penwidth=3, color="#8f100d"] 
+
+Event_47_17778754476098210886_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_47_17778754476098210886_0_0013939393939 -> phase_duration_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_48_17755705636980795639_0_0013939393939 -> phase_32 [penwidth=3, color="#8f100d"] 
+
+Event_48_17755705636980795639_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_48_17755705636980795639_0_0013939393939 -> phase_duration_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_49_5221067959244353195_0_0013939393939 -> phase_32 [penwidth=3, color="#8f100d"] 
+
+Event_49_5221067959244353195_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_49_5221067959244353195_0_0013939393939 -> phase_duration_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_50_9125923240103860007_0_0013939393939 -> phase_32 [penwidth=3, color="#8f100d"] 
+
+Event_50_9125923240103860007_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_51_10066373598766471508_0_0013939393939 -> fate_32 [penwidth=3, color="#8f100d"] 
+
+Event_51_10066373598766471508_0_0013939393939 -> fate_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+Event_52_16225650449205574491_0_0013939393939 -> fate_32 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_10313955294090051622_0_0013939393939 -> tip_gap_um_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_12493224585049534561_0_69696969697 -> total_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_12937818463083912264_0_69696969697 -> fig3_blue_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_12969002592451609664_0_69696969697 -> sperm_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_13658588964856872742_0_69696969697 -> fig3_pink_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_13811726533471183999_0_69696969697 -> meiotic_prophase_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_14185624642085060350_0_69696969697 -> spermatogenic_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_15426021596564223200_0_0013939393939 -> candidate_sperm_id_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_15510404237877708075_0_69696969697 -> fig3_yellow_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_16638279919840844259_0_69696969697 -> meiotic_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_16863994255538929406_0_69696969697 -> proliferative_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_17259054671321069058_0_69696969697 -> meiotic_S_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_17856611965899531936_0_69696969697 -> fig3_green_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_216054589962552780_0_69696969697 -> max_proliferative_distance_um_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_3464939988579920798_0_69696969697 -> mean_compression_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_4379038345095428088_0_69696969697 -> min_meiotic_distance_um_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_446672808456633401_0_0013939393939 -> candidate_oocyte_id_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_8251903224406133923_0_69696969697 -> g2_arrested_cells_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_32_9831760810789967920_0_69696969697 -> oogenic_cells_0 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_32_6148636045787366049_0_0013939393939 -> overlap_neighbours_32 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_32_6148636045787366049_0_0013939393939 -> summed_overlap_um_32 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 -> pair_force_32 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> cache_A_0 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> cache_Dx_0 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> cache_P_0 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> cache_R_0 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> cache_Tx_0 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> migration_length_um_0 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> ovulated_oocytes_0 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> remove_oocyte_id_0 [penwidth=3, color="#8f100d"] 
+
+System_25_0_0013939393939 -> remove_sperm_id_0 [penwidth=3, color="#8f100d"] 
+
+System_41_0_0013939393939 -> boundary_correction_32 [penwidth=3, color="#8f100d"] 
+
+System_41_0_0013939393939 -> fate_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+System_41_0_0013939393939 -> g2_arrest_h_32 [penwidth=3, color="#8f100d"] 
+
+System_41_0_0013939393939 -> phase_clock_h_32 [penwidth=3, color="#8f100d"] 
+
+System_41_0_0013939393939 -> radius_um_32 [penwidth=3, color="#8f100d"] 
+
+adult_time_hph_0 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+adult_time_hph_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+adult_time_hph_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+ancestor_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+apoptosis_probability_per_h_0 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+base_z_um_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+base_z_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+boundary_correction_32 -> DirectedMotion_32_14870545971486627187 [penwidth=2, color="#112c5f"] 
+
+boundary_correction_32 -> boundary_correction_x_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+boundary_correction_32 -> boundary_correction_y_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+boundary_correction_32 -> boundary_correction_z_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+boundary_correction_x_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+boundary_correction_y_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+boundary_correction_z_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+cache_A_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+cache_Dx_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+cache_R_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+cache_Tx_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+candidate_oocyte_id_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+candidate_sperm_id_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_0 -> cell_center_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_0 -> cell_center_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_0 -> cell_center_z_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_32 -> Mapper_32_10313955294090051622_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_12493224585049534561_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_12937818463083912264_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_12969002592451609664_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_13658588964856872742_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_13811726533471183999_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_14185624642085060350_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_15426021596564223200_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_15510404237877708075_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_16638279919840844259_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_16863994255538929406_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_17259054671321069058_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_17856611965899531936_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_216054589962552780_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_3464939988579920798_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_4379038345095428088_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_446672808456633401_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_8251903224406133923_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> Mapper_32_9831760810789967920_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_32 -> cell_center_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_32 -> cell_center_x_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_32 -> cell_center_y_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_32 -> cell_center_z_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_center_x_0 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_0 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_32 -> Mapper_32_15426021596564223200_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_32 -> Mapper_32_446672808456633401_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_32 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_32 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_32 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_x_32 -> distance_from_dtc_um_32 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_0 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_0 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_32 -> Mapper_32_15426021596564223200_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_32 -> Mapper_32_446672808456633401_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_32 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_32 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_32 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_y_32 -> distance_from_dtc_um_32 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_0 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_0 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_32 -> Mapper_32_15426021596564223200_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_32 -> Mapper_32_446672808456633401_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_32 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_32 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_32 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_center_z_32 -> distance_from_dtc_um_32 [penwidth=2, color="#112c5f"] 
+
+cell_id_32 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_id_32 -> Mapper_32_15426021596564223200_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_id_32 -> Mapper_32_446672808456633401_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_type_0 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_type_32 -> cell_type_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+cell_volume_32 -> CellDivision_32_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cell_volume_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+cell_volume_32 -> occupied_fraction_32 [penwidth=2, color="#112c5f"] 
+
+celltype_germ_id_0 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+celltype_germ_id_0 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+colour_0 -> Gnuplotter_0_17_25 [penwidth=2, color="#112c5f"] 
+
+colour_0 -> colour_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+colour_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+colour_32 -> colour_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+compression_ratio_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+compression_ratio_32 -> Mapper_32_3464939988579920798_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+compression_ratio_32 -> g2_arrested_32 [penwidth=2, color="#112c5f"] 
+
+confinement_meiotic_0 -> Haptotaxis_32 [penwidth=2, color="#112c5f"] 
+
+confinement_mitotic_0 -> Haptotaxis_32 [penwidth=2, color="#112c5f"] 
+
+cycle_duration_h_0 -> Event_44_17414476401269878542_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cycle_duration_h_0 -> Event_45_15551720897453393224_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cycle_duration_h_0 -> Event_46_1925139527027770912_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cycle_duration_h_0 -> Event_47_17778754476098210886_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cycle_duration_h_0 -> Event_48_17755705636980795639_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+cycle_duration_h_0 -> Event_49_5221067959244353195_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+distal_length_um_0 -> dtc_x_um_0 [penwidth=2, color="#112c5f"] 
+
+distal_y_um_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+distal_y_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> Event_42_2041507080380771464_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> Event_43_2013676635231239418_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> Event_51_10066373598766471508_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> Mapper_32_10313955294090051622_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> Mapper_32_216054589962552780_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> Mapper_32_4379038345095428088_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+distance_from_dtc_um_32 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+division_ready_32 -> CellDivision_32_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dt_h_0 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dt_h_0 -> Event_46_1925139527027770912_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dt_h_0 -> Event_48_17755705636980795639_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dt_h_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dt_h_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dtc_speed_um_h_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dtc_x_um_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+dtc_x_um_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dtc_x_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+dtc_y_um_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+dtc_z_um_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+effective_radius_um_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+effective_radius_um_32 -> compression_ratio_32 [penwidth=2, color="#112c5f"] 
+
+elapsed_hours_0 -> Event_44_17414476401269878542_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+elapsed_hours_0 -> Event_51_10066373598766471508_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+elapsed_hours_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> CellDivision_32_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Event_51_10066373598766471508_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Event_52_16225650449205574491_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_12937818463083912264_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_12969002592451609664_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_13658588964856872742_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_13811726533471183999_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_14185624642085060350_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_15426021596564223200_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_15510404237877708075_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_16638279919840844259_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_16863994255538929406_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_17259054671321069058_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_17856611965899531936_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_216054589962552780_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_4379038345095428088_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_446672808456633401_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> Mapper_32_9831760810789967920_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+fate_32 -> colour_32 [penwidth=2, color="#112c5f"] 
+
+fate_clock_h_32 -> CellDivision_32_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+fig3_blue_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fig3_green_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fig3_pink_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+fig3_yellow_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+force_to_cpm_coupling_0 -> DirectedMotion_32_14870545971486627187 [penwidth=2, color="#112c5f"] 
+
+g1_fraction_0 -> Event_44_17414476401269878542_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+g1_fraction_0 -> Event_48_17755705636980795639_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+g2_arrest_h_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+g2_arrested_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+g2_arrested_32 -> Mapper_32_8251903224406133923_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+g2_arrested_32 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+g2_arrested_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+g2_fraction_0 -> Event_46_1925139527027770912_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+gld1_active_32 -> Event_44_17414476401269878542_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+gld2_active_32 -> Event_44_17414476401269878542_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+glp1_32 -> Event_42_2041507080380771464_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+glp1_32 -> Event_43_2013676635231239418_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+glp1_32 -> Event_45_15551720897453393224_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+glp1_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+glp1_32 -> gld1_active_32 [penwidth=2, color="#112c5f"] 
+
+glp1_32 -> gld2_active_32 [penwidth=2, color="#112c5f"] 
+
+gonad_length_um_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+gonad_length_um_0 -> distance_from_dtc_um_32 [penwidth=2, color="#112c5f"] 
+
+gonad_radius_um_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+gonad_radius_um_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+gonad_radius_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+initial_cycle_position_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+lumen_energy_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+max_proliferative_distance_um_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+mean_compression_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+meiotic_S_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+meiotic_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+meiotic_prophase_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+meiotic_radius_um_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+meiotic_radius_um_0 -> Haptotaxis_32 [penwidth=2, color="#112c5f"] 
+
+meiotic_radius_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+migration_length_um_0 -> Event_24_14854328800555353833_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+migration_length_um_0 -> distal_length_um_0 [penwidth=2, color="#112c5f"] 
+
+migration_length_um_0 -> gonad_length_um_0 [penwidth=2, color="#112c5f"] 
+
+migration_length_um_0 -> proximal_length_um_0 [penwidth=2, color="#112c5f"] 
+
+migration_length_um_0 -> turn_angle_0 [penwidth=2, color="#112c5f"] 
+
+min_meiotic_distance_um_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+mitotic_radius_um_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+mitotic_radius_um_0 -> Haptotaxis_32 [penwidth=2, color="#112c5f"] 
+
+notch_bind_um_0 -> Event_42_2041507080380771464_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+notch_loss_um_0 -> Event_43_2013676635231239418_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+occupied_fraction_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+oocyte_growth_um_0 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+oocyte_growth_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+oocyte_radius_um_0 -> Event_52_16225650449205574491_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+oocyte_radius_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+oogenic_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+origin_x_um_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+origin_x_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+outlet_length_um_0 -> Mapper_32_15426021596564223200_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+outlet_length_um_0 -> Mapper_32_446672808456633401_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+overlap_neighbours_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+overlap_neighbours_32 -> effective_radius_um_32 [penwidth=2, color="#112c5f"] 
+
+ovulated_oocytes_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+pair_force_32 -> DirectedMotion_32_14870545971486627187 [penwidth=2, color="#112c5f"] 
+
+pair_force_32 -> pair_force_x_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+pair_force_32 -> pair_force_y_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+pair_force_32 -> pair_force_z_32 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+pair_force_x_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+pair_force_y_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+pair_force_z_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Event_44_17414476401269878542_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Event_45_15551720897453393224_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Event_46_1925139527027770912_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Event_47_17778754476098210886_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Event_48_17755705636980795639_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Event_49_5221067959244353195_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Event_50_9125923240103860007_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Mapper_32_13811726533471183999_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Mapper_32_15510404237877708075_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Mapper_32_16638279919840844259_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Mapper_32_16863994255538929406_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Mapper_32_17259054671321069058_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Mapper_32_17856611965899531936_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Mapper_32_216054589962552780_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> Mapper_32_4379038345095428088_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> colour_32 [penwidth=2, color="#112c5f"] 
+
+phase_32 -> g2_arrested_32 [penwidth=2, color="#112c5f"] 
+
+phase_clock_h_32 -> Event_45_15551720897453393224_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_clock_h_32 -> Event_46_1925139527027770912_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_clock_h_32 -> Event_47_17778754476098210886_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_clock_h_32 -> Event_48_17755705636980795639_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_clock_h_32 -> Event_49_5221067959244353195_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_clock_h_32 -> Event_50_9125923240103860007_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_clock_h_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+phase_cv_0 -> Event_46_1925139527027770912_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_cv_0 -> Event_48_17755705636980795639_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_duration_h_32 -> Event_45_15551720897453393224_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_duration_h_32 -> Event_46_1925139527027770912_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_duration_h_32 -> Event_47_17778754476098210886_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_duration_h_32 -> Event_48_17755705636980795639_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_duration_h_32 -> Event_49_5221067959244353195_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_duration_h_32 -> Event_50_9125923240103860007_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+phase_duration_h_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+proliferative_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+proximal_length_um_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+proximal_length_um_0 -> turn_x_um_0 [penwidth=2, color="#112c5f"] 
+
+proximal_y_um_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+proximal_y_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+radius_growth_um_h_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+radius_um_0 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+radius_um_0 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+radius_um_31 -> radius_um_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+radius_um_32 -> DirectedMotion_32_14870545971486627187 [penwidth=2, color="#112c5f"] 
+
+radius_um_32 -> Event_52_16225650449205574491_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+radius_um_32 -> Haptotaxis_32 [penwidth=2, color="#112c5f"] 
+
+radius_um_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+radius_um_32 -> NeighborhoodReporter_32_6148636045787366049_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+radius_um_32 -> NeighborhoodVectorReporter_32_16691936524810347843_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+radius_um_32 -> compression_ratio_32 [penwidth=2, color="#112c5f"] 
+
+radius_um_32 -> effective_radius_um_32 [penwidth=2, color="#112c5f"] 
+
+radius_um_32 -> radius_um_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+radius_um_32 -> rest_volume_um3_32 [penwidth=2, color="#112c5f"] 
+
+remove_oocyte_id_0 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+remove_sperm_id_0 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+rest_volume_um3_32 -> VolumeConstraint_32 [penwidth=2, color="#112c5f"] 
+
+rest_volume_um3_32 -> occupied_fraction_32 [penwidth=2, color="#112c5f"] 
+
+s_fraction_0 -> Event_45_15551720897453393224_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+s_fraction_0 -> Event_49_5221067959244353195_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+sex_decision_um_0 -> Event_51_10066373598766471508_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+source_drag_eta_0 -> DirectedMotion_32_14870545971486627187 [penwidth=2, color="#112c5f"] 
+
+space_0 -> space_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+space_0 -> space_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+space_0 -> space_z_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+space_x_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+space_y_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+space_z_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+sperm_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+sperm_delay_h_0 -> CellDivision_32_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+sperm_divisions_32 -> CellDivision_32_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+sperm_divisions_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+sperm_divisions_32 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+sperm_radius_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+spermatogenic_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+stage_fraction_0 -> cycle_duration_h_0 [penwidth=2, color="#112c5f"] 
+
+stretch_um_0 -> distal_length_um_0 [penwidth=2, color="#112c5f"] 
+
+stretch_um_0 -> gonad_length_um_0 [penwidth=2, color="#112c5f"] 
+
+stretch_um_0 -> proximal_length_um_0 [penwidth=2, color="#112c5f"] 
+
+summed_overlap_um_32 -> Logger_0_0_5 [penwidth=2, color="#112c5f"] 
+
+summed_overlap_um_32 -> effective_radius_um_32 [penwidth=2, color="#112c5f"] 
+
+surface_energy_0 -> SurfaceConstraint_32 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> CellDeath_32_16095614647922351889_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_24_14854328800555353833_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_42_2041507080380771464_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_43_2013676635231239418_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_44_17414476401269878542_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_45_15551720897453393224_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_46_1925139527027770912_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_47_17778754476098210886_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_48_17755705636980795639_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_49_5221067959244353195_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_50_9125923240103860007_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_51_10066373598766471508_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> Event_52_16225650449205574491_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> dtc_speed_um_h_0 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> elapsed_hours_0 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> g2_arrested_32 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> gonad_radius_um_0 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> stage_fraction_0 [penwidth=2, color="#112c5f"] 
+
+time_hph_0 -> stretch_um_0 [penwidth=2, color="#112c5f"] 
+
+tip_gap_um_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+tip_gap_um_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+total_cells_0 -> Logger_0_0_69696969697 [penwidth=2, color="#112c5f"] 
+
+turn_angle_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+turn_angle_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+turn_angle_0 -> distal_length_um_0 [penwidth=2, color="#112c5f"] 
+
+turn_angle_0 -> dtc_x_um_0 [penwidth=2, color="#112c5f"] 
+
+turn_angle_0 -> dtc_y_um_0 [penwidth=2, color="#112c5f"] 
+
+turn_angle_0 -> dtc_z_um_0 [penwidth=2, color="#112c5f"] 
+
+turn_angle_0 -> stretch_um_0 [penwidth=2, color="#112c5f"] 
+
+turn_radius_um_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+turn_radius_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+turn_start_length_um_0 -> Event_24_14854328800555353833_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+turn_start_length_um_0 -> distal_length_um_0 [penwidth=2, color="#112c5f"] 
+
+turn_start_length_um_0 -> proximal_length_um_0 [penwidth=2, color="#112c5f"] 
+
+turn_start_length_um_0 -> turn_angle_0 [penwidth=2, color="#112c5f"] 
+
+turn_time_hph_0 -> Event_24_14854328800555353833_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+turn_x_um_0 -> System_25_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+turn_x_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+turn_x_um_0 -> dtc_x_um_0 [penwidth=2, color="#112c5f"] 
+
+turn_y_um_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+turn_y_um_0 -> System_41_0_0013939393939 [penwidth=2, color="#112c5f"] 
+
+volume_energy_0 -> VolumeConstraint_32 [penwidth=2, color="#112c5f"] 
+
+wall_energy_0 -> DirectedMotion_32_14870545971486627187 [penwidth=2, color="#112c5f"] 
+
+wall_energy_0 -> Event_23_10717914839958052954_0_1 [penwidth=2, color="#112c5f"] 
+
+}

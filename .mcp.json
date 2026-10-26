@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "morpheus": {
+      "command": "uv",
+      "args": ["run", "--locked", "python", "server.py"]
+    }
+  }
+}

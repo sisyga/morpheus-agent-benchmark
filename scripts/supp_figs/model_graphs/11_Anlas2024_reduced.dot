@@ -1,0 +1,197 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+CPM_0_0_01 [shape=record, label="{CPM|0.01}", URL="morph://MorpheusModel/CPM" ]
+Cdh1_0[label="Cdh1", fillcolor="#d3d247",peripheries=2]
+Cdh2_0[label="Cdh2", fillcolor="#d3d247",peripheries=2]
+Lefty_0[label="Lefty", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[11]"]
+Wnt_0[label="Wnt", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+cadherin_adhesion_0[label="cadherin_adhesion", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[7]"]
+cycle_h_0[label="cycle_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+feedback_rate_0[label="feedback_rate", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+growth_rate_0[label="growth_rate", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[2]"]
+inhibitor_gain_0[label="inhibitor_gain", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[6]"]
+mean_Bra_0[label="mean_Bra", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[9]"]
+mean_Sox2_0[label="mean_Sox2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[10]"]
+mean_Wnt_0[label="mean_Wnt", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[8]"]
+neighbor_coupling_0[label="neighbor_coupling", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+signal_noise_0[label="signal_noise", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[5]"]
+time_h_0[label="time_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="";
+System_2_0_02[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.02</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System" ]
+}
+subgraph cluster_3 {
+label="CellType[medium]";
+}
+subgraph cluster_4 {
+label="CellType[stem]";
+Mapper_4_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[2]" ]
+Mapper_4_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[1]" ]
+Mapper_4_0_02[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.02</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/Mapper[0]" ]
+NeighborhoodReporter_4_0_02[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>0.02</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/NeighborhoodReporter" ]
+CellDivision_4_0_01[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>CellDivision</td></tr>
+<hr/>
+<tr><td>0.01</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/CellDivision" ]
+MotilityReporter_4_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>MotilityReporter</td></tr>
+<hr/>
+<tr><td>1</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/MotilityReporter" ]
+subgraph cluster_cpm4 {
+label="CPM components";
+VolumeConstraint_4[ shape=Mrecord, label=" VolumeConstraint", URL="morph://MorpheusModel/CellTypes/CellType[1]/VolumeConstraint"];
+}
+Aldh1a2_4[label="Aldh1a2", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[7]"]
+Bra_4[label="Bra", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[2]"]
+Cdh1_4[label="Cdh1", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[4]"]
+Cdh2_4[label="Cdh2", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[5]"]
+Eomes_4[label="Eomes", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[6]"]
+Nodal_4[label="Nodal", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[1]"]
+Sox2_4[label="Sox2", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[3]"]
+Wnt_4[label="Wnt", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[0]"]
+age_h_4[label="age_h", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[9]"]
+cell_center_4[label="cell.center", fillcolor="#b5b426"]
+cell_type_4[label="cell.type", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]"]
+displacement_4[label="displacement", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[1]"]
+generation_4[label="generation", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[11]"]
+neighbor_Wnt_4[label="neighbor_Wnt", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[8]"]
+target_area_4[label="target_area", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType[1]/Property[10]"]
+velocity_4[label="velocity", fillcolor="#b5b426", URL="morph://MorpheusModel/CellTypes/CellType[1]/PropertyVector[0]"]
+subgraph cluster_5 {
+label="";
+System_5_0_02[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.02</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType[1]/System" ]
+}
+subgraph cluster_6 {
+label="";
+}
+}
+}
+Bra_4 -> Mapper_4_1 [penwidth=2, color="#112c5f"] 
+
+CPM_0_0_01 -> VolumeConstraint_4 [dir=none, style="dashed", penwidth=1, color="#38568c",lhead=cluster_cpm4] 
+
+CPM_0_0_01 -> cell_center_4 [penwidth=3, color="#8f100d"] 
+
+CPM_0_0_01 -> cell_type_4 [penwidth=3, color="#8f100d"] 
+
+Cdh1_0 -> CPM_0_0_01 [penwidth=2, color="#112c5f"] 
+
+Cdh1_0 -> Cdh1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+Cdh1_4 -> Cdh1_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+Cdh2_0 -> CPM_0_0_01 [penwidth=2, color="#112c5f"] 
+
+Cdh2_0 -> Cdh2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+Cdh2_4 -> Cdh2_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+CellDivision_4_0_01 -> age_h_4 [penwidth=3, color="#8f100d"] 
+
+CellDivision_4_0_01 -> cell_center_4 [penwidth=3, color="#8f100d"] 
+
+CellDivision_4_0_01 -> generation_4 [penwidth=3, color="#8f100d"] 
+
+CellDivision_4_0_01 -> target_area_4 [penwidth=3, color="#8f100d"] 
+
+Lefty_0 -> System_5_0_02 [penwidth=2, color="#112c5f"] 
+
+Mapper_4_0_02 -> mean_Wnt_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_4_1 -> mean_Bra_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_4_1 -> mean_Sox2_0 [penwidth=3, color="#8f100d"] 
+
+MotilityReporter_4_1 -> displacement_4 [penwidth=3, color="#8f100d"] 
+
+MotilityReporter_4_1 -> velocity_4 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_4_0_02 -> neighbor_Wnt_4 [penwidth=3, color="#8f100d"] 
+
+Sox2_4 -> Mapper_4_1 [penwidth=2, color="#112c5f"] 
+
+System_2_0_02 -> Lefty_0 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> Aldh1a2_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> Bra_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> Cdh1_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> Cdh2_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> Eomes_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> Nodal_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> Sox2_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> Wnt_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> age_h_4 [penwidth=3, color="#8f100d"] 
+
+System_5_0_02 -> target_area_4 [penwidth=3, color="#8f100d"] 
+
+Wnt_0 -> NeighborhoodReporter_4_0_02 [penwidth=2, color="#112c5f"] 
+
+Wnt_4 -> Mapper_4_0_02 [penwidth=2, color="#112c5f"] 
+
+Wnt_4 -> NeighborhoodReporter_4_0_02 [penwidth=2, color="#112c5f"] 
+
+age_h_4 -> CellDivision_4_0_01 [penwidth=2, color="#112c5f"] 
+
+cadherin_adhesion_0 -> CPM_0_0_01 [penwidth=2, color="#112c5f"] 
+
+cell_center_4 -> Mapper_4_0_02 [penwidth=2, color="#112c5f"] 
+
+cell_center_4 -> Mapper_4_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_4 -> MotilityReporter_4_1 [penwidth=2, color="#112c5f"] 
+
+cell_center_4 -> NeighborhoodReporter_4_0_02 [penwidth=2, color="#112c5f"] 
+
+cycle_h_0 -> CellDivision_4_0_01 [penwidth=2, color="#112c5f"] 
+
+feedback_rate_0 -> System_5_0_02 [penwidth=2, color="#112c5f"] 
+
+growth_rate_0 -> System_5_0_02 [penwidth=2, color="#112c5f"] 
+
+inhibitor_gain_0 -> System_5_0_02 [penwidth=2, color="#112c5f"] 
+
+mean_Wnt_0 -> System_2_0_02 [penwidth=2, color="#112c5f"] 
+
+neighbor_Wnt_4 -> System_5_0_02 [penwidth=2, color="#112c5f"] 
+
+neighbor_coupling_0 -> System_5_0_02 [penwidth=2, color="#112c5f"] 
+
+signal_noise_0 -> System_5_0_02 [penwidth=2, color="#112c5f"] 
+
+target_area_4 -> VolumeConstraint_4 [penwidth=2, color="#112c5f"] 
+
+time_h_0 -> System_5_0_02 [penwidth=2, color="#112c5f"] 
+
+}

@@ -1,0 +1,568 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+Mapper_0_0_10101010101[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.10101</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[12]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[0]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[11]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[7]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[6]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[2]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[10]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[3]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[5]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[4]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[1]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[9]" ]
+Mapper_0_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[8]" ]
+Mapper_0_0_10101010101[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.10101</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[13]" ]
+Mapper_0_0_10101010101[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.10101</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[14]" ]
+Mapper_0_0_10101010101[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.10101</td></tr></table></font>>, URL="morph://MorpheusModel/Global/Mapper[15]" ]
+Gnuplotter_0_10[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Gnuplotter</td></tr>
+<hr/>
+<tr><td>10</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Gnuplotter" ]
+Logger_0_14492629805913213762_0_10101010101[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<tr><td><i>'ranges including boundary compartments'</i></td></tr>
+<hr/>
+<tr><td>0.10101</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[0]" ]
+Logger_0_8629885368176274089_0_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<tr><td><i>'six spatial fields'</i></td></tr>
+<hr/>
+<tr><td>0.1</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[1]" ]
+Logger_0_10823935648981889669_0_1[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<tr><td><i>'dynamic boundary states for spatial profiles'</i></td></tr>
+<hr/>
+<tr><td>0.1</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger[2]" ]
+Dd_0[label="Dd", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[2]"]
+Dh_0[label="Dh", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+Ds_0[label="Ds", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+Dud_0[label="Dud", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+Duh_0[label="Duh", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+Dw_0[label="Dw", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[5]"]
+d_0[label="d", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[2]"]
+d_bulk_left_0[label="d_bulk_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[9]"]
+d_bulk_max_0[label="d_bulk_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[27]"]
+d_bulk_min_0[label="d_bulk_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[26]"]
+d_bulk_right_0[label="d_bulk_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[11]"]
+d_left_0[label="d_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[8]"]
+d_max_0[label="d_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[5]"]
+d_min_0[label="d_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[4]"]
+d_range_0[label="d_range", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[6]"]
+d_right_0[label="d_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[10]"]
+dx_0[label="dx", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[22]"]
+epsilon_0[label="epsilon", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[20]"]
+eta_d_0[label="eta_d", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[12]"]
+eta_h_0[label="eta_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[11]"]
+eta_s_0[label="eta_s", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[10]"]
+gamma_0[label="gamma", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[18]"]
+h_0[label="h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+h_bulk_left_0[label="h_bulk_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[5]"]
+h_bulk_max_0[label="h_bulk_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[25]"]
+h_bulk_min_0[label="h_bulk_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[24]"]
+h_bulk_right_0[label="h_bulk_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[7]"]
+h_left_0[label="h_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[4]"]
+h_max_0[label="h_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[2]"]
+h_min_0[label="h_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[1]"]
+h_range_0[label="h_range", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[3]"]
+h_right_0[label="h_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[6]"]
+pd_0[label="pd", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[8]"]
+ph_0[label="ph", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[7]"]
+ps_0[label="ps", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[6]"]
+pw_0[label="pw", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[9]"]
+r0_0[label="r0", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[13]"]
+r1_0[label="r1", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[14]"]
+r2_0[label="r2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[15]"]
+r3_0[label="r3", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[16]"]
+s_0[label="s", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+s_bulk_left_0[label="s_bulk_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[1]"]
+s_bulk_max_0[label="s_bulk_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[31]"]
+s_bulk_min_0[label="s_bulk_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[30]"]
+s_bulk_right_0[label="s_bulk_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[3]"]
+s_left_0[label="s_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[0]"]
+s_max_0[label="s_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[11]"]
+s_min_0[label="s_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[10]"]
+s_range_0[label="s_range", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[12]"]
+s_right_0[label="s_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[2]"]
+space_0[label="space", fillcolor="#b5b426", URL="morph://MorpheusModel/Space/SpaceSymbol"]
+space_x_0[label="space.x", fillcolor="#d3d247"]
+tau_0[label="tau", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[17]"]
+theta_0[label="theta", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[19]"]
+ud_0[label="ud", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[4]"]
+ud_bulk_left_0[label="ud_bulk_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[17]"]
+ud_bulk_right_0[label="ud_bulk_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[19]"]
+ud_left_0[label="ud_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[16]"]
+ud_right_0[label="ud_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[18]"]
+uh_0[label="uh", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[3]"]
+uh_bulk_left_0[label="uh_bulk_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[13]"]
+uh_bulk_right_0[label="uh_bulk_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[15]"]
+uh_left_0[label="uh_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[12]"]
+uh_right_0[label="uh_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[14]"]
+wnt_0[label="wnt", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[5]"]
+wnt_bulk_left_0[label="wnt_bulk_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[21]"]
+wnt_bulk_max_0[label="wnt_bulk_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[29]"]
+wnt_bulk_min_0[label="wnt_bulk_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[28]"]
+wnt_bulk_right_0[label="wnt_bulk_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[23]"]
+wnt_left_0[label="wnt_left", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[20]"]
+wnt_max_0[label="wnt_max", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[8]"]
+wnt_min_0[label="wnt_min", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[7]"]
+wnt_range_0[label="wnt_range", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[9]"]
+wnt_right_0[label="wnt_right", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Variable[22]"]
+x_paper_0[label="x_paper", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[0]"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="";
+System_2_3866759533504447060_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<tr><td><i>'six-field bulk reaction-diffusion kinetics'</i></td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System[0]" ]
+}
+subgraph cluster_3 {
+label="";
+System_3_16072410198089646286_1e_05[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<tr><td><i>'twelve dynamic boundary ODE concentrations'</i></td></tr>
+<hr/>
+<tr><td>1e-05</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System[1]" ]
+}
+subgraph cluster_4 {
+label="Function";
+}
+subgraph cluster_5 {
+label="Function";
+}
+subgraph cluster_6 {
+label="Function";
+}
+subgraph cluster_7 {
+label="Function";
+}
+subgraph cluster_8 {
+label="Function";
+}
+subgraph cluster_9 {
+label="Function";
+}
+subgraph cluster_10 {
+label="Function";
+}
+subgraph cluster_11 {
+label="Function";
+}
+subgraph cluster_12 {
+label="Function";
+}
+subgraph cluster_13 {
+label="Function";
+}
+subgraph cluster_14 {
+label="Function";
+}
+subgraph cluster_15 {
+label="Function";
+}
+}
+Dd_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+Dh_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+Ds_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+Dud_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+Duh_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+Dw_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+Mapper_0_0_10101010101 -> d_bulk_max_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_10101010101 -> d_bulk_min_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_10101010101 -> h_bulk_max_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_10101010101 -> h_bulk_min_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_10101010101 -> s_bulk_max_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_10101010101 -> s_bulk_min_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_10101010101 -> wnt_bulk_max_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_0_10101010101 -> wnt_bulk_min_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> d_bulk_left_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> d_bulk_right_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> h_bulk_left_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> h_bulk_right_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> s_bulk_left_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> s_bulk_right_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> ud_bulk_left_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> ud_bulk_right_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> uh_bulk_left_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> uh_bulk_right_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> wnt_bulk_left_0 [penwidth=3, color="#8f100d"] 
+
+Mapper_0_1e_05 -> wnt_bulk_right_0 [penwidth=3, color="#8f100d"] 
+
+System_2_3866759533504447060_1e_05 -> d_0 [penwidth=3, color="#8f100d"] 
+
+System_2_3866759533504447060_1e_05 -> h_0 [penwidth=3, color="#8f100d"] 
+
+System_2_3866759533504447060_1e_05 -> s_0 [penwidth=3, color="#8f100d"] 
+
+System_2_3866759533504447060_1e_05 -> ud_0 [penwidth=3, color="#8f100d"] 
+
+System_2_3866759533504447060_1e_05 -> uh_0 [penwidth=3, color="#8f100d"] 
+
+System_2_3866759533504447060_1e_05 -> wnt_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> d_left_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> d_right_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> h_left_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> h_right_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> s_left_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> s_right_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> ud_left_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> ud_right_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> uh_left_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> uh_right_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> wnt_left_0 [penwidth=3, color="#8f100d"] 
+
+System_3_16072410198089646286_1e_05 -> wnt_right_0 [penwidth=3, color="#8f100d"] 
+
+d_0 -> Gnuplotter_0_10 [penwidth=2, color="#112c5f"] 
+
+d_0 -> Logger_0_8629885368176274089_0_1 [penwidth=2, color="#112c5f"] 
+
+d_0 -> Mapper_0_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+d_0 -> Mapper_0_1e_05 [penwidth=2, color="#112c5f"] 
+
+d_bulk_left_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+d_bulk_max_0 -> d_max_0 [penwidth=2, color="#112c5f"] 
+
+d_bulk_min_0 -> d_min_0 [penwidth=2, color="#112c5f"] 
+
+d_bulk_right_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+d_left_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+d_left_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+d_left_0 -> d_max_0 [penwidth=2, color="#112c5f"] 
+
+d_left_0 -> d_min_0 [penwidth=2, color="#112c5f"] 
+
+d_max_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+d_max_0 -> d_range_0 [penwidth=2, color="#112c5f"] 
+
+d_min_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+d_min_0 -> d_range_0 [penwidth=2, color="#112c5f"] 
+
+d_range_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+d_right_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+d_right_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+d_right_0 -> d_max_0 [penwidth=2, color="#112c5f"] 
+
+d_right_0 -> d_min_0 [penwidth=2, color="#112c5f"] 
+
+dx_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+epsilon_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+eta_d_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+eta_d_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+eta_h_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+eta_h_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+eta_s_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+eta_s_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+gamma_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+h_0 -> Gnuplotter_0_10 [penwidth=2, color="#112c5f"] 
+
+h_0 -> Logger_0_8629885368176274089_0_1 [penwidth=2, color="#112c5f"] 
+
+h_0 -> Mapper_0_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+h_0 -> Mapper_0_1e_05 [penwidth=2, color="#112c5f"] 
+
+h_bulk_left_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+h_bulk_max_0 -> h_max_0 [penwidth=2, color="#112c5f"] 
+
+h_bulk_min_0 -> h_min_0 [penwidth=2, color="#112c5f"] 
+
+h_bulk_right_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+h_left_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+h_left_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+h_left_0 -> h_max_0 [penwidth=2, color="#112c5f"] 
+
+h_left_0 -> h_min_0 [penwidth=2, color="#112c5f"] 
+
+h_max_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+h_max_0 -> h_range_0 [penwidth=2, color="#112c5f"] 
+
+h_min_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+h_min_0 -> h_range_0 [penwidth=2, color="#112c5f"] 
+
+h_range_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+h_right_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+h_right_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+h_right_0 -> h_max_0 [penwidth=2, color="#112c5f"] 
+
+h_right_0 -> h_min_0 [penwidth=2, color="#112c5f"] 
+
+pd_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+pd_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+ph_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+ph_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+ps_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+ps_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+pw_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+pw_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+r0_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+r0_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+r1_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+r1_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+r2_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+r2_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+r3_0 -> System_2_3866759533504447060_1e_05 [penwidth=2, color="#112c5f"] 
+
+r3_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+s_0 -> Logger_0_8629885368176274089_0_1 [penwidth=2, color="#112c5f"] 
+
+s_0 -> Mapper_0_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+s_0 -> Mapper_0_1e_05 [penwidth=2, color="#112c5f"] 
+
+s_bulk_left_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+s_bulk_max_0 -> s_max_0 [penwidth=2, color="#112c5f"] 
+
+s_bulk_min_0 -> s_min_0 [penwidth=2, color="#112c5f"] 
+
+s_bulk_right_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+s_left_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+s_left_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+s_left_0 -> s_max_0 [penwidth=2, color="#112c5f"] 
+
+s_left_0 -> s_min_0 [penwidth=2, color="#112c5f"] 
+
+s_max_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+s_max_0 -> s_range_0 [penwidth=2, color="#112c5f"] 
+
+s_min_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+s_min_0 -> s_range_0 [penwidth=2, color="#112c5f"] 
+
+s_range_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+s_right_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+s_right_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+s_right_0 -> s_max_0 [penwidth=2, color="#112c5f"] 
+
+s_right_0 -> s_min_0 [penwidth=2, color="#112c5f"] 
+
+space_0 -> space_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+space_x_0 -> Mapper_0_1e_05 [penwidth=2, color="#112c5f"] 
+
+space_x_0 -> x_paper_0 [penwidth=2, color="#112c5f"] 
+
+tau_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+theta_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+ud_0 -> Logger_0_8629885368176274089_0_1 [penwidth=2, color="#112c5f"] 
+
+ud_0 -> Mapper_0_1e_05 [penwidth=2, color="#112c5f"] 
+
+ud_bulk_left_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+ud_bulk_right_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+ud_left_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+ud_left_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+ud_right_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+ud_right_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+uh_0 -> Logger_0_8629885368176274089_0_1 [penwidth=2, color="#112c5f"] 
+
+uh_0 -> Mapper_0_1e_05 [penwidth=2, color="#112c5f"] 
+
+uh_bulk_left_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+uh_bulk_right_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+uh_left_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+uh_left_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+uh_right_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+uh_right_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+wnt_0 -> Gnuplotter_0_10 [penwidth=2, color="#112c5f"] 
+
+wnt_0 -> Logger_0_8629885368176274089_0_1 [penwidth=2, color="#112c5f"] 
+
+wnt_0 -> Mapper_0_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+wnt_0 -> Mapper_0_1e_05 [penwidth=2, color="#112c5f"] 
+
+wnt_bulk_left_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+wnt_bulk_max_0 -> wnt_max_0 [penwidth=2, color="#112c5f"] 
+
+wnt_bulk_min_0 -> wnt_min_0 [penwidth=2, color="#112c5f"] 
+
+wnt_bulk_right_0 -> System_3_16072410198089646286_1e_05 [penwidth=2, color="#112c5f"] 
+
+wnt_left_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+wnt_left_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+wnt_left_0 -> wnt_max_0 [penwidth=2, color="#112c5f"] 
+
+wnt_left_0 -> wnt_min_0 [penwidth=2, color="#112c5f"] 
+
+wnt_max_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+wnt_max_0 -> wnt_range_0 [penwidth=2, color="#112c5f"] 
+
+wnt_min_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+wnt_min_0 -> wnt_range_0 [penwidth=2, color="#112c5f"] 
+
+wnt_range_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+wnt_right_0 -> Logger_0_10823935648981889669_0_1 [penwidth=2, color="#112c5f"] 
+
+wnt_right_0 -> Logger_0_14492629805913213762_0_10101010101 [penwidth=2, color="#112c5f"] 
+
+wnt_right_0 -> wnt_max_0 [penwidth=2, color="#112c5f"] 
+
+wnt_right_0 -> wnt_min_0 [penwidth=2, color="#112c5f"] 
+
+x_paper_0 -> Logger_0_8629885368176274089_0_1 [penwidth=2, color="#112c5f"] 
+
+}

@@ -1,0 +1,5 @@
+WT Fig.1 and Fig.2
+
+Simulate from 0 through 50 hours, the WT endpoint.
+
+Add quantification and data output to a single csv file for 100 time points of the number of cells of each type in the left half of space AND the number of cells of each type in the right half of space.

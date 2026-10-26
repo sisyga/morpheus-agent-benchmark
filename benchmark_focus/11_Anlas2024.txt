@@ -1,0 +1,1 @@
+Cell cluster as in Fig.1A and Fig.4A starting from 50 cells in 2D space with uniform Bra/T and Sox2 and growing to 100 cells within 72 hours with these cells starting to express Bra/T and Sox2 in a pattern that represents the A-P axis as shown in Fig.1A,B,C and Fig.4B and E.

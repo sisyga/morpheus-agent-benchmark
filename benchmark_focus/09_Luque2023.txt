@@ -1,0 +1,5 @@
+HCC tumor growth within the regenerating liver tissue, considering the 2D cross-section of a liver lobule.
+
+Target Fig.10 and simulate from day 0 through day 60.
+
+Add quantification and data output to a single csv file for 100 time points of the number of cancer cells AND the number of liver cells.

@@ -1,0 +1,3 @@
+Aggregation and growth of two adjacent hepatocyte clusters (Z1-HLO and Z3-HLO in Fig.1a) into an organoid in 2D space with zonated GST, GS, Glutamine activities (Fig.4g,h,i).
+
+Initialize from the first state in Fig.1b (day 1) and simulate through day 7 on that figure's co-culture timeline, an elapsed duration of 6 days.

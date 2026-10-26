@@ -1,0 +1,651 @@
+{
+  "version": 7,
+  "source": {
+    "workbook": "Biological_scoring_criteria_v7.xlsx",
+    "authoritative": "clause table of each paper sheet"
+  },
+  "criteria": [
+    {
+      "paper_stems": [
+        "01_Szabo2010",
+        "1_Szabo2010_clean",
+        "Szabo2010"
+      ],
+      "target": "Dense motile monolayer for adhesion alpha=4.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Use final-time CSV observables or equivalent output evidence for occupied space and mean cell speed at t_end.",
+      "clauses": [
+        {
+          "id": "unoccupied_space_end_below_0_001_total",
+          "kind": "qualitative",
+          "description": "unoccupied space at end < 0.001*total space",
+          "weight": 2
+        },
+        {
+          "id": "mean_cell_speed_end_above_0_01",
+          "kind": "numeric",
+          "description": "mean cell speed(t_end) > 0.01node/MCS",
+          "weight": 1
+        },
+        {
+          "id": "mean_cell_speed_end_between_0_05_and_0_25",
+          "kind": "numeric",
+          "description": "mean cell speed(t_end) is between 0.05node/MCS and 0.25node/MCS",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "02_Thapa2024",
+        "2_Thapa2024_clean",
+        "Thapa2024"
+      ],
+      "target": "Ovarian cancer model 4 with cancer adhesion to senescent cells and senescent apoptosis or extrusion above perimeter coverage threshold.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Use time-resolved and start/final cell counts from CSV outputs or equivalent output evidence. Apply the same rubric to every run regardless of duration. All times and the first half refer to the observed simulation interval; t_end is the last observed state, including for partial runs. Do not convert time units, crop trajectories to 120 hours, or change thresholds according to duration. Numeric ranges include both bounds.",
+      "clauses": [
+        {
+          "id": "cancer_cells_exist_at_all_times",
+          "kind": "qualitative",
+          "description": "cancer cells exist at all times",
+          "weight": 1
+        },
+        {
+          "id": "non_senescent_cells_exist_at_all_times",
+          "kind": "qualitative",
+          "description": "non-senescent cells exist at all times",
+          "weight": 1
+        },
+        {
+          "id": "senescent_cells_exist_through_first_half",
+          "kind": "qualitative",
+          "description": "senescent cells exist throughout at least the first half of the observed simulation duration",
+          "weight": 1
+        },
+        {
+          "id": "cancer_growth_ratio_between_10_and_30",
+          "kind": "numeric",
+          "description": "ratio N_cancer(t_end)/N_cancer(t_start) is between 10 and 30 inclusive",
+          "weight": 1
+        },
+        {
+          "id": "non_senescent_growth_ratio_between_5_and_15",
+          "kind": "numeric",
+          "description": "ratio N_non-senesc.(t_end)/N_non-senesc.(t_start) is between 5 and 15 inclusive",
+          "weight": 1
+        },
+        {
+          "id": "senescent_ratio_is_zero",
+          "kind": "numeric",
+          "description": "ratio N_senesc.(t_end)/N_senesc.(t_start) is 0",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "03_Carpenter2024",
+        "3_Carpenter2024_clean",
+        "Carpenter2024"
+      ],
+      "target": "Monolayer growth with apoptosis, matching Fig. 2F-related outputs.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Use time-resolved occupancy plus final-time total-cell and mean-area observables. The area clause refers to A_S, the cell-area threshold of the G1/S transition used for Fig. 2D, not to the equilibrium area of an isolated cell (A_SC). If the outputs report mean cell area relative to A_SC or another reference, recompute the final mean cell area / A_S from the logged values and the A_S and A_SC parameters in canonical model.xml before applying the 0.6-0.9 interval.",
+      "clauses": [
+        {
+          "id": "cells_exist_at_all_times",
+          "kind": "qualitative",
+          "description": "cells exist at all times",
+          "weight": 1
+        },
+        {
+          "id": "cells_occupy_some_or_all_space",
+          "kind": "qualitative",
+          "description": "cells occupy some or all space",
+          "weight": 1
+        },
+        {
+          "id": "cell_count_end_between_1000_and_3000",
+          "kind": "numeric",
+          "description": "number of cells at end is between 1000 and 3000",
+          "weight": 1
+        },
+        {
+          "id": "mean_cell_area_a_s_ratio_between_0_6_and_0_9",
+          "kind": "numeric",
+          "description": "ratio of mean cell area / reference area A_S is between 0.6 and 0.9 at end of simulation",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "04_Atwell2025",
+        "4_Atwell2015_clean",
+        "Atwell2015",
+        "Atwell2025"
+      ],
+      "target": "Germ cell proliferation, fate composition, and U-shaped tissue geometry matching Fig. 3 / Table S2.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Use final cell-type presence and counts from CSV outputs or equivalent output evidence. Evaluate the two geometry clauses independently of implementation: accept image/TIFF domains, analytical expressions in Space/Domain, cell trajectories, or other mechanisms that produce the required geometry. Inspect canonical model.xml to interpret the construction and canonical simulation outputs to establish the realized shape; an intended mask or trajectory alone is not sufficient. For referenced image assets, resolve a stale archived path by basename in agent_workspace. Color names refer to proliferative yellow, meiotic green, sperm blue, and oogenic red populations.",
+      "clauses": [
+        {
+          "id": "proliferative_yellow_present_end",
+          "kind": "qualitative",
+          "description": "proliferative (or yellow) cells exist at end",
+          "weight": 1
+        },
+        {
+          "id": "meiotic_green_present_end",
+          "kind": "qualitative",
+          "description": "meiotic (or green) cells exist at end",
+          "weight": 1
+        },
+        {
+          "id": "sperm_blue_present_end",
+          "kind": "qualitative",
+          "description": "sperm (or blue) cells exist at end",
+          "weight": 1
+        },
+        {
+          "id": "oogenic_red_present_end",
+          "kind": "qualitative",
+          "description": "oogenic (or red) cells exist at end",
+          "weight": 1
+        },
+        {
+          "id": "non_rectangular_or_two_lane_accessible_domain",
+          "kind": "qualitative",
+          "description": "the realized accessible tissue domain or tissue geometry is non-rectangular or contains a two-horizontal-lane substructure; accept image/TIFF domains, analytical expressions in Space/Domain, cell trajectories, or other mechanisms; judge the realized shape in canonical simulation outputs, not the presence of a particular XML element or file format",
+          "weight": 1
+        },
+        {
+          "id": "proliferative_yellow_count_end_between_200_and_400",
+          "kind": "numeric",
+          "description": "number of proliferative (or yellow) cells at end is between 200 and 400",
+          "weight": 1
+        },
+        {
+          "id": "meiotic_green_count_end_between_50_and_200",
+          "kind": "numeric",
+          "description": "number of meiotic (or green) cells at end is between 50 and 200",
+          "weight": 1
+        },
+        {
+          "id": "sperm_blue_count_end_between_30_and_180",
+          "kind": "numeric",
+          "description": "number of sperm (or blue) cells at end is between 30 and 180",
+          "weight": 1
+        },
+        {
+          "id": "oogenic_red_count_end_between_30_and_100",
+          "kind": "numeric",
+          "description": "number of oogenic (or red) cells at end is between 30 and 100",
+          "weight": 1
+        },
+        {
+          "id": "tissue_grows_in_horizontal_u_shape_with_10_cells_past_apex",
+          "kind": "numeric",
+          "description": "the tissue grows in a horizontal U-shape geometry and by the end at least 10 cells have passed the apex of the U-turn",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "05_Berkemeier2023",
+        "5_Berkemeier2023_clean",
+        "Berkemeier2023"
+      ],
+      "target": "Delta-Notch pattern formation for epsilon=1, Fig. 1(f).",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Use final-time Delta-state presence, white-cell fraction, and white-cluster statistics from CSV outputs or equivalent output evidence.",
+      "clauses": [
+        {
+          "id": "white_high_delta_cells_present_end",
+          "kind": "qualitative",
+          "description": "cells with high Delta (or white) exist at the end",
+          "weight": 1
+        },
+        {
+          "id": "green_low_delta_cells_present_without_medium_delta_end",
+          "kind": "qualitative",
+          "description": "cells with low Delta (or green) exist at the end such that no medium Delta (light-green) remain",
+          "weight": 1
+        },
+        {
+          "id": "white_high_delta_ratio_between_0_1_and_0_3",
+          "kind": "numeric",
+          "description": "fraction of white (or high Delta) cells among all cells is at the end between 0.1 and 0.3",
+          "weight": 1
+        },
+        {
+          "id": "mean_white_cluster_size_between_1_5_and_3_5",
+          "kind": "numeric",
+          "description": "white (or high Delta) cells occur in clusters at the end with mean cell number between 1.5 and 3.5 (counting each isolated white cell as a cluster of number 1)",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "06_Herron2022",
+        "6_Herron2022_clean",
+        "Herron2022"
+      ],
+      "target": "Heterogeneous PDE pattern with ring-like structure and expected spot count, matching Fig. 4F.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Inspect final output figures for spots and ring organization, and use field outputs plus countable final structures for numeric clauses.",
+      "clauses": [
+        {
+          "id": "final_pattern_has_spots",
+          "kind": "qualitative",
+          "description": "the final pattern has spots",
+          "weight": 1
+        },
+        {
+          "id": "final_pattern_forms_ring_or_spots_on_ring",
+          "kind": "qualitative",
+          "description": "the final pattern forms a ring or spots placed on a ring",
+          "weight": 1
+        },
+        {
+          "id": "u_field_range_above_10",
+          "kind": "numeric",
+          "description": "difference between max and min field values is larger than 10",
+          "weight": 1
+        },
+        {
+          "id": "spot_count_end_between_6_and_12",
+          "kind": "numeric",
+          "description": "number of spots at end is between 6 and 12",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "07_Scheel2021",
+        "7_Scheel2021_clean",
+        "Scheel2021"
+      ],
+      "target": "Cutting and regeneration pattern with head/tail morphogen polarity, matching bottom-right target.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Use CSV field ranges, output images, or field snapshots such as VTK files; a missing CSV does not fail a clause when images or snapshots provide the evidence. Award opposite polarity only when the head- and tail-specific maxima are on opposite sides.",
+      "clauses": [
+        {
+          "id": "head_tail_maxima_on_opposite_sides_end",
+          "kind": "qualitative",
+          "description": "head-specific field has maximum on opposite side of tail-specific field's maximum at end",
+          "weight": 1
+        },
+        {
+          "id": "wnt_range_end_above_start",
+          "kind": "qualitative",
+          "description": "Wnt-signal at end spans a higher max-min range than at start",
+          "weight": 1
+        },
+        {
+          "id": "head_field_range_end_above_0_1",
+          "kind": "numeric",
+          "description": "difference max-min of head-specific field at end is larger than 0.1",
+          "weight": 1
+        },
+        {
+          "id": "tail_field_range_end_above_0_1",
+          "kind": "numeric",
+          "description": "difference max-min of tail-specific field at end is larger than 0.1",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "08_Mu2024",
+        "8_Mu2024_clean",
+        "Mu2024"
+      ],
+      "target": "B-cell chemotaxis between dark and light zones with affinity dynamics.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Use final B-cell zone counts, time-resolved zone occupancy, and affinity outputs from CSVs or equivalent evidence.",
+      "clauses": [
+        {
+          "id": "bcells_present_left_dark_zone_end",
+          "kind": "qualitative",
+          "description": "there are some beta cells in the dark zone (left half) at the end",
+          "weight": 1
+        },
+        {
+          "id": "bcells_present_right_light_zone_end",
+          "kind": "qualitative",
+          "description": "there are some beta cells in the light zone (right half) at the end",
+          "weight": 1
+        },
+        {
+          "id": "bcells_move_between_left_and_right_halves",
+          "kind": "qualitative",
+          "description": "at least one beta cell moves from the interior of one half into the other half during the run; cells that remain near or merely cross the central boundary without entering the other half do not count",
+          "weight": 1
+        },
+        {
+          "id": "bcells_left_dark_zone_end_between_1000_and_2000",
+          "kind": "numeric",
+          "description": "final number of beta cells in dark zone (left half) is between 1000 and 2000",
+          "weight": 1
+        },
+        {
+          "id": "bcells_right_light_zone_end_between_100_and_1000",
+          "kind": "numeric",
+          "description": "final number of beta cells in light zone (right half) is between 100 and 1000",
+          "weight": 1
+        },
+        {
+          "id": "mean_bcell_affinity_changes_over_time",
+          "kind": "numeric",
+          "description": "mean affinity of beta cells increases over time and is not constant",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "09_Luque2023",
+        "9_Luque2023_clean",
+        "Luque2023"
+      ],
+      "target": "HCC tumor growth within regenerating liver tissue in a 2D liver lobule cross-section.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Use output images plus time-resolved cancer area and cell-count outputs. Award each bounded-ratio clause only when both sides of its listed range are satisfied.",
+      "clauses": [
+        {
+          "id": "oxygen_sources_have_hexagonal_symmetry",
+          "kind": "qualitative",
+          "description": "oxygen sources have hexagonal symmetry",
+          "weight": 1
+        },
+        {
+          "id": "at_least_two_cell_types_present_end",
+          "kind": "qualitative",
+          "description": "there are at least two cell types at the end",
+          "weight": 1
+        },
+        {
+          "id": "cancer_cell_area_grows_over_time",
+          "kind": "qualitative",
+          "description": "area of cancer cells grows over time",
+          "weight": 1
+        },
+        {
+          "id": "cancer_growth_ratio_between_10_and_1000",
+          "kind": "numeric",
+          "description": "the ratio of cancer cell numbers at end over beginning is between 10 and 1000",
+          "weight": 1
+        },
+        {
+          "id": "liver_cell_count_grows_over_time",
+          "kind": "numeric",
+          "description": "number of liver cells grows over time",
+          "weight": 1
+        },
+        {
+          "id": "liver_growth_ratio_between_1_5_and_2_5",
+          "kind": "numeric",
+          "description": "the ratio of liver cell (or hepatocyte) numbers at end over beginning is between 1.5 and 2.5",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "10_Berkhout2025",
+        "ten_Berkhout2025_clean",
+        "10_Berkhout2025_clean",
+        "Berkhout2025"
+      ],
+      "target": "Wild-type neural tube morphogenesis with symmetric hollow tube and multiple cell types.",
+      "scoring_instructions": "Score the qualitative and numeric categories separately and give them equal total weight. Inspect final output images and model/output cell-type information at t_end. For the numeric clauses, compare per-type cell counts, or alternatively the total cross-section areas, of paraxial mesoderm, somite, and surface ectoderm cells at t_start and t_end; absolute cell numbers do not need to match the paper.",
+      "clauses": [
+        {
+          "id": "left_right_symmetric_end_state",
+          "kind": "qualitative",
+          "description": "final cell arrangement is roughly left-right symmetric",
+          "weight": 1
+        },
+        {
+          "id": "hollow_tube_in_center",
+          "kind": "qualitative",
+          "description": "final cell arrangement has a central cell-free channel bounded by coherent tube tissue on both sides; the channel may be open at one end, including the bottom, but a broad external gap, inter-cluster gap, or torn-open arrangement does not count",
+          "weight": 1
+        },
+        {
+          "id": "more_than_five_cell_types_present",
+          "kind": "qualitative",
+          "description": "more than 5 cell types present at end",
+          "weight": 1
+        },
+        {
+          "id": "paraxial_mesoderm_differentiates",
+          "kind": "numeric",
+          "description": "initial state has paraxial mesoderm cells and final state has no paraxial mesoderm; lack of paraxial mesoderm at start fails, one or more paraxial mesoderm cells at end also fails",
+          "weight": 1
+        },
+        {
+          "id": "somite_formation",
+          "kind": "numeric",
+          "description": "initial state has no somite cells; final state has number of somite cells double or more the initial number of paraxial mesoderm cells and this number of somite cells at end is less than 10 times the initial number of paraxial mesoderm cells; alternatively, the area of all somite cells in the simulated cross-section at the end is double or more the initial area of all paraxial mesoderm cells and this area of all somite cells at end is less than 10 times the initial area of all paraxial mesoderm cells; fails if either somite cells are present at start or too few somite cells are present at end or too many somite cells are present at end",
+          "weight": 1
+        },
+        {
+          "id": "surface_ectoderm_grows",
+          "kind": "numeric",
+          "description": "final state has higher number, at least one more, of surface ectoderm cells than initial state and this number of surface ectoderm cells at end is less than 5 times the initial number of surface ectoderm cells; alternatively, the area of all surface ectoderm cells in the simulated cross-section at the end is larger than the initial area of all surface ectoderm cells and this area of all surface ectoderm cells at end is less than 5 times the initial area of all surface ectoderm cells; fails if no surface ectoderm is present at start or amount of surface ectoderm stays constant or amount of surface ectoderm decreases from start to end",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "11_Anlas2024",
+        "Anlas2024"
+      ],
+      "target": "Growing 2D cell aggregate with anterior-posterior axis formation through Bra/T and Sox2 patterning.",
+      "scoring_instructions": "Use output images, model marker definitions, and CSV outputs where available. Award each qualitative clause independently from the generated artifacts.",
+      "clauses": [
+        {
+          "id": "compact_aggregate",
+          "kind": "qualitative",
+          "description": "compact aggregate",
+          "weight": 1
+        },
+        {
+          "id": "grows_double_or_triple_size",
+          "kind": "qualitative",
+          "description": "final cell number is at least twice and at most three times the initial cell number (2 <= final/initial <= 3; exact doubling and exact tripling both pass)",
+          "weight": 1
+        },
+        {
+          "id": "increasing_bra_t_from_signaling",
+          "kind": "qualitative",
+          "description": "Bra/T increases over time in at least some cells in response to modeled signaling",
+          "weight": 1
+        },
+        {
+          "id": "axis_from_bra_t_gradient",
+          "kind": "qualitative",
+          "description": "at the final time, a single directional Bra/T gradient or high-Bra/T pole defines an axis; bilateral or irregular high-Bra/T regions do not count",
+          "weight": 1
+        },
+        {
+          "id": "sox_positive_opposite_to_bra_t",
+          "kind": "qualitative",
+          "description": "at the final time, high-Sox cells and high-Bra/T cells form distinct, spatially opposed regions within the aggregate; demonstrate this using final images or position-resolved expression data; negative expression correlation alone, temporal changes, or small fluctuations around a nearly uniform pattern are insufficient",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "12_Malkmus2025",
+        "Malkmus2025"
+      ],
+      "target": "Turing-like digit patterning in a circular 2D limb-bud domain.",
+      "scoring_instructions": "Inspect final output images, model equations, and field outputs where available. Award each qualitative clause independently from the generated artifacts.",
+      "clauses": [
+        {
+          "id": "domain_shape",
+          "kind": "qualitative",
+          "description": "spatial domain has roundish shape",
+          "weight": 1
+        },
+        {
+          "id": "pdes_for_turing",
+          "kind": "qualitative",
+          "description": "fields and PDEs are used to generate a Turing pattern",
+          "weight": 1
+        },
+        {
+          "id": "heterogeneous_pattern_emerges",
+          "kind": "qualitative",
+          "description": "a heterogeneous pattern is absent initially and then emerges in the outputs",
+          "weight": 1
+        },
+        {
+          "id": "four_to_six_wavelengths_across_domain",
+          "kind": "qualitative",
+          "description": "pattern has 4, 5, or 6 complete wavelengths across a representative diameter for at least one variable; estimate wavelength from center-to-center repeat spacing along a straight transect, not by counting all individual spots or branches in the whole spatial domain; 3.5 wavelengths fails and 4.0 passes",
+          "weight": 1
+        },
+        {
+          "id": "elongated_spots_as_digits",
+          "kind": "qualitative",
+          "description": "for at least one variable, the pattern is dominated throughout by multiple finite regions clearly longer than wide, with many visible segment endpoints; elongated regions need not be fully separated and may touch or branch; fail if only round spots, domain-spanning stripes, or a labyrinth with few endpoints",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "13_Mole2026",
+        "Mole2026"
+      ],
+      "target": "Blastocyst attraction to an endometrial gland followed by adhesion and implantation into endometrial epithelium.",
+      "scoring_instructions": "Use output images, model receptor-ligand mechanisms, and CSV outputs where available. Award each qualitative clause independently from the generated artifacts.",
+      "clauses": [
+        {
+          "id": "blastocyst_starts_multilayered_with_two_cell_types",
+          "kind": "qualitative",
+          "description": "at the start, the upper blastocyst is one multilayered cluster with at least two cell types; if the time-zero plot lacks type colors, use canonical model.xml initial populations or the earliest type-resolved output, and ignore later breakup for this start-only clause",
+          "weight": 1
+        },
+        {
+          "id": "blastocyst_remains_single_cluster",
+          "kind": "qualitative",
+          "description": "all blastocyst-derived cells remain one connected cluster through the end; any detached blastocyst-derived cell or cluster at a sampled time fails, while deformation or embedding alone does not",
+          "weight": 1
+        },
+        {
+          "id": "blastocyst_remains_multilayered_with_distinct_shell_and_core",
+          "kind": "qualitative",
+          "description": "at the end, the whole surviving blastocyst is a coherent multilayered structure with one type forming a substantially continuous shell around a core enriched for another type; do not pass a residual subcluster, local patch, mixed cell types, or mere coexistence of two types",
+          "weight": 1
+        },
+        {
+          "id": "gland_remains_roughly_u_shaped",
+          "kind": "qualitative",
+          "description": "a recognizable curved or roughly U-shaped gland epithelial pocket remains in the epithelial layer; deformation, shallowness, simplicity, or a frozen gland does not fail, but absent, dispersed, or solid branched gland cells without a pocket fail",
+          "weight": 1
+        },
+        {
+          "id": "diffusible_gland_field_visualized",
+          "kind": "qualitative",
+          "description": "a diffusible field produced by the gland is directly visualized in canonical outputs",
+          "weight": 1
+        },
+        {
+          "id": "blastocyst_chemotaxis_to_gland",
+          "kind": "qualitative",
+          "description": "before contact, the blastocyst centroid or major mass shows sustained net approach toward the gland over multiple time points; growth alone, epithelial retraction, post-contact invasion, or movement of only a few detached cells does not count as chemotaxis",
+          "weight": 1
+        },
+        {
+          "id": "some_blastocyst_invasion_below_epithelium",
+          "kind": "qualitative",
+          "description": "at least one blastocyst-derived cell crosses to the stromal or basal side of the current epithelial layer or becomes embedded within it; surface contact or apposition alone does not count",
+          "weight": 1
+        },
+        {
+          "id": "more_than_half_blastocyst_invasion_below_epithelium",
+          "kind": "qualitative",
+          "description": "at the end, more than half of all blastocyst-derived cells or area lies on the stromal or basal side of the current epithelial boundary; use the current deformed epithelium rather than a fixed initial coordinate, and include all blastocyst types and detached cells in the denominator",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "14_Otsuki2025",
+        "Otsuki2025"
+      ],
+      "target": "Limb regeneration after cutting, with A/P tissue halves, Hand2/Shh signaling, growth, and later growth arrest.",
+      "scoring_instructions": "Use output images, model signaling definitions, and CSV outputs where available. Award each qualitative clause independently from the generated artifacts.",
+      "clauses": [
+        {
+          "id": "two_tissues_a_p",
+          "kind": "qualitative",
+          "description": "Throughout regeneration, anterior and posterior cell-state domains remain substantial contiguous regions on their respective sides, and both extend into the regenerated tissue. Fail if posterior-state tissue overtakes the anterior side of the outgrowth, leaving anterior-state tissue mainly in the original stump or as a residual patch. Judge current positional identity from the model's Hand2/posterior-memory state, not retained cell-type names or lineage labels alone. Limited boundary shifts and local posteriorization are allowed; equal sizes or identical growth rates are not required.",
+          "weight": 1
+        },
+        {
+          "id": "hand2_increases_in_p_near_cut",
+          "kind": "qualitative",
+          "description": "Hand2 increases in posterior tissue near the cut relative to its earlier baseline",
+          "weight": 1
+        },
+        {
+          "id": "growth",
+          "kind": "qualitative",
+          "description": "tissue cell count increases from the start through cell division; cell-area or cell-volume expansion with unchanged cell count does not count",
+          "weight": 1
+        },
+        {
+          "id": "hand2_decreases_in_p_after_repatterning",
+          "kind": "qualitative",
+          "description": "after its induced peak, Hand2 decreases at later times in posterior tissue",
+          "weight": 1
+        },
+        {
+          "id": "growth_ceases",
+          "kind": "qualitative",
+          "description": "after earlier cell-count growth, cell count reaches a late plateau or division rate effectively falls to zero before the end; no growth from the start cannot satisfy this clause, while isolated rare late divisions do not fail an otherwise clear plateau",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "paper_stems": [
+        "15_Reza2025",
+        "Reza2025"
+      ],
+      "target": "Aggregation and growth of two adjacent hepatocyte clusters, Z1-HLO and Z3-HLO, into a zonated 2D liver organoid with lumen formation.",
+      "scoring_instructions": "Use output images, model marker definitions, and CSV outputs where available. Award the four workbook clauses independently: fusion of seeded clones, total cell-count growth above 25%, a three-zone pattern in at least one variable, and lumen. Do not add numeric Fig. 4g,h,i scoring unless concrete thresholds are added to the criteria.",
+      "clauses": [
+        {
+          "id": "fusion_of_seeded_clones",
+          "kind": "qualitative",
+          "description": "Z1-HLO and Z3-HLO seeded clones form one contiguous integrated organoid by the end; adjacent or loosely touching clusters do not count",
+          "weight": 1
+        },
+        {
+          "id": "total_cell_count_grows_by_more_than_25_percent",
+          "kind": "qualitative",
+          "description": "total cell count grows by more than 25 percent from start to end",
+          "weight": 1
+        },
+        {
+          "id": "at_least_one_variable_has_three_zones",
+          "kind": "qualitative",
+          "description": "at least one output variable has three spatially distinct zones within the same fused organoid; initialized clone identities or three separate clusters do not count",
+          "weight": 1
+        },
+        {
+          "id": "lumen",
+          "kind": "qualitative",
+          "description": "the final fused organoid contains a distinct cell-free lumen bounded by organoid cells; external gaps, inter-cluster spaces, or sparse background do not count",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

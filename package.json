@@ -1,0 +1,27 @@
+{
+  "name": "morpheus-ai",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "benchmark": "tsx src/benchmark/cli.ts",
+    "score:biology": "tsx src/benchmark/biological-scoring.ts",
+    "smoke": "tsx scripts/smoke-codex.ts",
+    "test:ts": "tsx --test tests/*.test.ts",
+    "test:coverage:ts": "bash scripts/check-deterministic-ts-coverage.sh",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@openai/codex-sdk": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "allowScripts": {
+    "esbuild@0.27.4": true
+  }
+}

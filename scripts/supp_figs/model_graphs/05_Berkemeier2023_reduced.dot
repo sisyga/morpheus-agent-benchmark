@@ -1,0 +1,101 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+NeighborhoodReporter_0_0_001[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>0.001</td></tr></table></font>>, URL="morph://MorpheusModel/Global/NeighborhoodReporter[0]" ]
+NeighborhoodReporter_0_0[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>-1</td></tr></table></font>>, URL="morph://MorpheusModel/Global/NeighborhoodReporter[1]" ]
+NeighborhoodReporter_0_0[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>NeighborhoodReporter</td></tr>
+<hr/>
+<tr><td>-1</td></tr></table></font>>, URL="morph://MorpheusModel/Global/NeighborhoodReporter[2]" ]
+D_0[label="D", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[7]"]
+a_0[label="a", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[1]"]
+b_0[label="b", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[2]"]
+epsilon_0[label="epsilon", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+h_0[label="h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[3]"]
+k_0[label="k", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[4]"]
+nu_0[label="nu", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[5]"]
+r1_count_0[label="r1_count", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+r2_count_0[label="r2_count", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[2]"]
+signal_0[label="signal", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+size_0[label="size", fillcolor="#b5b426"]
+space_0[label="space", fillcolor="#b5b426", URL="morph://MorpheusModel/Space/SpaceSymbol"]
+subgraph cluster_1 {
+label="CellType[epithelium]";
+Mapper_1_0_001[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Mapper</td></tr>
+<hr/>
+<tr><td>0.001</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType/Mapper" ]
+D_1[label="D", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType/Property[1]"]
+D_input_1[label="D_input", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType/Property[2]"]
+N_1[label="N", fillcolor="#d3d247", URL="morph://MorpheusModel/CellTypes/CellType/Property[0]"]
+cell_center_1[label="cell.center", fillcolor="#b5b426"]
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="";
+System_3_0_001[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<hr/>
+<tr><td>0.001</td></tr></table></font>>, URL="morph://MorpheusModel/CellTypes/CellType/System" ]
+}
+}
+subgraph cluster_4 {
+label="CellType[Medium]";
+}
+}
+D_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+D_1 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+D_input_1 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+Mapper_1_0_001 -> D_input_1 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_0_0 -> r1_count_0 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_0_0 -> r2_count_0 [penwidth=3, color="#8f100d"] 
+
+NeighborhoodReporter_0_0_001 -> signal_0 [penwidth=3, color="#8f100d"] 
+
+System_3_0_001 -> D_1 [penwidth=3, color="#8f100d"] 
+
+System_3_0_001 -> N_1 [penwidth=3, color="#8f100d"] 
+
+a_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+b_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+cell_center_1 -> Mapper_1_0_001 [penwidth=2, color="#112c5f"] 
+
+cell_center_1 -> NeighborhoodReporter_0_0 [penwidth=2, color="#112c5f"] 
+
+cell_center_1 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+epsilon_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+h_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+k_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+nu_0 -> System_3_0_001 [penwidth=2, color="#112c5f"] 
+
+signal_0 -> Mapper_1_0_001 [penwidth=2, color="#112c5f"] 
+
+size_0 -> NeighborhoodReporter_0_0 [penwidth=2, color="#112c5f"] 
+
+size_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+space_0 -> NeighborhoodReporter_0_0 [penwidth=2, color="#112c5f"] 
+
+space_0 -> NeighborhoodReporter_0_0_001 [penwidth=2, color="#112c5f"] 
+
+}

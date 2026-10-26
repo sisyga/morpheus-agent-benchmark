@@ -1,0 +1,74 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below and cite the accompanying preprint."
+type: software
+title: "Morpheus.AI: benchmark and tools for LLM agents that build Morpheus multicellular models"
+abstract: >-
+  Benchmark runner, Morpheus agent skill, Model Context Protocol (MCP) server, biological scoring
+  criteria and analysis scripts used to test whether LLM-based coding agents can rebuild published
+  multicellular models in the Morpheus simulator. The release reproduces the subject-facing setup
+  of benchmark version 3 (git tag benchmark-v3) that produced the runs reported in the
+  accompanying preprint.
+authors:
+  - given-names: Prerana
+    family-names: Chandratre
+    affiliation: "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+  - given-names: Anjali
+    family-names: Sharma
+    affiliation: "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+  - given-names: Justin
+    family-names: Bürger Michaelis
+    affiliation: "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+  - given-names: Diego
+    family-names: Jahn
+    affiliation: "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+  - given-names: Jörn
+    family-names: Starruß
+    affiliation: "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+  - given-names: Lutz
+    family-names: Brusch
+    affiliation: "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+  - given-names: Simon
+    family-names: Syga
+    affiliation: "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
+version: 2.0.0
+license: Apache-2.0
+repository-code: "https://github.com/sisyga/morpheus-agent-benchmark"
+keywords:
+  - large language models
+  - AI agents
+  - benchmark
+  - multicellular modeling
+  - Morpheus
+  - cellular Potts model
+  - Model Context Protocol
+  - systems biology
+references:
+  - type: article
+    title: "Morpheus: a user-friendly modeling environment for multiscale and multicellular systems biology"
+    authors:
+      - family-names: Starruß
+        given-names: Jörn
+      - name: "et al."
+    journal: Bioinformatics
+    year: 2014
+    doi: 10.1093/bioinformatics/btt772
+preferred-citation:
+  type: article
+  title: "LLM-based agents can autonomously generate, execute, and refine in silico models"
+  status: preprint
+  year: 2026
+  authors:
+    - given-names: Prerana
+      family-names: Chandratre
+    - given-names: Anjali
+      family-names: Sharma
+    - given-names: Justin
+      family-names: Bürger Michaelis
+    - given-names: Diego
+      family-names: Jahn
+    - given-names: Jörn
+      family-names: Starruß
+    - given-names: Lutz
+      family-names: Brusch
+    - given-names: Simon
+      family-names: Syga

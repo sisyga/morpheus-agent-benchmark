@@ -1,0 +1,106 @@
+digraph {
+compound=true;
+subgraph cluster{
+labelloc="t";label="Global";bgcolor="#2341782f"
+node[style=filled,fillcolor="#fffea3"]
+Gnuplotter_0_6[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Gnuplotter</td></tr>
+<hr/>
+<tr><td>6</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Gnuplotter" ]
+Logger_0_3[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>Logger</td></tr>
+<hr/>
+<tr><td>3</td></tr></table></font>>, URL="morph://MorpheusModel/Analysis/Logger" ]
+BMP2_0[label="BMP2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[3]"]
+SULF1_0[label="SULF1", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[4]"]
+Sfrp2_0[label="Sfrp2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[0]"]
+Sox9_0[label="Sox9", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[5]"]
+WNT2_0[label="WNT2", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[1]"]
+beta_cat_0[label="beta_cat", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Field[2]"]
+k_0[label="k", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Constant[0]"]
+l_0[label="l", fillcolor="#b5b426", URL="morph://MorpheusModel/Space/SpaceSymbol"]
+l_x_0[label="l.x", fillcolor="#d3d247"]
+l_y_0[label="l.y", fillcolor="#d3d247"]
+time_h_0[label="time_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Time/TimeSymbol"]
+time_since_E10_5_h_0[label="time_since_E10_5_h", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[2]"]
+x_um_0[label="x_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[0]"]
+y_um_0[label="y_um", fillcolor="#d3d247", URL="morph://MorpheusModel/Global/Function[1]"]
+subgraph cluster_1 {
+label="Function";
+}
+subgraph cluster_2 {
+label="Function";
+}
+subgraph cluster_3 {
+label="Function";
+}
+subgraph cluster_4 {
+label="";
+System_4_8899373774884810434_0_005[ shape=plain, label=<<font face="times" point-size="15"><table cellborder="0" border="1" cellspacing="0" cellpadding="3" align="center">
+<tr><td>System</td></tr>
+<tr><td><i>'Fig.7E signed GRN with saturating production'</i></td></tr>
+<hr/>
+<tr><td>0.005</td></tr></table></font>>, URL="morph://MorpheusModel/Global/System" ]
+}
+}
+BMP2_0 -> Gnuplotter_0_6 [penwidth=2, color="#112c5f"] 
+
+BMP2_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+SULF1_0 -> Gnuplotter_0_6 [penwidth=2, color="#112c5f"] 
+
+SULF1_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+Sfrp2_0 -> Gnuplotter_0_6 [penwidth=2, color="#112c5f"] 
+
+Sfrp2_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+Sox9_0 -> Gnuplotter_0_6 [penwidth=2, color="#112c5f"] 
+
+Sox9_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+System_4_8899373774884810434_0_005 -> BMP2_0 [penwidth=3, color="#8f100d"] 
+
+System_4_8899373774884810434_0_005 -> SULF1_0 [penwidth=3, color="#8f100d"] 
+
+System_4_8899373774884810434_0_005 -> Sfrp2_0 [penwidth=3, color="#8f100d"] 
+
+System_4_8899373774884810434_0_005 -> Sox9_0 [penwidth=3, color="#8f100d"] 
+
+System_4_8899373774884810434_0_005 -> WNT2_0 [penwidth=3, color="#8f100d"] 
+
+System_4_8899373774884810434_0_005 -> beta_cat_0 [penwidth=3, color="#8f100d"] 
+
+WNT2_0 -> Gnuplotter_0_6 [penwidth=2, color="#112c5f"] 
+
+WNT2_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+beta_cat_0 -> Gnuplotter_0_6 [penwidth=2, color="#112c5f"] 
+
+beta_cat_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+k_0 -> System_4_8899373774884810434_0_005 [penwidth=2, color="#112c5f"] 
+
+l_0 -> l_x_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+l_0 -> l_y_0 [dir=none, style="dashed", penwidth=1, color="#38568c"] 
+
+l_x_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+l_x_0 -> x_um_0 [penwidth=2, color="#112c5f"] 
+
+l_y_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+l_y_0 -> y_um_0 [penwidth=2, color="#112c5f"] 
+
+time_h_0 -> Gnuplotter_0_6 [penwidth=2, color="#112c5f"] 
+
+time_h_0 -> time_since_E10_5_h_0 [penwidth=2, color="#112c5f"] 
+
+time_since_E10_5_h_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+x_um_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+y_um_0 -> Logger_0_3 [penwidth=2, color="#112c5f"] 
+
+}

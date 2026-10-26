@@ -1,0 +1,3 @@
+As shown in Fig.5f: 2D tissue with two halves A and P, A without Hand2 signal and P with low Hand2 signal, get cut at start time and the open cut elevates Hand2 near the cut where it was low, this secretes Shh which diffuses few cell layers, cells divide and grow to regenerate the missing tissue and re-pattern low Hand2 in response to Shh.
+
+Simulate regeneration from amputation at day 0 through day 39 after amputation. Use Fig.5f for the mechanism and Extended Data Fig.5c for the temporal course of Hand2 expression. Choose a consistent mapping between simulation time and days.

@@ -1,0 +1,3 @@
+Blastocyst as a cell cluster that gets attracted by endometrial gland and adheres and then implants into endometrium, all in 2D cross-section as shown in Fig.3A, including receptor-ligand pairs for blastocyst-endometrium recognition.
+
+Simulate from 6 to 9 days post-fertilization (d.p.f.), an elapsed duration of 72 hours.
