@@ -443,6 +443,7 @@ export class BenchmarkRunner {
 
   async run(maxPapers?: number, options: BenchmarkRunOptions = {}): Promise<BenchmarkSummary> {
     this.resolvePythonSandboxPaths();
+    const papers = await this.discoverPapers(maxPapers, options.startAtPaper);
     const startedAt = new Date();
     const benchmarkPaths = buildBenchmarkRunPaths(this.config.resultsDir, startedAt);
     const diagnostics = emptyBenchmarkDiagnostics();
@@ -453,7 +454,6 @@ export class BenchmarkRunner {
     process.env.MORPHEUS_XML_SCHEMA_PATH = this.config.morpheusXmlSchemaPath;
     applyMorpheusThreadEnv(process.env, this.config.morpheusNumThreads);
 
-    const papers = await this.discoverPapers(maxPapers, options.startAtPaper);
     const jobs = expandBenchmarkJobs(papers, this.config.benchmarkModes, this.config.benchmarkRepetitions);
     const maxConcurrentJobs = resolveBenchmarkMaxConcurrentJobs(
       this.config.maxConcurrentJobs,
@@ -955,11 +955,24 @@ export class BenchmarkRunner {
   }
 
   async discoverPapers(maxPapers?: number, startAtPaper?: string): Promise<string[]> {
-    const entries = await readdir(this.config.papersDir, { withFileTypes: true });
+    const missingPapersHint =
+      "Download the paper PDFs listed in benchmark_papers/papers.csv first (see benchmark_papers/README.md).";
+    let entries;
+    try {
+      entries = await readdir(this.config.papersDir, { withFileTypes: true });
+    } catch (error) {
+      if (isFileNotFoundError(error)) {
+        throw new Error(`Papers directory ${this.config.papersDir} does not exist. ${missingPapersHint}`);
+      }
+      throw error;
+    }
     let pdfs = entries
       .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith(".pdf"))
       .map((entry) => path.join(this.config.papersDir, entry.name))
       .sort();
+    if (pdfs.length === 0) {
+      throw new Error(`No paper PDFs found in ${this.config.papersDir}. ${missingPapersHint}`);
+    }
     if (startAtPaper) {
       const startIndex = findStartPaperIndex(pdfs, startAtPaper);
       if (startIndex < 0) {

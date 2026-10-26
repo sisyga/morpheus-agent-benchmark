@@ -23,7 +23,7 @@ export async function loadConfig(configPath?: string): Promise<BenchmarkConfig> 
     benchmarkModes: normalizeBenchmarkModes(parsed.benchmarkModes),
     benchmarkRepetitions: integerAtLeast(parsed.benchmarkRepetitions ?? 1, "benchmarkRepetitions", 1),
     model: parsed.model ?? "gpt-6.1-sol",
-    reasoningEffort: parsed.reasoningEffort ?? "xhigh",
+    reasoningEffort: parsed.reasoningEffort ?? "max",
     totalTimeLimitMs: integerAtLeast(parsed.totalTimeLimitMs ?? 14_400_000, "totalTimeLimitMs", 1),
     finalizationReserveMs: integerAtLeast(
       parsed.finalizationReserveMs ?? 600_000,

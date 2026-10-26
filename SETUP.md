@@ -196,7 +196,7 @@ npm run benchmark -- --total-time-limit-minutes 300 --finalization-reserve-minut
 npm run benchmark -- --repetitions 3
 npm run benchmark -- --all-benchmark-modes --max-concurrent-jobs 5
 npm run benchmark -- --results-dir benchmark_runs_review
-npm run benchmark -- --model gpt-6.1-sol --reasoning-effort xhigh
+npm run benchmark -- --model gpt-6.1-sol --reasoning-effort max
 npm run benchmark -- --score-biological
 npm run benchmark -- --score-biological --skip-scored-attempts
 npm run benchmark -- --no-analysis
@@ -220,7 +220,7 @@ The default configuration is stored in `benchmark.config.json`:
   "benchmarkModes": ["morpheus_mcp"],
   "benchmarkRepetitions": 1,
   "model": "gpt-6.1-sol",
-  "reasoningEffort": "xhigh",
+  "reasoningEffort": "max",
   "totalTimeLimitMs": 14400000,
   "finalizationReserveMs": 600000,
   "maxConcurrentJobs": 1,

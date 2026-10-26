@@ -1603,11 +1603,17 @@ class MorpheusMcpServerTests(unittest.TestCase):
                 kernel32.CloseHandle(handle)
         try:
             os.kill(pid, 0)
-            return True
         except PermissionError:
             return True
         except OSError:
             return False
+        # A killed child whose parent never reaps it (e.g. PID 1 in a container) stays a zombie
+        # and still answers signal 0, so treat state Z as gone where /proc shows it.
+        try:
+            stat = Path(f"/proc/{pid}/stat").read_text(encoding="utf-8")
+        except OSError:
+            return True
+        return stat.rsplit(")", 1)[-1].split()[0] != "Z"
 
     @staticmethod
     def _terminate_pid(pid: int) -> None:

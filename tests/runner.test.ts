@@ -1,7 +1,7 @@
 /* node:coverage disable */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdir, mkdtemp, open, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, open, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -3452,6 +3452,17 @@ test("explicit recoverRun reruns quota-exhausted assignments and launches never-
   ]);
   assert.equal(second.repetition, 2);
   assert.equal(second.stopReason, "agent_finished");
+});
+
+test("run fails before creating a run folder when no paper PDFs are present", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "morpheus-no-papers-"));
+  const runner = new BenchmarkRunner(testBenchmarkConfig(root));
+
+  await assert.rejects(runner.run(), /Papers directory .* does not exist.*benchmark_papers\/README\.md/);
+  await mkdir(path.join(root, "papers"), { recursive: true });
+  await writeFile(path.join(root, "papers", "README.md"), "not a paper\n", "utf8");
+  await assert.rejects(runner.run(), /No paper PDFs found in .*benchmark_papers\/README\.md/);
+  assert.deepEqual((await readdir(root)).sort(), ["papers"]);
 });
 
 test("run stops the queue on an exhausted Codex quota without a clean replacement", async () => {

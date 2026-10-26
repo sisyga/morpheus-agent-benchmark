@@ -96,13 +96,13 @@ test("applyCliOverrides ignores the removed Windows sandbox field in recovered c
   assert.equal("codexWindowsSandboxMode" in overridden, false);
 });
 
-test("loadConfig defaults to gpt-6.1-sol xhigh subjects and gpt-6-luna high scorers", async () => {
+test("loadConfig defaults to gpt-6.1-sol max subjects and gpt-6-luna high scorers", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "morpheus-config-defaults-"));
   const configPath = path.join(root, "benchmark.config.json");
   await writeFile(configPath, "{}", "utf8");
   const expected = {
     model: "gpt-6.1-sol",
-    reasoningEffort: "xhigh",
+    reasoningEffort: "max",
     biologicalScoringModel: "gpt-6-luna",
     biologicalScoringReasoningEffort: "high",
   };

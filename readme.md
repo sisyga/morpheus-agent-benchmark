@@ -10,6 +10,49 @@ The repository has three parts:
 
 The benchmark runs, automated scores, and manual scores reported in the preprint are archived in a separate Zenodo dataset (DOI to be added). Cite this code with [CITATION.cff](CITATION.cff) or its Zenodo record.
 
+## Reproducing the preprint
+
+The main results of the preprint come from two version 3 benchmark runs, both archived in the data deposit:
+
+| Run folder | Subject model and reasoning effort | Repetitions | Jobs |
+| --- | --- | --- | --- |
+| `20261007_202940_benchmark` | `gpt-6.1-sol`, `max` | 3 | 225 |
+| `20261003_005649_benchmark` | `gpt-6-luna`, `max` | 5 | 375 |
+
+Both runs used all five modes, a 4-hour budget per job, and 12 concurrent jobs. `gpt-6-luna` at reasoning effort `high` scored them (scorer v8, criteria v7).
+
+**System requirements.** Full runs need Linux x86-64 or WSL2; native Windows runs one job at a time. The published runs used Ubuntu (Linux kernel 6.17) with Morpheus 2.4.1 (revision 19.05.2026), gnuplot 6.0, Node.js 18.19.1, Python 3.12.14, and the Codex SDK and CLI 0.160.0. `package-lock.json` and `uv.lock` pin all other packages. No GPU or other special hardware is needed. Running the benchmark requires a Codex login with access to the subject and scorer models; the demo and the analysis scripts do not.
+
+**Installation time.** `uv sync --locked` and `npm ci` take about half a minute on a broadband connection (10 s and 21 s on our test machine). Installing Morpheus is described in [SETUP.md](SETUP.md).
+
+**Demo.** This step needs neither an OpenAI account nor Morpheus and takes about 10 s. With the two run folders from the data deposit, run:
+
+```bash
+uv run --locked python compare_benchmarks.py <deposit>/20261007_202940_benchmark <deposit>/20261003_005649_benchmark --out-dir demo_comparison
+```
+
+`demo_comparison/` then holds the model-comparison figures, a `_stats.md` file for each, `statistical_tests.md`, and the source CSVs. In `benchmark_model_comparison_overall.csv`, the mean biological score over the four Morpheus modes is 0.850 for `gpt-6.1-sol` and 0.663 for `gpt-6-luna`, at a mean API cost of US$3.74 and US$0.32 per run. `biological_score_by_model_and_mode_stats.md` lists the means per mode, for example 0.862 for `gpt-6.1-sol` with the MCP server and 0.108 for `gpt-6-luna` with Python and web search only. The bootstrap uses a fixed seed, so the confidence intervals come out identical on every run.
+
+**Rerunning the benchmark.** Add the paper PDFs as described in [benchmark_papers/README.md](benchmark_papers/README.md), then run:
+
+```bash
+npm run benchmark -- --all-benchmark-modes --repetitions 3 --model gpt-6.1-sol --reasoning-effort max --max-concurrent-jobs 12 --score-biological --biological-scoring-max-concurrent-jobs 12
+npm run benchmark -- --all-benchmark-modes --repetitions 5 --model gpt-6-luna --reasoning-effort max --max-concurrent-jobs 12 --score-biological --biological-scoring-max-concurrent-jobs 12
+```
+
+A job can use its full 4-hour budget, so each run takes days and depends on the Codex quota; `--recover-run` resumes a run that stopped. Agents behave differently from run to run, so a rerun reproduces the score distributions rather than the individual scores.
+
+**Figures.** The figures of the preprint come from these commands:
+
+| Figure files | Command | Input |
+| --- | --- | --- |
+| `biological_score_by_model_and_mode`, `api_cost_by_model_and_mode`, `api_cost_biological_score_pareto_by_model`, `statistical_tests.md` | `compare_benchmarks.py`, as in the demo | the two version 3 run folders |
+| GPT-5.6 replication | `compare_benchmarks.py` | the three version 2 run folders |
+| `biological_score_manual_vs_agent` | `manual_biological_scores.py`, then `biological_score_comparison.py` (see [Validating the scorer against manual scores](#validating-the-scorer-against-manual-scores)) | `20260524_002842_benchmark` and its manual score workbook |
+| Per-paper comparison figures | `scripts/supp_figs/build_all.py` (see [scripts/supp_figs/README.md](scripts/supp_figs/README.md)) | `20261007_202940_benchmark` and the paper PDFs |
+
+Tables and schematic panels in the figures were assembled by hand.
+
 ## Installation
 
 Python dependencies are managed with [uv](https://docs.astral.sh/uv/). `pyproject.toml` declares the dependencies, `uv.lock` locks their versions across platforms, and `uv sync --locked` creates the local `.venv/` after cloning. The project defaults to Python 3.12 via `.python-version`, requires Python 3.11 or newer, and uses only uv-managed interpreters (`python-preference = "only-managed"`). Node dependencies continue to use npm.
@@ -191,7 +234,7 @@ Core run selection:
 Model and runtime controls:
 
 - `--model <name>`: override the Codex model, e.g. `gpt-6.1-sol` or `gpt-6-luna`.
-- `--reasoning-effort <none|low|medium|high|xhigh|max>`: override reasoning effort. The default is `gpt-6.1-sol` at `xhigh`.
+- `--reasoning-effort <none|low|medium|high|xhigh|max>`: override reasoning effort. The default is `gpt-6.1-sol` at `max`, the setting used for the paper.
 - `--total-time-limit-minutes <number>`: total active subject time per paper/mode/repetition. The default is 240 minutes (4 hours).
 - `--finalization-reserve-minutes <number>`: reserve inside that total during which new Morpheus simulations are refused so the subject can inspect artifacts and finalize. The default is 10 minutes.
 - `--max-concurrent-jobs <number>`: run independent paper/mode/repetition jobs in parallel on Linux or WSL2; native Windows records and uses `1`.
@@ -470,7 +513,7 @@ To define a new version, see [Updating the Morpheus skill, prompts, or docs-mode
 
 ## Reproducibility of the published runs
 
-The version 3 runs of the preprint (gpt-6.1-sol and gpt-6-luna) were made in the development repository at commit c945e84, tagged `benchmark-v3`; these identifiers appear in their recorded provenance. The recorded SHA-256 hashes of the Morpheus skill, the docs-mode references, `src/benchmark/prompt.ts`, `morpheus_mcp_server.py`, `benchmark_focus/`, `package-lock.json`, and `uv.lock` match the files in this release, so recovering or rerunning those runs with this release passes the runner's provenance checks. Changes after c945e84 concern job scheduling and recovery in the runner, the analysis and comparison scripts, the figure scripts, the tests, and the documentation; none of them touches a file that the benchmark subject sees.
+The version 3 runs of the preprint (gpt-6.1-sol and gpt-6-luna) were made in the development repository at commit c945e84, tagged `benchmark-v3`; these identifiers appear in their recorded provenance. The recorded SHA-256 hashes of the Morpheus skill, the docs-mode references, `src/benchmark/prompt.ts`, `morpheus_mcp_server.py`, `benchmark_focus/`, `package-lock.json`, and `uv.lock` match the files in this release, so recovering or rerunning those runs with this release passes the runner's provenance checks. Changes after c945e84 concern job scheduling, recovery, and input checks in the runner, the default configuration, the analysis and comparison scripts, the figure scripts, the tests, and the documentation; none of them touches a file that the benchmark subject sees.
 
 ## Citation and license
 
