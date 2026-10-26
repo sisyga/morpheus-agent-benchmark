@@ -21,7 +21,7 @@ The main results of the preprint come from two version 3 benchmark runs, both ar
 
 Both runs used all five modes, a 4-hour budget per job, and 12 concurrent jobs. `gpt-6-luna` at reasoning effort `high` scored them (scorer v8, criteria v7).
 
-**System requirements.** Full runs need Linux x86-64 or WSL2; native Windows runs one job at a time. The published runs used Ubuntu (Linux kernel 6.17) with Morpheus 2.4.1 (revision 19.05.2026), gnuplot 6.0, Node.js 18.19.1, Python 3.12.14, and the Codex SDK and CLI 0.160.0. `package-lock.json` and `uv.lock` pin all other packages. No GPU or other special hardware is needed. Running the benchmark requires a Codex login with access to the subject and scorer models; the demo and the analysis scripts do not.
+**System requirements.** Full runs need Linux x86-64 or WSL2; native Windows runs one job at a time. A run with one job at a time needs no more than an ordinary desktop computer, and no GPU or other special hardware. The published runs ran 12 jobs in parallel on a VMware virtual machine with 24 vCPUs (AMD EPYC 7513) and 125 GiB RAM under Ubuntu 24.04.5, with Morpheus 2.4.1 (revision 19.05.2026), gnuplot 6.0, Node.js 18.19.1, Python 3.12.14, and the Codex SDK and CLI 0.160.0. `package-lock.json` and `uv.lock` pin all other packages. Running the benchmark requires a Codex login with access to the subject and scorer models; the demo and the analysis scripts do not.
 
 **Installation time.** `uv sync --locked` and `npm ci` take about half a minute on a broadband connection (10 s and 21 s on our test machine). Installing Morpheus is described in [SETUP.md](SETUP.md).
 
