@@ -118,7 +118,7 @@ The default runner concurrency is one job at a time. Linux and WSL2 can run inde
 - `compare_benchmarks.py`
   Compares complete benchmark runs of two or more models, with paired statistical tests.
 - `scripts/`
-  `benchmark_time_left.py` (the subject's time-left command), the Codex smoke checks, `stranded-runs/` (finalizes executions whose host process failed after the subject had finished; written after a full disk on 2026-10-11), and `supp_figs/` (the paper-comparison supplementary figures; see its README).
+  `benchmark_time_left.py` (the subject's time-left command), the Codex smoke checks, and `supp_figs/` (the paper-comparison supplementary figures; see its README).
 - `tests/`
   Python (`pytest`) and TypeScript (`npm run test:ts`) test suites. Tests that need the benchmark paper PDFs skip when the PDFs are missing.
 - `LICENSE`, `NOTICE`, `CITATION.cff`, `.zenodo.json`
