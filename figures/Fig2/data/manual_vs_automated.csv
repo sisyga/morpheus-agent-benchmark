@@ -1,0 +1,226 @@
+canonical_paper_stem,paper_title,mode,mode_label,repetition,manual_score,manual_score_source,agent_biological_score,agent_biological_status,score_delta,abs_error,join_status,agent_run_id
+01_Szabo2010,Szabó et al. (2010),python_web,Python + web,1.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260524_002844_01_Szabo2010__python_web__rep01
+01_Szabo2010,Szabó et al. (2010),python_web,Python + web,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_002844_01_Szabo2010__python_web__rep02
+01_Szabo2010,Szabó et al. (2010),python_web,Python + web,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_002844_01_Szabo2010__python_web__rep03
+01_Szabo2010,Szabó et al. (2010),morpheus_cli,Morpheus CLI,1.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_002844_01_Szabo2010__morpheus_cli__rep01
+01_Szabo2010,Szabó et al. (2010),morpheus_cli,Morpheus CLI,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_002844_01_Szabo2010__morpheus_cli__rep02
+01_Szabo2010,Szabó et al. (2010),morpheus_cli,Morpheus CLI,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_002844_01_Szabo2010__morpheus_cli__rep03
+01_Szabo2010,Szabó et al. (2010),morpheus_cli_docs,Morpheus CLI + docs,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260524_011620_01_Szabo2010__morpheus_cli_docs__rep01
+01_Szabo2010,Szabó et al. (2010),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_021450_01_Szabo2010__morpheus_cli_docs__rep02
+01_Szabo2010,Szabó et al. (2010),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_022250_01_Szabo2010__morpheus_cli_docs__rep03
+01_Szabo2010,Szabó et al. (2010),morpheus_skill,Skill + CLI,1.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_023557_01_Szabo2010__morpheus_skill__rep01
+01_Szabo2010,Szabó et al. (2010),morpheus_skill,Skill + CLI,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_034203_01_Szabo2010__morpheus_skill__rep02
+01_Szabo2010,Szabó et al. (2010),morpheus_skill,Skill + CLI,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_043158_01_Szabo2010__morpheus_skill__rep03
+01_Szabo2010,Szabó et al. (2010),morpheus_mcp,Morpheus MCP,1.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_054559_01_Szabo2010__morpheus_mcp__rep01
+01_Szabo2010,Szabó et al. (2010),morpheus_mcp,Morpheus MCP,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_055252_01_Szabo2010__morpheus_mcp__rep02
+01_Szabo2010,Szabó et al. (2010),morpheus_mcp,Morpheus MCP,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260524_055523_01_Szabo2010__morpheus_mcp__rep03
+02_Thapa2024,Thapa et al. (2024),python_web,Python + web,1.0,0.66,updated_manual_mean_score,0.8333333333333334,scored,0.1733333333333333,0.1733333333333333,matched,20260524_060037_02_Thapa2024__python_web__rep01
+02_Thapa2024,Thapa et al. (2024),python_web,Python + web,2.0,0.5,updated_manual_mean_score,0.8333333333333334,scored,0.3333333333333333,0.3333333333333333,matched,20260524_061511_02_Thapa2024__python_web__rep02
+02_Thapa2024,Thapa et al. (2024),python_web,Python + web,3.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260524_064052_02_Thapa2024__python_web__rep03
+02_Thapa2024,Thapa et al. (2024),morpheus_cli,Morpheus CLI,1.0,0.66,updated_manual_mean_score,1.0,scored,0.3399999999999999,0.3399999999999999,matched,20260524_073627_02_Thapa2024__morpheus_cli__rep01
+02_Thapa2024,Thapa et al. (2024),morpheus_cli,Morpheus CLI,2.0,0.66,updated_manual_mean_score,0.6666666666666666,scored,0.0066666666666665,0.0066666666666665,matched,20260524_074459_02_Thapa2024__morpheus_cli__rep02
+02_Thapa2024,Thapa et al. (2024),morpheus_cli,Morpheus CLI,3.0,0.66,updated_manual_mean_score,0.8333333333333334,scored,0.1733333333333333,0.1733333333333333,matched,20260524_080905_02_Thapa2024__morpheus_cli__rep03
+02_Thapa2024,Thapa et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260524_081817_02_Thapa2024__morpheus_cli_docs__rep01
+02_Thapa2024,Thapa et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.5,updated_manual_mean_score,0.6666666666666666,scored,0.1666666666666666,0.1666666666666666,matched,20260524_082343_02_Thapa2024__morpheus_cli_docs__rep02
+02_Thapa2024,Thapa et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260524_084811_02_Thapa2024__morpheus_cli_docs__rep03
+02_Thapa2024,Thapa et al. (2024),morpheus_skill,Skill + CLI,1.0,0.5,updated_manual_mean_score,0.6666666666666666,scored,0.1666666666666666,0.1666666666666666,matched,20260524_111958_02_Thapa2024__morpheus_skill__rep01
+02_Thapa2024,Thapa et al. (2024),morpheus_skill,Skill + CLI,2.0,0.5,updated_manual_mean_score,0.6666666666666666,scored,0.1666666666666666,0.1666666666666666,matched,20260524_113725_02_Thapa2024__morpheus_skill__rep02
+02_Thapa2024,Thapa et al. (2024),morpheus_skill,Skill + CLI,3.0,0.5,updated_manual_mean_score,0.6666666666666666,scored,0.1666666666666666,0.1666666666666666,matched,20260524_120527_02_Thapa2024__morpheus_skill__rep03
+02_Thapa2024,Thapa et al. (2024),morpheus_mcp,Morpheus MCP,1.0,0.75,updated_manual_mean_score,0.8333333333333334,scored,0.0833333333333333,0.0833333333333333,matched,20260524_121210_02_Thapa2024__morpheus_mcp__rep01
+02_Thapa2024,Thapa et al. (2024),morpheus_mcp,Morpheus MCP,2.0,0.66,updated_manual_mean_score,0.6666666666666666,scored,0.0066666666666665,0.0066666666666665,matched,20260524_123723_02_Thapa2024__morpheus_mcp__rep02
+02_Thapa2024,Thapa et al. (2024),morpheus_mcp,Morpheus MCP,3.0,0.66,updated_manual_mean_score,0.6666666666666666,scored,0.0066666666666665,0.0066666666666665,matched,20260524_124314_02_Thapa2024__morpheus_mcp__rep03
+03_Carpenter2024,Carpenter et al. (2024),python_web,Python + web,1.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260524_131128_03_Carpenter2024__python_web__rep01
+03_Carpenter2024,Carpenter et al. (2024),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260524_134244_03_Carpenter2024__python_web__rep02
+03_Carpenter2024,Carpenter et al. (2024),python_web,Python + web,3.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260524_135802_03_Carpenter2024__python_web__rep03
+03_Carpenter2024,Carpenter et al. (2024),morpheus_cli,Morpheus CLI,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260524_142456_03_Carpenter2024__morpheus_cli__rep01
+03_Carpenter2024,Carpenter et al. (2024),morpheus_cli,Morpheus CLI,2.0,0.75,updated_manual_mean_score,1.0,scored,0.25,0.25,matched,20260524_142952_03_Carpenter2024__morpheus_cli__rep02
+03_Carpenter2024,Carpenter et al. (2024),morpheus_cli,Morpheus CLI,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_144942_03_Carpenter2024__morpheus_cli__rep03
+03_Carpenter2024,Carpenter et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.75,updated_manual_mean_score,1.0,scored,0.25,0.25,matched,20260524_145711_03_Carpenter2024__morpheus_cli_docs__rep01
+03_Carpenter2024,Carpenter et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.75,updated_manual_mean_score,1.0,scored,0.25,0.25,matched,20260524_152941_03_Carpenter2024__morpheus_cli_docs__rep02
+03_Carpenter2024,Carpenter et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260524_171438_03_Carpenter2024__morpheus_cli_docs__rep03
+03_Carpenter2024,Carpenter et al. (2024),morpheus_skill,Skill + CLI,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260524_172230_03_Carpenter2024__morpheus_skill__rep01
+03_Carpenter2024,Carpenter et al. (2024),morpheus_skill,Skill + CLI,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260524_175132_03_Carpenter2024__morpheus_skill__rep02
+03_Carpenter2024,Carpenter et al. (2024),morpheus_skill,Skill + CLI,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260524_180346_03_Carpenter2024__morpheus_skill__rep03
+03_Carpenter2024,Carpenter et al. (2024),morpheus_mcp,Morpheus MCP,1.0,0.75,updated_manual_mean_score,1.0,scored,0.25,0.25,matched,20260524_181609_03_Carpenter2024__morpheus_mcp__rep01
+03_Carpenter2024,Carpenter et al. (2024),morpheus_mcp,Morpheus MCP,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260524_194200_03_Carpenter2024__morpheus_mcp__rep02
+03_Carpenter2024,Carpenter et al. (2024),morpheus_mcp,Morpheus MCP,3.0,1.0,updated_manual_mean_score,0.75,scored,-0.25,0.25,matched,20260524_201736_03_Carpenter2024__morpheus_mcp__rep03
+04_Atwell2025,Atwell et al. (2015),python_web,Python + web,1.0,0.4,updated_manual_mean_score,0.5,scored,0.0999999999999999,0.0999999999999999,matched,20260524_205114_04_Atwell2025__python_web__rep01
+04_Atwell2025,Atwell et al. (2015),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260524_205125_04_Atwell2025__python_web__rep02
+04_Atwell2025,Atwell et al. (2015),python_web,Python + web,3.0,0.3,updated_manual_mean_score,0.3,scored,0.0,0.0,matched,20260524_213148_04_Atwell2025__python_web__rep03
+04_Atwell2025,Atwell et al. (2015),morpheus_cli,Morpheus CLI,1.0,0.8,updated_manual_mean_score,0.9,scored,0.0999999999999999,0.0999999999999999,matched,20260524_220814_04_Atwell2025__morpheus_cli__rep01
+04_Atwell2025,Atwell et al. (2015),morpheus_cli,Morpheus CLI,2.0,0.7,updated_manual_mean_score,0.8,scored,0.1,0.1,matched,20260524_223006_04_Atwell2025__morpheus_cli__rep02
+04_Atwell2025,Atwell et al. (2015),morpheus_cli,Morpheus CLI,3.0,0.8,updated_manual_mean_score,0.9,scored,0.0999999999999999,0.0999999999999999,matched,20260524_224642_04_Atwell2025__morpheus_cli__rep03
+04_Atwell2025,Atwell et al. (2015),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260524_231215_04_Atwell2025__morpheus_cli_docs__rep01
+04_Atwell2025,Atwell et al. (2015),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.7,updated_manual_mean_score,0.7,scored,0.0,0.0,matched,20260524_231729_04_Atwell2025__morpheus_cli_docs__rep02
+04_Atwell2025,Atwell et al. (2015),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.8,updated_manual_mean_score,0.9,scored,0.0999999999999999,0.0999999999999999,matched,20260524_235033_04_Atwell2025__morpheus_cli_docs__rep03
+04_Atwell2025,Atwell et al. (2015),morpheus_skill,Skill + CLI,1.0,0.7,updated_manual_mean_score,0.7,scored,0.0,0.0,matched,20260525_005435_04_Atwell2025__morpheus_skill__rep01
+04_Atwell2025,Atwell et al. (2015),morpheus_skill,Skill + CLI,2.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260525_021920_04_Atwell2025__morpheus_skill__rep02
+04_Atwell2025,Atwell et al. (2015),morpheus_skill,Skill + CLI,3.0,0.8,updated_manual_mean_score,0.9,scored,0.0999999999999999,0.0999999999999999,matched,20260525_024027_04_Atwell2025__morpheus_skill__rep03
+04_Atwell2025,Atwell et al. (2015),morpheus_mcp,Morpheus MCP,1.0,0.7,updated_manual_mean_score,0.7,scored,0.0,0.0,matched,20260525_025502_04_Atwell2025__morpheus_mcp__rep01
+04_Atwell2025,Atwell et al. (2015),morpheus_mcp,Morpheus MCP,2.0,0.8,updated_manual_mean_score,0.7,scored,-0.1,0.1,matched,20260525_030151_04_Atwell2025__morpheus_mcp__rep02
+04_Atwell2025,Atwell et al. (2015),morpheus_mcp,Morpheus MCP,3.0,0.9,updated_manual_mean_score,0.9,scored,0.0,0.0,matched,20260525_035046_04_Atwell2025__morpheus_mcp__rep03
+05_Berkemeier2023,Berkemeier et al. (2023),python_web,Python + web,1.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260525_053655_05_Berkemeier2023__python_web__rep01
+05_Berkemeier2023,Berkemeier et al. (2023),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260525_055903_05_Berkemeier2023__python_web__rep02
+05_Berkemeier2023,Berkemeier et al. (2023),python_web,Python + web,3.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260525_064401_05_Berkemeier2023__python_web__rep03
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_cli,Morpheus CLI,1.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260525_064546_05_Berkemeier2023__morpheus_cli__rep01
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_cli,Morpheus CLI,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260525_065541_05_Berkemeier2023__morpheus_cli__rep02
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_cli,Morpheus CLI,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260525_071707_05_Berkemeier2023__morpheus_cli__rep03
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_cli_docs,Morpheus CLI + docs,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_080300_05_Berkemeier2023__morpheus_cli_docs__rep01
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_cli_docs,Morpheus CLI + docs,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_083254_05_Berkemeier2023__morpheus_cli_docs__rep02
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260525_084850_05_Berkemeier2023__morpheus_cli_docs__rep03
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_skill,Skill + CLI,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_100004_05_Berkemeier2023__morpheus_skill__rep01
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_skill,Skill + CLI,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_102547_05_Berkemeier2023__morpheus_skill__rep02
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_skill,Skill + CLI,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260525_105732_05_Berkemeier2023__morpheus_skill__rep03
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_mcp,Morpheus MCP,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_115517_05_Berkemeier2023__morpheus_mcp__rep01
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_mcp,Morpheus MCP,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_115922_05_Berkemeier2023__morpheus_mcp__rep02
+05_Berkemeier2023,Berkemeier et al. (2023),morpheus_mcp,Morpheus MCP,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_122432_05_Berkemeier2023__morpheus_mcp__rep03
+06_Herron2022,Herron et al. (2022),python_web,Python + web,1.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260525_131434_06_Herron2022__python_web__rep01
+06_Herron2022,Herron et al. (2022),python_web,Python + web,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_132449_06_Herron2022__python_web__rep02
+06_Herron2022,Herron et al. (2022),python_web,Python + web,3.0,0.5,updated_manual_mean_score,0.25,scored,-0.25,0.25,matched,20260525_142057_06_Herron2022__python_web__rep03
+06_Herron2022,Herron et al. (2022),morpheus_cli,Morpheus CLI,1.0,0.75,updated_manual_mean_score,0.5,scored,-0.25,0.25,matched,20260525_142422_06_Herron2022__morpheus_cli__rep01
+06_Herron2022,Herron et al. (2022),morpheus_cli,Morpheus CLI,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_143446_06_Herron2022__morpheus_cli__rep02
+06_Herron2022,Herron et al. (2022),morpheus_cli,Morpheus CLI,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_144554_06_Herron2022__morpheus_cli__rep03
+06_Herron2022,Herron et al. (2022),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.8,updated_manual_mean_score,1.0,scored,0.1999999999999999,0.1999999999999999,matched,20260525_155706_06_Herron2022__morpheus_cli_docs__rep01
+06_Herron2022,Herron et al. (2022),morpheus_cli_docs,Morpheus CLI + docs,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_165712_06_Herron2022__morpheus_cli_docs__rep02
+06_Herron2022,Herron et al. (2022),morpheus_cli_docs,Morpheus CLI + docs,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_171722_06_Herron2022__morpheus_cli_docs__rep03
+06_Herron2022,Herron et al. (2022),morpheus_skill,Skill + CLI,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_183245_06_Herron2022__morpheus_skill__rep01
+06_Herron2022,Herron et al. (2022),morpheus_skill,Skill + CLI,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_184635_06_Herron2022__morpheus_skill__rep02
+06_Herron2022,Herron et al. (2022),morpheus_skill,Skill + CLI,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_184906_06_Herron2022__morpheus_skill__rep03
+06_Herron2022,Herron et al. (2022),morpheus_mcp,Morpheus MCP,1.0,0.75,updated_manual_mean_score,1.0,scored,0.25,0.25,matched,20260525_195837_06_Herron2022__morpheus_mcp__rep01
+06_Herron2022,Herron et al. (2022),morpheus_mcp,Morpheus MCP,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_195845_06_Herron2022__morpheus_mcp__rep02
+06_Herron2022,Herron et al. (2022),morpheus_mcp,Morpheus MCP,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_195853_06_Herron2022__morpheus_mcp__rep03
+07_Scheel2021,Scheel et al. (2021),python_web,Python + web,1.0,0.0,updated_manual_mean_score,0.0,scored,0.0,0.0,matched,20260525_195900_07_Scheel2021__python_web__rep01
+07_Scheel2021,Scheel et al. (2021),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260525_195908_07_Scheel2021__python_web__rep02
+07_Scheel2021,Scheel et al. (2021),python_web,Python + web,3.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260525_195916_07_Scheel2021__python_web__rep03
+07_Scheel2021,Scheel et al. (2021),morpheus_cli,Morpheus CLI,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_195924_07_Scheel2021__morpheus_cli__rep01
+07_Scheel2021,Scheel et al. (2021),morpheus_cli,Morpheus CLI,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_195933_07_Scheel2021__morpheus_cli__rep02
+07_Scheel2021,Scheel et al. (2021),morpheus_cli,Morpheus CLI,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_195942_07_Scheel2021__morpheus_cli__rep03
+07_Scheel2021,Scheel et al. (2021),morpheus_cli_docs,Morpheus CLI + docs,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_195952_07_Scheel2021__morpheus_cli_docs__rep01
+07_Scheel2021,Scheel et al. (2021),morpheus_cli_docs,Morpheus CLI + docs,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200002_07_Scheel2021__morpheus_cli_docs__rep02
+07_Scheel2021,Scheel et al. (2021),morpheus_cli_docs,Morpheus CLI + docs,3.0,1.0,updated_manual_mean_score,0.75,scored,-0.25,0.25,matched,20260525_200011_07_Scheel2021__morpheus_cli_docs__rep03
+07_Scheel2021,Scheel et al. (2021),morpheus_skill,Skill + CLI,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200021_07_Scheel2021__morpheus_skill__rep01
+07_Scheel2021,Scheel et al. (2021),morpheus_skill,Skill + CLI,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200030_07_Scheel2021__morpheus_skill__rep02
+07_Scheel2021,Scheel et al. (2021),morpheus_skill,Skill + CLI,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200038_07_Scheel2021__morpheus_skill__rep03
+07_Scheel2021,Scheel et al. (2021),morpheus_mcp,Morpheus MCP,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200047_07_Scheel2021__morpheus_mcp__rep01
+07_Scheel2021,Scheel et al. (2021),morpheus_mcp,Morpheus MCP,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200056_07_Scheel2021__morpheus_mcp__rep02
+07_Scheel2021,Scheel et al. (2021),morpheus_mcp,Morpheus MCP,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200104_07_Scheel2021__morpheus_mcp__rep03
+08_Mu2024,Mu et al. (2024),python_web,Python + web,1.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260525_200113_08_Mu2024__python_web__rep01
+08_Mu2024,Mu et al. (2024),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260525_200120_08_Mu2024__python_web__rep02
+08_Mu2024,Mu et al. (2024),python_web,Python + web,3.0,0.16,updated_manual_mean_score,0.3333333333333333,scored,0.1733333333333333,0.1733333333333333,matched,20260525_200127_08_Mu2024__python_web__rep03
+08_Mu2024,Mu et al. (2024),morpheus_cli,Morpheus CLI,1.0,0.83,updated_manual_mean_score,0.6666666666666666,scored,-0.1633333333333333,0.1633333333333333,matched,20260525_200134_08_Mu2024__morpheus_cli__rep01
+08_Mu2024,Mu et al. (2024),morpheus_cli,Morpheus CLI,2.0,0.5,updated_manual_mean_score,0.3333333333333333,scored,-0.1666666666666666,0.1666666666666666,matched,20260525_200141_08_Mu2024__morpheus_cli__rep02
+08_Mu2024,Mu et al. (2024),morpheus_cli,Morpheus CLI,3.0,0.66,updated_manual_mean_score,0.6666666666666666,scored,0.0066666666666665,0.0066666666666665,matched,20260525_200148_08_Mu2024__morpheus_cli__rep03
+08_Mu2024,Mu et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260525_200155_08_Mu2024__morpheus_cli_docs__rep01
+08_Mu2024,Mu et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.66,updated_manual_mean_score,0.6666666666666666,scored,0.0066666666666665,0.0066666666666665,matched,20260525_200202_08_Mu2024__morpheus_cli_docs__rep02
+08_Mu2024,Mu et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260525_200209_08_Mu2024__morpheus_cli_docs__rep03
+08_Mu2024,Mu et al. (2024),morpheus_skill,Skill + CLI,1.0,0.6,updated_manual_mean_score,0.8333333333333334,scored,0.2333333333333334,0.2333333333333334,matched,20260525_200216_08_Mu2024__morpheus_skill__rep01
+08_Mu2024,Mu et al. (2024),morpheus_skill,Skill + CLI,2.0,0.5,updated_manual_mean_score,0.6666666666666666,scored,0.1666666666666666,0.1666666666666666,matched,20260525_200224_08_Mu2024__morpheus_skill__rep02
+08_Mu2024,Mu et al. (2024),morpheus_skill,Skill + CLI,3.0,0.6,updated_manual_mean_score,0.6666666666666666,scored,0.0666666666666666,0.0666666666666666,matched,20260525_200232_08_Mu2024__morpheus_skill__rep03
+08_Mu2024,Mu et al. (2024),morpheus_mcp,Morpheus MCP,1.0,0.8,updated_manual_mean_score,0.8333333333333334,scored,0.0333333333333333,0.0333333333333333,matched,20260525_200239_08_Mu2024__morpheus_mcp__rep01
+08_Mu2024,Mu et al. (2024),morpheus_mcp,Morpheus MCP,2.0,0.8,updated_manual_mean_score,0.6666666666666666,scored,-0.1333333333333334,0.1333333333333334,matched,20260525_200247_08_Mu2024__morpheus_mcp__rep02
+08_Mu2024,Mu et al. (2024),morpheus_mcp,Morpheus MCP,3.0,0.5,updated_manual_mean_score,0.6666666666666666,scored,0.1666666666666666,0.1666666666666666,matched,20260525_200254_08_Mu2024__morpheus_mcp__rep03
+09_Luque2023,Luque et al. (2023),python_web,Python + web,1.0,0.33,updated_manual_mean_score,0.1666666666666666,scored,-0.1633333333333333,0.1633333333333333,matched,20260525_200301_09_Luque2023__python_web__rep01
+09_Luque2023,Luque et al. (2023),python_web,Python + web,2.0,0.83,updated_manual_mean_score,0.8333333333333334,scored,0.0033333333333334,0.0033333333333334,matched,20260525_200310_09_Luque2023__python_web__rep02
+09_Luque2023,Luque et al. (2023),python_web,Python + web,3.0,0.33,updated_manual_mean_score,0.5,scored,0.1699999999999999,0.1699999999999999,matched,20260525_200319_09_Luque2023__python_web__rep03
+09_Luque2023,Luque et al. (2023),morpheus_cli,Morpheus CLI,1.0,0.83,updated_manual_mean_score,0.8333333333333334,scored,0.0033333333333334,0.0033333333333334,matched,20260525_200327_09_Luque2023__morpheus_cli__rep01
+09_Luque2023,Luque et al. (2023),morpheus_cli,Morpheus CLI,2.0,0.83,updated_manual_mean_score,0.8333333333333334,scored,0.0033333333333334,0.0033333333333334,matched,20260525_200336_09_Luque2023__morpheus_cli__rep02
+09_Luque2023,Luque et al. (2023),morpheus_cli,Morpheus CLI,3.0,0.83,updated_manual_mean_score,0.8333333333333334,scored,0.0033333333333334,0.0033333333333334,matched,20260525_200344_09_Luque2023__morpheus_cli__rep03
+09_Luque2023,Luque et al. (2023),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.66,updated_manual_mean_score,0.6666666666666666,scored,0.0066666666666665,0.0066666666666665,matched,20260525_200353_09_Luque2023__morpheus_cli_docs__rep01
+09_Luque2023,Luque et al. (2023),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.83,updated_manual_mean_score,0.8333333333333334,scored,0.0033333333333334,0.0033333333333334,matched,20260525_200402_09_Luque2023__morpheus_cli_docs__rep02
+09_Luque2023,Luque et al. (2023),morpheus_cli_docs,Morpheus CLI + docs,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200412_09_Luque2023__morpheus_cli_docs__rep03
+09_Luque2023,Luque et al. (2023),morpheus_skill,Skill + CLI,1.0,0.9,updated_manual_mean_score,1.0,scored,0.0999999999999999,0.0999999999999999,matched,20260525_200423_09_Luque2023__morpheus_skill__rep01
+09_Luque2023,Luque et al. (2023),morpheus_skill,Skill + CLI,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200433_09_Luque2023__morpheus_skill__rep02
+09_Luque2023,Luque et al. (2023),morpheus_skill,Skill + CLI,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200443_09_Luque2023__morpheus_skill__rep03
+09_Luque2023,Luque et al. (2023),morpheus_mcp,Morpheus MCP,1.0,0.83,updated_manual_mean_score,0.8333333333333334,scored,0.0033333333333334,0.0033333333333334,matched,20260525_200453_09_Luque2023__morpheus_mcp__rep01
+09_Luque2023,Luque et al. (2023),morpheus_mcp,Morpheus MCP,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260525_200502_09_Luque2023__morpheus_mcp__rep02
+09_Luque2023,Luque et al. (2023),morpheus_mcp,Morpheus MCP,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260528_171224_09_Luque2023__morpheus_mcp__rep03
+10_Berkhout2025,Berkhout et al. (2025),python_web,Python + web,1.0,0.33,updated_manual_mean_score,0.3333333333333333,scored,0.0033333333333332,0.0033333333333332,matched,20260528_171224_10_Berkhout2025__python_web__rep01
+10_Berkhout2025,Berkhout et al. (2025),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260528_171225_10_Berkhout2025__python_web__rep02
+10_Berkhout2025,Berkhout et al. (2025),python_web,Python + web,3.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260528_171224_10_Berkhout2025__python_web__rep03
+10_Berkhout2025,Berkhout et al. (2025),morpheus_cli,Morpheus CLI,1.0,0.5,updated_manual_mean_score,0.3333333333333333,scored,-0.1666666666666666,0.1666666666666666,matched,20260528_171225_10_Berkhout2025__morpheus_cli__rep01
+10_Berkhout2025,Berkhout et al. (2025),morpheus_cli,Morpheus CLI,2.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260528_171225_10_Berkhout2025__morpheus_cli__rep02
+10_Berkhout2025,Berkhout et al. (2025),morpheus_cli,Morpheus CLI,3.0,0.66,updated_manual_mean_score,0.5,scored,-0.16,0.16,matched,20260528_173207_10_Berkhout2025__morpheus_cli__rep03
+10_Berkhout2025,Berkhout et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.5,updated_manual_mean_score,0.3333333333333333,scored,-0.1666666666666666,0.1666666666666666,matched,20260528_174042_10_Berkhout2025__morpheus_cli_docs__rep01
+10_Berkhout2025,Berkhout et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.16,updated_manual_mean_score,0.3333333333333333,scored,0.1733333333333333,0.1733333333333333,matched,20260528_174408_10_Berkhout2025__morpheus_cli_docs__rep02
+10_Berkhout2025,Berkhout et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.16,updated_manual_mean_score,0.5,scored,0.3399999999999999,0.3399999999999999,matched,20260528_174622_10_Berkhout2025__morpheus_cli_docs__rep03
+10_Berkhout2025,Berkhout et al. (2025),morpheus_skill,Skill + CLI,1.0,0.5,updated_manual_mean_score,0.3333333333333333,scored,-0.1666666666666666,0.1666666666666666,matched,20260528_200206_10_Berkhout2025__morpheus_skill__rep01
+10_Berkhout2025,Berkhout et al. (2025),morpheus_skill,Skill + CLI,2.0,0.33,updated_manual_mean_score,0.3333333333333333,scored,0.0033333333333332,0.0033333333333332,matched,20260528_201432_10_Berkhout2025__morpheus_skill__rep02
+10_Berkhout2025,Berkhout et al. (2025),morpheus_skill,Skill + CLI,3.0,0.3,updated_manual_mean_score,0.5,scored,0.2,0.2,matched,20260528_203301_10_Berkhout2025__morpheus_skill__rep03
+10_Berkhout2025,Berkhout et al. (2025),morpheus_mcp,Morpheus MCP,1.0,0.33,updated_manual_mean_score,0.3333333333333333,scored,0.0033333333333332,0.0033333333333332,matched,20260528_204149_10_Berkhout2025__morpheus_mcp__rep01
+10_Berkhout2025,Berkhout et al. (2025),morpheus_mcp,Morpheus MCP,2.0,0.6,updated_manual_mean_score,0.5,scored,-0.0999999999999999,0.0999999999999999,matched,20260528_204508_10_Berkhout2025__morpheus_mcp__rep02
+10_Berkhout2025,Berkhout et al. (2025),morpheus_mcp,Morpheus MCP,3.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260528_204713_10_Berkhout2025__morpheus_mcp__rep03
+11_Anlas2024,Anlas et al. (2024),python_web,Python + web,1.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260528_221154_11_Anlas2024__python_web__rep01
+11_Anlas2024,Anlas et al. (2024),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260528_221820_11_Anlas2024__python_web__rep02
+11_Anlas2024,Anlas et al. (2024),python_web,Python + web,3.0,0.4,updated_manual_mean_score,0.4,scored,0.0,0.0,matched,20260528_222212_11_Anlas2024__python_web__rep03
+11_Anlas2024,Anlas et al. (2024),morpheus_cli,Morpheus CLI,1.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260528_222617_11_Anlas2024__morpheus_cli__rep01
+11_Anlas2024,Anlas et al. (2024),morpheus_cli,Morpheus CLI,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260528_223011_11_Anlas2024__morpheus_cli__rep02
+11_Anlas2024,Anlas et al. (2024),morpheus_cli,Morpheus CLI,3.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260528_223300_11_Anlas2024__morpheus_cli__rep03
+11_Anlas2024,Anlas et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.8,updated_manual_mean_score,1.0,scored,0.1999999999999999,0.1999999999999999,matched,20260528_223518_11_Anlas2024__morpheus_cli_docs__rep01
+11_Anlas2024,Anlas et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260528_223953_11_Anlas2024__morpheus_cli_docs__rep02
+11_Anlas2024,Anlas et al. (2024),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.8,updated_manual_mean_score,0.6,scored,-0.2,0.2,matched,20260528_230010_11_Anlas2024__morpheus_cli_docs__rep03
+11_Anlas2024,Anlas et al. (2024),morpheus_skill,Skill + CLI,1.0,0.8,updated_manual_mean_score,1.0,scored,0.1999999999999999,0.1999999999999999,matched,20260528_231503_11_Anlas2024__morpheus_skill__rep01
+11_Anlas2024,Anlas et al. (2024),morpheus_skill,Skill + CLI,2.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260528_234028_11_Anlas2024__morpheus_skill__rep02
+11_Anlas2024,Anlas et al. (2024),morpheus_skill,Skill + CLI,3.0,0.8,updated_manual_mean_score,1.0,scored,0.1999999999999999,0.1999999999999999,matched,20260529_000234_11_Anlas2024__morpheus_skill__rep03
+11_Anlas2024,Anlas et al. (2024),morpheus_mcp,Morpheus MCP,1.0,0.8,updated_manual_mean_score,1.0,scored,0.1999999999999999,0.1999999999999999,matched,20260529_001847_11_Anlas2024__morpheus_mcp__rep01
+11_Anlas2024,Anlas et al. (2024),morpheus_mcp,Morpheus MCP,2.0,0.8,updated_manual_mean_score,0.6,scored,-0.2,0.2,matched,20260529_004509_11_Anlas2024__morpheus_mcp__rep02
+11_Anlas2024,Anlas et al. (2024),morpheus_mcp,Morpheus MCP,3.0,0.8,updated_manual_mean_score,0.6,scored,-0.2,0.2,matched,20260529_010841_11_Anlas2024__morpheus_mcp__rep03
+12_Malkmus2025,Malkmus et al. (2025),python_web,Python + web,1.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260529_012730_12_Malkmus2025__python_web__rep01
+12_Malkmus2025,Malkmus et al. (2025),python_web,Python + web,2.0,0.6,updated_manual_mean_score,0.6,scored,0.0,0.0,matched,20260529_013415_12_Malkmus2025__python_web__rep02
+12_Malkmus2025,Malkmus et al. (2025),python_web,Python + web,3.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260529_013625_12_Malkmus2025__python_web__rep03
+12_Malkmus2025,Malkmus et al. (2025),morpheus_cli,Morpheus CLI,1.0,0.6,updated_manual_mean_score,0.6,scored,0.0,0.0,matched,20260529_013944_12_Malkmus2025__morpheus_cli__rep01
+12_Malkmus2025,Malkmus et al. (2025),morpheus_cli,Morpheus CLI,2.0,0.6,updated_manual_mean_score,0.6,scored,0.0,0.0,matched,20260529_014855_12_Malkmus2025__morpheus_cli__rep02
+12_Malkmus2025,Malkmus et al. (2025),morpheus_cli,Morpheus CLI,3.0,0.6,updated_manual_mean_score,0.6,scored,0.0,0.0,matched,20260529_015316_12_Malkmus2025__morpheus_cli__rep03
+12_Malkmus2025,Malkmus et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.6,updated_manual_mean_score,0.6,scored,0.0,0.0,matched,20260529_020123_12_Malkmus2025__morpheus_cli_docs__rep01
+12_Malkmus2025,Malkmus et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260529_020341_12_Malkmus2025__morpheus_cli_docs__rep02
+12_Malkmus2025,Malkmus et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.6,updated_manual_mean_score,0.6,scored,0.0,0.0,matched,20260529_023304_12_Malkmus2025__morpheus_cli_docs__rep03
+12_Malkmus2025,Malkmus et al. (2025),morpheus_skill,Skill + CLI,1.0,0.8,updated_manual_mean_score,0.6,scored,-0.2,0.2,matched,20260529_023353_12_Malkmus2025__morpheus_skill__rep01
+12_Malkmus2025,Malkmus et al. (2025),morpheus_skill,Skill + CLI,2.0,0.6,updated_manual_mean_score,0.6,scored,0.0,0.0,matched,20260529_024538_12_Malkmus2025__morpheus_skill__rep02
+12_Malkmus2025,Malkmus et al. (2025),morpheus_skill,Skill + CLI,3.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260529_024903_12_Malkmus2025__morpheus_skill__rep03
+12_Malkmus2025,Malkmus et al. (2025),morpheus_mcp,Morpheus MCP,1.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260529_025349_12_Malkmus2025__morpheus_mcp__rep01
+12_Malkmus2025,Malkmus et al. (2025),morpheus_mcp,Morpheus MCP,2.0,0.8,updated_manual_mean_score,0.6,scored,-0.2,0.2,matched,20260529_031715_12_Malkmus2025__morpheus_mcp__rep02
+12_Malkmus2025,Malkmus et al. (2025),morpheus_mcp,Morpheus MCP,3.0,1.0,updated_manual_mean_score,0.6,scored,-0.4,0.4,matched,20260529_031923_12_Malkmus2025__morpheus_mcp__rep03
+13_Mole2026,Mole et al. (2026),python_web,Python + web,1.0,0.5,updated_manual_mean_score,0.625,scored,0.125,0.125,matched,20260529_035745_13_Mole2026__python_web__rep01
+13_Mole2026,Mole et al. (2026),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260529_035828_13_Mole2026__python_web__rep02
+13_Mole2026,Mole et al. (2026),python_web,Python + web,3.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260529_041330_13_Mole2026__python_web__rep03
+13_Mole2026,Mole et al. (2026),morpheus_cli,Morpheus CLI,1.0,0.625,updated_manual_mean_score,0.625,scored,0.0,0.0,matched,20260529_041902_13_Mole2026__morpheus_cli__rep01
+13_Mole2026,Mole et al. (2026),morpheus_cli,Morpheus CLI,2.0,0.875,updated_manual_mean_score,0.875,scored,0.0,0.0,matched,20260529_041950_13_Mole2026__morpheus_cli__rep02
+13_Mole2026,Mole et al. (2026),morpheus_cli,Morpheus CLI,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_042200_13_Mole2026__morpheus_cli__rep03
+13_Mole2026,Mole et al. (2026),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.625,updated_manual_mean_score,0.625,scored,0.0,0.0,matched,20260529_042519_13_Mole2026__morpheus_cli_docs__rep01
+13_Mole2026,Mole et al. (2026),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.625,updated_manual_mean_score,0.625,scored,0.0,0.0,matched,20260529_043355_13_Mole2026__morpheus_cli_docs__rep02
+13_Mole2026,Mole et al. (2026),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.75,updated_manual_mean_score,0.625,scored,-0.125,0.125,matched,20260529_043841_13_Mole2026__morpheus_cli_docs__rep03
+13_Mole2026,Mole et al. (2026),morpheus_skill,Skill + CLI,1.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260529_045536_13_Mole2026__morpheus_skill__rep01
+13_Mole2026,Mole et al. (2026),morpheus_skill,Skill + CLI,2.0,0.625,updated_manual_mean_score,0.75,scored,0.125,0.125,matched,20260529_050135_13_Mole2026__morpheus_skill__rep02
+13_Mole2026,Mole et al. (2026),morpheus_skill,Skill + CLI,3.0,0.625,updated_manual_mean_score,0.625,scored,0.0,0.0,matched,20260529_050243_13_Mole2026__morpheus_skill__rep03
+13_Mole2026,Mole et al. (2026),morpheus_mcp,Morpheus MCP,1.0,0.625,updated_manual_mean_score,0.375,scored,-0.25,0.25,matched,20260529_050336_13_Mole2026__morpheus_mcp__rep01
+13_Mole2026,Mole et al. (2026),morpheus_mcp,Morpheus MCP,2.0,0.625,updated_manual_mean_score,0.5,scored,-0.125,0.125,matched,20260529_053542_13_Mole2026__morpheus_mcp__rep02
+13_Mole2026,Mole et al. (2026),morpheus_mcp,Morpheus MCP,3.0,0.625,updated_manual_mean_score,0.5,scored,-0.125,0.125,matched,20260529_054116_13_Mole2026__morpheus_mcp__rep03
+14_Otsuki2025,Otsuki et al. (2025),python_web,Python + web,1.0,0.4,updated_manual_mean_score,0.6,scored,0.1999999999999999,0.1999999999999999,matched,20260529_054542_14_Otsuki2025__python_web__rep01
+14_Otsuki2025,Otsuki et al. (2025),python_web,Python + web,2.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260529_055925_14_Otsuki2025__python_web__rep02
+14_Otsuki2025,Otsuki et al. (2025),python_web,Python + web,3.0,0.0,updated_manual_mean_score,0.0,model_failed,0.0,0.0,matched,20260529_060440_14_Otsuki2025__python_web__rep03
+14_Otsuki2025,Otsuki et al. (2025),morpheus_cli,Morpheus CLI,1.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260529_061145_14_Otsuki2025__morpheus_cli__rep01
+14_Otsuki2025,Otsuki et al. (2025),morpheus_cli,Morpheus CLI,2.0,0.6,updated_manual_mean_score,0.6,scored,0.0,0.0,matched,20260529_061223_14_Otsuki2025__morpheus_cli__rep02
+14_Otsuki2025,Otsuki et al. (2025),morpheus_cli,Morpheus CLI,3.0,0.8,updated_manual_mean_score,1.0,scored,0.1999999999999999,0.1999999999999999,matched,20260529_061615_14_Otsuki2025__morpheus_cli__rep03
+14_Otsuki2025,Otsuki et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260529_064148_14_Otsuki2025__morpheus_cli_docs__rep01
+14_Otsuki2025,Otsuki et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.8,updated_manual_mean_score,0.4,scored,-0.4,0.4,matched,20260529_064706_14_Otsuki2025__morpheus_cli_docs__rep02
+14_Otsuki2025,Otsuki et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,3.0,1.0,updated_manual_mean_score,0.8,scored,-0.1999999999999999,0.1999999999999999,matched,20260529_070837_14_Otsuki2025__morpheus_cli_docs__rep03
+14_Otsuki2025,Otsuki et al. (2025),morpheus_skill,Skill + CLI,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260529_072106_14_Otsuki2025__morpheus_skill__rep01
+14_Otsuki2025,Otsuki et al. (2025),morpheus_skill,Skill + CLI,2.0,0.8,updated_manual_mean_score,0.8,scored,0.0,0.0,matched,20260529_073525_14_Otsuki2025__morpheus_skill__rep02
+14_Otsuki2025,Otsuki et al. (2025),morpheus_skill,Skill + CLI,3.0,0.6,updated_manual_mean_score,0.8,scored,0.2,0.2,matched,20260529_073747_14_Otsuki2025__morpheus_skill__rep03
+14_Otsuki2025,Otsuki et al. (2025),morpheus_mcp,Morpheus MCP,1.0,1.0,updated_manual_mean_score,1.0,scored,0.0,0.0,matched,20260529_074440_14_Otsuki2025__morpheus_mcp__rep01
+14_Otsuki2025,Otsuki et al. (2025),morpheus_mcp,Morpheus MCP,2.0,0.6,updated_manual_mean_score,0.8,scored,0.2,0.2,matched,20260529_075245_14_Otsuki2025__morpheus_mcp__rep02
+14_Otsuki2025,Otsuki et al. (2025),morpheus_mcp,Morpheus MCP,3.0,0.6,updated_manual_mean_score,0.8,scored,0.2,0.2,matched,20260529_080654_14_Otsuki2025__morpheus_mcp__rep03
+15_Reza2025,Reza et al. (2025),python_web,Python + web,1.0,0.25,updated_manual_mean_score,0.5,scored,0.25,0.25,matched,20260529_080905_15_Reza2025__python_web__rep01
+15_Reza2025,Reza et al. (2025),python_web,Python + web,2.0,0.25,updated_manual_mean_score,0.0,scored,-0.25,0.25,matched,20260529_081714_15_Reza2025__python_web__rep02
+15_Reza2025,Reza et al. (2025),python_web,Python + web,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_081855_15_Reza2025__python_web__rep03
+15_Reza2025,Reza et al. (2025),morpheus_cli,Morpheus CLI,1.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_082510_15_Reza2025__morpheus_cli__rep01
+15_Reza2025,Reza et al. (2025),morpheus_cli,Morpheus CLI,2.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260529_082905_15_Reza2025__morpheus_cli__rep02
+15_Reza2025,Reza et al. (2025),morpheus_cli,Morpheus CLI,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_083050_15_Reza2025__morpheus_cli__rep03
+15_Reza2025,Reza et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,1.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_083734_15_Reza2025__morpheus_cli_docs__rep01
+15_Reza2025,Reza et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_085729_15_Reza2025__morpheus_cli_docs__rep02
+15_Reza2025,Reza et al. (2025),morpheus_cli_docs,Morpheus CLI + docs,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_090111_15_Reza2025__morpheus_cli_docs__rep03
+15_Reza2025,Reza et al. (2025),morpheus_skill,Skill + CLI,1.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_090204_15_Reza2025__morpheus_skill__rep01
+15_Reza2025,Reza et al. (2025),morpheus_skill,Skill + CLI,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_091818_15_Reza2025__morpheus_skill__rep02
+15_Reza2025,Reza et al. (2025),morpheus_skill,Skill + CLI,3.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_092440_15_Reza2025__morpheus_skill__rep03
+15_Reza2025,Reza et al. (2025),morpheus_mcp,Morpheus MCP,1.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_092652_15_Reza2025__morpheus_mcp__rep01
+15_Reza2025,Reza et al. (2025),morpheus_mcp,Morpheus MCP,2.0,0.75,updated_manual_mean_score,0.75,scored,0.0,0.0,matched,20260529_092801_15_Reza2025__morpheus_mcp__rep02
+15_Reza2025,Reza et al. (2025),morpheus_mcp,Morpheus MCP,3.0,0.5,updated_manual_mean_score,0.5,scored,0.0,0.0,matched,20260529_093013_15_Reza2025__morpheus_mcp__rep03

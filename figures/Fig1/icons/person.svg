@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 295 360" width="295" height="360">
+  <!-- Own drawing for Fig. 1 (Morpheus agent benchmark), matching the layout of the earlier icon. -->
+  <g fill="#2C2F32">
+    <circle cx="147.5" cy="95" r="94.5"/>
+    <path d="M0.2 359 A148 154 0 0 1 95.5 199.8 A117 117 0 0 0 199.5 199.8 A148 154 0 0 1 294.8 359 Z"/>
+  </g>
+</svg>

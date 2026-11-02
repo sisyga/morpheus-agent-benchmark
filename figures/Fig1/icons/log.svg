@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 360" width="340" height="360">
+<!-- Own drawing for Fig. 1 (Morpheus agent benchmark), matching the layout of the earlier icon. -->
+<path fill="#000000" fill-rule="evenodd" d="M17 0 H196 L284 88 Q289 93 289 99 V344 A16 16 0 0 1 273 360 H17 A16 16 0 0 1 1 344 V16 A16 16 0 0 1 17 0 Z
+ M23 22 V339 H267 V109 H204 A24 24 0 0 1 180 85 V22 Z
+ M200 25 V83 Q200 89 206 89 H264 Z"/>
+<rect x="54" y="166.5" width="286" height="137" rx="22" fill="#000000"/>
+<g fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="90" text-anchor="middle">
+<text transform="translate(114 268.5) scale(1.08 1)">L</text>
+<text transform="translate(185 268.5) scale(1.08 1)">O</text>
+<text transform="translate(266 268.5) scale(1.08 1)">G</text>
+</g>
+</svg>

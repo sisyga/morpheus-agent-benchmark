@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MorpheusModel version="4">
+    <Description>
+        <Title>Szabo 2010: active endothelial monolayer, alpha=4</Title>
+        <Details>Source: Szabo et al., Physical Biology 7 (2010) 046007, doi:10.1088/1478-3975/7/4/046007.
+        Explicit 2D Cellular Potts translation of assumptions A1-A5 and Eqs.6-10, pp.5-6, with the paper-supported alternative active bias Eq.14, p.11.
+        Showcase Fig.10(d): alpha=4, P=3; Table 2: target area=50, lambda=1, beta=1, r=0.2/MCS.
+        Random single-node sites expanded by a Voronoi tessellation initialize a confluent sheet; this initial geometry is an assumption, not reported in the paper.
+        Initial polarity is zero; unbiased CPM fluctuations initiate spontaneous polarization without an external cue.
+        Immutable empty one-node border implemented by the square Domain. Cell count is fixed: no division or death.
+        One node=5 micrometres, one MCS=1 minute (paper p.6). Coordinates and velocity remain in nodes and nodes/MCS.
+        The 24-hour showcase window follows the empirical recording duration on p.2; Fig.10 gives no snapshot time.
+        Seed 2010 is fixed a priori for computational reproducibility and is not selected for phenotype.
+        Random sampler and eight-neighbor unscaled contact counts preserve Eqs.6-8.
+        Eq.10 is an explicit recurrence p(t+1)=(1-r)*p(t)+centroid displacement; no normalization of displacement in feedback.
+        Active rule=copy; copy mode applies Eq.14 with unnormalized source-to-target displacement for both participating cells.
+        Centroid mode is a separately preserved Eq.9 translation; it divides Morpheus mass-weighted displacement by cell.volume.
+        The Eq.14 variant was selected on Fig.6 persistent-motion evidence after literal Eq.9 gave inadequate persistence, not on the showcase picture.
+        Outputs: five spatial frames, five lossless cell-ID TIFF states, every-MCS population statistics and cell tracks for validation.
+        A dedicated Logger selects 100 actual integer-MCS states including initial and final states, without interpolation.
+        Its selection condition affects only data output, never cell dynamics. The full every-MCS audit logs are retained.</Details>
+    </Description>
+    <Global>
+        <Constant symbol="alpha" value="4" name="intercellular boundary cost"/>
+        <Constant symbol="beta" value="1" name="free boundary cost"/>
+        <Constant symbol="A" value="50" name="target area in nodes squared"/>
+        <Constant symbol="lambda" value="1"/>
+        <Constant symbol="P" value="3" name="active bias"/>
+        <Constant symbol="r" value="0.2" name="polarity decay per MCS"/>
+        <Constant symbol="node_length_um" value="5"/>
+        <Constant symbol="minutes_per_MCS" value="1"/>
+        <Variable symbol="occupied_nodes" value="0"/>
+        <Variable symbol="mean_speed" value="0"/>
+        <Variable symbol="mean_area" value="0"/>
+        <Variable symbol="mean_surface" value="0"/>
+        <Variable symbol="area_variance" value="0"/>
+        <Function symbol="lattice_area_fraction">
+            <Expression>occupied_nodes/(size.x*size.y)</Expression>
+        </Function>
+        <Function symbol="interior_area_fraction">
+            <Expression>occupied_nodes/((size.x-2)*(size.y-2))</Expression>
+        </Function>
+        <Function symbol="time_MCS"><Expression>time</Expression></Function>
+        <Function symbol="time_min"><Expression>time*minutes_per_MCS</Expression></Function>
+        <Function symbol="mean_area_fraction_occupied"><Expression>lattice_area_fraction</Expression></Function>
+        <Function symbol="mean_cell_speed_node_per_MCS"><Expression>mean_speed</Expression></Function>
+    </Global>
+    <Space>
+        <Lattice class="square">
+            <Size symbol="size" value="200,200,0"/>
+            <Neighborhood><Order>2</Order></Neighborhood>
+            <BoundaryConditions>
+                <Condition type="constant" boundary="x"/>
+                <Condition type="constant" boundary="y"/>
+            </BoundaryConditions>
+            <Domain boundary-type="constant">
+                <Expression>space.x &gt;= 1 and space.x &lt; size.x-1 and space.y &gt;= 1 and space.y &lt; size.y-1</Expression>
+            </Domain>
+        </Lattice>
+        <SpaceSymbol symbol="space"/>
+    </Space>
+    <Time>
+        <StartTime value="0"/>
+        <StopTime value="1440"/>
+        <TimeSymbol symbol="time" name="time in MCS (1 MCS = 1 minute)"/>
+        <RandomSeed value="2010"/>
+        <SaveInterval value="-1"/>
+    </Time>
+    <CellTypes>
+        <CellType class="medium" name="medium"/>
+        <CellType class="biological" name="endothelial">
+            <PropertyVector symbol="polarity" value="0,0,0"/>
+            <PropertyVector symbol="previous_center" value="0,0,0"/>
+            <PropertyVector symbol="velocity" value="0,0,0"/>
+            <VolumeConstraint target="A" strength="lambda"/>
+            <ConnectivityConstraint/>
+            <DirectedMotion direction="polarity" strength="P" update-direction="source-to-target" protrusion="true" retraction="true"/>
+            <Event time-step="1" trigger="when-true" name="Polarity-motion feedback, Eq.10">
+                <Condition>time &gt; 0</Condition>
+                <VectorRule symbol-ref="polarity">
+                    <Expression>(1-r)*polarity + cell.center-previous_center</Expression>
+                </VectorRule>
+                <VectorRule symbol-ref="velocity">
+                    <Expression>cell.center-previous_center</Expression>
+                </VectorRule>
+                <VectorRule symbol-ref="previous_center">
+                    <Expression>cell.center</Expression>
+                </VectorRule>
+            </Event>
+            <Mapper time-step="1">
+                <Input value="cell.volume"/>
+                <Output symbol-ref="occupied_nodes" mapping="sum"/>
+                <Output symbol-ref="mean_area" mapping="mean"/>
+                <Output symbol-ref="area_variance" mapping="variance"/>
+            </Mapper>
+            <Mapper time-step="1">
+                <Input value="velocity.abs"/>
+                <Output symbol-ref="mean_speed" mapping="mean"/>
+            </Mapper>
+            <Mapper time-step="1">
+                <Input value="cell.surface"/>
+                <Output symbol-ref="mean_surface" mapping="mean"/>
+            </Mapper>
+        </CellType>
+    </CellTypes>
+    <CPM>
+        <Interaction>
+            <Contact type1="endothelial" type2="endothelial" value="alpha"/>
+            <Contact type1="endothelial" type2="medium" value="beta"/>
+        </Interaction>
+        <MonteCarloSampler stepper="random">
+            <MCSDuration value="1"/>
+            <Neighborhood><Order>2</Order></Neighborhood>
+            <MetropolisKinetics temperature="1"/>
+        </MonteCarloSampler>
+        <ShapeSurface scaling="none">
+            <Neighborhood><Order>2</Order></Neighborhood>
+        </ShapeSurface>
+    </CPM>
+    <CellPopulations>
+        <BoundaryValue boundary="x" value="medium"/>
+        <BoundaryValue boundary="-x" value="medium"/>
+        <BoundaryValue boundary="y" value="medium"/>
+        <BoundaryValue boundary="-y" value="medium"/>
+        <BoundaryValue boundary="domain" value="medium"/>
+        <Population type="endothelial" size="0">
+            <InitRectangle number-of-cells="1000" mode="random">
+                <Dimensions origin="1,1,0" size="size.x-2,size.y-2,0"/>
+            </InitRectangle>
+            <InitVoronoi/>
+            <InitVectorProperty symbol-ref="previous_center"><Expression>cell.center</Expression></InitVectorProperty>
+        </Population>
+    </CellPopulations>
+    <Analysis>
+        <ModelGraph format="dot" reduced="false" include-tags="#untagged"/>
+        <TiffPlotter time-step="360.0" format="16bit" timelapse="true" OME-header="true" compression="false">
+            <Channel symbol-ref="cell.id" exclude-medium="true"/>
+        </TiffPlotter>
+        <Gnuplotter time-step="360.0" log-commands="true" decorate="false">
+            <Terminal name="png" size="1200 600 0"/>
+            <Plot title="Explicit cell monolayer: alpha=4, P=3">
+                <Cells value="cell.id"/>
+            </Plot>
+            <Plot title="Cell polarity and emergent motion">
+                <Cells value="polarity.phi" min="0" max="6.28318530718">
+                    <ColorMap>
+                        <Color value="0" color="red"/>
+                        <Color value="1.0471975512" color="yellow"/>
+                        <Color value="2.0943951024" color="green"/>
+                        <Color value="3.14159265359" color="cyan"/>
+                        <Color value="4.1887902048" color="blue"/>
+                        <Color value="5.235987756" color="magenta"/>
+                        <Color value="6.28318530718" color="red"/>
+                    </ColorMap>
+                </Cells>
+                <CellArrows orientation="2*polarity/max(polarity.abs,1e-12)" style="1"/>
+            </Plot>
+        </Gnuplotter>
+        <Logger time-step="1" name="Exact population aggregates">
+            <Input>
+                <Symbol symbol-ref="occupied_nodes"/>
+                <Symbol symbol-ref="lattice_area_fraction"/>
+                <Symbol symbol-ref="interior_area_fraction"/>
+                <Symbol symbol-ref="mean_speed"/>
+                <Symbol symbol-ref="celltype.endothelial.size"/>
+                <Symbol symbol-ref="mean_area"/>
+                <Symbol symbol-ref="area_variance"/>
+                <Symbol symbol-ref="mean_surface"/>
+            </Input>
+            <Output><TextOutput file-name="population.tsv" file-format="csv" separator="tab"/></Output>
+        </Logger>
+        <Logger time-step="1" name="Requested 100 observed states with units">
+            <Input>
+                <Symbol symbol-ref="time_MCS"/>
+                <Symbol symbol-ref="time_min"/>
+                <Symbol symbol-ref="mean_area_fraction_occupied"/>
+                <Symbol symbol-ref="mean_cell_speed_node_per_MCS"/>
+                <Symbol symbol-ref="interior_area_fraction"/>
+                <Symbol symbol-ref="celltype.endothelial.size"/>
+                <Symbol symbol-ref="occupied_nodes"/>
+            </Input>
+            <Restriction condition="time == rint(rint(time*99/1440)*1440/99)"/>
+            <Output><TextOutput file-name="observables_100" file-format="csv" separator="comma"/></Output>
+        </Logger>
+        <Logger time-step="1" name="Cell-resolved audit tracks">
+            <Input>
+                <Symbol symbol-ref="cell.id"/>
+                <Symbol symbol-ref="cell.center.x"/>
+                <Symbol symbol-ref="cell.center.y"/>
+                <Symbol symbol-ref="cell.volume"/>
+                <Symbol symbol-ref="cell.surface"/>
+                <Symbol symbol-ref="velocity.x"/>
+                <Symbol symbol-ref="velocity.y"/>
+                <Symbol symbol-ref="polarity.x"/>
+                <Symbol symbol-ref="polarity.y"/>
+            </Input>
+            <Restriction><Celltype celltype="endothelial"/></Restriction>
+            <Output><TextOutput file-name="cell_tracks.tsv" file-format="csv" separator="tab"/></Output>
+        </Logger>
+    </Analysis>
+</MorpheusModel>

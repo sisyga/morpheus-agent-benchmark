@@ -822,7 +822,7 @@ test("buildBenchmarkCodexEnv isolates benchmark agents from host secrets while p
     BENCHMARK_SAFE_FLAG: "1",
     SystemRoot: "C:\\Windows",
     ComSpec: "C:\\Windows\\System32\\cmd.exe",
-    TEMP: "C:\\Users\\simon\\AppData\\Local\\Temp",
+    TEMP: "C:\\Users\\user\\AppData\\Local\\Temp",
   };
 
   const env = buildBenchmarkCodexEnv(

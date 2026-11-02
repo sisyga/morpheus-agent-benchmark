@@ -1,0 +1,11 @@
+# Atwell et al. (2015) Table S2: cell counts of the single run shown in Fig. 3 (model output).
+# Written by figures/Supplementary/Supp_Fig_04_Atwell2015/atwell_tables2_extract.py from the text layer of page 23 of benchmark_papers/04_Atwell2025.pdf.
+time_hph,yellow,green,blue,pink
+18.5,16,0,0,0
+27.5,113,8,0,0
+30.5,147,85,0,0
+32.5,184,80,38,0
+33.5,174,76,38,36
+35.5,228,57,152,69
+60.5,366,143,111,60
+87.5,314,178,47,83

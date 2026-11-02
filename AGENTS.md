@@ -11,12 +11,12 @@
 ## Default workflow
 - Use the `morpheus` skill for MorpheusML authoring, model debugging, simulation execution, and local output image inspection.
 - Treat `benchmark_papers/` as benchmark inputs and `benchmark_focus/` as optional per-paper focus prompts.
-- Never commit benchmark paper PDFs. `benchmark_papers/papers.csv` lists the corpus with DOIs and checksums; local PDFs are git-ignored.
+- Commit only the paper PDFs that may be redistributed (`in_repository` in `benchmark_papers/papers.csv` and `preprints/preprints.csv`); the others stay git-ignored.
 
 ## Repo expectations
 - Keep benchmark orchestration in the TypeScript runner.
 - Keep reusable deterministic utilities in the Python MCP server and CLI bridge.
-- Keep benchmark analysis and figure generation in `analyze_benchmark.py`.
+- Keep benchmark analysis in `analyze_benchmark.py` and `compare_benchmarks.py`; the figures of the preprint are built in `figures/`, one folder per figure.
 - Manage Python dependencies with `uv` in `pyproject.toml` and `uv.lock`. Run `uv sync --locked` for setup and `uv run --locked python ...` for Python work; the benchmark runner uses the resulting project `.venv` directly.
 - Preserve benchmark-mode sandbox boundaries: expose only the skills, MCP tools, CLI access, web access, and staged resources intended for that mode.
 - Codex subject runs should use isolated paper-specific `agent_workspace/` and `codex_home/` directories.
@@ -24,5 +24,4 @@
 - Do not edit benchmark source PDFs or Morpheus skill reference material during benchmark runs.
 - For Morpheus-running benchmark modes, preserve the attempt artifact contract in the runner prompt and analysis: each Morpheus attempt should have a fresh attempt folder, the corresponding `model.xml`, run logs/outputs, and `attempt_reproduction.json` when the benchmark subject can inspect the attempt.
 - The runner should stage paper text, PDF, and a visual manifest. Subject prompts should tell benchmark agents to render and inspect needed paper/output PNGs directly with `view_image` when available.
-- Do not reintroduce runner-side image review turns, image-review budgets, `outputImagePaths`, or `contactSheetPath`.
 - Normal benchmark runs perform one automatic recovery pass and then run analysis unless disabled by CLI flags; keep docs in `readme.md` and `SETUP.md` aligned with CLI behavior.

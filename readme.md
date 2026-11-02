@@ -1,6 +1,6 @@
 # Morpheus agent benchmark
 
-This repository holds the code of a benchmark that tests whether LLM-based coding agents can rebuild published multicellular models in the simulator [Morpheus](https://morpheus.gitlab.io). An agent receives one of 15 papers, writes a MorpheusML model of it, runs Morpheus, and revises the model within a fixed time budget. A separate scoring agent can then check the simulation output against paper-specific criteria. The code accompanies the preprint "LLM-based agents can autonomously generate, execute, and refine in silico models" (Chandratre et al., 2026).
+This repository holds the code of a benchmark that tests whether LLM-based coding agents can rebuild published multicellular models in the simulator [Morpheus](https://morpheus.gitlab.io). An agent receives one of 15 papers, writes a MorpheusML model of it, runs Morpheus, and revises the model within a fixed time budget. A separate scoring agent can then check the simulation output against paper-specific criteria. The code accompanies the preprint "Morpheus.AI: agents autonomously generate, execute and refine virtual tissue models" (Chandratre et al., 2026).
 
 The repository has three parts:
 
@@ -8,11 +8,13 @@ The repository has three parts:
 - a Morpheus skill and a Python MCP server for PDF staging, XML writing, Morpheus execution, and output inspection, which also serve modeling tasks outside the benchmark;
 - analysis scripts that turn finished benchmark folders into CSV tables, statistical tests, and figures.
 
-The benchmark runs, automated scores, and manual scores reported in the preprint are archived in a separate Zenodo dataset (DOI to be added). Cite this code with [CITATION.cff](CITATION.cff) or its Zenodo record.
+To use the agent workflow for your own modeling tasks, install the Morpheus skill from [sisyga/morpheus-skills](https://github.com/sisyga/morpheus-skills), which explains its setup.
+
+[figures/](figures/README.md) has one folder per figure and table of the preprint, each with its build script and the data behind it: the per-run scores, times and costs of both final benchmarks, the manual scores, and the files of the 15 runs shown in the figures. The complete run outputs (agent transcripts, workspaces, all logs) are not published; they contain the copyrighted paper PDFs and are available on request. Cite this code with [CITATION.cff](CITATION.cff) or its Zenodo record, [doi:10.5281/zenodo.23697418](https://doi.org/10.5281/zenodo.23697418) (all versions).
 
 ## Reproducing the preprint
 
-The main results of the preprint come from two version 3 benchmark runs, both archived in the data deposit:
+The main results of the preprint come from two version 3 benchmark runs:
 
 | Run folder | Subject model and reasoning effort | Repetitions | Jobs |
 | --- | --- | --- | --- |
@@ -25,15 +27,15 @@ Both runs used all five modes, a 4-hour budget per job, and 12 concurrent jobs. 
 
 **Installation time.** `uv sync --locked` and `npm ci` take about half a minute on a broadband connection (10 s and 21 s on our test machine). Installing Morpheus is described in [SETUP.md](SETUP.md).
 
-**Demo.** This step needs neither an OpenAI account nor Morpheus and takes about 10 s. With the two run folders from the data deposit, run:
+**Demo.** This step needs neither an OpenAI account nor Morpheus and takes about a minute. It recomputes every statistic of the preprint from the per-run table in `figures/Fig2/data/`:
 
 ```bash
-uv run --locked python compare_benchmarks.py <deposit>/20261007_202940_benchmark <deposit>/20261003_005649_benchmark --out-dir demo_comparison
+uv run --locked python compare_benchmarks.py --runs-csv figures/Fig2/data/runs_by_run.csv --out-dir demo_comparison
 ```
 
-`demo_comparison/` then holds the model-comparison figures, a `_stats.md` file for each, `statistical_tests.md`, and the source CSVs. In `benchmark_model_comparison_overall.csv`, the mean biological score over the four Morpheus modes is 0.850 for `gpt-6.1-sol` and 0.663 for `gpt-6-luna`, at a mean API cost of US$3.74 and US$0.32 per run. `biological_score_by_model_and_mode_stats.md` lists the means per mode, for example 0.862 for `gpt-6.1-sol` with the MCP server and 0.108 for `gpt-6-luna` with Python and web search only. The bootstrap uses a fixed seed, so the confidence intervals come out identical on every run.
+The per-run table holds the records that `compare_benchmarks.py` reads from the two benchmark folders, so the tables match those of the published analysis. `demo_comparison/` then holds the model-comparison figures, a `_stats.md` file for each, `statistical_tests.md`, and the source CSVs. In `benchmark_model_comparison_overall.csv`, the mean biological score over the four Morpheus modes is 0.850 for `gpt-6.1-sol` and 0.663 for `gpt-6-luna`, at a mean API cost of US$3.74 and US$0.32 per run. `biological_score_by_model_and_mode_stats.md` lists the means per mode, for example 0.862 for `gpt-6.1-sol` with the MCP server and 0.108 for `gpt-6-luna` with Python and web search only. The bootstrap uses a fixed seed, so the confidence intervals come out identical on every run.
 
-**Rerunning the benchmark.** Add the paper PDFs as described in [benchmark_papers/README.md](benchmark_papers/README.md), then run:
+**Rerunning the benchmark.** Add the four paper PDFs that are not redistributed, as described in [benchmark_papers/README.md](benchmark_papers/README.md), then run:
 
 ```bash
 npm run benchmark -- --all-benchmark-modes --repetitions 3 --model gpt-6.1-sol --reasoning-effort max --max-concurrent-jobs 12 --score-biological --biological-scoring-max-concurrent-jobs 12
@@ -42,22 +44,23 @@ npm run benchmark -- --all-benchmark-modes --repetitions 5 --model gpt-6-luna --
 
 A job can use its full 4-hour budget, so each run takes days and depends on the Codex quota; `--recover-run` resumes a run that stopped. Agents behave differently from run to run, so a rerun reproduces the score distributions rather than the individual scores.
 
-**Figures.** The figures of the preprint come from these commands:
+**Figures and tables.** Every figure and table of the preprint has its own folder under [figures/](figures/README.md), with a `README.md`, a `build.py` and everything it needs:
 
-| Figure files | Command | Input |
-| --- | --- | --- |
-| `biological_score_by_model_and_mode`, `api_cost_by_model_and_mode`, `api_cost_biological_score_pareto_by_model`, `statistical_tests.md` | `compare_benchmarks.py`, as in the demo | the two version 3 run folders |
-| GPT-5.6 replication | `compare_benchmarks.py` | the three version 2 run folders |
-| `biological_score_manual_vs_agent` | `manual_biological_scores.py`, then `biological_score_comparison.py` (see [Validating the scorer against manual scores](#validating-the-scorer-against-manual-scores)) | `20260524_002842_benchmark` and its manual score workbook |
-| Per-paper comparison figures | `scripts/supp_figs/build_all.py` (see [scripts/supp_figs/README.md](scripts/supp_figs/README.md)) | `20261007_202940_benchmark` and the paper PDFs |
+| Figure or table | Command |
+| --- | --- |
+| Fig. 1 | `uv run --locked python figures/Fig1/build.py` |
+| Fig. 2 | `uv run --locked python figures/Fig2/build.py` |
+| Supplementary Note 1, Table 1, Figs. 1–15 | `python figures/Supplementary/<folder>/build.py` (see [figures/Supplementary/README.md](figures/Supplementary/README.md)) |
+| The whole supplement, with the Supplementary Data zip | `python figures/Supplementary/build_supplement.py` |
+| Statistics in the text | the demo above |
 
-Tables and schematic panels in the figures were assembled by hand.
+On our system (Windows 11, Python 3.12, Chrome for the main figures, Graphviz 16.1.0, Arial), the figures built this way matched the published ones pixel for pixel; other systems may differ slightly in fonts and anti-aliasing. Fig. 1 is drawn by `figures/Fig1/build.py`. The layout of rows d and e of Fig. 2 (`figures/Fig2/assets/fig2_layout.svg`) was drawn in Inkscape; `figures/Fig2/build.py` places every data panel into it. On Windows, clone into a short path (the longest file path in the repository has 175 characters) or enable long paths (`git config --global core.longpaths true`).
 
 ## Installation
 
 Python dependencies are managed with [uv](https://docs.astral.sh/uv/). `pyproject.toml` declares the dependencies, `uv.lock` locks their versions across platforms, and `uv sync --locked` creates the local `.venv/` after cloning. The project defaults to Python 3.12 via `.python-version`, requires Python 3.11 or newer, and uses only uv-managed interpreters (`python-preference = "only-managed"`). Node dependencies continue to use npm.
 
-The benchmark paper PDFs are not included because several may not be redistributed. [benchmark_papers/README.md](benchmark_papers/README.md) explains how to download them and check them against the SHA-256 checksums of the files the published runs used.
+The eleven benchmark papers under a CC BY licence are included as the PDFs the runs used. The other four may not be redistributed; [benchmark_papers/README.md](benchmark_papers/README.md) lists them and explains how to download them and check them against the SHA-256 checksums of the files the published runs used.
 
 Choose the setup path for the host that will execute Morpheus:
 
@@ -84,7 +87,7 @@ For Linux commands, WSL2 installation, native Windows sandbox initialization, Mo
 
 1. Run `uv sync --locked` and `npm ci` to install Python and Node dependencies.
 2. Confirm that `codex login status` and `morpheus --help` both work.
-3. Add the paper PDFs to `benchmark_papers/` as described in [benchmark_papers/README.md](benchmark_papers/README.md).
+3. Add the four paper PDFs that are not redistributed to `benchmark_papers/` as described in [benchmark_papers/README.md](benchmark_papers/README.md).
 4. Run `npm run benchmark -- --max-papers 1`.
 5. Run `uv run --locked python analyze_benchmark.py benchmark_runs/<timestamp>_benchmark`.
 6. Inspect the new timestamped benchmark folder under `benchmark_runs/`.
@@ -92,6 +95,8 @@ For Linux commands, WSL2 installation, native Windows sandbox initialization, Mo
 ## What the benchmark does
 
 For each PDF in `benchmark_papers/`, the runner can run one or more benchmark capability modes. The default mode is `morpheus_mcp`, which gives the agent every tool. The available modes are:
+
+Setups 1–5 of the preprint are, in this order, `python_web` (1, Web), `morpheus_cli` (2, CLI), `morpheus_cli_docs` (3, Docs), `morpheus_skill` (4, Skill) and `morpheus_mcp` (5, MCP).
 
 - `python_web`: web search + Python only. The agent must still produce MorpheusML `model.xml`; the host runs Morpheus on it afterward so that its output can be scored.
 - `morpheus_cli`: web search + Python + Morpheus CLI, without the Morpheus skill or MCP tools.
@@ -129,7 +134,7 @@ The default runner concurrency is one job at a time. Linux and WSL2 can run inde
 - `pyproject.toml`, `uv.lock`, `.python-version`
   Python dependencies, cross-platform dependency lockfile, and default interpreter version, managed with uv.
 - `benchmark_papers/`
-  Benchmark inputs. The runner scans this folder for PDF files. The PDFs are not distributed; `papers.csv` lists the 15 papers with DOIs and checksums, and `README.md` explains how to obtain them.
+  Benchmark inputs. The runner scans this folder for PDF files. The eleven CC BY PDFs are included; `papers.csv` lists the 15 papers with DOIs, checksums and licences, and `README.md` explains how to obtain the other four. `preprints/` holds the bioRxiv preprints used by two supplementary-figure panels.
 - `benchmark_focus/`
   Optional per-paper focus prompts. A file named like the PDF stem, for example `10_Berkhout2025.txt`, is appended to that paper's benchmark prompt.
 - `.agents/skills/morpheus/`
@@ -153,7 +158,7 @@ The default runner concurrency is one job at a time. Linux and WSL2 can run inde
 - `sync_biological_scoring_criteria.py`
   Synchronizes the runtime JSON with the criteria workbook. It reads clause weights from the tables as written and refuses workbooks whose formula rows or Share column disagree with the clause tables. Run it without `--update` to check for drift, or with `--update` to refresh the JSON.
 - `manual_biological_scores.py`
-  Exports the manual scores of a scoring workbook (`Benchmark_Manual_Scores_*.xlsx`, archived with the benchmark dataset) to the CSV files that `biological_score_comparison.py` reads. It takes each run's score from the Mean column of an `Updated_manual_scores_*` sheet, or from column V of the active sheet when the workbook has no such sheet, and refuses a sheet whose Mode or Mean headers have moved.
+  Exports the manual scores of a scoring workbook (`Benchmark_Manual_Scores_*.xlsx`, not included; the scores used in the preprint are in `figures/Fig2/data/manual_vs_automated.csv`) to the CSV files that `biological_score_comparison.py` reads. It takes each run's score from the Mean column of an `Updated_manual_scores_*` sheet, or from column V of the active sheet when the workbook has no such sheet, and refuses a sheet whose Mode or Mean headers have moved.
 - `biological_score_comparison.py`
   Compares the manual with the automated biological scores of the same runs to validate the scorer.
 - `biological_score_details.py`
@@ -161,7 +166,9 @@ The default runner concurrency is one job at a time. Linux and WSL2 can run inde
 - `compare_benchmarks.py`
   Compares complete benchmark runs of two or more models, with paired statistical tests.
 - `scripts/`
-  `benchmark_time_left.py` (the subject's time-left command), the Codex smoke checks, and `supp_figs/` (the paper-comparison supplementary figures; see its README).
+  `benchmark_time_left.py` (the subject's time-left command) and the Codex smoke checks.
+- `figures/`
+  One folder per figure and table of the preprint, with the data and the code to rebuild it (see its README).
 - `tests/`
   Python (`pytest`) and TypeScript (`npm run test:ts`) test suites. Tests that need the benchmark paper PDFs skip when the PDFs are missing.
 - `LICENSE`, `NOTICE`, `CITATION.cff`, `.zenodo.json`
@@ -303,7 +310,7 @@ The analysis output includes:
 - `attempt_self_scores_by_paper`
 - `attempt_self_scores_by_mode`
 
-The standalone score figure uses a box-plot grid for technical, reproduction, and available biological score sources across all papers, papers 1-10 with modeling-keyword overlap, and papers 11-15 requiring more biological abstraction. The overview quality panel uses box plots as well. The token and API-cost figures each use an all-paper two-panel layout: stacked component means on the left and total-value box plots on the right. The runtime and outcome cohort figures use three side-by-side stacked-bar panels for the same paper splits.
+The standalone score figure uses a box-plot grid for technical, reproduction, and available biological score sources across all papers, papers 1-10 (with a published model) and papers 11-15 (without one). The overview quality panel uses box plots as well. The token and API-cost figures each use an all-paper two-panel layout: stacked component means on the left and total-value box plots on the right. The runtime and outcome cohort figures use three side-by-side stacked-bar panels for the same paper splits.
 
 Attempt-level plots use `attempt_reproduction.json` files written by agents inside attempt folders. If an agent attempt folder is missing that file, the analysis script derives the attempt number from the `attempt_###` directory name and keeps its score blank rather than inventing a zero.
 
@@ -339,7 +346,7 @@ Each workbook covers one scorer cohort: `scorer-v<version>__<model>__<effort>__c
 
 The scorer of this release (scorer v8) applies criteria v7 from `Biological_scoring_criteria_v7.xlsx`, the version used in the preprint. Each paper's sheet gives the target, the scoring instructions, and the weighted clauses. The common subject prompt asks the agent for initial and final CSV states with time units, so that endpoint clauses can be checked.
 
-The scorer reads the synchronized JSON at runtime. To check or refresh it from the criteria workbook (`--workbook` selects another file, e.g. a fresh Numbers export):
+The scorer reads the synchronized JSON at runtime. To check or refresh it from the criteria workbook (`--workbook` selects another file):
 
 ```powershell
 uv run --locked python sync_biological_scoring_criteria.py
@@ -357,7 +364,7 @@ uv run --locked python biological_score_comparison.py benchmark_runs/<timestamp>
 
 The comparison writes to `manual_score_comparison/` in the benchmark folder: CSV summaries by run, paper and mode, mode, and paper criterion, and `biological_score_discrepancy_report.md`. The criterion CSV counts exact agreements, discrepancies, over-scores, and under-scores for every paper-specific criterion. The report gives agreement statistics over all runs and over scored runs only, status coverage, common score mismatches, and the largest individual errors. It also reports the ordinary least-squares regression of unbinned automated scores on manual scores (slope, intercept, R²), the slope's deviation from 1 and from 0.5, and the mean signed bias (automated minus manual). Perfect agreement has slope 1 and intercept 0; undefined regressions or R² are reported as NA.
 
-The figure `biological_score_manual_vs_agent` is a 10×10 count heatmap with 0.1-wide score bins (lower edge inclusive; the top bin also holds 1.0) and the count printed in each occupied bin. Scores are fractions k/n of satisfied criteria (n = 3–10), so every bin contains at least one attainable value and 0.8 stays separate from 1.0. The reversed colour map shows low counts light and high counts dark. The colour scale starts at one observation, so empty bins take the colour map's under colour (white), which the colour bar shows as an arrow below its lowest count. A second figure, `biological_score_manual_vs_agent_dark`, uses the non-reversed colour map with the same count scale, again with white empty bins so that they stay distinct from its dark low-count end. Both axes span exactly 0–1, a dashed diagonal marks perfect agreement, and the plots have no grid lines. Both figures are written as PNG, SVG, and PDF.
+The figure `biological_score_manual_vs_agent` is a 10×10 count heatmap with 0.1-wide score bins (lower edge inclusive; the top bin also holds 1.0) and the count printed in each occupied bin. Scores are weighted fractions of satisfied criteria (3–10 criteria per paper), and 0.8 stays separate from 1.0. The reversed colour map shows low counts light and high counts dark. The colour scale starts at one observation, so empty bins take the colour map's under colour (white), which the colour bar shows as an arrow below its lowest count. A second figure, `biological_score_manual_vs_agent_dark`, uses the non-reversed colour map with the same count scale, again with white empty bins so that they stay distinct from its dark low-count end. Both axes span exactly 0–1, a dashed diagonal marks perfect agreement, and the plots have no grid lines. Both figures are written as PNG, SVG, and PDF.
 
 ## Direct MCP usage
 
@@ -483,12 +490,12 @@ Analysis uses the directly recorded `subjectExecutionMs`; it does not reconstruc
 
 ## Benchmark versions
 
-`BENCHMARK_VERSION` in `src/benchmark/types.ts` identifies the subject-facing setup: the Morpheus skill, the docs-mode references (`morpheusml-doc.md`, `model-template.md`), the prompts, and the runner behavior. This release is version 3. The preprint uses runs of all three versions:
+`BENCHMARK_VERSION` in `src/benchmark/types.ts` identifies the subject-facing setup: the Morpheus skill, the docs-mode references (`morpheusml-doc.md`, `model-template.md`), the prompts, and the runner behavior. This release is version 3. The preprint uses runs of versions 1 and 3:
 
 | Version | Protocol | Morpheus skill | Subject models | Use in the preprint |
 | --- | --- | --- | --- | --- |
-| v1 | `max_cycles_v1` | prototype | gpt-5.5, gpt-5.4-mini | gpt-5.5 runs scored by hand to validate the automated scorer |
-| v2 | `time_limit_v2` | 1.3.0 | gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna | replication with the GPT-5.6 models |
+| v1 | `max_cycles_v1` | prototype | gpt-5.5, gpt-5.4-mini | the 225 gpt-5.5 runs (reasoning effort `xhigh`) scored by hand to validate the automated scorer |
+| v2 | `time_limit_v2` | 1.3.0 | gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna | not used |
 | v3 | `time_limit_v2` | 1.5.1 | gpt-6.1-sol, gpt-6-luna | main results |
 
 Version 1 used a different time limit: each Codex turn had a 90-minute wall-clock cap that the agent was not told about, and a timed-out turn restarted in a new thread that kept the workspace. Do not pool version 1 runs with later versions.
@@ -513,7 +520,7 @@ To define a new version, see [Updating the Morpheus skill, prompts, or docs-mode
 
 ## Reproducibility of the published runs
 
-The version 3 runs of the preprint (gpt-6.1-sol and gpt-6-luna) were made in the development repository at commit c945e84, tagged `benchmark-v3`; these identifiers appear in their recorded provenance. The recorded SHA-256 hashes of the Morpheus skill, the docs-mode references, `src/benchmark/prompt.ts`, `morpheus_mcp_server.py`, `benchmark_focus/`, `package-lock.json`, and `uv.lock` match the files in this release, so recovering or rerunning those runs with this release passes the runner's provenance checks. Changes after c945e84 concern job scheduling, recovery, and input checks in the runner, the default configuration, the analysis and comparison scripts, the figure scripts, the tests, and the documentation; none of them touches a file that the benchmark subject sees.
+The version 3 runs of the preprint (gpt-6.1-sol and gpt-6-luna) record the commit c945e84 and tag `benchmark-v3` of the code base they ran from, which predate this repository's history. The recorded SHA-256 hashes of the Morpheus skill, the docs-mode references, `src/benchmark/prompt.ts`, `morpheus_mcp_server.py`, `benchmark_focus/`, `package-lock.json`, and `uv.lock` match the files in this release, so recovering or rerunning those runs with this release passes the runner's provenance checks. Changes after c945e84 concern job scheduling, recovery, and input checks in the runner, the default configuration, the analysis and comparison scripts, the figure scripts, the tests, and the documentation; none of them touches a file that the benchmark subject sees.
 
 ## Citation and license
 

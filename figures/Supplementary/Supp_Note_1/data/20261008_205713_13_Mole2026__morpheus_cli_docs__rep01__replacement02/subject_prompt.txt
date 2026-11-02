@@ -1,0 +1,84 @@
+<task>
+
+Recreate the paper's model or the closest biologically grounded Morpheus reproduction, then leave the strongest auditable result.
+
+Paper: 13_Mole2026.pdf
+
+PDF: paper.pdf
+
+Paper text: paper.txt
+
+Run ID: 20261008_205713_13_Mole2026__morpheus_cli_docs__rep01__replacement02
+
+Run directory: .
+
+Visual manifest: paper_visual_manifest.json
+
+Likely visual pages: 1, 2, 4, 6, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 35, 37, 39, 41, 43, 45, 47
+
+Preferred paper render DPI: 150
+
+Preferred representative output frames: 5
+
+Work only inside the run directory. Unrelated local folders and artifacts are out of scope.
+
+</task>
+
+<validation_target>
+Showcase/validation target: Blastocyst as a cell cluster that gets attracted by endometrial gland and adheres and then implants into endometrium, all in 2D cross-section as shown in Fig.3A, including receptor-ligand pairs for blastocyst-endometrium recognition.
+
+Simulate from 6 to 9 days post-fertilization (d.p.f.), an elapsed duration of 72 hours.
+Treat this as the final showcase, not the sole design target. Ground the model in the paper's mechanisms first and use at least one additional relevant paper result to constrain it when available.
+</validation_target>
+
+<time_budget>
+- Total subject execution limit: 4 hours.
+- Finalization reserve: 10 minutes.
+- Subject process started at: {{BENCHMARK_SUBJECT_STARTED_AT}}.
+- Soft cutoff: {{BENCHMARK_SOFT_CUTOFF_AT}}.
+- Hard cutoff: {{BENCHMARK_HARD_CUTOFF_AT}}.
+- Morpheus simulation limit: 60 minutes, dynamically shortened near the soft cutoff.
+- Run benchmark-time-left before a simulation or a major new attempt and whenever you need an updated reminder.
+- Preserve the strongest valid candidate early. When the soft cutoff arrives, do not start another Morpheus simulation; use the reserve to finalize the canonical XML and evidence.
+- A Morpheus simulation that reaches its effective limit is killed with exit code 124. Its exact XML, partial outputs, stdout, stderr logs, and morpheus_command.json remain inspectable in that attempt folder; inspect and use them rather than assuming the attempt vanished.
+</time_budget>
+
+<available_resources>
+Use the staged paper assets, Python, shell editing, the Morpheus CLI, morpheusml_doc.txt, and model_template.txt.
+Use model_template.txt as the starting skeleton and morpheusml_doc.txt as the tag and attribute reference.
+Invoke Morpheus with explicit -f and a fresh --outdir for every attempt.
+Use only the staged `morpheus` command. Do not invoke Morpheus through an absolute binary path such as `/bin/morpheus` or `/usr/bin/morpheus`; absolute paths bypass benchmark timing and attempt capture.
+Keep every file under the current working directory.
+</available_resources>
+
+<scientific_contract>
+- Identify whether the paper has an explicit computational source model and identify its source model class before authoring XML.
+- Preserve the reported mechanisms, assumptions, parameters, observables, spatial scale, temporal scale, and cell counts as closely as Morpheus allows. Do not invent exact values that the paper does not support.
+- Preserve the requested biological time window and choose a consistent conversion to simulation time. Where a CSV time series is requested, include the initial and final simulation states among the requested time points, and label the time column with its units.
+- Cell-resolved or individual-cell source models require a cell-resolved Morpheus representation. Do not replace explicit cells with a pure field surrogate; fields may support explicit cells.
+- Field-only models are appropriate only for genuinely field-based source models or biology.
+- Do not pre-place future cells, trace target snapshots with schedules or masks, impose unreported axes or seeds, or tune hidden cues solely to draw the requested figure. Any such forbidden shortcut makes the result incomplete even if it looks similar.
+- If exact mechanics are unavailable, use the closest defensible approximation and state the limitation honestly.
+</scientific_contract>
+
+<work_contract>
+- Create model.xml at the run directory root: model.xml. This is the canonical deliverable.
+- Read paper.txt first, determine the model class and quantitative anchors, and consult only the figures, tables, references, or web sources needed to resolve a concrete uncertainty.
+- Run and debug the model, inspect stdout/stderr and generated CSV/PNG evidence, and revise conservatively. A parse alone is not sufficient runtime evidence.
+- Render only relevant paper/output PNGs and inspect them directly with view_image when images matter.
+- Keep each execution attempt in a fresh attempt folder at attempts/attempt_###/ containing the exact model.xml, logs, and outputs. Write attempts/attempt_###/attempt_reproduction.json for every execution with four numeric scores: source_coverage, mechanism_mapping, observable_alignment, and parameter_plausibility, each 0, 1, or 2.
+- Preserve an evidence-backed candidate before risky changes. Use quantitative logs/CSV and direct visual inspection, not filenames alone.
+- Configure useful PNG and logger output without producing wasteful repeated line plots.
+</work_contract>
+
+<reproduction_rubric>
+Score source_coverage, mechanism_mapping, observable_alignment, and parameter_plausibility from 0 to 2. Cite specific paper pages/figures/tables and exact output files in every evidence list.
+A score of 2 for observable_alignment requires direct checks of relevant spatial, temporal, count, numeric, or visual anchors. A score of 2 for mechanism_mapping requires the paper's mechanisms, not merely a similar image.
+Set agentReportedStatus=completed only for a non-null 8/8 report. Otherwise use best_effort and describe the strongest artifacts and remaining limitations.
+The total_score must equal the four criterion scores.
+</reproduction_rubric>
+
+<output_contract>
+Return only the JSON object matching the supplied schema, without prose, markdown fences, or extra keys.
+Keep assumptions explicit in evidence and rationales, but do not reveal hidden reasoning.
+</output_contract>

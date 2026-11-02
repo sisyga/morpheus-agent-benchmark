@@ -1,0 +1,1807 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<MorpheusModel version="4">
+  <Description>
+    <Title>Mu 2024 germinal center: explicit B-cell chemotaxis and selection</Title>
+    <Details>Source class: CompuCell3D Cellular Potts model coupled to a Tellurium/Gillespie intracellular network (Mu et al., doi:10.3389/fimmu.2024.1377303, pp.3-4). Morpheus translation: full 250x200x11 1-micrometre lattice, explicit B cells and 45 CRC,45 FDC,36 Tfh cells. Model time unit is biological hours. One Morpheus MCS is .01 h = one source MCS; 400 h = 40000 source MCS. Linear stationary-source chemokine PDE is solved to equilibrium before the run; TIFF inputs are mechanistic solutions, not target-image templates. Transient chemokine establishment is approximated. Resident geometry is rounded from Fig.2A; z layers and cell shapes are assumed. Intracellular rates are explicitly approximated deterministic kinetics with stochastic contact selection and independent daughter SHM, not the unrecovered original Gillespie network. No scheduled population growth or external cell guidance. See model_notes.md and parameter_mapping.json for all limitations and source anchors.</Details>
+  </Description>
+  <Global>
+    <Constant symbol="lattice_um" value="1" />
+    <Constant symbol="source_mcs_per_hour" value="100" />
+    <Constant symbol="temperature" value="15" />
+    <Constant symbol="lambda_volume" value="2" />
+    <Constant symbol="lambda_CXCL13" value="250.0" />
+    <Constant symbol="lambda_CXCL12" value="1000.0" />
+    <Constant symbol="AP4_induction" value="4.5" />
+    <Constant symbol="gradient_response_scale" value="0.05" />
+    <Constant symbol="lambda_surface" value="0.2" />
+    <Constant symbol="motility_force_max" value="11.0" />
+    <Constant symbol="motility_half_response" value="3" />
+    <Constant symbol="CXCR4_FOXO_threshold" value="82.0" />
+    <Constant symbol="AP4_half_life_hours" value="8.0" />
+    <Constant symbol="death_half_life_hours" value="16" />
+    <Constant symbol="first_growth_delay_hours" value="8" />
+    <Constant symbol="growth_doubling_hours" value="5" />
+    <Constant symbol="volume_growth_lag_hours" value="0.65" />
+    <Variable symbol="B_left" value="0" />
+    <Variable symbol="B_right" value="0" />
+    <Variable symbol="affinity_mean" value="0" />
+    <Variable symbol="cycling_left" value="0" />
+    <Variable symbol="cycling_right" value="0" />
+    <Variable symbol="mean_generation" value="0" />
+    <Variable symbol="mean_volume" value="0" />
+    <Variable symbol="AP4_mean" value="0" />
+    <Variable symbol="CXCR4_mean" value="0" />
+    <Field symbol="CXCL12" value="0">
+      <Diffusion rate="0" />
+      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL12.tif" />
+    </Field>
+    <Field symbol="CXCL12_gradient_x" value="0">
+      <Diffusion rate="0" />
+      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL12_gradient_x.tif" />
+    </Field>
+    <Field symbol="CXCL12_gradient_y" value="0">
+      <Diffusion rate="0" />
+      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL12_gradient_y.tif" />
+    </Field>
+    <Field symbol="CXCL12_gradient_z" value="0">
+      <Diffusion rate="0" />
+      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL12_gradient_z.tif" />
+    </Field>
+    <Field symbol="CXCL13" value="0">
+      <Diffusion rate="0" />
+      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL13.tif" />
+    </Field>
+    <Field symbol="CXCL13_gradient_x" value="0">
+      <Diffusion rate="0" />
+      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL13_gradient_x.tif" />
+    </Field>
+    <Field symbol="CXCL13_gradient_y" value="0">
+      <Diffusion rate="0" />
+      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL13_gradient_y.tif" />
+    </Field>
+    <Field symbol="CXCL13_gradient_z" value="0">
+      <Diffusion rate="0" />
+      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL13_gradient_z.tif" />
+    </Field>
+  </Global>
+  <Space>
+    <Lattice class="cubic">
+      <Size symbol="size" value="250,200,11" />
+      <NodeLength value="1" />
+      <Neighborhood>
+        <Order>1</Order>
+      </Neighborhood>
+      <BoundaryConditions>
+        <Condition boundary="x" type="noflux" />
+        <Condition boundary="-x" type="noflux" />
+        <Condition boundary="y" type="noflux" />
+        <Condition boundary="-y" type="noflux" />
+        <Condition boundary="z" type="noflux" />
+        <Condition boundary="-z" type="noflux" />
+      </BoundaryConditions>
+    </Lattice>
+    <SpaceSymbol symbol="space" />
+  </Space>
+  <Time>
+    <StartTime value="0" />
+    <StopTime value="400.0" />
+    <TimeSymbol symbol="time_hours" />
+    <RandomSeed value="2024" />
+    <SaveInterval value="0" />
+  </Time>
+  <CellTypes>
+    <CellType name="medium" class="medium">
+      <Constant symbol="affinity" value="0" />
+    </CellType>
+    <CellType name="CRC" class="biological">
+      <Constant symbol="affinity" value="4" />
+      <FreezeMotion>
+        <Condition>1</Condition>
+      </FreezeMotion>
+    </CellType>
+    <CellType name="FDC" class="biological">
+      <Constant symbol="affinity" value="4" />
+      <FreezeMotion>
+        <Condition>1</Condition>
+      </FreezeMotion>
+    </CellType>
+    <CellType name="Tfh" class="biological">
+      <Constant symbol="affinity" value="4" />
+      <FreezeMotion>
+        <Condition>1</Condition>
+      </FreezeMotion>
+    </CellType>
+    <CellType name="BCell" class="biological">
+      <Property symbol="affinity" value="5" />
+      <Property symbol="phase" value="0" />
+      <Property symbol="target_volume" value="50" />
+      <Property symbol="death_timer" value="100" />
+      <Property symbol="pMHCII" value="0" />
+      <Property symbol="AKT" value="0" />
+      <Property symbol="FOXO1" value="100" />
+      <Property symbol="CD40" value="0" />
+      <Property symbol="cRel" value="0" />
+      <Property symbol="MYC" value="0" />
+      <Property symbol="AP4" value="0" />
+      <Property symbol="CXCR4" value="0" />
+      <Property symbol="CXCR5" value="100" />
+      <Property symbol="RelA" value="0" />
+      <Property symbol="BLIMP1" value="0" />
+      <Property symbol="caspase3" value="0" />
+      <Property symbol="lethal" value="0" />
+      <Property symbol="FDC_contact" value="0" />
+      <Property symbol="Tfh_contact" value="0" />
+      <Property symbol="selected_time" value="-100" />
+      <Property symbol="exit_time" value="-100" />
+      <Property symbol="birth_time" value="0" />
+      <Property symbol="cycle_start_time" value="0" />
+      <Property symbol="generation" value="0" />
+      <Property symbol="clone_id" value="0" />
+      <Property symbol="cycle_number" value="0" />
+      <Property symbol="return_origin_x" value="0" />
+      <Property symbol="return_time" value="-100" />
+      <Property symbol="last_entry_time" value="-100" />
+      <Property symbol="last_entry_x" value="0" />
+      <Property symbol="birth_x" value="0" />
+      <Property symbol="birth_y" value="0" />
+      <Property symbol="birth_z" value="0" />
+      <Property symbol="cycle_duration" value="0" />
+      <Property symbol="burst_origin_id" value="0" />
+      <Property symbol="search_start_time" value="0" />
+      <Property symbol="search_origin_x" value="0" />
+      <Property symbol="signal_gain" value="1" />
+      <Property symbol="MYC_peak" value="0" />
+      <Property symbol="AP4_peak" value="0" />
+      <Property symbol="MYC_AUC_hours" value="0" />
+      <Property symbol="split_fraction" value="0.5" />
+      <Property symbol="split_prepared" value="0" />
+      <VolumeConstraint target="target_volume" strength="lambda_volume" />
+      <ConnectivityConstraint />
+      <SurfaceConstraint mode="aspherity" target="1.3" strength="lambda_surface" />
+      <Property symbol="sensed_CXCL12_x" value="0" />
+      <Mapper time-step=".01">
+        <Input value="CXCL12_gradient_x" />
+        <Output symbol-ref="sensed_CXCL12_x" mapping="mean" />
+      </Mapper>
+      <Property symbol="sensed_CXCL12_y" value="0" />
+      <Mapper time-step=".01">
+        <Input value="CXCL12_gradient_y" />
+        <Output symbol-ref="sensed_CXCL12_y" mapping="mean" />
+      </Mapper>
+      <Property symbol="sensed_CXCL12_z" value="0" />
+      <Mapper time-step=".01">
+        <Input value="CXCL12_gradient_z" />
+        <Output symbol-ref="sensed_CXCL12_z" mapping="mean" />
+      </Mapper>
+      <PropertyVector symbol="sensed_CXCL12" value="0,0,0" />
+      <VectorEquation symbol-ref="sensed_CXCL12">
+        <Expression>sensed_CXCL12_x,sensed_CXCL12_y,sensed_CXCL12_z</Expression>
+      </VectorEquation>
+      <Property symbol="sensed_CXCL13_x" value="0" />
+      <Mapper time-step=".01">
+        <Input value="CXCL13_gradient_x" />
+        <Output symbol-ref="sensed_CXCL13_x" mapping="mean" />
+      </Mapper>
+      <Property symbol="sensed_CXCL13_y" value="0" />
+      <Mapper time-step=".01">
+        <Input value="CXCL13_gradient_y" />
+        <Output symbol-ref="sensed_CXCL13_y" mapping="mean" />
+      </Mapper>
+      <Property symbol="sensed_CXCL13_z" value="0" />
+      <Mapper time-step=".01">
+        <Input value="CXCL13_gradient_z" />
+        <Output symbol-ref="sensed_CXCL13_z" mapping="mean" />
+      </Mapper>
+      <PropertyVector symbol="sensed_CXCL13" value="0,0,0" />
+      <VectorEquation symbol-ref="sensed_CXCL13">
+        <Expression>sensed_CXCL13_x,sensed_CXCL13_y,sensed_CXCL13_z</Expression>
+      </VectorEquation>
+      <PropertyVector symbol="chemotactic_signal" value="0,0,0" />
+      <VectorEquation symbol-ref="chemotactic_signal">
+        <Expression>lambda_CXCL12*CXCR4/100*sensed_CXCL12*gradient_response_scale/(gradient_response_scale+sensed_CXCL12.abs) + lambda_CXCL13*CXCR5/100*sensed_CXCL13*gradient_response_scale/(gradient_response_scale+sensed_CXCL13.abs)</Expression>
+      </VectorEquation>
+      <DirectedMotion direction="chemotactic_signal" strength="motility_force_max*chemotactic_signal.abs/(motility_half_response+chemotactic_signal.abs)" update-direction="cell-mass-displacement" />
+      <NeighborhoodReporter time-step=".01">
+        <Input value="cell.type == celltype.FDC.id" scaling="cell" />
+        <Output symbol-ref="FDC_contact" mapping="sum" />
+      </NeighborhoodReporter>
+      <NeighborhoodReporter time-step=".01">
+        <Input value="cell.type == celltype.Tfh.id" scaling="cell" />
+        <Output symbol-ref="Tfh_contact" mapping="sum" />
+      </NeighborhoodReporter>
+      <System solver="Euler [fixed, O(1)]" time-step=".01">
+        <DiffEqn symbol-ref="AKT">
+          <Expression>-AKT/4</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="FOXO1">
+          <Expression>(100-.8*AKT-FOXO1)/.2</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="CD40">
+          <Expression>-CD40/1.3</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="cRel">
+          <Expression>(CD40-cRel)/.2</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="MYC">
+          <Expression>(.65*signal_gain*cRel*if(FOXO1 &lt; 95,1,0)-MYC)/.2</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="AP4">
+          <Expression>AP4_induction*MYC-ln(2)/AP4_half_life_hours*AP4 + 1.0*sqrt(max(0,AP4_induction*MYC+ln(2)/AP4_half_life_hours*max(0,AP4))/.01)*rand_norm(0,1)</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="MYC_AUC_hours">
+          <Expression>if(phase == 3 or phase == 4,MYC,0)</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="pMHCII">
+          <Expression>if(phase == 3 or phase == 4,pMHCII*(-1),0)</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="CXCR4">
+          <Expression>(if((phase == 3 or phase == 4) and FOXO1 &gt; CXCR4_FOXO_threshold,100,0)-CXCR4)/.25</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="RelA">
+          <Expression>(if(phase == 6,100,0)-RelA)/.1</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="BLIMP1">
+          <Expression>(if(RelA &gt; 50,100,0)-BLIMP1)/.2</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="caspase3">
+          <Expression>(if(lethal &gt; 0 or death_timer &lt; 50,100,0)-caspase3)/.1</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="death_timer">
+          <Expression>if(phase == 3 or phase == 4,0,-ln(2)/death_half_life_hours*death_timer)</Expression>
+        </DiffEqn>
+        <DiffEqn symbol-ref="target_volume">
+          <Expression>if(phase == 4 and target_volume &lt; 110 and time_hours-cycle_start_time &gt;= if(cycle_number == 0,first_growth_delay_hours+volume_growth_lag_hours,volume_growth_lag_hours),ln(2)/growth_doubling_hours*target_volume,0)</Expression>
+        </DiffEqn>
+        <Rule symbol-ref="MYC_peak">
+          <Expression>max(MYC_peak,MYC)</Expression>
+        </Rule>
+        <Rule symbol-ref="AP4_peak">
+          <Expression>max(AP4_peak,AP4)</Expression>
+        </Rule>
+      </System>
+      <Event name="Nonnegative AP4 boundary in diffusion approximation" time-step=".01" trigger="when-true">
+        <Condition>AP4 &lt; 0</Condition>
+        <Rule symbol-ref="AP4">
+          <Expression>0</Expression>
+        </Rule>
+      </Event>
+      <Event name="FDC antigen engagement" time-step=".01" trigger="when-true">
+        <Condition>phase == 0 and FDC_contact &gt; 0</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>if(affinity &gt;= 10,6,1)</Expression>
+        </Rule>
+        <Rule symbol-ref="pMHCII">
+          <Expression>10*max(0,affinity)</Expression>
+        </Rule>
+        <Rule symbol-ref="AKT">
+          <Expression>10*max(0,affinity)</Expression>
+        </Rule>
+      </Event>
+      <Event name="Tfh affinity-dependent positive selection" time-step=".01" trigger="when-true">
+        <Condition>phase == 1 and Tfh_contact &gt; 0</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>if(selection_draw &lt; min(.98,pMHCII/100),3,2)</Expression>
+        </Rule>
+        <Rule symbol-ref="CD40">
+          <Expression>if(selection_draw &lt; min(.98,pMHCII/100),pMHCII,0)</Expression>
+        </Rule>
+        <Rule symbol-ref="death_timer">
+          <Expression>if(selection_draw &lt; min(.98,pMHCII/100),100,death_timer)</Expression>
+        </Rule>
+        <Rule symbol-ref="selected_time">
+          <Expression>time_hours</Expression>
+        </Rule>
+        <Rule symbol-ref="cycle_start_time">
+          <Expression>time_hours</Expression>
+        </Rule>
+        <Rule symbol-ref="return_origin_x">
+          <Expression>cell.center.x</Expression>
+        </Rule>
+        <Rule symbol-ref="cycle_number">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="burst_origin_id">
+          <Expression>cell.id</Expression>
+        </Rule>
+        <Rule symbol-ref="signal_gain">
+          <Expression>exp(rand_norm(-0.06124999999999999,0.35))</Expression>
+        </Rule>
+        <Rule symbol-ref="MYC_peak">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="AP4_peak">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="MYC_AUC_hours">
+          <Expression>0</Expression>
+        </Rule>
+        <Intermediate symbol="selection_draw" value="rand_uni(0,1)" />
+      </Event>
+      <Event name="First cell cycle growth after return delay" time-step=".01" trigger="when-true">
+        <Condition>phase == 3 and time_hours-selected_time &gt;= first_growth_delay_hours</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>4</Expression>
+        </Rule>
+      </Event>
+      <Event name="CXCR4 downregulation and start of LZ search" time-step=".01" trigger="when-true">
+        <Condition>phase == 5 and time_hours-exit_time &gt;= .5</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="death_timer">
+          <Expression>100</Expression>
+        </Rule>
+        <Rule symbol-ref="pMHCII">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="CD40">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="last_entry_time">
+          <Expression>-100</Expression>
+        </Rule>
+        <Rule symbol-ref="search_start_time">
+          <Expression>time_hours</Expression>
+        </Rule>
+        <Rule symbol-ref="search_origin_x">
+          <Expression>cell.center.x</Expression>
+        </Rule>
+      </Event>
+      <Event name="Record arrival back in dark zone" time-step=".01" trigger="when-true">
+        <Condition>phase == 3 and cell.center.x &lt; 125 and return_time &lt; selected_time</Condition>
+        <Rule symbol-ref="return_time">
+          <Expression>time_hours</Expression>
+        </Rule>
+      </Event>
+      <Event name="Record arrival in light zone" time-step=".01" trigger="when-true">
+        <Condition>(phase == 0 or phase == 1 or phase == 2) and cell.center.x &gt;= 125 and last_entry_time &lt; 0</Condition>
+        <Rule symbol-ref="last_entry_time">
+          <Expression>time_hours</Expression>
+        </Rule>
+        <Rule symbol-ref="last_entry_x">
+          <Expression>cell.center.x</Expression>
+        </Rule>
+      </Event>
+      <Event name="Prepare complementary lognormal daughter volume targets" time-step=".01" trigger="when-true">
+        <Condition>phase == 4 and target_volume &gt;= 100 and cell.volume &gt;= 100 and split_prepared == 0</Condition>
+        <Rule symbol-ref="split_fraction">
+          <Expression>split_weight/(1+split_weight)</Expression>
+        </Rule>
+        <Rule symbol-ref="split_prepared">
+          <Expression>1</Expression>
+        </Rule>
+        <Intermediate symbol="split_weight" value="exp(rand_norm(0,0.25))" />
+      </Event>
+      <CellDivision division-plane="major" write-log="csv" daughterID="daughter">
+        <Condition>phase == 4 and target_volume &gt;= 100 and cell.volume &gt;= 100 and split_prepared &gt; 0</Condition>
+        <Triggers>
+          <Intermediate symbol="mutation_draw" value="rand_uni(0,1)" />
+          <Intermediate symbol="mutation_step" value="if(rand_uni(0,1)&lt;.5,.25,.5)" />
+          <Rule symbol-ref="target_volume">
+            <Expression>if(daughter == 1,100*split_fraction,100*(1-split_fraction))</Expression>
+          </Rule>
+          <Rule symbol-ref="split_prepared">
+            <Expression>0</Expression>
+          </Rule>
+          <Rule symbol-ref="generation">
+            <Expression>generation+1</Expression>
+          </Rule>
+          <Rule symbol-ref="birth_time">
+            <Expression>time_hours</Expression>
+          </Rule>
+          <Rule symbol-ref="cycle_start_time">
+            <Expression>time_hours</Expression>
+          </Rule>
+          <Rule symbol-ref="birth_x">
+            <Expression>cell.center.x</Expression>
+          </Rule>
+          <Rule symbol-ref="birth_y">
+            <Expression>cell.center.y</Expression>
+          </Rule>
+          <Rule symbol-ref="birth_z">
+            <Expression>cell.center.z</Expression>
+          </Rule>
+          <Rule symbol-ref="cycle_duration">
+            <Expression>time_hours-cycle_start_time</Expression>
+          </Rule>
+          <Rule symbol-ref="cycle_number">
+            <Expression>cycle_number+1</Expression>
+          </Rule>
+          <Rule symbol-ref="lethal">
+            <Expression>if(mutation_draw &lt; .3,1,0)</Expression>
+          </Rule>
+          <Rule symbol-ref="affinity">
+            <Expression>if(mutation_draw &lt; .3,-1,max(0,affinity + if(mutation_draw &lt; .3+.7/3,-mutation_step,if(mutation_draw &lt; .3+2*.7/3,mutation_step,0))))</Expression>
+          </Rule>
+          <Rule symbol-ref="phase">
+            <Expression>if(AP4 &lt; 50,5,4)</Expression>
+          </Rule>
+          <Rule symbol-ref="exit_time">
+            <Expression>time_hours</Expression>
+          </Rule>
+          <Rule symbol-ref="death_timer">
+            <Expression>100</Expression>
+          </Rule>
+          <Rule symbol-ref="pMHCII">
+            <Expression>0</Expression>
+          </Rule>
+          <Rule symbol-ref="CD40">
+            <Expression>0</Expression>
+          </Rule>
+        </Triggers>
+      </CellDivision>
+      <CellDeath name="Apoptosis or plasma-cell GC exit">
+        <Condition>caspase3 &gt; 50 or (phase == 6 and BLIMP1 &gt; 50)</Condition>
+        <Logging>
+          <Symbol symbol-ref="affinity" />
+          <Symbol symbol-ref="phase" />
+          <Symbol symbol-ref="lethal" />
+          <Symbol symbol-ref="death_timer" />
+          <Symbol symbol-ref="caspase3" />
+          <Symbol symbol-ref="BLIMP1" />
+          <Symbol symbol-ref="RelA" />
+          <Symbol symbol-ref="generation" />
+          <Symbol symbol-ref="clone_id" />
+        </Logging>
+      </CellDeath>
+      <Mapper time-step=".01">
+        <Input value="cell.center.x &lt; 125" />
+        <Output symbol-ref="B_left" mapping="sum" />
+      </Mapper>
+      <Mapper time-step=".01">
+        <Input value="cell.center.x &gt;= 125" />
+        <Output symbol-ref="B_right" mapping="sum" />
+      </Mapper>
+      <Mapper time-step=".01">
+        <Input value="affinity" />
+        <Output symbol-ref="affinity_mean" mapping="mean" />
+      </Mapper>
+      <Mapper time-step=".01">
+        <Input value="(phase == 3 or phase == 4) and cell.center.x &lt; 125" />
+        <Output symbol-ref="cycling_left" mapping="sum" />
+      </Mapper>
+      <Mapper time-step=".01">
+        <Input value="(phase == 3 or phase == 4) and cell.center.x &gt;= 125" />
+        <Output symbol-ref="cycling_right" mapping="sum" />
+      </Mapper>
+      <Mapper time-step=".01">
+        <Input value="generation" />
+        <Output symbol-ref="mean_generation" mapping="mean" />
+      </Mapper>
+      <Mapper time-step=".01">
+        <Input value="cell.volume" />
+        <Output symbol-ref="mean_volume" mapping="mean" />
+      </Mapper>
+      <Mapper time-step=".01">
+        <Input value="AP4" />
+        <Output symbol-ref="AP4_mean" mapping="mean" />
+      </Mapper>
+      <Mapper time-step=".01">
+        <Input value="CXCR4" />
+        <Output symbol-ref="CXCR4_mean" mapping="mean" />
+      </Mapper>
+    </CellType>
+  </CellTypes>
+  <CPM>
+    <Interaction default="0">
+      <Contact type1="BCell" type2="BCell" value="5" />
+      <Contact type1="BCell" type2="medium" value="2" />
+      <Contact type1="BCell" type2="CRC" value="3" />
+      <Contact type1="BCell" type2="FDC" value="3" />
+      <Contact type1="BCell" type2="Tfh" value="3" />
+    </Interaction>
+    <ShapeSurface scaling="compat-cc3d">
+      <Neighborhood>
+        <Order>2</Order>
+      </Neighborhood>
+    </ShapeSurface>
+    <MonteCarloSampler stepper="edgelist">
+      <MCSDuration value=".01" />
+      <Neighborhood>
+        <Order>1</Order>
+      </Neighborhood>
+      <MetropolisKinetics temperature="temperature" />
+    </MonteCarloSampler>
+  </CPM>
+  <CellPopulations>
+    <Population type="CRC" size="0">
+      <Cell id="1">
+        <Nodes>35,68,1;35,69,1;35,70,1;35,71,1;35,72,1;35,73,1;36,68,1;36,69,1;36,70,1;36,71,1;36,72,1;36,73,1;37,68,1;37,69,1;37,70,1;37,71,1;37,72,1;37,73,1;38,68,1;38,69,1;38,70,1;38,71,1;38,72,1;38,73,1;39,68,1;39,69,1;39,70,1;39,71,1;39,72,1;39,73,1;40,68,1;40,69,1;40,70,1;40,71,1;40,72,1;40,73,1</Nodes>
+      </Cell>
+      <Cell id="2">
+        <Nodes>35,88,1;35,89,1;35,90,1;35,91,1;35,92,1;35,93,1;36,88,1;36,89,1;36,90,1;36,91,1;36,92,1;36,93,1;37,88,1;37,89,1;37,90,1;37,91,1;37,92,1;37,93,1;38,88,1;38,89,1;38,90,1;38,91,1;38,92,1;38,93,1;39,88,1;39,89,1;39,90,1;39,91,1;39,92,1;39,93,1;40,88,1;40,89,1;40,90,1;40,91,1;40,92,1;40,93,1</Nodes>
+      </Cell>
+      <Cell id="3">
+        <Nodes>35,108,1;35,109,1;35,110,1;35,111,1;35,112,1;35,113,1;36,108,1;36,109,1;36,110,1;36,111,1;36,112,1;36,113,1;37,108,1;37,109,1;37,110,1;37,111,1;37,112,1;37,113,1;38,108,1;38,109,1;38,110,1;38,111,1;38,112,1;38,113,1;39,108,1;39,109,1;39,110,1;39,111,1;39,112,1;39,113,1;40,108,1;40,109,1;40,110,1;40,111,1;40,112,1;40,113,1</Nodes>
+      </Cell>
+      <Cell id="4">
+        <Nodes>35,128,1;35,129,1;35,130,1;35,131,1;35,132,1;35,133,1;36,128,1;36,129,1;36,130,1;36,131,1;36,132,1;36,133,1;37,128,1;37,129,1;37,130,1;37,131,1;37,132,1;37,133,1;38,128,1;38,129,1;38,130,1;38,131,1;38,132,1;38,133,1;39,128,1;39,129,1;39,130,1;39,131,1;39,132,1;39,133,1;40,128,1;40,129,1;40,130,1;40,131,1;40,132,1;40,133,1</Nodes>
+      </Cell>
+      <Cell id="5">
+        <Nodes>55,58,1;55,59,1;55,60,1;55,61,1;55,62,1;55,63,1;56,58,1;56,59,1;56,60,1;56,61,1;56,62,1;56,63,1;57,58,1;57,59,1;57,60,1;57,61,1;57,62,1;57,63,1;58,58,1;58,59,1;58,60,1;58,61,1;58,62,1;58,63,1;59,58,1;59,59,1;59,60,1;59,61,1;59,62,1;59,63,1;60,58,1;60,59,1;60,60,1;60,61,1;60,62,1;60,63,1</Nodes>
+      </Cell>
+      <Cell id="6">
+        <Nodes>55,78,1;55,79,1;55,80,1;55,81,1;55,82,1;55,83,1;56,78,1;56,79,1;56,80,1;56,81,1;56,82,1;56,83,1;57,78,1;57,79,1;57,80,1;57,81,1;57,82,1;57,83,1;58,78,1;58,79,1;58,80,1;58,81,1;58,82,1;58,83,1;59,78,1;59,79,1;59,80,1;59,81,1;59,82,1;59,83,1;60,78,1;60,79,1;60,80,1;60,81,1;60,82,1;60,83,1</Nodes>
+      </Cell>
+      <Cell id="7">
+        <Nodes>55,98,1;55,99,1;55,100,1;55,101,1;55,102,1;55,103,1;56,98,1;56,99,1;56,100,1;56,101,1;56,102,1;56,103,1;57,98,1;57,99,1;57,100,1;57,101,1;57,102,1;57,103,1;58,98,1;58,99,1;58,100,1;58,101,1;58,102,1;58,103,1;59,98,1;59,99,1;59,100,1;59,101,1;59,102,1;59,103,1;60,98,1;60,99,1;60,100,1;60,101,1;60,102,1;60,103,1</Nodes>
+      </Cell>
+      <Cell id="8">
+        <Nodes>55,118,1;55,119,1;55,120,1;55,121,1;55,122,1;55,123,1;56,118,1;56,119,1;56,120,1;56,121,1;56,122,1;56,123,1;57,118,1;57,119,1;57,120,1;57,121,1;57,122,1;57,123,1;58,118,1;58,119,1;58,120,1;58,121,1;58,122,1;58,123,1;59,118,1;59,119,1;59,120,1;59,121,1;59,122,1;59,123,1;60,118,1;60,119,1;60,120,1;60,121,1;60,122,1;60,123,1</Nodes>
+      </Cell>
+      <Cell id="9">
+        <Nodes>55,138,1;55,139,1;55,140,1;55,141,1;55,142,1;55,143,1;56,138,1;56,139,1;56,140,1;56,141,1;56,142,1;56,143,1;57,138,1;57,139,1;57,140,1;57,141,1;57,142,1;57,143,1;58,138,1;58,139,1;58,140,1;58,141,1;58,142,1;58,143,1;59,138,1;59,139,1;59,140,1;59,141,1;59,142,1;59,143,1;60,138,1;60,139,1;60,140,1;60,141,1;60,142,1;60,143,1</Nodes>
+      </Cell>
+      <Cell id="10">
+        <Nodes>75,48,1;75,49,1;75,50,1;75,51,1;75,52,1;75,53,1;76,48,1;76,49,1;76,50,1;76,51,1;76,52,1;76,53,1;77,48,1;77,49,1;77,50,1;77,51,1;77,52,1;77,53,1;78,48,1;78,49,1;78,50,1;78,51,1;78,52,1;78,53,1;79,48,1;79,49,1;79,50,1;79,51,1;79,52,1;79,53,1;80,48,1;80,49,1;80,50,1;80,51,1;80,52,1;80,53,1</Nodes>
+      </Cell>
+      <Cell id="11">
+        <Nodes>75,68,1;75,69,1;75,70,1;75,71,1;75,72,1;75,73,1;76,68,1;76,69,1;76,70,1;76,71,1;76,72,1;76,73,1;77,68,1;77,69,1;77,70,1;77,71,1;77,72,1;77,73,1;78,68,1;78,69,1;78,70,1;78,71,1;78,72,1;78,73,1;79,68,1;79,69,1;79,70,1;79,71,1;79,72,1;79,73,1;80,68,1;80,69,1;80,70,1;80,71,1;80,72,1;80,73,1</Nodes>
+      </Cell>
+      <Cell id="12">
+        <Nodes>75,128,1;75,129,1;75,130,1;75,131,1;75,132,1;75,133,1;76,128,1;76,129,1;76,130,1;76,131,1;76,132,1;76,133,1;77,128,1;77,129,1;77,130,1;77,131,1;77,132,1;77,133,1;78,128,1;78,129,1;78,130,1;78,131,1;78,132,1;78,133,1;79,128,1;79,129,1;79,130,1;79,131,1;79,132,1;79,133,1;80,128,1;80,129,1;80,130,1;80,131,1;80,132,1;80,133,1</Nodes>
+      </Cell>
+      <Cell id="13">
+        <Nodes>75,148,1;75,149,1;75,150,1;75,151,1;75,152,1;75,153,1;76,148,1;76,149,1;76,150,1;76,151,1;76,152,1;76,153,1;77,148,1;77,149,1;77,150,1;77,151,1;77,152,1;77,153,1;78,148,1;78,149,1;78,150,1;78,151,1;78,152,1;78,153,1;79,148,1;79,149,1;79,150,1;79,151,1;79,152,1;79,153,1;80,148,1;80,149,1;80,150,1;80,151,1;80,152,1;80,153,1</Nodes>
+      </Cell>
+      <Cell id="14">
+        <Nodes>95,48,1;95,49,1;95,50,1;95,51,1;95,52,1;95,53,1;96,48,1;96,49,1;96,50,1;96,51,1;96,52,1;96,53,1;97,48,1;97,49,1;97,50,1;97,51,1;97,52,1;97,53,1;98,48,1;98,49,1;98,50,1;98,51,1;98,52,1;98,53,1;99,48,1;99,49,1;99,50,1;99,51,1;99,52,1;99,53,1;100,48,1;100,49,1;100,50,1;100,51,1;100,52,1;100,53,1</Nodes>
+      </Cell>
+      <Cell id="15">
+        <Nodes>95,148,1;95,149,1;95,150,1;95,151,1;95,152,1;95,153,1;96,148,1;96,149,1;96,150,1;96,151,1;96,152,1;96,153,1;97,148,1;97,149,1;97,150,1;97,151,1;97,152,1;97,153,1;98,148,1;98,149,1;98,150,1;98,151,1;98,152,1;98,153,1;99,148,1;99,149,1;99,150,1;99,151,1;99,152,1;99,153,1;100,148,1;100,149,1;100,150,1;100,151,1;100,152,1;100,153,1</Nodes>
+      </Cell>
+      <Cell id="16">
+        <Nodes>35,68,5;35,69,5;35,70,5;35,71,5;35,72,5;35,73,5;36,68,5;36,69,5;36,70,5;36,71,5;36,72,5;36,73,5;37,68,5;37,69,5;37,70,5;37,71,5;37,72,5;37,73,5;38,68,5;38,69,5;38,70,5;38,71,5;38,72,5;38,73,5;39,68,5;39,69,5;39,70,5;39,71,5;39,72,5;39,73,5;40,68,5;40,69,5;40,70,5;40,71,5;40,72,5;40,73,5</Nodes>
+      </Cell>
+      <Cell id="17">
+        <Nodes>35,88,5;35,89,5;35,90,5;35,91,5;35,92,5;35,93,5;36,88,5;36,89,5;36,90,5;36,91,5;36,92,5;36,93,5;37,88,5;37,89,5;37,90,5;37,91,5;37,92,5;37,93,5;38,88,5;38,89,5;38,90,5;38,91,5;38,92,5;38,93,5;39,88,5;39,89,5;39,90,5;39,91,5;39,92,5;39,93,5;40,88,5;40,89,5;40,90,5;40,91,5;40,92,5;40,93,5</Nodes>
+      </Cell>
+      <Cell id="18">
+        <Nodes>35,108,5;35,109,5;35,110,5;35,111,5;35,112,5;35,113,5;36,108,5;36,109,5;36,110,5;36,111,5;36,112,5;36,113,5;37,108,5;37,109,5;37,110,5;37,111,5;37,112,5;37,113,5;38,108,5;38,109,5;38,110,5;38,111,5;38,112,5;38,113,5;39,108,5;39,109,5;39,110,5;39,111,5;39,112,5;39,113,5;40,108,5;40,109,5;40,110,5;40,111,5;40,112,5;40,113,5</Nodes>
+      </Cell>
+      <Cell id="19">
+        <Nodes>35,128,5;35,129,5;35,130,5;35,131,5;35,132,5;35,133,5;36,128,5;36,129,5;36,130,5;36,131,5;36,132,5;36,133,5;37,128,5;37,129,5;37,130,5;37,131,5;37,132,5;37,133,5;38,128,5;38,129,5;38,130,5;38,131,5;38,132,5;38,133,5;39,128,5;39,129,5;39,130,5;39,131,5;39,132,5;39,133,5;40,128,5;40,129,5;40,130,5;40,131,5;40,132,5;40,133,5</Nodes>
+      </Cell>
+      <Cell id="20">
+        <Nodes>55,58,5;55,59,5;55,60,5;55,61,5;55,62,5;55,63,5;56,58,5;56,59,5;56,60,5;56,61,5;56,62,5;56,63,5;57,58,5;57,59,5;57,60,5;57,61,5;57,62,5;57,63,5;58,58,5;58,59,5;58,60,5;58,61,5;58,62,5;58,63,5;59,58,5;59,59,5;59,60,5;59,61,5;59,62,5;59,63,5;60,58,5;60,59,5;60,60,5;60,61,5;60,62,5;60,63,5</Nodes>
+      </Cell>
+      <Cell id="21">
+        <Nodes>55,78,5;55,79,5;55,80,5;55,81,5;55,82,5;55,83,5;56,78,5;56,79,5;56,80,5;56,81,5;56,82,5;56,83,5;57,78,5;57,79,5;57,80,5;57,81,5;57,82,5;57,83,5;58,78,5;58,79,5;58,80,5;58,81,5;58,82,5;58,83,5;59,78,5;59,79,5;59,80,5;59,81,5;59,82,5;59,83,5;60,78,5;60,79,5;60,80,5;60,81,5;60,82,5;60,83,5</Nodes>
+      </Cell>
+      <Cell id="22">
+        <Nodes>55,98,5;55,99,5;55,100,5;55,101,5;55,102,5;55,103,5;56,98,5;56,99,5;56,100,5;56,101,5;56,102,5;56,103,5;57,98,5;57,99,5;57,100,5;57,101,5;57,102,5;57,103,5;58,98,5;58,99,5;58,100,5;58,101,5;58,102,5;58,103,5;59,98,5;59,99,5;59,100,5;59,101,5;59,102,5;59,103,5;60,98,5;60,99,5;60,100,5;60,101,5;60,102,5;60,103,5</Nodes>
+      </Cell>
+      <Cell id="23">
+        <Nodes>55,118,5;55,119,5;55,120,5;55,121,5;55,122,5;55,123,5;56,118,5;56,119,5;56,120,5;56,121,5;56,122,5;56,123,5;57,118,5;57,119,5;57,120,5;57,121,5;57,122,5;57,123,5;58,118,5;58,119,5;58,120,5;58,121,5;58,122,5;58,123,5;59,118,5;59,119,5;59,120,5;59,121,5;59,122,5;59,123,5;60,118,5;60,119,5;60,120,5;60,121,5;60,122,5;60,123,5</Nodes>
+      </Cell>
+      <Cell id="24">
+        <Nodes>55,138,5;55,139,5;55,140,5;55,141,5;55,142,5;55,143,5;56,138,5;56,139,5;56,140,5;56,141,5;56,142,5;56,143,5;57,138,5;57,139,5;57,140,5;57,141,5;57,142,5;57,143,5;58,138,5;58,139,5;58,140,5;58,141,5;58,142,5;58,143,5;59,138,5;59,139,5;59,140,5;59,141,5;59,142,5;59,143,5;60,138,5;60,139,5;60,140,5;60,141,5;60,142,5;60,143,5</Nodes>
+      </Cell>
+      <Cell id="25">
+        <Nodes>75,48,5;75,49,5;75,50,5;75,51,5;75,52,5;75,53,5;76,48,5;76,49,5;76,50,5;76,51,5;76,52,5;76,53,5;77,48,5;77,49,5;77,50,5;77,51,5;77,52,5;77,53,5;78,48,5;78,49,5;78,50,5;78,51,5;78,52,5;78,53,5;79,48,5;79,49,5;79,50,5;79,51,5;79,52,5;79,53,5;80,48,5;80,49,5;80,50,5;80,51,5;80,52,5;80,53,5</Nodes>
+      </Cell>
+      <Cell id="26">
+        <Nodes>75,68,5;75,69,5;75,70,5;75,71,5;75,72,5;75,73,5;76,68,5;76,69,5;76,70,5;76,71,5;76,72,5;76,73,5;77,68,5;77,69,5;77,70,5;77,71,5;77,72,5;77,73,5;78,68,5;78,69,5;78,70,5;78,71,5;78,72,5;78,73,5;79,68,5;79,69,5;79,70,5;79,71,5;79,72,5;79,73,5;80,68,5;80,69,5;80,70,5;80,71,5;80,72,5;80,73,5</Nodes>
+      </Cell>
+      <Cell id="27">
+        <Nodes>75,128,5;75,129,5;75,130,5;75,131,5;75,132,5;75,133,5;76,128,5;76,129,5;76,130,5;76,131,5;76,132,5;76,133,5;77,128,5;77,129,5;77,130,5;77,131,5;77,132,5;77,133,5;78,128,5;78,129,5;78,130,5;78,131,5;78,132,5;78,133,5;79,128,5;79,129,5;79,130,5;79,131,5;79,132,5;79,133,5;80,128,5;80,129,5;80,130,5;80,131,5;80,132,5;80,133,5</Nodes>
+      </Cell>
+      <Cell id="28">
+        <Nodes>75,148,5;75,149,5;75,150,5;75,151,5;75,152,5;75,153,5;76,148,5;76,149,5;76,150,5;76,151,5;76,152,5;76,153,5;77,148,5;77,149,5;77,150,5;77,151,5;77,152,5;77,153,5;78,148,5;78,149,5;78,150,5;78,151,5;78,152,5;78,153,5;79,148,5;79,149,5;79,150,5;79,151,5;79,152,5;79,153,5;80,148,5;80,149,5;80,150,5;80,151,5;80,152,5;80,153,5</Nodes>
+      </Cell>
+      <Cell id="29">
+        <Nodes>95,48,5;95,49,5;95,50,5;95,51,5;95,52,5;95,53,5;96,48,5;96,49,5;96,50,5;96,51,5;96,52,5;96,53,5;97,48,5;97,49,5;97,50,5;97,51,5;97,52,5;97,53,5;98,48,5;98,49,5;98,50,5;98,51,5;98,52,5;98,53,5;99,48,5;99,49,5;99,50,5;99,51,5;99,52,5;99,53,5;100,48,5;100,49,5;100,50,5;100,51,5;100,52,5;100,53,5</Nodes>
+      </Cell>
+      <Cell id="30">
+        <Nodes>95,148,5;95,149,5;95,150,5;95,151,5;95,152,5;95,153,5;96,148,5;96,149,5;96,150,5;96,151,5;96,152,5;96,153,5;97,148,5;97,149,5;97,150,5;97,151,5;97,152,5;97,153,5;98,148,5;98,149,5;98,150,5;98,151,5;98,152,5;98,153,5;99,148,5;99,149,5;99,150,5;99,151,5;99,152,5;99,153,5;100,148,5;100,149,5;100,150,5;100,151,5;100,152,5;100,153,5</Nodes>
+      </Cell>
+      <Cell id="31">
+        <Nodes>35,68,9;35,69,9;35,70,9;35,71,9;35,72,9;35,73,9;36,68,9;36,69,9;36,70,9;36,71,9;36,72,9;36,73,9;37,68,9;37,69,9;37,70,9;37,71,9;37,72,9;37,73,9;38,68,9;38,69,9;38,70,9;38,71,9;38,72,9;38,73,9;39,68,9;39,69,9;39,70,9;39,71,9;39,72,9;39,73,9;40,68,9;40,69,9;40,70,9;40,71,9;40,72,9;40,73,9</Nodes>
+      </Cell>
+      <Cell id="32">
+        <Nodes>35,88,9;35,89,9;35,90,9;35,91,9;35,92,9;35,93,9;36,88,9;36,89,9;36,90,9;36,91,9;36,92,9;36,93,9;37,88,9;37,89,9;37,90,9;37,91,9;37,92,9;37,93,9;38,88,9;38,89,9;38,90,9;38,91,9;38,92,9;38,93,9;39,88,9;39,89,9;39,90,9;39,91,9;39,92,9;39,93,9;40,88,9;40,89,9;40,90,9;40,91,9;40,92,9;40,93,9</Nodes>
+      </Cell>
+      <Cell id="33">
+        <Nodes>35,108,9;35,109,9;35,110,9;35,111,9;35,112,9;35,113,9;36,108,9;36,109,9;36,110,9;36,111,9;36,112,9;36,113,9;37,108,9;37,109,9;37,110,9;37,111,9;37,112,9;37,113,9;38,108,9;38,109,9;38,110,9;38,111,9;38,112,9;38,113,9;39,108,9;39,109,9;39,110,9;39,111,9;39,112,9;39,113,9;40,108,9;40,109,9;40,110,9;40,111,9;40,112,9;40,113,9</Nodes>
+      </Cell>
+      <Cell id="34">
+        <Nodes>35,128,9;35,129,9;35,130,9;35,131,9;35,132,9;35,133,9;36,128,9;36,129,9;36,130,9;36,131,9;36,132,9;36,133,9;37,128,9;37,129,9;37,130,9;37,131,9;37,132,9;37,133,9;38,128,9;38,129,9;38,130,9;38,131,9;38,132,9;38,133,9;39,128,9;39,129,9;39,130,9;39,131,9;39,132,9;39,133,9;40,128,9;40,129,9;40,130,9;40,131,9;40,132,9;40,133,9</Nodes>
+      </Cell>
+      <Cell id="35">
+        <Nodes>55,58,9;55,59,9;55,60,9;55,61,9;55,62,9;55,63,9;56,58,9;56,59,9;56,60,9;56,61,9;56,62,9;56,63,9;57,58,9;57,59,9;57,60,9;57,61,9;57,62,9;57,63,9;58,58,9;58,59,9;58,60,9;58,61,9;58,62,9;58,63,9;59,58,9;59,59,9;59,60,9;59,61,9;59,62,9;59,63,9;60,58,9;60,59,9;60,60,9;60,61,9;60,62,9;60,63,9</Nodes>
+      </Cell>
+      <Cell id="36">
+        <Nodes>55,78,9;55,79,9;55,80,9;55,81,9;55,82,9;55,83,9;56,78,9;56,79,9;56,80,9;56,81,9;56,82,9;56,83,9;57,78,9;57,79,9;57,80,9;57,81,9;57,82,9;57,83,9;58,78,9;58,79,9;58,80,9;58,81,9;58,82,9;58,83,9;59,78,9;59,79,9;59,80,9;59,81,9;59,82,9;59,83,9;60,78,9;60,79,9;60,80,9;60,81,9;60,82,9;60,83,9</Nodes>
+      </Cell>
+      <Cell id="37">
+        <Nodes>55,98,9;55,99,9;55,100,9;55,101,9;55,102,9;55,103,9;56,98,9;56,99,9;56,100,9;56,101,9;56,102,9;56,103,9;57,98,9;57,99,9;57,100,9;57,101,9;57,102,9;57,103,9;58,98,9;58,99,9;58,100,9;58,101,9;58,102,9;58,103,9;59,98,9;59,99,9;59,100,9;59,101,9;59,102,9;59,103,9;60,98,9;60,99,9;60,100,9;60,101,9;60,102,9;60,103,9</Nodes>
+      </Cell>
+      <Cell id="38">
+        <Nodes>55,118,9;55,119,9;55,120,9;55,121,9;55,122,9;55,123,9;56,118,9;56,119,9;56,120,9;56,121,9;56,122,9;56,123,9;57,118,9;57,119,9;57,120,9;57,121,9;57,122,9;57,123,9;58,118,9;58,119,9;58,120,9;58,121,9;58,122,9;58,123,9;59,118,9;59,119,9;59,120,9;59,121,9;59,122,9;59,123,9;60,118,9;60,119,9;60,120,9;60,121,9;60,122,9;60,123,9</Nodes>
+      </Cell>
+      <Cell id="39">
+        <Nodes>55,138,9;55,139,9;55,140,9;55,141,9;55,142,9;55,143,9;56,138,9;56,139,9;56,140,9;56,141,9;56,142,9;56,143,9;57,138,9;57,139,9;57,140,9;57,141,9;57,142,9;57,143,9;58,138,9;58,139,9;58,140,9;58,141,9;58,142,9;58,143,9;59,138,9;59,139,9;59,140,9;59,141,9;59,142,9;59,143,9;60,138,9;60,139,9;60,140,9;60,141,9;60,142,9;60,143,9</Nodes>
+      </Cell>
+      <Cell id="40">
+        <Nodes>75,48,9;75,49,9;75,50,9;75,51,9;75,52,9;75,53,9;76,48,9;76,49,9;76,50,9;76,51,9;76,52,9;76,53,9;77,48,9;77,49,9;77,50,9;77,51,9;77,52,9;77,53,9;78,48,9;78,49,9;78,50,9;78,51,9;78,52,9;78,53,9;79,48,9;79,49,9;79,50,9;79,51,9;79,52,9;79,53,9;80,48,9;80,49,9;80,50,9;80,51,9;80,52,9;80,53,9</Nodes>
+      </Cell>
+      <Cell id="41">
+        <Nodes>75,68,9;75,69,9;75,70,9;75,71,9;75,72,9;75,73,9;76,68,9;76,69,9;76,70,9;76,71,9;76,72,9;76,73,9;77,68,9;77,69,9;77,70,9;77,71,9;77,72,9;77,73,9;78,68,9;78,69,9;78,70,9;78,71,9;78,72,9;78,73,9;79,68,9;79,69,9;79,70,9;79,71,9;79,72,9;79,73,9;80,68,9;80,69,9;80,70,9;80,71,9;80,72,9;80,73,9</Nodes>
+      </Cell>
+      <Cell id="42">
+        <Nodes>75,128,9;75,129,9;75,130,9;75,131,9;75,132,9;75,133,9;76,128,9;76,129,9;76,130,9;76,131,9;76,132,9;76,133,9;77,128,9;77,129,9;77,130,9;77,131,9;77,132,9;77,133,9;78,128,9;78,129,9;78,130,9;78,131,9;78,132,9;78,133,9;79,128,9;79,129,9;79,130,9;79,131,9;79,132,9;79,133,9;80,128,9;80,129,9;80,130,9;80,131,9;80,132,9;80,133,9</Nodes>
+      </Cell>
+      <Cell id="43">
+        <Nodes>75,148,9;75,149,9;75,150,9;75,151,9;75,152,9;75,153,9;76,148,9;76,149,9;76,150,9;76,151,9;76,152,9;76,153,9;77,148,9;77,149,9;77,150,9;77,151,9;77,152,9;77,153,9;78,148,9;78,149,9;78,150,9;78,151,9;78,152,9;78,153,9;79,148,9;79,149,9;79,150,9;79,151,9;79,152,9;79,153,9;80,148,9;80,149,9;80,150,9;80,151,9;80,152,9;80,153,9</Nodes>
+      </Cell>
+      <Cell id="44">
+        <Nodes>95,48,9;95,49,9;95,50,9;95,51,9;95,52,9;95,53,9;96,48,9;96,49,9;96,50,9;96,51,9;96,52,9;96,53,9;97,48,9;97,49,9;97,50,9;97,51,9;97,52,9;97,53,9;98,48,9;98,49,9;98,50,9;98,51,9;98,52,9;98,53,9;99,48,9;99,49,9;99,50,9;99,51,9;99,52,9;99,53,9;100,48,9;100,49,9;100,50,9;100,51,9;100,52,9;100,53,9</Nodes>
+      </Cell>
+      <Cell id="45">
+        <Nodes>95,148,9;95,149,9;95,150,9;95,151,9;95,152,9;95,153,9;96,148,9;96,149,9;96,150,9;96,151,9;96,152,9;96,153,9;97,148,9;97,149,9;97,150,9;97,151,9;97,152,9;97,153,9;98,148,9;98,149,9;98,150,9;98,151,9;98,152,9;98,153,9;99,148,9;99,149,9;99,150,9;99,151,9;99,152,9;99,153,9;100,148,9;100,149,9;100,150,9;100,151,9;100,152,9;100,153,9</Nodes>
+      </Cell>
+    </Population>
+    <Population type="FDC" size="0">
+      <Cell id="46">
+        <Nodes>210,68,1;210,69,1;210,70,1;210,71,1;210,72,1;210,73,1;211,68,1;211,69,1;211,70,1;211,71,1;211,72,1;211,73,1;212,68,1;212,69,1;212,70,1;212,71,1;212,72,1;212,73,1;213,68,1;213,69,1;213,70,1;213,71,1;213,72,1;213,73,1;214,68,1;214,69,1;214,70,1;214,71,1;214,72,1;214,73,1;215,68,1;215,69,1;215,70,1;215,71,1;215,72,1;215,73,1</Nodes>
+      </Cell>
+      <Cell id="47">
+        <Nodes>210,88,1;210,89,1;210,90,1;210,91,1;210,92,1;210,93,1;211,88,1;211,89,1;211,90,1;211,91,1;211,92,1;211,93,1;212,88,1;212,89,1;212,90,1;212,91,1;212,92,1;212,93,1;213,88,1;213,89,1;213,90,1;213,91,1;213,92,1;213,93,1;214,88,1;214,89,1;214,90,1;214,91,1;214,92,1;214,93,1;215,88,1;215,89,1;215,90,1;215,91,1;215,92,1;215,93,1</Nodes>
+      </Cell>
+      <Cell id="48">
+        <Nodes>210,108,1;210,109,1;210,110,1;210,111,1;210,112,1;210,113,1;211,108,1;211,109,1;211,110,1;211,111,1;211,112,1;211,113,1;212,108,1;212,109,1;212,110,1;212,111,1;212,112,1;212,113,1;213,108,1;213,109,1;213,110,1;213,111,1;213,112,1;213,113,1;214,108,1;214,109,1;214,110,1;214,111,1;214,112,1;214,113,1;215,108,1;215,109,1;215,110,1;215,111,1;215,112,1;215,113,1</Nodes>
+      </Cell>
+      <Cell id="49">
+        <Nodes>210,128,1;210,129,1;210,130,1;210,131,1;210,132,1;210,133,1;211,128,1;211,129,1;211,130,1;211,131,1;211,132,1;211,133,1;212,128,1;212,129,1;212,130,1;212,131,1;212,132,1;212,133,1;213,128,1;213,129,1;213,130,1;213,131,1;213,132,1;213,133,1;214,128,1;214,129,1;214,130,1;214,131,1;214,132,1;214,133,1;215,128,1;215,129,1;215,130,1;215,131,1;215,132,1;215,133,1</Nodes>
+      </Cell>
+      <Cell id="50">
+        <Nodes>190,58,1;190,59,1;190,60,1;190,61,1;190,62,1;190,63,1;191,58,1;191,59,1;191,60,1;191,61,1;191,62,1;191,63,1;192,58,1;192,59,1;192,60,1;192,61,1;192,62,1;192,63,1;193,58,1;193,59,1;193,60,1;193,61,1;193,62,1;193,63,1;194,58,1;194,59,1;194,60,1;194,61,1;194,62,1;194,63,1;195,58,1;195,59,1;195,60,1;195,61,1;195,62,1;195,63,1</Nodes>
+      </Cell>
+      <Cell id="51">
+        <Nodes>190,78,1;190,79,1;190,80,1;190,81,1;190,82,1;190,83,1;191,78,1;191,79,1;191,80,1;191,81,1;191,82,1;191,83,1;192,78,1;192,79,1;192,80,1;192,81,1;192,82,1;192,83,1;193,78,1;193,79,1;193,80,1;193,81,1;193,82,1;193,83,1;194,78,1;194,79,1;194,80,1;194,81,1;194,82,1;194,83,1;195,78,1;195,79,1;195,80,1;195,81,1;195,82,1;195,83,1</Nodes>
+      </Cell>
+      <Cell id="52">
+        <Nodes>190,98,1;190,99,1;190,100,1;190,101,1;190,102,1;190,103,1;191,98,1;191,99,1;191,100,1;191,101,1;191,102,1;191,103,1;192,98,1;192,99,1;192,100,1;192,101,1;192,102,1;192,103,1;193,98,1;193,99,1;193,100,1;193,101,1;193,102,1;193,103,1;194,98,1;194,99,1;194,100,1;194,101,1;194,102,1;194,103,1;195,98,1;195,99,1;195,100,1;195,101,1;195,102,1;195,103,1</Nodes>
+      </Cell>
+      <Cell id="53">
+        <Nodes>190,118,1;190,119,1;190,120,1;190,121,1;190,122,1;190,123,1;191,118,1;191,119,1;191,120,1;191,121,1;191,122,1;191,123,1;192,118,1;192,119,1;192,120,1;192,121,1;192,122,1;192,123,1;193,118,1;193,119,1;193,120,1;193,121,1;193,122,1;193,123,1;194,118,1;194,119,1;194,120,1;194,121,1;194,122,1;194,123,1;195,118,1;195,119,1;195,120,1;195,121,1;195,122,1;195,123,1</Nodes>
+      </Cell>
+      <Cell id="54">
+        <Nodes>190,138,1;190,139,1;190,140,1;190,141,1;190,142,1;190,143,1;191,138,1;191,139,1;191,140,1;191,141,1;191,142,1;191,143,1;192,138,1;192,139,1;192,140,1;192,141,1;192,142,1;192,143,1;193,138,1;193,139,1;193,140,1;193,141,1;193,142,1;193,143,1;194,138,1;194,139,1;194,140,1;194,141,1;194,142,1;194,143,1;195,138,1;195,139,1;195,140,1;195,141,1;195,142,1;195,143,1</Nodes>
+      </Cell>
+      <Cell id="55">
+        <Nodes>170,48,1;170,49,1;170,50,1;170,51,1;170,52,1;170,53,1;171,48,1;171,49,1;171,50,1;171,51,1;171,52,1;171,53,1;172,48,1;172,49,1;172,50,1;172,51,1;172,52,1;172,53,1;173,48,1;173,49,1;173,50,1;173,51,1;173,52,1;173,53,1;174,48,1;174,49,1;174,50,1;174,51,1;174,52,1;174,53,1;175,48,1;175,49,1;175,50,1;175,51,1;175,52,1;175,53,1</Nodes>
+      </Cell>
+      <Cell id="56">
+        <Nodes>170,68,1;170,69,1;170,70,1;170,71,1;170,72,1;170,73,1;171,68,1;171,69,1;171,70,1;171,71,1;171,72,1;171,73,1;172,68,1;172,69,1;172,70,1;172,71,1;172,72,1;172,73,1;173,68,1;173,69,1;173,70,1;173,71,1;173,72,1;173,73,1;174,68,1;174,69,1;174,70,1;174,71,1;174,72,1;174,73,1;175,68,1;175,69,1;175,70,1;175,71,1;175,72,1;175,73,1</Nodes>
+      </Cell>
+      <Cell id="57">
+        <Nodes>170,128,1;170,129,1;170,130,1;170,131,1;170,132,1;170,133,1;171,128,1;171,129,1;171,130,1;171,131,1;171,132,1;171,133,1;172,128,1;172,129,1;172,130,1;172,131,1;172,132,1;172,133,1;173,128,1;173,129,1;173,130,1;173,131,1;173,132,1;173,133,1;174,128,1;174,129,1;174,130,1;174,131,1;174,132,1;174,133,1;175,128,1;175,129,1;175,130,1;175,131,1;175,132,1;175,133,1</Nodes>
+      </Cell>
+      <Cell id="58">
+        <Nodes>170,148,1;170,149,1;170,150,1;170,151,1;170,152,1;170,153,1;171,148,1;171,149,1;171,150,1;171,151,1;171,152,1;171,153,1;172,148,1;172,149,1;172,150,1;172,151,1;172,152,1;172,153,1;173,148,1;173,149,1;173,150,1;173,151,1;173,152,1;173,153,1;174,148,1;174,149,1;174,150,1;174,151,1;174,152,1;174,153,1;175,148,1;175,149,1;175,150,1;175,151,1;175,152,1;175,153,1</Nodes>
+      </Cell>
+      <Cell id="59">
+        <Nodes>150,48,1;150,49,1;150,50,1;150,51,1;150,52,1;150,53,1;151,48,1;151,49,1;151,50,1;151,51,1;151,52,1;151,53,1;152,48,1;152,49,1;152,50,1;152,51,1;152,52,1;152,53,1;153,48,1;153,49,1;153,50,1;153,51,1;153,52,1;153,53,1;154,48,1;154,49,1;154,50,1;154,51,1;154,52,1;154,53,1;155,48,1;155,49,1;155,50,1;155,51,1;155,52,1;155,53,1</Nodes>
+      </Cell>
+      <Cell id="60">
+        <Nodes>150,148,1;150,149,1;150,150,1;150,151,1;150,152,1;150,153,1;151,148,1;151,149,1;151,150,1;151,151,1;151,152,1;151,153,1;152,148,1;152,149,1;152,150,1;152,151,1;152,152,1;152,153,1;153,148,1;153,149,1;153,150,1;153,151,1;153,152,1;153,153,1;154,148,1;154,149,1;154,150,1;154,151,1;154,152,1;154,153,1;155,148,1;155,149,1;155,150,1;155,151,1;155,152,1;155,153,1</Nodes>
+      </Cell>
+      <Cell id="61">
+        <Nodes>210,68,5;210,69,5;210,70,5;210,71,5;210,72,5;210,73,5;211,68,5;211,69,5;211,70,5;211,71,5;211,72,5;211,73,5;212,68,5;212,69,5;212,70,5;212,71,5;212,72,5;212,73,5;213,68,5;213,69,5;213,70,5;213,71,5;213,72,5;213,73,5;214,68,5;214,69,5;214,70,5;214,71,5;214,72,5;214,73,5;215,68,5;215,69,5;215,70,5;215,71,5;215,72,5;215,73,5</Nodes>
+      </Cell>
+      <Cell id="62">
+        <Nodes>210,88,5;210,89,5;210,90,5;210,91,5;210,92,5;210,93,5;211,88,5;211,89,5;211,90,5;211,91,5;211,92,5;211,93,5;212,88,5;212,89,5;212,90,5;212,91,5;212,92,5;212,93,5;213,88,5;213,89,5;213,90,5;213,91,5;213,92,5;213,93,5;214,88,5;214,89,5;214,90,5;214,91,5;214,92,5;214,93,5;215,88,5;215,89,5;215,90,5;215,91,5;215,92,5;215,93,5</Nodes>
+      </Cell>
+      <Cell id="63">
+        <Nodes>210,108,5;210,109,5;210,110,5;210,111,5;210,112,5;210,113,5;211,108,5;211,109,5;211,110,5;211,111,5;211,112,5;211,113,5;212,108,5;212,109,5;212,110,5;212,111,5;212,112,5;212,113,5;213,108,5;213,109,5;213,110,5;213,111,5;213,112,5;213,113,5;214,108,5;214,109,5;214,110,5;214,111,5;214,112,5;214,113,5;215,108,5;215,109,5;215,110,5;215,111,5;215,112,5;215,113,5</Nodes>
+      </Cell>
+      <Cell id="64">
+        <Nodes>210,128,5;210,129,5;210,130,5;210,131,5;210,132,5;210,133,5;211,128,5;211,129,5;211,130,5;211,131,5;211,132,5;211,133,5;212,128,5;212,129,5;212,130,5;212,131,5;212,132,5;212,133,5;213,128,5;213,129,5;213,130,5;213,131,5;213,132,5;213,133,5;214,128,5;214,129,5;214,130,5;214,131,5;214,132,5;214,133,5;215,128,5;215,129,5;215,130,5;215,131,5;215,132,5;215,133,5</Nodes>
+      </Cell>
+      <Cell id="65">
+        <Nodes>190,58,5;190,59,5;190,60,5;190,61,5;190,62,5;190,63,5;191,58,5;191,59,5;191,60,5;191,61,5;191,62,5;191,63,5;192,58,5;192,59,5;192,60,5;192,61,5;192,62,5;192,63,5;193,58,5;193,59,5;193,60,5;193,61,5;193,62,5;193,63,5;194,58,5;194,59,5;194,60,5;194,61,5;194,62,5;194,63,5;195,58,5;195,59,5;195,60,5;195,61,5;195,62,5;195,63,5</Nodes>
+      </Cell>
+      <Cell id="66">
+        <Nodes>190,78,5;190,79,5;190,80,5;190,81,5;190,82,5;190,83,5;191,78,5;191,79,5;191,80,5;191,81,5;191,82,5;191,83,5;192,78,5;192,79,5;192,80,5;192,81,5;192,82,5;192,83,5;193,78,5;193,79,5;193,80,5;193,81,5;193,82,5;193,83,5;194,78,5;194,79,5;194,80,5;194,81,5;194,82,5;194,83,5;195,78,5;195,79,5;195,80,5;195,81,5;195,82,5;195,83,5</Nodes>
+      </Cell>
+      <Cell id="67">
+        <Nodes>190,98,5;190,99,5;190,100,5;190,101,5;190,102,5;190,103,5;191,98,5;191,99,5;191,100,5;191,101,5;191,102,5;191,103,5;192,98,5;192,99,5;192,100,5;192,101,5;192,102,5;192,103,5;193,98,5;193,99,5;193,100,5;193,101,5;193,102,5;193,103,5;194,98,5;194,99,5;194,100,5;194,101,5;194,102,5;194,103,5;195,98,5;195,99,5;195,100,5;195,101,5;195,102,5;195,103,5</Nodes>
+      </Cell>
+      <Cell id="68">
+        <Nodes>190,118,5;190,119,5;190,120,5;190,121,5;190,122,5;190,123,5;191,118,5;191,119,5;191,120,5;191,121,5;191,122,5;191,123,5;192,118,5;192,119,5;192,120,5;192,121,5;192,122,5;192,123,5;193,118,5;193,119,5;193,120,5;193,121,5;193,122,5;193,123,5;194,118,5;194,119,5;194,120,5;194,121,5;194,122,5;194,123,5;195,118,5;195,119,5;195,120,5;195,121,5;195,122,5;195,123,5</Nodes>
+      </Cell>
+      <Cell id="69">
+        <Nodes>190,138,5;190,139,5;190,140,5;190,141,5;190,142,5;190,143,5;191,138,5;191,139,5;191,140,5;191,141,5;191,142,5;191,143,5;192,138,5;192,139,5;192,140,5;192,141,5;192,142,5;192,143,5;193,138,5;193,139,5;193,140,5;193,141,5;193,142,5;193,143,5;194,138,5;194,139,5;194,140,5;194,141,5;194,142,5;194,143,5;195,138,5;195,139,5;195,140,5;195,141,5;195,142,5;195,143,5</Nodes>
+      </Cell>
+      <Cell id="70">
+        <Nodes>170,48,5;170,49,5;170,50,5;170,51,5;170,52,5;170,53,5;171,48,5;171,49,5;171,50,5;171,51,5;171,52,5;171,53,5;172,48,5;172,49,5;172,50,5;172,51,5;172,52,5;172,53,5;173,48,5;173,49,5;173,50,5;173,51,5;173,52,5;173,53,5;174,48,5;174,49,5;174,50,5;174,51,5;174,52,5;174,53,5;175,48,5;175,49,5;175,50,5;175,51,5;175,52,5;175,53,5</Nodes>
+      </Cell>
+      <Cell id="71">
+        <Nodes>170,68,5;170,69,5;170,70,5;170,71,5;170,72,5;170,73,5;171,68,5;171,69,5;171,70,5;171,71,5;171,72,5;171,73,5;172,68,5;172,69,5;172,70,5;172,71,5;172,72,5;172,73,5;173,68,5;173,69,5;173,70,5;173,71,5;173,72,5;173,73,5;174,68,5;174,69,5;174,70,5;174,71,5;174,72,5;174,73,5;175,68,5;175,69,5;175,70,5;175,71,5;175,72,5;175,73,5</Nodes>
+      </Cell>
+      <Cell id="72">
+        <Nodes>170,128,5;170,129,5;170,130,5;170,131,5;170,132,5;170,133,5;171,128,5;171,129,5;171,130,5;171,131,5;171,132,5;171,133,5;172,128,5;172,129,5;172,130,5;172,131,5;172,132,5;172,133,5;173,128,5;173,129,5;173,130,5;173,131,5;173,132,5;173,133,5;174,128,5;174,129,5;174,130,5;174,131,5;174,132,5;174,133,5;175,128,5;175,129,5;175,130,5;175,131,5;175,132,5;175,133,5</Nodes>
+      </Cell>
+      <Cell id="73">
+        <Nodes>170,148,5;170,149,5;170,150,5;170,151,5;170,152,5;170,153,5;171,148,5;171,149,5;171,150,5;171,151,5;171,152,5;171,153,5;172,148,5;172,149,5;172,150,5;172,151,5;172,152,5;172,153,5;173,148,5;173,149,5;173,150,5;173,151,5;173,152,5;173,153,5;174,148,5;174,149,5;174,150,5;174,151,5;174,152,5;174,153,5;175,148,5;175,149,5;175,150,5;175,151,5;175,152,5;175,153,5</Nodes>
+      </Cell>
+      <Cell id="74">
+        <Nodes>150,48,5;150,49,5;150,50,5;150,51,5;150,52,5;150,53,5;151,48,5;151,49,5;151,50,5;151,51,5;151,52,5;151,53,5;152,48,5;152,49,5;152,50,5;152,51,5;152,52,5;152,53,5;153,48,5;153,49,5;153,50,5;153,51,5;153,52,5;153,53,5;154,48,5;154,49,5;154,50,5;154,51,5;154,52,5;154,53,5;155,48,5;155,49,5;155,50,5;155,51,5;155,52,5;155,53,5</Nodes>
+      </Cell>
+      <Cell id="75">
+        <Nodes>150,148,5;150,149,5;150,150,5;150,151,5;150,152,5;150,153,5;151,148,5;151,149,5;151,150,5;151,151,5;151,152,5;151,153,5;152,148,5;152,149,5;152,150,5;152,151,5;152,152,5;152,153,5;153,148,5;153,149,5;153,150,5;153,151,5;153,152,5;153,153,5;154,148,5;154,149,5;154,150,5;154,151,5;154,152,5;154,153,5;155,148,5;155,149,5;155,150,5;155,151,5;155,152,5;155,153,5</Nodes>
+      </Cell>
+      <Cell id="76">
+        <Nodes>210,68,9;210,69,9;210,70,9;210,71,9;210,72,9;210,73,9;211,68,9;211,69,9;211,70,9;211,71,9;211,72,9;211,73,9;212,68,9;212,69,9;212,70,9;212,71,9;212,72,9;212,73,9;213,68,9;213,69,9;213,70,9;213,71,9;213,72,9;213,73,9;214,68,9;214,69,9;214,70,9;214,71,9;214,72,9;214,73,9;215,68,9;215,69,9;215,70,9;215,71,9;215,72,9;215,73,9</Nodes>
+      </Cell>
+      <Cell id="77">
+        <Nodes>210,88,9;210,89,9;210,90,9;210,91,9;210,92,9;210,93,9;211,88,9;211,89,9;211,90,9;211,91,9;211,92,9;211,93,9;212,88,9;212,89,9;212,90,9;212,91,9;212,92,9;212,93,9;213,88,9;213,89,9;213,90,9;213,91,9;213,92,9;213,93,9;214,88,9;214,89,9;214,90,9;214,91,9;214,92,9;214,93,9;215,88,9;215,89,9;215,90,9;215,91,9;215,92,9;215,93,9</Nodes>
+      </Cell>
+      <Cell id="78">
+        <Nodes>210,108,9;210,109,9;210,110,9;210,111,9;210,112,9;210,113,9;211,108,9;211,109,9;211,110,9;211,111,9;211,112,9;211,113,9;212,108,9;212,109,9;212,110,9;212,111,9;212,112,9;212,113,9;213,108,9;213,109,9;213,110,9;213,111,9;213,112,9;213,113,9;214,108,9;214,109,9;214,110,9;214,111,9;214,112,9;214,113,9;215,108,9;215,109,9;215,110,9;215,111,9;215,112,9;215,113,9</Nodes>
+      </Cell>
+      <Cell id="79">
+        <Nodes>210,128,9;210,129,9;210,130,9;210,131,9;210,132,9;210,133,9;211,128,9;211,129,9;211,130,9;211,131,9;211,132,9;211,133,9;212,128,9;212,129,9;212,130,9;212,131,9;212,132,9;212,133,9;213,128,9;213,129,9;213,130,9;213,131,9;213,132,9;213,133,9;214,128,9;214,129,9;214,130,9;214,131,9;214,132,9;214,133,9;215,128,9;215,129,9;215,130,9;215,131,9;215,132,9;215,133,9</Nodes>
+      </Cell>
+      <Cell id="80">
+        <Nodes>190,58,9;190,59,9;190,60,9;190,61,9;190,62,9;190,63,9;191,58,9;191,59,9;191,60,9;191,61,9;191,62,9;191,63,9;192,58,9;192,59,9;192,60,9;192,61,9;192,62,9;192,63,9;193,58,9;193,59,9;193,60,9;193,61,9;193,62,9;193,63,9;194,58,9;194,59,9;194,60,9;194,61,9;194,62,9;194,63,9;195,58,9;195,59,9;195,60,9;195,61,9;195,62,9;195,63,9</Nodes>
+      </Cell>
+      <Cell id="81">
+        <Nodes>190,78,9;190,79,9;190,80,9;190,81,9;190,82,9;190,83,9;191,78,9;191,79,9;191,80,9;191,81,9;191,82,9;191,83,9;192,78,9;192,79,9;192,80,9;192,81,9;192,82,9;192,83,9;193,78,9;193,79,9;193,80,9;193,81,9;193,82,9;193,83,9;194,78,9;194,79,9;194,80,9;194,81,9;194,82,9;194,83,9;195,78,9;195,79,9;195,80,9;195,81,9;195,82,9;195,83,9</Nodes>
+      </Cell>
+      <Cell id="82">
+        <Nodes>190,98,9;190,99,9;190,100,9;190,101,9;190,102,9;190,103,9;191,98,9;191,99,9;191,100,9;191,101,9;191,102,9;191,103,9;192,98,9;192,99,9;192,100,9;192,101,9;192,102,9;192,103,9;193,98,9;193,99,9;193,100,9;193,101,9;193,102,9;193,103,9;194,98,9;194,99,9;194,100,9;194,101,9;194,102,9;194,103,9;195,98,9;195,99,9;195,100,9;195,101,9;195,102,9;195,103,9</Nodes>
+      </Cell>
+      <Cell id="83">
+        <Nodes>190,118,9;190,119,9;190,120,9;190,121,9;190,122,9;190,123,9;191,118,9;191,119,9;191,120,9;191,121,9;191,122,9;191,123,9;192,118,9;192,119,9;192,120,9;192,121,9;192,122,9;192,123,9;193,118,9;193,119,9;193,120,9;193,121,9;193,122,9;193,123,9;194,118,9;194,119,9;194,120,9;194,121,9;194,122,9;194,123,9;195,118,9;195,119,9;195,120,9;195,121,9;195,122,9;195,123,9</Nodes>
+      </Cell>
+      <Cell id="84">
+        <Nodes>190,138,9;190,139,9;190,140,9;190,141,9;190,142,9;190,143,9;191,138,9;191,139,9;191,140,9;191,141,9;191,142,9;191,143,9;192,138,9;192,139,9;192,140,9;192,141,9;192,142,9;192,143,9;193,138,9;193,139,9;193,140,9;193,141,9;193,142,9;193,143,9;194,138,9;194,139,9;194,140,9;194,141,9;194,142,9;194,143,9;195,138,9;195,139,9;195,140,9;195,141,9;195,142,9;195,143,9</Nodes>
+      </Cell>
+      <Cell id="85">
+        <Nodes>170,48,9;170,49,9;170,50,9;170,51,9;170,52,9;170,53,9;171,48,9;171,49,9;171,50,9;171,51,9;171,52,9;171,53,9;172,48,9;172,49,9;172,50,9;172,51,9;172,52,9;172,53,9;173,48,9;173,49,9;173,50,9;173,51,9;173,52,9;173,53,9;174,48,9;174,49,9;174,50,9;174,51,9;174,52,9;174,53,9;175,48,9;175,49,9;175,50,9;175,51,9;175,52,9;175,53,9</Nodes>
+      </Cell>
+      <Cell id="86">
+        <Nodes>170,68,9;170,69,9;170,70,9;170,71,9;170,72,9;170,73,9;171,68,9;171,69,9;171,70,9;171,71,9;171,72,9;171,73,9;172,68,9;172,69,9;172,70,9;172,71,9;172,72,9;172,73,9;173,68,9;173,69,9;173,70,9;173,71,9;173,72,9;173,73,9;174,68,9;174,69,9;174,70,9;174,71,9;174,72,9;174,73,9;175,68,9;175,69,9;175,70,9;175,71,9;175,72,9;175,73,9</Nodes>
+      </Cell>
+      <Cell id="87">
+        <Nodes>170,128,9;170,129,9;170,130,9;170,131,9;170,132,9;170,133,9;171,128,9;171,129,9;171,130,9;171,131,9;171,132,9;171,133,9;172,128,9;172,129,9;172,130,9;172,131,9;172,132,9;172,133,9;173,128,9;173,129,9;173,130,9;173,131,9;173,132,9;173,133,9;174,128,9;174,129,9;174,130,9;174,131,9;174,132,9;174,133,9;175,128,9;175,129,9;175,130,9;175,131,9;175,132,9;175,133,9</Nodes>
+      </Cell>
+      <Cell id="88">
+        <Nodes>170,148,9;170,149,9;170,150,9;170,151,9;170,152,9;170,153,9;171,148,9;171,149,9;171,150,9;171,151,9;171,152,9;171,153,9;172,148,9;172,149,9;172,150,9;172,151,9;172,152,9;172,153,9;173,148,9;173,149,9;173,150,9;173,151,9;173,152,9;173,153,9;174,148,9;174,149,9;174,150,9;174,151,9;174,152,9;174,153,9;175,148,9;175,149,9;175,150,9;175,151,9;175,152,9;175,153,9</Nodes>
+      </Cell>
+      <Cell id="89">
+        <Nodes>150,48,9;150,49,9;150,50,9;150,51,9;150,52,9;150,53,9;151,48,9;151,49,9;151,50,9;151,51,9;151,52,9;151,53,9;152,48,9;152,49,9;152,50,9;152,51,9;152,52,9;152,53,9;153,48,9;153,49,9;153,50,9;153,51,9;153,52,9;153,53,9;154,48,9;154,49,9;154,50,9;154,51,9;154,52,9;154,53,9;155,48,9;155,49,9;155,50,9;155,51,9;155,52,9;155,53,9</Nodes>
+      </Cell>
+      <Cell id="90">
+        <Nodes>150,148,9;150,149,9;150,150,9;150,151,9;150,152,9;150,153,9;151,148,9;151,149,9;151,150,9;151,151,9;151,152,9;151,153,9;152,148,9;152,149,9;152,150,9;152,151,9;152,152,9;152,153,9;153,148,9;153,149,9;153,150,9;153,151,9;153,152,9;153,153,9;154,148,9;154,149,9;154,150,9;154,151,9;154,152,9;154,153,9;155,148,9;155,149,9;155,150,9;155,151,9;155,152,9;155,153,9</Nodes>
+      </Cell>
+    </Population>
+    <Population type="Tfh" size="0">
+      <Cell id="91">
+        <Nodes>165,129,0;165,129,1;165,129,2;165,130,0;165,130,1;165,130,2;165,131,0;165,131,1;165,131,2;166,129,0;166,129,1;166,129,2;166,130,0;166,130,1;166,130,2;166,131,0;166,131,1;166,131,2;167,129,0;167,129,1;167,129,2;167,130,0;167,130,1;167,130,2;167,131,0;167,131,1;167,131,2</Nodes>
+      </Cell>
+      <Cell id="92">
+        <Nodes>177,129,0;177,129,1;177,129,2;177,130,0;177,130,1;177,130,2;177,131,0;177,131,1;177,131,2;178,129,0;178,129,1;178,129,2;178,130,0;178,130,1;178,130,2;178,131,0;178,131,1;178,131,2;179,129,0;179,129,1;179,129,2;179,130,0;179,130,1;179,130,2;179,131,0;179,131,1;179,131,2</Nodes>
+      </Cell>
+      <Cell id="93">
+        <Nodes>185,119,0;185,119,1;185,119,2;185,120,0;185,120,1;185,120,2;185,121,0;185,121,1;185,121,2;186,119,0;186,119,1;186,119,2;186,120,0;186,120,1;186,120,2;186,121,0;186,121,1;186,121,2;187,119,0;187,119,1;187,119,2;187,120,0;187,120,1;187,120,2;187,121,0;187,121,1;187,121,2</Nodes>
+      </Cell>
+      <Cell id="94">
+        <Nodes>197,119,0;197,119,1;197,119,2;197,120,0;197,120,1;197,120,2;197,121,0;197,121,1;197,121,2;198,119,0;198,119,1;198,119,2;198,120,0;198,120,1;198,120,2;198,121,0;198,121,1;198,121,2;199,119,0;199,119,1;199,119,2;199,120,0;199,120,1;199,120,2;199,121,0;199,121,1;199,121,2</Nodes>
+      </Cell>
+      <Cell id="95">
+        <Nodes>205,109,0;205,109,1;205,109,2;205,110,0;205,110,1;205,110,2;205,111,0;205,111,1;205,111,2;206,109,0;206,109,1;206,109,2;206,110,0;206,110,1;206,110,2;206,111,0;206,111,1;206,111,2;207,109,0;207,109,1;207,109,2;207,110,0;207,110,1;207,110,2;207,111,0;207,111,1;207,111,2</Nodes>
+      </Cell>
+      <Cell id="96">
+        <Nodes>185,99,0;185,99,1;185,99,2;185,100,0;185,100,1;185,100,2;185,101,0;185,101,1;185,101,2;186,99,0;186,99,1;186,99,2;186,100,0;186,100,1;186,100,2;186,101,0;186,101,1;186,101,2;187,99,0;187,99,1;187,99,2;187,100,0;187,100,1;187,100,2;187,101,0;187,101,1;187,101,2</Nodes>
+      </Cell>
+      <Cell id="97">
+        <Nodes>197,99,0;197,99,1;197,99,2;197,100,0;197,100,1;197,100,2;197,101,0;197,101,1;197,101,2;198,99,0;198,99,1;198,99,2;198,100,0;198,100,1;198,100,2;198,101,0;198,101,1;198,101,2;199,99,0;199,99,1;199,99,2;199,100,0;199,100,1;199,100,2;199,101,0;199,101,1;199,101,2</Nodes>
+      </Cell>
+      <Cell id="98">
+        <Nodes>205,89,0;205,89,1;205,89,2;205,90,0;205,90,1;205,90,2;205,91,0;205,91,1;205,91,2;206,89,0;206,89,1;206,89,2;206,90,0;206,90,1;206,90,2;206,91,0;206,91,1;206,91,2;207,89,0;207,89,1;207,89,2;207,90,0;207,90,1;207,90,2;207,91,0;207,91,1;207,91,2</Nodes>
+      </Cell>
+      <Cell id="99">
+        <Nodes>185,79,0;185,79,1;185,79,2;185,80,0;185,80,1;185,80,2;185,81,0;185,81,1;185,81,2;186,79,0;186,79,1;186,79,2;186,80,0;186,80,1;186,80,2;186,81,0;186,81,1;186,81,2;187,79,0;187,79,1;187,79,2;187,80,0;187,80,1;187,80,2;187,81,0;187,81,1;187,81,2</Nodes>
+      </Cell>
+      <Cell id="100">
+        <Nodes>197,79,0;197,79,1;197,79,2;197,80,0;197,80,1;197,80,2;197,81,0;197,81,1;197,81,2;198,79,0;198,79,1;198,79,2;198,80,0;198,80,1;198,80,2;198,81,0;198,81,1;198,81,2;199,79,0;199,79,1;199,79,2;199,80,0;199,80,1;199,80,2;199,81,0;199,81,1;199,81,2</Nodes>
+      </Cell>
+      <Cell id="101">
+        <Nodes>165,69,0;165,69,1;165,69,2;165,70,0;165,70,1;165,70,2;165,71,0;165,71,1;165,71,2;166,69,0;166,69,1;166,69,2;166,70,0;166,70,1;166,70,2;166,71,0;166,71,1;166,71,2;167,69,0;167,69,1;167,69,2;167,70,0;167,70,1;167,70,2;167,71,0;167,71,1;167,71,2</Nodes>
+      </Cell>
+      <Cell id="102">
+        <Nodes>177,69,0;177,69,1;177,69,2;177,70,0;177,70,1;177,70,2;177,71,0;177,71,1;177,71,2;178,69,0;178,69,1;178,69,2;178,70,0;178,70,1;178,70,2;178,71,0;178,71,1;178,71,2;179,69,0;179,69,1;179,69,2;179,70,0;179,70,1;179,70,2;179,71,0;179,71,1;179,71,2</Nodes>
+      </Cell>
+      <Cell id="103">
+        <Nodes>165,129,4;165,129,5;165,129,6;165,130,4;165,130,5;165,130,6;165,131,4;165,131,5;165,131,6;166,129,4;166,129,5;166,129,6;166,130,4;166,130,5;166,130,6;166,131,4;166,131,5;166,131,6;167,129,4;167,129,5;167,129,6;167,130,4;167,130,5;167,130,6;167,131,4;167,131,5;167,131,6</Nodes>
+      </Cell>
+      <Cell id="104">
+        <Nodes>177,129,4;177,129,5;177,129,6;177,130,4;177,130,5;177,130,6;177,131,4;177,131,5;177,131,6;178,129,4;178,129,5;178,129,6;178,130,4;178,130,5;178,130,6;178,131,4;178,131,5;178,131,6;179,129,4;179,129,5;179,129,6;179,130,4;179,130,5;179,130,6;179,131,4;179,131,5;179,131,6</Nodes>
+      </Cell>
+      <Cell id="105">
+        <Nodes>185,119,4;185,119,5;185,119,6;185,120,4;185,120,5;185,120,6;185,121,4;185,121,5;185,121,6;186,119,4;186,119,5;186,119,6;186,120,4;186,120,5;186,120,6;186,121,4;186,121,5;186,121,6;187,119,4;187,119,5;187,119,6;187,120,4;187,120,5;187,120,6;187,121,4;187,121,5;187,121,6</Nodes>
+      </Cell>
+      <Cell id="106">
+        <Nodes>197,119,4;197,119,5;197,119,6;197,120,4;197,120,5;197,120,6;197,121,4;197,121,5;197,121,6;198,119,4;198,119,5;198,119,6;198,120,4;198,120,5;198,120,6;198,121,4;198,121,5;198,121,6;199,119,4;199,119,5;199,119,6;199,120,4;199,120,5;199,120,6;199,121,4;199,121,5;199,121,6</Nodes>
+      </Cell>
+      <Cell id="107">
+        <Nodes>205,109,4;205,109,5;205,109,6;205,110,4;205,110,5;205,110,6;205,111,4;205,111,5;205,111,6;206,109,4;206,109,5;206,109,6;206,110,4;206,110,5;206,110,6;206,111,4;206,111,5;206,111,6;207,109,4;207,109,5;207,109,6;207,110,4;207,110,5;207,110,6;207,111,4;207,111,5;207,111,6</Nodes>
+      </Cell>
+      <Cell id="108">
+        <Nodes>185,99,4;185,99,5;185,99,6;185,100,4;185,100,5;185,100,6;185,101,4;185,101,5;185,101,6;186,99,4;186,99,5;186,99,6;186,100,4;186,100,5;186,100,6;186,101,4;186,101,5;186,101,6;187,99,4;187,99,5;187,99,6;187,100,4;187,100,5;187,100,6;187,101,4;187,101,5;187,101,6</Nodes>
+      </Cell>
+      <Cell id="109">
+        <Nodes>197,99,4;197,99,5;197,99,6;197,100,4;197,100,5;197,100,6;197,101,4;197,101,5;197,101,6;198,99,4;198,99,5;198,99,6;198,100,4;198,100,5;198,100,6;198,101,4;198,101,5;198,101,6;199,99,4;199,99,5;199,99,6;199,100,4;199,100,5;199,100,6;199,101,4;199,101,5;199,101,6</Nodes>
+      </Cell>
+      <Cell id="110">
+        <Nodes>205,89,4;205,89,5;205,89,6;205,90,4;205,90,5;205,90,6;205,91,4;205,91,5;205,91,6;206,89,4;206,89,5;206,89,6;206,90,4;206,90,5;206,90,6;206,91,4;206,91,5;206,91,6;207,89,4;207,89,5;207,89,6;207,90,4;207,90,5;207,90,6;207,91,4;207,91,5;207,91,6</Nodes>
+      </Cell>
+      <Cell id="111">
+        <Nodes>185,79,4;185,79,5;185,79,6;185,80,4;185,80,5;185,80,6;185,81,4;185,81,5;185,81,6;186,79,4;186,79,5;186,79,6;186,80,4;186,80,5;186,80,6;186,81,4;186,81,5;186,81,6;187,79,4;187,79,5;187,79,6;187,80,4;187,80,5;187,80,6;187,81,4;187,81,5;187,81,6</Nodes>
+      </Cell>
+      <Cell id="112">
+        <Nodes>197,79,4;197,79,5;197,79,6;197,80,4;197,80,5;197,80,6;197,81,4;197,81,5;197,81,6;198,79,4;198,79,5;198,79,6;198,80,4;198,80,5;198,80,6;198,81,4;198,81,5;198,81,6;199,79,4;199,79,5;199,79,6;199,80,4;199,80,5;199,80,6;199,81,4;199,81,5;199,81,6</Nodes>
+      </Cell>
+      <Cell id="113">
+        <Nodes>165,69,4;165,69,5;165,69,6;165,70,4;165,70,5;165,70,6;165,71,4;165,71,5;165,71,6;166,69,4;166,69,5;166,69,6;166,70,4;166,70,5;166,70,6;166,71,4;166,71,5;166,71,6;167,69,4;167,69,5;167,69,6;167,70,4;167,70,5;167,70,6;167,71,4;167,71,5;167,71,6</Nodes>
+      </Cell>
+      <Cell id="114">
+        <Nodes>177,69,4;177,69,5;177,69,6;177,70,4;177,70,5;177,70,6;177,71,4;177,71,5;177,71,6;178,69,4;178,69,5;178,69,6;178,70,4;178,70,5;178,70,6;178,71,4;178,71,5;178,71,6;179,69,4;179,69,5;179,69,6;179,70,4;179,70,5;179,70,6;179,71,4;179,71,5;179,71,6</Nodes>
+      </Cell>
+      <Cell id="115">
+        <Nodes>165,129,8;165,129,9;165,129,10;165,130,8;165,130,9;165,130,10;165,131,8;165,131,9;165,131,10;166,129,8;166,129,9;166,129,10;166,130,8;166,130,9;166,130,10;166,131,8;166,131,9;166,131,10;167,129,8;167,129,9;167,129,10;167,130,8;167,130,9;167,130,10;167,131,8;167,131,9;167,131,10</Nodes>
+      </Cell>
+      <Cell id="116">
+        <Nodes>177,129,8;177,129,9;177,129,10;177,130,8;177,130,9;177,130,10;177,131,8;177,131,9;177,131,10;178,129,8;178,129,9;178,129,10;178,130,8;178,130,9;178,130,10;178,131,8;178,131,9;178,131,10;179,129,8;179,129,9;179,129,10;179,130,8;179,130,9;179,130,10;179,131,8;179,131,9;179,131,10</Nodes>
+      </Cell>
+      <Cell id="117">
+        <Nodes>185,119,8;185,119,9;185,119,10;185,120,8;185,120,9;185,120,10;185,121,8;185,121,9;185,121,10;186,119,8;186,119,9;186,119,10;186,120,8;186,120,9;186,120,10;186,121,8;186,121,9;186,121,10;187,119,8;187,119,9;187,119,10;187,120,8;187,120,9;187,120,10;187,121,8;187,121,9;187,121,10</Nodes>
+      </Cell>
+      <Cell id="118">
+        <Nodes>197,119,8;197,119,9;197,119,10;197,120,8;197,120,9;197,120,10;197,121,8;197,121,9;197,121,10;198,119,8;198,119,9;198,119,10;198,120,8;198,120,9;198,120,10;198,121,8;198,121,9;198,121,10;199,119,8;199,119,9;199,119,10;199,120,8;199,120,9;199,120,10;199,121,8;199,121,9;199,121,10</Nodes>
+      </Cell>
+      <Cell id="119">
+        <Nodes>205,109,8;205,109,9;205,109,10;205,110,8;205,110,9;205,110,10;205,111,8;205,111,9;205,111,10;206,109,8;206,109,9;206,109,10;206,110,8;206,110,9;206,110,10;206,111,8;206,111,9;206,111,10;207,109,8;207,109,9;207,109,10;207,110,8;207,110,9;207,110,10;207,111,8;207,111,9;207,111,10</Nodes>
+      </Cell>
+      <Cell id="120">
+        <Nodes>185,99,8;185,99,9;185,99,10;185,100,8;185,100,9;185,100,10;185,101,8;185,101,9;185,101,10;186,99,8;186,99,9;186,99,10;186,100,8;186,100,9;186,100,10;186,101,8;186,101,9;186,101,10;187,99,8;187,99,9;187,99,10;187,100,8;187,100,9;187,100,10;187,101,8;187,101,9;187,101,10</Nodes>
+      </Cell>
+      <Cell id="121">
+        <Nodes>197,99,8;197,99,9;197,99,10;197,100,8;197,100,9;197,100,10;197,101,8;197,101,9;197,101,10;198,99,8;198,99,9;198,99,10;198,100,8;198,100,9;198,100,10;198,101,8;198,101,9;198,101,10;199,99,8;199,99,9;199,99,10;199,100,8;199,100,9;199,100,10;199,101,8;199,101,9;199,101,10</Nodes>
+      </Cell>
+      <Cell id="122">
+        <Nodes>205,89,8;205,89,9;205,89,10;205,90,8;205,90,9;205,90,10;205,91,8;205,91,9;205,91,10;206,89,8;206,89,9;206,89,10;206,90,8;206,90,9;206,90,10;206,91,8;206,91,9;206,91,10;207,89,8;207,89,9;207,89,10;207,90,8;207,90,9;207,90,10;207,91,8;207,91,9;207,91,10</Nodes>
+      </Cell>
+      <Cell id="123">
+        <Nodes>185,79,8;185,79,9;185,79,10;185,80,8;185,80,9;185,80,10;185,81,8;185,81,9;185,81,10;186,79,8;186,79,9;186,79,10;186,80,8;186,80,9;186,80,10;186,81,8;186,81,9;186,81,10;187,79,8;187,79,9;187,79,10;187,80,8;187,80,9;187,80,10;187,81,8;187,81,9;187,81,10</Nodes>
+      </Cell>
+      <Cell id="124">
+        <Nodes>197,79,8;197,79,9;197,79,10;197,80,8;197,80,9;197,80,10;197,81,8;197,81,9;197,81,10;198,79,8;198,79,9;198,79,10;198,80,8;198,80,9;198,80,10;198,81,8;198,81,9;198,81,10;199,79,8;199,79,9;199,79,10;199,80,8;199,80,9;199,80,10;199,81,8;199,81,9;199,81,10</Nodes>
+      </Cell>
+      <Cell id="125">
+        <Nodes>165,69,8;165,69,9;165,69,10;165,70,8;165,70,9;165,70,10;165,71,8;165,71,9;165,71,10;166,69,8;166,69,9;166,69,10;166,70,8;166,70,9;166,70,10;166,71,8;166,71,9;166,71,10;167,69,8;167,69,9;167,69,10;167,70,8;167,70,9;167,70,10;167,71,8;167,71,9;167,71,10</Nodes>
+      </Cell>
+      <Cell id="126">
+        <Nodes>177,69,8;177,69,9;177,69,10;177,70,8;177,70,9;177,70,10;177,71,8;177,71,9;177,71,10;178,69,8;178,69,9;178,69,10;178,70,8;178,70,9;178,70,10;178,71,8;178,71,9;178,71,10;179,69,8;179,69,9;179,69,10;179,70,8;179,70,9;179,70,10;179,71,8;179,71,9;179,71,10</Nodes>
+      </Cell>
+    </Population>
+    <Population type="BCell" size="0">
+      <Cell id="127">
+        <Nodes>147,57,4;148,57,4;147,58,4;147,57,3;148,58,4;147,57,5;148,57,3;147,56,4;148,57,5;147,58,3;146,57,4;148,56,4;147,58,5;148,58,3;147,56,3;148,58,5;146,58,4;147,56,5;146,57,3;148,56,3;146,57,5;149,57,4;148,56,5;146,56,4;146,58,3;147,59,4;146,58,5;149,58,4;149,57,3;147,57,2;146,56,3;148,59,4;149,57,5;146,56,5;149,56,4;148,57,2;147,57,6;147,59,3;149,58,3;147,58,2;147,59,5;147,55,4;149,58,5;148,57,6;148,59,3;148,58,2;148,59,5;149,56,3;147,58,6;148,55,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="127" />
+      </Cell>
+      <Cell id="128">
+        <Nodes>156,174,3;156,175,3;155,174,3;156,174,2;156,174,4;157,174,3;155,175,3;156,175,2;156,175,4;157,175,3;156,173,3;155,174,2;155,174,4;157,174,2;157,174,4;155,175,2;155,175,4;157,175,2;157,175,4;156,176,3;155,173,3;156,173,2;156,173,4;157,173,3;155,176,3;156,176,2;156,176,4;157,176,3;155,173,2;155,173,4;157,173,2;157,173,4;154,174,3;156,174,1;156,174,5;154,175,3;158,174,3;156,175,1;156,175,5;158,175,3;155,176,2;155,176,4;157,176,2;157,176,4;154,174,2;154,174,4;155,174,1;155,174,5;157,174,1;157,174,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="128" />
+      </Cell>
+      <Cell id="129">
+        <Nodes>106,52,4;105,52,4;106,52,5;105,52,5;106,53,4;105,53,4;106,51,4;105,51,4;106,53,5;105,53,5;106,52,3;105,52,3;106,51,5;105,51,5;107,52,4;104,52,4;106,53,3;105,53,3;107,52,5;104,52,5;106,51,3;105,51,3;107,53,4;104,53,4;106,52,6;105,52,6;107,51,4;104,51,4;107,53,5;104,53,5;107,52,3;104,52,3;106,54,4;105,54,4;107,51,5;104,51,5;106,53,6;105,53,6;106,54,5;105,54,5;107,53,3;104,53,3;106,51,6;105,51,6;106,50,4;105,50,4;107,51,3;104,51,3;106,52,2;105,52,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="129" />
+      </Cell>
+      <Cell id="130">
+        <Nodes>112,113,6;112,113,5;112,114,6;112,114,5;111,113,6;111,113,5;111,114,6;113,113,6;111,114,5;113,113,5;113,114,6;112,112,6;112,113,7;113,114,5;112,112,5;112,114,7;111,112,6;111,113,7;112,113,4;111,112,5;112,115,6;111,114,7;113,112,6;113,113,7;112,114,4;112,115,5;113,112,5;113,114,7;112,112,7;111,113,4;111,115,6;110,113,6;111,114,4;111,115,5;110,113,5;110,114,6;113,113,4;113,115,6;111,112,7;110,114,5;113,114,4;112,112,4;113,115,5;112,115,7;114,113,6;113,112,7;114,113,5;114,114,6;111,112,4;110,112,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="130" />
+      </Cell>
+      <Cell id="131">
+        <Nodes>107,110,2;108,110,2;107,110,3;107,109,2;108,110,3;108,109,2;107,109,3;107,111,2;107,110,1;108,109,3;108,111,2;108,110,1;106,110,2;107,111,3;108,111,3;107,109,1;106,110,3;108,109,1;106,109,2;109,110,2;107,111,1;108,111,1;106,109,3;106,111,2;109,110,3;107,110,4;106,110,1;109,109,2;108,110,4;107,108,2;106,111,3;108,108,2;109,109,3;109,111,2;107,109,4;106,109,1;109,110,1;107,108,3;108,109,4;108,108,3;109,111,3;107,111,4;106,111,1;107,112,2;108,111,4;109,109,1;108,112,2;106,110,4;107,108,1;107,110,0</Nodes>
+        <PropertyData symbol-ref="clone_id" value="131" />
+      </Cell>
+      <Cell id="132">
+        <Nodes>133,171,7;132,171,7;133,172,7;133,171,6;132,172,7;132,171,6;133,172,6;132,172,6;133,171,8;133,170,7;132,171,8;132,170,7;134,171,7;133,172,8;133,170,6;132,172,8;132,170,6;134,172,7;131,171,7;134,171,6;131,172,7;134,172,6;131,171,6;133,173,7;133,171,5;132,173,7;132,171,5;131,172,6;133,173,6;133,172,5;132,173,6;132,172,5;133,170,8;132,170,8;134,171,8;134,170,7;134,172,8;131,171,8;131,170,7;134,170,6;131,172,8;133,173,8;131,170,6;132,173,8;133,170,5;134,173,7;132,170,5;134,171,5;131,173,7;134,173,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="132" />
+      </Cell>
+      <Cell id="133">
+        <Nodes>142,74,3;142,74,4;141,74,3;142,73,3;141,74,4;142,73,4;141,73,3;142,75,3;143,74,3;141,73,4;142,75,4;142,74,2;143,74,4;141,75,3;143,73,3;141,75,4;141,74,2;142,73,2;143,73,4;142,74,5;143,75,3;141,73,2;142,75,2;140,74,3;143,75,4;141,74,5;143,74,2;142,73,5;142,72,3;140,74,4;142,72,4;141,75,2;140,73,3;141,73,5;143,73,2;141,72,3;142,75,5;140,73,4;143,74,5;141,72,4;140,75,3;141,75,5;143,75,2;143,73,5;143,72,3;142,76,3;140,75,4;140,74,2;144,74,3;142,72,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="133" />
+      </Cell>
+      <Cell id="134">
+        <Nodes>131,67,7;131,66,7;131,67,8;130,67,7;132,67,7;131,67,6;131,66,8;130,66,7;132,66,7;131,68,7;131,66,6;130,67,8;132,67,8;130,67,6;130,66,8;132,67,6;132,66,8;131,68,8;130,68,7;130,66,6;132,68,7;132,66,6;131,68,6;131,65,7;130,68,8;132,68,8;131,67,9;131,65,8;130,68,6;132,68,6;130,65,7;132,65,7;129,67,7;131,66,9;131,65,6;133,67,7;129,66,7;131,67,5;133,66,7;130,67,9;130,65,8;132,67,9;132,65,8;129,67,8;131,66,5;133,67,8;130,66,9;130,65,6;132,66,9;132,65,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="134" />
+      </Cell>
+      <Cell id="135">
+        <Nodes>115,66,7;115,66,6;115,67,7;114,66,7;116,66,7;115,67,6;115,65,7;114,66,6;115,66,8;114,67,7;116,66,6;115,65,6;116,67,7;114,67,6;114,65,7;115,67,8;116,67,6;114,66,8;116,65,7;114,65,6;116,66,8;115,65,8;116,65,6;115,66,5;114,67,8;116,67,8;115,68,7;115,67,5;114,65,8;113,66,7;114,66,5;115,68,6;116,65,8;116,66,5;113,66,6;115,65,5;114,68,7;117,66,7;113,67,7;114,67,5;115,64,7;116,68,7;114,68,6;117,66,6;116,67,5;113,67,6;113,65,7;115,64,6;114,65,5;115,68,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="135" />
+      </Cell>
+      <Cell id="136">
+        <Nodes>119,65,3;119,65,2;118,65,3;119,66,3;118,65,2;119,66,2;118,66,3;118,66,2;119,64,3;120,65,3;119,64,2;120,65,2;119,65,4;118,64,3;120,66,3;118,64,2;120,66,2;118,65,4;119,66,4;119,65,1;120,64,3;118,66,4;118,65,1;119,66,1;120,64,2;117,65,3;119,67,3;119,64,4;120,65,4;117,65,2;119,67,2;118,66,1;117,66,3;118,67,3;118,64,4;119,64,1;120,66,4;120,65,1;117,66,2;118,67,2;118,64,1;120,66,1;117,64,3;120,67,3;120,64,4;117,64,2;120,67,2;119,63,3;121,65,3;117,65,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="136" />
+      </Cell>
+      <Cell id="137">
+        <Nodes>120,141,5;120,141,4;120,142,5;121,141,5;119,141,5;120,140,5;120,141,6;120,142,4;121,141,4;121,142,5;119,141,4;119,142,5;120,140,4;120,142,6;121,140,5;121,141,6;119,140,5;119,141,6;120,140,6;121,142,4;119,142,4;121,140,4;121,142,6;119,140,4;119,142,6;121,140,6;119,140,6;120,141,3;120,143,5;122,141,5;118,141,5;120,139,5;120,141,7;120,142,3;120,143,4;121,141,3;121,143,5;122,141,4;122,142,5;119,141,3;119,143,5;120,140,3;120,143,6;122,140,5;122,141,6;118,141,4;118,142,5;120,139,4;120,142,7;121,139,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="137" />
+      </Cell>
+      <Cell id="138">
+        <Nodes>106,62,3;105,62,3;106,62,4;106,61,3;105,62,4;105,61,3;106,61,4;105,61,4;106,63,3;106,62,2;105,63,3;105,62,2;107,62,3;106,63,4;106,61,2;105,63,4;105,61,2;104,62,3;107,62,4;107,61,3;104,62,4;104,61,3;106,63,2;105,63,2;107,61,4;106,62,5;106,60,3;105,62,5;105,60,3;104,61,4;107,63,3;107,62,2;104,63,3;104,62,2;106,61,5;106,60,4;105,61,5;105,60,4;107,63,4;107,61,2;104,63,4;104,61,2;106,63,5;105,63,5;106,60,2;105,60,2;107,63,2;106,64,3;106,62,1;105,64,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="138" />
+      </Cell>
+      <Cell id="139">
+        <Nodes>163,108,4;164,108,4;163,108,5;164,108,5;163,109,4;164,109,4;163,107,4;163,109,5;164,107,4;164,109,5;163,108,3;163,107,5;162,108,4;164,108,3;164,107,5;162,108,5;163,109,3;165,108,4;162,109,4;164,109,3;163,107,3;163,108,6;165,108,5;162,107,4;164,107,3;162,109,5;164,108,6;165,109,4;162,108,3;162,107,5;165,107,4;163,110,4;163,109,6;165,109,5;164,110,4;164,109,6;163,107,6;165,108,3;165,107,5;163,110,5;162,109,3;164,107,6;163,106,4;164,110,5;162,107,3;164,106,4;162,108,6;163,106,5;165,109,3;164,106,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="139" />
+      </Cell>
+      <Cell id="140">
+        <Nodes>158,77,6;159,77,6;158,78,6;159,78,6;158,77,7;158,77,5;159,77,7;159,77,5;158,78,7;158,78,5;159,78,7;158,76,6;159,78,5;157,77,6;159,76,6;157,78,6;160,77,6;158,76,7;158,76,5;157,77,7;158,79,6;157,77,5;159,76,7;160,78,6;159,76,5;159,79,6;157,78,7;157,78,5;157,76,6;160,77,7;160,77,5;158,79,7;158,79,5;160,78,7;160,78,5;158,77,8;159,79,7;159,79,5;158,77,4;160,76,6;159,77,8;158,78,8;159,77,4;157,76,7;157,76,5;158,78,4;157,79,6;159,78,8;159,78,4;160,76,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="140" />
+      </Cell>
+      <Cell id="141">
+        <Nodes>116,29,6;116,28,6;116,29,7;116,28,7;115,29,6;117,29,6;115,28,6;117,28,6;116,29,5;116,28,5;115,29,7;117,29,7;116,30,6;115,28,7;117,28,7;115,29,5;117,29,5;116,27,6;115,28,5;117,28,5;116,30,7;115,30,6;117,30,6;116,30,5;116,27,7;115,27,6;117,27,6;116,27,5;116,29,8;115,30,7;117,30,7;116,28,8;114,29,6;115,30,5;118,29,6;117,30,5;115,27,7;114,28,6;117,27,7;118,28,6;116,29,4;115,27,5;117,27,5;116,28,4;115,29,8;117,29,8;115,28,8;114,29,7;117,28,8;118,29,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="141" />
+      </Cell>
+      <Cell id="142">
+        <Nodes>124,76,4;123,76,4;124,77,4;124,76,3;123,77,4;123,76,3;124,77,3;123,77,3;124,76,5;124,75,4;123,76,5;123,75,4;125,76,4;124,77,5;123,77,5;124,75,3;125,77,4;123,75,3;122,76,4;125,76,3;122,77,4;125,77,3;124,78,4;122,76,3;123,78,4;124,76,2;124,75,5;123,76,2;122,77,3;123,75,5;124,78,3;125,76,5;124,77,2;125,75,4;123,78,3;123,77,2;125,77,5;122,76,5;122,75,4;125,75,3;122,77,5;124,78,5;122,75,3;123,78,5;124,75,2;125,78,4;123,75,2;125,76,2;125,75,5;124,76,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="142" />
+      </Cell>
+      <Cell id="143">
+        <Nodes>118,111,4;118,110,4;117,111,4;117,110,4;118,111,5;118,110,5;117,111,5;117,110,5;118,111,3;118,110,3;117,111,3;117,110,3;119,111,4;119,110,4;118,112,4;118,109,4;117,112,4;117,109,4;116,111,4;116,110,4;119,111,5;119,110,5;118,112,5;118,109,5;119,111,3;119,110,3;117,112,5;118,112,3;117,109,5;118,109,3;116,111,5;116,110,5;117,112,3;117,109,3;116,111,3;116,110,3;118,111,6;118,110,6;119,112,4;119,109,4;117,111,6;117,110,6;118,111,2;118,110,2;116,112,4;116,109,4;117,111,2;117,110,2;119,112,5;119,109,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="143" />
+      </Cell>
+      <Cell id="144">
+        <Nodes>130,55,5;130,56,5;129,55,5;130,55,6;129,56,5;130,55,4;130,56,6;131,55,5;130,56,4;129,55,6;130,54,5;129,55,4;131,56,5;129,56,6;129,56,4;129,54,5;131,55,6;131,55,4;130,54,6;130,54,4;131,56,6;130,57,5;131,56,4;131,54,5;129,54,6;128,55,5;129,54,4;129,57,5;128,56,5;130,57,6;130,55,7;130,57,4;131,54,6;131,54,4;128,55,6;130,55,3;128,55,4;131,57,5;130,56,7;129,57,6;129,55,7;129,57,4;128,56,6;130,56,3;128,56,4;129,55,3;128,54,5;132,55,5;129,56,7;129,56,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="144" />
+      </Cell>
+      <Cell id="145">
+        <Nodes>141,88,4;141,88,5;141,89,4;140,88,4;141,89,5;140,88,5;142,88,4;141,87,4;142,88,5;141,87,5;140,89,4;141,88,3;140,89,5;142,89,4;142,89,5;140,87,4;140,87,5;142,87,4;141,88,6;142,87,5;141,89,3;140,88,3;142,88,3;141,87,3;141,89,6;140,88,6;142,88,6;141,87,6;140,89,3;141,90,4;142,89,3;141,90,5;139,88,4;140,87,3;139,88,5;140,89,6;142,87,3;143,88,4;142,89,6;143,88,5;141,86,4;140,87,6;141,86,5;142,87,6;140,90,4;139,89,4;140,90,5;142,90,4;139,89,5;142,90,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="145" />
+      </Cell>
+      <Cell id="146">
+        <Nodes>166,32,4;166,33,4;167,32,4;166,32,5;166,32,3;165,32,4;167,33,4;166,31,4;166,33,5;166,33,3;165,33,4;167,32,5;167,32,3;165,32,5;165,32,3;167,31,4;167,33,5;166,31,5;167,33,3;166,31,3;165,31,4;165,33,5;165,33,3;166,34,4;167,31,5;167,31,3;165,31,5;165,31,3;168,32,4;166,32,6;167,34,4;166,34,5;166,32,2;166,34,3;165,34,4;168,33,4;164,32,4;166,33,6;166,33,2;168,32,5;167,32,6;168,32,3;164,33,4;167,34,5;166,30,4;167,32,2;167,34,3;165,32,6;168,31,4;165,34,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="146" />
+      </Cell>
+      <Cell id="147">
+        <Nodes>136,115,2;136,115,3;137,115,2;137,115,3;136,114,2;136,114,3;137,114,2;137,114,3;136,116,2;136,116,3;135,115,2;135,115,3;137,116,2;136,115,1;137,116,3;135,114,2;137,115,1;136,115,4;135,114,3;136,114,1;137,115,4;138,115,2;137,114,1;136,114,4;138,115,3;136,113,2;135,116,2;137,114,4;136,113,3;138,114,2;135,116,3;136,116,1;138,114,3;137,113,2;135,115,1;137,113,3;137,116,1;136,116,4;135,115,4;135,114,1;137,116,4;138,116,2;138,116,3;135,114,4;138,115,1;135,113,2;135,113,3;136,117,2;136,113,1;138,115,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="147" />
+      </Cell>
+      <Cell id="148">
+        <Nodes>117,33,2;117,33,3;117,34,2;116,33,2;118,33,2;117,34,3;117,32,2;116,33,3;117,33,1;116,34,2;118,33,3;117,32,3;118,34,2;116,34,3;116,32,2;117,34,1;116,33,1;118,34,3;118,32,2;116,32,3;118,33,1;117,32,1;116,34,1;118,32,3;117,33,4;118,34,1;117,35,2;116,32,1;115,33,2;117,34,4;116,33,4;117,35,3;118,32,1;115,33,3;116,35,2;118,33,4;115,34,2;117,32,4;119,33,2;116,34,4;117,31,2;118,35,2;116,35,3;115,34,3;115,32,2;117,35,1;119,33,3;117,33,0;118,34,4;115,33,1</Nodes>
+        <PropertyData symbol-ref="clone_id" value="148" />
+      </Cell>
+      <Cell id="149">
+        <Nodes>123,86,7;122,86,7;123,87,7;123,86,8;122,87,7;123,86,6;122,86,8;123,85,7;122,86,6;122,85,7;123,87,8;124,86,7;123,87,6;122,87,8;122,87,6;123,85,8;123,85,6;122,85,8;121,86,7;122,85,6;124,87,7;124,86,8;124,86,6;124,85,7;121,87,7;121,86,8;121,86,6;121,85,7;124,87,8;123,88,7;124,87,6;122,88,7;123,86,9;124,85,8;124,85,6;123,86,5;122,86,9;121,87,8;121,87,6;122,86,5;123,84,7;121,85,8;122,84,7;121,85,6;123,88,8;123,88,6;123,87,9;122,88,8;122,88,6;123,87,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="149" />
+      </Cell>
+      <Cell id="150">
+        <Nodes>101,132,5;101,133,5;101,132,4;101,133,4;100,132,5;100,133,5;102,132,5;102,133,5;100,132,4;101,132,6;100,133,4;101,133,6;102,132,4;102,133,4;101,131,5;101,134,5;100,132,6;101,131,4;100,133,6;102,132,6;102,133,6;100,131,5;101,134,4;102,131,5;101,132,3;100,134,5;101,133,3;100,131,4;101,131,6;102,134,5;102,131,4;100,134,4;101,134,6;99,132,5;102,134,4;99,133,5;100,132,3;100,133,3;102,132,3;103,132,5;100,131,6;102,133,3;99,132,4;103,133,5;99,133,4;102,131,6;100,134,6;103,132,4;102,134,6;103,133,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="150" />
+      </Cell>
+      <Cell id="151">
+        <Nodes>141,47,7;141,47,6;142,47,7;142,47,6;141,46,7;141,48,7;141,46,6;142,46,7;141,48,6;140,47,7;142,48,7;141,47,8;142,46,6;140,47,6;142,48,6;142,47,8;140,46,7;141,46,8;140,48,7;141,48,8;141,47,5;140,46,6;140,48,6;143,47,7;142,46,8;140,47,8;142,48,8;142,47,5;143,47,6;141,46,5;141,45,7;141,48,5;143,46,7;140,46,8;143,48,7;141,49,7;140,48,8;142,46,5;141,45,6;140,47,5;143,46,6;142,45,7;142,48,5;143,48,6;141,49,6;143,47,8;142,49,7;142,45,6;139,47,7;142,49,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="151" />
+      </Cell>
+      <Cell id="152">
+        <Nodes>127,86,5;127,87,5;126,86,5;126,87,5;127,86,6;127,87,6;126,86,6;126,87,6;127,86,4;127,87,4;126,86,4;126,87,4;128,86,5;127,85,5;128,87,5;126,85,5;127,88,5;128,86,6;125,86,5;127,85,6;126,88,5;128,87,6;125,87,5;126,85,6;127,88,6;125,86,6;126,88,6;125,87,6;127,86,7;127,87,7;126,86,7;126,87,7;128,86,4;127,85,4;128,87,4;126,85,4;128,85,5;127,88,4;125,86,4;126,88,4;125,87,4;128,88,5;128,85,6;125,85,5;128,88,6;125,88,5;125,85,6;128,86,7;127,85,7;128,87,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="152" />
+      </Cell>
+      <Cell id="153">
+        <Nodes>118,90,3;118,91,3;119,90,3;119,91,3;118,90,2;118,91,2;118,90,4;118,91,4;119,90,2;117,90,3;119,91,2;119,90,4;117,91,3;119,91,4;118,89,3;118,92,3;119,89,3;117,90,2;117,91,2;117,90,4;117,91,4;119,92,3;118,89,2;118,89,4;120,90,3;120,91,3;118,92,2;118,92,4;119,89,2;117,89,3;119,89,4;119,92,2;117,92,3;119,92,4;118,90,1;120,90,2;118,91,1;120,91,2;120,90,4;118,90,5;120,91,4;118,91,5;117,89,2;119,90,1;119,91,1;117,89,4;117,92,2;119,90,5;119,91,5;117,92,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="153" />
+      </Cell>
+      <Cell id="154">
+        <Nodes>149,40,4;149,40,3;150,40,4;149,41,4;150,40,3;149,39,4;149,41,3;148,40,4;150,41,4;149,40,5;149,39,3;150,39,4;148,40,3;150,41,3;150,40,5;148,41,4;150,39,3;149,41,5;148,39,4;149,39,5;148,41,3;148,40,5;150,41,5;149,40,2;148,39,3;151,40,4;150,39,5;150,40,2;149,42,4;148,41,5;151,40,3;149,41,2;151,41,4;148,39,5;149,42,3;149,39,2;150,42,4;149,38,4;151,39,4;148,40,2;150,41,2;151,41,3;151,40,5;150,42,3;147,40,4;150,39,2;149,38,3;151,39,3;150,38,4;149,40,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="154" />
+      </Cell>
+      <Cell id="155">
+        <Nodes>115,45,5;116,45,5;115,45,6;115,44,5;116,45,6;116,44,5;115,44,6;116,44,6;115,46,5;115,45,4;114,45,5;116,46,5;116,45,4;115,46,6;115,44,4;114,45,6;114,44,5;116,46,6;116,44,4;114,44,6;117,45,5;115,45,7;115,43,5;115,46,4;114,46,5;114,45,4;117,45,6;117,44,5;116,45,7;116,43,5;115,44,7;115,43,6;116,46,4;114,46,6;114,44,4;117,44,6;116,44,7;116,43,6;117,46,5;117,45,4;115,46,7;114,45,7;115,43,4;114,43,5;114,46,4;117,46,6;116,46,7;117,44,4;116,43,4;114,44,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="155" />
+      </Cell>
+      <Cell id="156">
+        <Nodes>114,138,4;114,137,4;114,138,3;113,138,4;114,137,3;113,137,4;113,138,3;115,138,4;113,137,3;114,138,5;114,139,4;115,137,4;114,137,5;115,138,3;113,138,5;114,139,3;113,139,4;115,137,3;113,137,5;114,136,4;113,139,3;115,138,5;114,138,2;115,139,4;114,139,5;112,138,4;114,136,3;115,137,5;113,136,4;114,137,2;112,137,4;115,139,3;113,138,2;112,138,3;113,139,5;113,136,3;113,137,2;112,137,3;115,136,4;114,136,5;115,138,2;115,139,5;112,138,5;115,136,3;114,139,2;113,136,5;112,139,4;115,137,2;116,138,4;114,138,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="156" />
+      </Cell>
+      <Cell id="157">
+        <Nodes>168,110,3;168,110,2;167,110,3;168,109,3;167,110,2;168,109,2;167,109,3;167,109,2;168,111,3;169,110,3;168,110,4;168,111,2;169,110,2;167,111,3;169,109,3;167,110,4;168,109,4;167,111,2;169,109,2;167,109,4;168,110,1;169,111,3;166,110,3;168,108,3;168,111,4;169,110,4;167,110,1;168,109,1;169,111,2;166,110,2;168,108,2;166,109,3;167,108,3;167,111,4;169,109,4;167,109,1;166,109,2;167,108,2;168,111,1;169,110,1;166,111,3;169,108,3;169,111,4;166,110,4;168,108,4;167,111,1;169,109,1;166,111,2;169,108,2;168,112,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="157" />
+      </Cell>
+      <Cell id="158">
+        <Nodes>143,56,4;144,56,4;143,57,4;143,56,5;144,57,4;144,56,5;143,57,5;144,57,5;143,56,3;143,55,4;144,56,3;142,56,4;144,55,4;143,57,3;143,55,5;144,57,3;142,57,4;142,56,5;144,55,5;145,56,4;142,57,5;143,58,4;145,57,4;145,56,5;143,56,6;144,58,4;144,56,6;143,58,5;145,57,5;143,57,6;144,58,5;144,57,6;143,55,3;142,56,3;144,55,3;142,55,4;142,57,3;142,55,5;145,56,3;145,55,4;143,58,3;145,57,3;144,58,3;145,55,5;142,58,4;143,55,6;142,56,6;144,55,6;142,58,5;142,57,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="158" />
+      </Cell>
+      <Cell id="159">
+        <Nodes>135,28,7;136,28,7;135,28,8;136,28,8;135,27,7;135,29,7;136,27,7;135,27,8;136,29,7;135,29,8;136,27,8;135,28,6;136,29,8;134,28,7;136,28,6;134,28,8;137,28,7;135,27,6;134,27,7;135,28,9;135,29,6;136,27,6;137,28,8;134,29,7;136,28,9;134,27,8;136,29,6;134,29,8;137,27,7;134,28,6;135,27,9;137,29,7;137,27,8;135,26,7;135,29,9;136,27,9;137,29,8;136,26,7;136,29,9;135,26,8;137,28,6;135,30,7;134,27,6;136,26,8;134,28,9;136,30,7;134,29,6;135,30,8;136,30,8;137,27,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="159" />
+      </Cell>
+      <Cell id="160">
+        <Nodes>117,98,3;118,98,3;117,97,3;117,98,2;117,98,4;118,97,3;117,99,3;118,98,2;116,98,3;117,97,2;118,98,4;118,99,3;117,97,4;118,97,2;117,99,2;116,97,3;118,97,4;116,98,2;117,99,4;118,99,2;116,98,4;116,99,3;118,99,4;119,98,3;116,97,2;116,97,4;117,96,3;119,97,3;116,99,2;117,98,1;119,98,2;118,96,3;116,99,4;119,98,4;118,98,1;119,99,3;117,96,2;117,98,5;117,97,1;119,97,2;117,100,3;117,96,4;118,96,2;118,98,5;119,97,4;118,97,1;117,99,1;118,100,3;119,99,2;116,96,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="160" />
+      </Cell>
+      <Cell id="161">
+        <Nodes>127,142,4;127,142,3;127,143,4;127,143,3;126,142,4;126,142,3;126,143,4;126,143,3;128,142,4;128,142,3;128,143,4;128,143,3;127,141,4;127,141,3;127,142,5;127,142,2;127,143,5;126,141,4;127,143,2;126,141,3;127,144,4;126,142,5;127,144,3;126,142,2;126,143,5;128,141,4;128,141,3;126,143,2;128,142,5;126,144,4;126,144,3;125,142,4;128,142,2;125,142,3;128,143,5;127,141,5;125,143,4;128,143,2;125,143,3;127,141,2;128,144,4;128,144,3;126,141,5;127,144,5;126,141,2;129,142,4;129,142,3;127,144,2;129,143,4;128,141,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="161" />
+      </Cell>
+      <Cell id="162">
+        <Nodes>159,117,6;159,117,5;160,117,6;159,118,6;159,116,6;158,117,6;160,117,5;159,118,5;159,117,7;160,118,6;159,116,5;158,117,5;160,116,6;158,118,6;160,118,5;160,117,7;159,118,7;158,116,6;160,116,5;158,118,5;159,116,7;158,117,7;158,116,5;159,117,4;160,118,7;160,116,7;158,118,7;161,117,6;159,119,6;160,117,4;159,118,4;158,116,7;161,117,5;159,119,5;159,116,4;158,117,4;161,118,6;160,119,6;159,115,6;157,117,6;160,118,4;161,116,6;158,119,6;161,118,5;160,119,5;159,115,5;157,117,5;160,116,4;159,117,8;158,118,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="162" />
+      </Cell>
+      <Cell id="163">
+        <Nodes>163,101,3;163,102,3;164,101,3;164,102,3;163,101,2;163,101,4;163,102,2;163,102,4;164,101,2;164,101,4;164,102,2;164,102,4;162,101,3;162,102,3;163,100,3;163,103,3;164,100,3;164,103,3;165,101,3;162,101,2;165,102,3;162,101,4;162,102,2;162,102,4;163,100,2;163,100,4;163,103,2;164,100,2;163,103,4;164,100,4;164,103,2;164,103,4;165,101,2;162,100,3;165,101,4;165,102,2;165,102,4;162,103,3;163,101,1;163,102,1;163,101,5;163,102,5;164,101,1;164,102,1;164,101,5;164,102,5;165,100,3;162,100,2;162,100,4;165,103,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="163" />
+      </Cell>
+      <Cell id="164">
+        <Nodes>145,120,7;145,120,6;144,120,7;145,121,7;144,120,6;145,121,6;145,119,7;146,120,7;144,121,7;145,120,8;145,119,6;146,120,6;144,121,6;144,119,7;146,121,7;144,120,8;145,121,8;144,119,6;146,121,6;146,119,7;145,120,5;145,119,8;146,120,8;144,121,8;146,119,6;143,120,7;145,122,7;144,120,5;145,121,5;144,119,8;146,121,8;143,120,6;145,122,6;143,121,7;144,122,7;145,119,5;146,120,5;144,121,5;146,119,8;143,121,6;144,122,6;145,118,7;143,119,7;147,120,7;146,122,7;144,119,5;146,121,5;143,120,8;145,122,8;145,118,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="164" />
+      </Cell>
+      <Cell id="165">
+        <Nodes>109,58,7;109,58,8;109,57,7;109,57,8;108,58,7;108,58,8;108,57,7;108,57,8;110,58,7;110,58,8;109,59,7;110,57,7;109,59,8;109,58,6;110,57,8;109,57,6;108,59,7;109,58,9;108,59,8;108,58,6;109,57,9;109,56,7;110,59,7;108,57,6;109,56,8;108,58,9;110,59,8;110,58,6;107,58,7;108,57,9;109,59,6;108,56,7;110,57,6;107,58,8;110,58,9;108,56,8;107,57,7;109,59,9;107,57,8;110,57,9;110,56,7;108,59,6;110,56,8;111,58,7;108,59,9;109,56,6;110,59,6;111,58,8;111,57,7;107,59,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="165" />
+      </Cell>
+      <Cell id="166">
+        <Nodes>139,56,5;139,56,4;139,55,5;140,56,5;139,55,4;140,56,4;140,55,5;140,55,4;138,56,5;139,57,5;139,56,6;138,56,4;139,57,4;138,55,5;140,57,5;139,55,6;140,56,6;138,55,4;140,57,4;140,55,6;139,56,3;139,54,5;141,56,5;139,55,3;140,56,3;139,54,4;141,56,4;140,54,5;141,55,5;140,55,3;140,54,4;141,55,4;138,57,5;138,56,6;139,57,6;138,57,4;138,55,6;140,57,6;138,56,3;139,57,3;138,54,5;139,54,6;141,57,5;141,56,6;138,55,3;138,54,4;140,57,3;141,57,4;140,54,6;141,55,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="166" />
+      </Cell>
+      <Cell id="167">
+        <Nodes>127,45,6;127,45,5;127,44,6;127,44,5;128,45,6;128,45,5;128,44,6;128,44,5;126,45,6;126,45,5;126,44,6;127,46,6;126,44,5;127,46,5;127,45,7;127,45,4;127,44,7;128,46,6;128,46,5;127,44,4;128,45,7;127,43,6;127,43,5;128,45,4;128,44,7;128,44,4;128,43,6;129,45,6;128,43,5;129,45,5;129,44,6;129,44,5;126,46,6;126,46,5;126,45,7;126,45,4;126,44,7;127,46,7;126,44,4;127,46,4;126,43,6;126,43,5;128,46,7;128,46,4;127,43,7;127,43,4;129,46,6;129,46,5;128,43,7;129,45,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="167" />
+      </Cell>
+      <Cell id="168">
+        <Nodes>104,34,4;103,34,4;104,34,3;103,34,3;104,33,4;104,35,4;103,33,4;104,33,3;103,35,4;104,35,3;103,33,3;103,35,3;104,34,5;105,34,4;103,34,5;105,34,3;102,34,4;104,34,2;104,33,5;105,33,4;104,35,5;105,35,4;102,34,3;103,34,2;103,33,5;105,33,3;103,35,5;105,35,3;105,34,5;102,33,4;104,33,2;102,35,4;104,35,2;102,33,3;103,33,2;104,32,4;102,35,3;103,35,2;103,32,4;104,36,4;104,32,3;102,34,5;105,34,2;105,33,5;103,36,4;103,32,3;104,36,3;105,35,5;103,36,3;102,34,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="168" />
+      </Cell>
+      <Cell id="169">
+        <Nodes>126,109,7;126,110,7;126,109,8;126,110,8;125,109,7;125,110,7;127,109,7;127,110,7;125,109,8;125,110,8;126,109,6;126,110,6;127,109,8;127,110,8;126,108,7;126,111,7;125,109,6;125,110,6;126,108,8;126,111,8;127,109,6;125,108,7;127,110,6;125,111,7;126,109,9;126,110,9;127,108,7;125,108,8;127,111,7;125,111,8;126,108,6;124,109,7;126,111,6;127,108,8;124,110,7;125,109,9;127,111,8;125,110,9;124,109,8;124,110,8;127,109,9;127,110,9;125,108,6;128,109,7;125,111,6;128,110,7;127,108,6;127,111,6;128,109,8;126,108,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="169" />
+      </Cell>
+      <Cell id="170">
+        <Nodes>166,156,3;167,156,3;166,157,3;166,156,2;166,156,4;166,155,3;167,157,3;167,156,2;167,156,4;167,155,3;165,156,3;166,157,2;166,157,4;166,155,2;166,155,4;167,157,2;167,157,4;167,155,2;167,155,4;168,156,3;165,157,3;165,156,2;165,156,4;165,155,3;168,157,3;168,156,2;168,156,4;168,155,3;165,157,2;165,157,4;165,155,2;166,158,3;165,155,4;166,156,1;166,156,5;167,158,3;166,154,3;167,156,1;167,156,5;168,157,2;167,154,3;168,157,4;168,155,2;168,155,4;166,158,2;166,158,4;166,157,1;166,157,5;166,155,1;167,158,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="170" />
+      </Cell>
+      <Cell id="171">
+        <Nodes>155,26,6;154,26,6;155,26,5;155,25,6;155,27,6;154,26,5;155,26,7;154,25,6;154,27,6;154,26,7;156,26,6;155,25,5;155,27,5;154,25,5;154,27,5;155,25,7;155,27,7;154,25,7;154,27,7;153,26,6;156,26,5;156,25,6;156,27,6;156,26,7;153,26,5;153,25,6;153,27,6;156,25,5;153,26,7;156,27,5;155,26,4;156,25,7;154,26,4;155,24,6;156,27,7;155,28,6;154,24,6;153,25,5;154,28,6;155,26,8;153,27,5;154,26,8;153,25,7;155,25,4;153,27,7;155,27,4;155,24,5;154,25,4;155,28,5;154,27,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="171" />
+      </Cell>
+      <Cell id="172">
+        <Nodes>139,165,7;139,164,7;140,165,7;140,164,7;139,165,6;139,164,6;140,165,6;140,164,6;139,165,8;139,164,8;140,165,8;138,165,7;140,164,8;138,164,7;139,166,7;140,166,7;139,163,7;138,165,6;138,164,6;140,163,7;139,166,6;141,165,7;141,164,7;140,166,6;139,163,6;138,165,8;138,164,8;139,166,8;140,163,6;141,165,6;139,165,5;141,164,6;139,164,5;140,166,8;139,163,8;138,166,7;140,165,5;140,164,5;140,163,8;141,165,8;138,163,7;141,164,8;138,166,6;141,166,7;138,163,6;139,165,9;139,164,9;141,163,7;138,166,8;140,165,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="172" />
+      </Cell>
+      <Cell id="173">
+        <Nodes>157,102,8;157,102,7;157,101,8;157,101,7;158,102,8;156,102,8;158,102,7;158,101,8;156,102,7;156,101,8;158,101,7;157,103,8;157,102,9;156,101,7;157,103,7;157,101,9;158,103,8;158,102,9;157,102,6;157,100,8;156,103,8;158,103,7;156,102,9;158,101,9;157,101,6;157,100,7;156,103,7;156,101,9;157,103,9;158,102,6;158,100,8;159,102,8;156,102,6;158,101,6;156,100,8;158,100,7;159,102,7;159,101,8;156,101,6;156,100,7;158,103,9;157,103,6;155,102,8;159,101,7;157,100,9;156,103,9;155,102,7;155,101,8;155,101,7;158,103,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="173" />
+      </Cell>
+      <Cell id="174">
+        <Nodes>113,37,4;113,38,4;112,37,4;113,37,5;112,38,4;113,38,5;112,37,5;112,38,5;113,37,3;114,37,4;113,38,3;114,38,4;113,36,4;112,37,3;112,38,3;114,37,5;114,38,5;113,39,4;112,36,4;113,36,5;112,39,4;113,39,5;112,36,5;111,37,4;111,38,4;113,37,6;113,38,6;112,39,5;111,37,5;112,37,6;111,38,5;112,38,6;114,37,3;114,38,3;113,36,3;114,36,4;113,39,3;114,39,4;112,36,3;114,36,5;112,39,3;114,39,5;111,37,3;111,38,3;114,37,6;114,38,6;111,36,4;113,36,6;111,39,4;113,39,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="174" />
+      </Cell>
+      <Cell id="175">
+        <Nodes>150,114,5;150,115,5;151,114,5;150,114,6;151,115,5;150,115,6;151,114,6;150,114,4;149,114,5;150,113,5;151,115,6;150,115,4;149,115,5;151,114,4;149,114,6;151,113,5;150,113,6;151,115,4;149,115,6;151,113,6;149,114,4;150,116,5;150,113,4;149,113,5;152,114,5;149,115,4;150,114,7;151,116,5;150,116,6;151,113,4;152,115,5;149,113,6;150,115,7;152,114,6;151,114,7;151,116,6;152,115,6;150,116,4;151,115,7;149,116,5;149,113,4;152,114,4;152,113,5;149,114,7;150,114,3;151,116,4;150,113,7;148,114,5;152,115,4;149,116,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="175" />
+      </Cell>
+      <Cell id="176">
+        <Nodes>134,75,3;135,75,3;134,75,2;134,74,3;134,76,3;134,75,4;135,75,2;135,74,3;135,76,3;135,75,4;133,75,3;134,74,2;134,76,2;134,74,4;134,76,4;135,74,2;135,76,2;135,74,4;133,75,2;133,74,3;135,76,4;133,76,3;133,75,4;136,75,3;133,74,2;133,76,2;133,74,4;136,75,2;136,74,3;133,76,4;134,75,1;134,73,3;136,76,3;136,75,4;134,77,3;134,75,5;135,75,1;135,73,3;135,77,3;135,75,5;136,74,2;134,74,1;134,73,2;136,76,2;136,74,4;134,76,1;134,73,4;136,76,4;134,77,2;134,74,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="176" />
+      </Cell>
+      <Cell id="177">
+        <Nodes>152,43,7;151,43,7;152,43,6;152,42,7;151,43,6;152,44,7;151,42,7;152,43,8;151,44,7;151,43,8;152,42,6;153,43,7;152,44,6;151,42,6;151,44,6;152,42,8;152,44,8;151,42,8;153,43,6;150,43,7;151,44,8;153,42,7;153,44,7;153,43,8;150,43,6;153,42,6;150,42,7;152,43,5;153,44,6;150,44,7;151,43,5;150,43,8;152,41,7;153,42,8;153,44,8;152,45,7;151,41,7;150,42,6;150,44,6;151,45,7;152,42,5;152,43,9;152,44,5;152,41,6;151,42,5;150,42,8;151,43,9;151,44,5;150,44,8;152,45,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="177" />
+      </Cell>
+      <Cell id="178">
+        <Nodes>136,52,2;136,52,3;136,53,2;137,52,2;136,53,3;137,52,3;135,52,2;136,51,2;137,53,2;135,52,3;136,51,3;137,53,3;136,52,1;135,53,2;135,53,3;137,51,2;137,51,3;136,52,4;136,53,1;137,52,1;135,51,2;135,51,3;136,53,4;135,52,1;137,52,4;136,51,1;137,53,1;136,54,2;136,54,3;138,52,2;135,52,4;138,52,3;135,53,1;136,51,4;137,53,4;137,51,1;137,54,2;138,53,2;137,54,3;135,53,4;138,53,3;135,51,1;137,51,4;134,52,2;135,54,2;134,52,3;135,54,3;136,50,2;138,51,2;136,50,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="178" />
+      </Cell>
+      <Cell id="179">
+        <Nodes>120,155,4;120,155,5;119,155,4;120,154,4;119,155,5;120,156,4;120,154,5;121,155,4;120,156,5;119,154,4;120,155,3;121,155,5;119,156,4;119,154,5;121,154,4;119,156,5;119,155,3;121,156,4;120,154,3;121,154,5;120,156,3;120,155,6;121,156,5;121,155,3;119,154,3;118,155,4;119,156,3;119,155,6;120,154,6;120,153,4;121,154,3;118,155,5;120,156,6;121,156,3;121,155,6;120,153,5;120,157,4;118,154,4;119,154,6;119,153,4;122,155,4;118,156,4;119,156,6;120,157,5;118,154,5;119,153,5;121,154,6;122,155,5;121,153,4;118,156,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="179" />
+      </Cell>
+      <Cell id="180">
+        <Nodes>169,98,8;169,98,7;169,97,8;170,98,8;169,97,7;170,98,7;168,98,8;169,99,8;168,98,7;169,99,7;170,97,8;170,97,7;169,98,9;168,97,8;168,97,7;170,99,8;170,99,7;169,98,6;168,99,8;168,99,7;169,97,9;170,98,9;169,97,6;170,98,6;168,98,9;169,99,9;168,98,6;169,99,6;170,97,9;169,96,8;169,96,7;171,98,8;171,98,7;170,97,6;168,97,9;170,99,9;168,97,6;170,99,6;168,99,9;167,98,8;170,96,8;167,98,7;171,97,8;169,100,8;170,96,7;171,97,7;169,100,7;168,99,6;168,96,8;168,96,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="180" />
+      </Cell>
+      <Cell id="181">
+        <Nodes>114,54,6;114,53,6;113,54,6;113,53,6;114,54,7;114,53,7;114,54,5;113,54,7;114,53,5;113,53,7;113,54,5;115,54,6;114,55,6;113,53,5;115,53,6;113,55,6;115,54,7;114,55,7;114,52,6;115,53,7;112,54,6;115,54,5;114,55,5;113,55,7;113,52,6;112,53,6;115,53,5;113,55,5;115,55,6;114,52,7;112,54,7;114,54,8;114,52,5;113,52,7;112,53,7;114,53,8;112,54,5;113,54,8;115,55,7;113,52,5;115,52,6;112,53,5;113,53,8;114,54,4;112,55,6;115,55,5;114,53,4;113,54,4;115,52,7;113,53,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="181" />
+      </Cell>
+      <Cell id="182">
+        <Nodes>168,121,5;168,121,6;167,121,5;168,122,5;167,121,6;168,122,6;167,122,5;167,122,6;168,120,5;169,121,5;168,120,6;168,121,4;169,121,6;167,120,5;167,120,6;169,122,5;167,121,4;168,122,4;169,122,6;168,121,7;167,122,4;166,121,5;167,121,7;168,122,7;166,121,6;168,123,5;168,123,6;166,122,5;167,122,7;167,123,5;166,122,6;169,120,5;167,123,6;168,120,4;169,120,6;169,121,4;167,120,4;169,122,4;168,120,7;169,121,7;166,120,5;167,120,7;166,120,6;166,121,4;169,122,7;169,123,5;168,123,4;169,123,6;166,122,4;167,123,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="182" />
+      </Cell>
+      <Cell id="183">
+        <Nodes>161,66,7;160,66,7;161,67,7;160,67,7;161,66,8;160,66,8;161,66,6;161,67,8;160,66,6;160,67,8;161,65,7;160,65,7;161,67,6;160,67,6;162,66,7;159,66,7;161,65,8;160,65,8;162,67,7;159,67,7;162,66,8;161,65,6;160,65,6;159,66,8;161,68,7;160,68,7;162,66,6;162,67,8;159,66,6;162,65,7;159,67,8;161,66,9;160,66,9;159,65,7;162,67,6;161,68,8;160,68,8;159,67,6;161,67,9;160,67,9;162,65,8;159,65,8;161,68,6;160,68,6;161,66,5;160,66,5;162,65,6;159,65,6;161,64,7;161,65,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="183" />
+      </Cell>
+      <Cell id="184">
+        <Nodes>104,57,7;104,57,6;105,57,7;104,58,7;105,57,6;104,58,6;104,56,7;103,57,7;105,58,7;104,57,8;104,56,6;103,57,6;105,58,6;105,56,7;103,58,7;105,57,8;104,58,8;105,56,6;103,58,6;103,56,7;104,56,8;103,57,8;105,58,8;104,57,5;103,56,6;106,57,7;104,59,7;105,56,8;103,58,8;105,57,5;104,58,5;106,57,6;104,59,6;103,56,8;106,58,7;105,59,7;104,56,5;103,57,5;105,58,5;104,55,7;106,58,6;102,57,7;105,59,6;106,56,7;103,59,7;106,57,8;104,59,8;105,56,5;103,58,5;104,57,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="184" />
+      </Cell>
+      <Cell id="185">
+        <Nodes>139,151,4;139,150,4;139,151,5;139,150,5;140,151,4;140,150,4;140,151,5;140,150,5;138,151,4;138,150,4;139,151,3;138,151,5;139,150,3;138,150,5;139,152,4;139,149,4;139,152,5;140,151,3;140,150,3;139,149,5;140,152,4;139,151,6;139,150,6;140,149,4;140,152,5;138,151,3;138,150,3;140,149,5;138,152,4;141,151,4;140,151,6;141,150,4;140,150,6;138,149,4;139,152,3;138,152,5;141,151,5;141,150,5;139,149,3;138,149,5;138,151,6;138,150,6;140,152,3;140,149,3;139,152,6;137,151,4;137,150,4;139,149,6;138,152,3;141,151,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="185" />
+      </Cell>
+      <Cell id="186">
+        <Nodes>102,112,6;103,112,6;102,113,6;102,112,5;103,113,6;103,112,5;102,113,5;102,112,7;103,113,5;102,111,6;103,112,7;101,112,6;102,113,7;103,111,6;103,113,7;101,113,6;102,111,5;101,112,5;103,111,5;104,112,6;101,113,5;102,111,7;102,114,6;104,113,6;101,112,7;103,111,7;103,114,6;104,112,5;101,111,6;102,112,4;101,113,7;102,114,5;103,112,4;104,113,5;102,113,4;103,114,5;104,112,7;101,111,5;103,113,4;104,111,6;102,114,7;104,113,7;103,114,7;101,111,7;101,114,6;102,112,8;104,111,5;102,111,4;103,112,8;101,112,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="186" />
+      </Cell>
+      <Cell id="187">
+        <Nodes>108,117,6;109,117,6;108,117,7;109,117,7;108,116,6;109,116,6;108,116,7;109,116,7;108,118,6;109,118,6;108,118,7;109,118,7;108,117,5;109,117,5;107,117,6;107,117,7;110,117,6;110,117,7;108,117,8;108,116,5;109,117,8;109,116,5;107,116,6;107,116,7;110,116,6;108,118,5;109,118,5;107,118,6;110,116,7;108,116,8;109,116,8;107,118,7;110,118,6;108,115,6;110,118,7;109,115,6;107,117,5;108,118,8;109,118,8;108,115,7;109,115,7;110,117,5;107,117,8;108,119,6;107,116,5;109,119,6;110,117,8;108,119,7;110,116,5;109,119,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="187" />
+      </Cell>
+      <Cell id="188">
+        <Nodes>146,84,5;145,84,5;146,84,6;145,84,6;146,85,5;145,85,5;146,83,5;145,83,5;146,84,4;145,84,4;146,85,6;145,85,6;146,83,6;145,83,6;147,84,5;144,84,5;146,85,4;145,85,4;146,83,4;145,83,4;147,84,6;144,84,6;147,85,5;144,85,5;147,83,5;144,83,5;146,84,7;145,84,7;147,84,4;144,84,4;147,85,6;144,85,6;147,83,6;144,83,6;146,86,5;145,86,5;146,85,7;145,85,7;146,82,5;145,82,5;146,83,7;145,83,7;147,85,4;144,85,4;146,86,6;145,86,6;147,83,4;144,83,4;146,82,6;145,82,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="188" />
+      </Cell>
+      <Cell id="189">
+        <Nodes>131,108,6;131,108,5;132,108,6;131,107,6;131,109,6;130,108,6;131,108,7;132,108,5;131,107,5;131,109,5;130,108,5;132,107,6;132,109,6;130,107,6;130,109,6;132,108,7;131,107,7;131,109,7;132,107,5;132,109,5;130,108,7;130,107,5;130,109,5;131,108,4;132,107,7;132,109,7;130,107,7;130,109,7;133,108,6;131,106,6;131,110,6;132,108,4;131,107,4;131,109,4;129,108,6;133,108,5;130,108,4;131,106,5;131,110,5;133,107,6;133,109,6;131,108,8;132,106,6;129,108,5;132,110,6;132,107,4;132,109,4;130,106,6;133,108,7;130,110,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="189" />
+      </Cell>
+      <Cell id="190">
+        <Nodes>146,152,3;146,151,3;145,152,3;146,152,4;145,151,3;146,151,4;146,152,2;145,152,4;147,152,3;146,153,3;146,151,2;145,151,4;147,151,3;145,152,2;147,152,4;145,153,3;146,153,4;145,151,2;147,151,4;147,152,2;146,153,2;145,153,4;147,153,3;146,150,3;147,151,2;144,152,3;145,153,2;146,152,5;147,153,4;145,150,3;146,150,4;144,151,3;146,151,5;144,152,4;145,152,5;147,153,2;146,150,2;145,150,4;147,150,3;144,151,4;144,152,2;146,152,1;145,151,5;148,152,3;144,153,3;147,152,5;146,153,5;146,154,3;145,150,2;144,151,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="190" />
+      </Cell>
+      <Cell id="191">
+        <Nodes>116,73,7;116,73,8;116,74,7;116,74,8;115,73,7;115,73,8;115,74,7;115,74,8;117,73,7;117,73,8;117,74,7;117,74,8;116,72,7;116,73,6;116,72,8;116,74,6;116,73,9;116,75,7;116,74,9;116,75,8;115,72,7;115,73,6;115,72,8;115,74,6;115,73,9;115,75,7;117,72,7;115,74,9;117,73,6;115,75,8;117,72,8;117,74,6;114,73,7;117,73,9;114,73,8;114,74,7;117,75,7;116,72,6;117,74,9;114,74,8;117,75,8;116,72,9;116,75,6;115,72,6;118,73,7;116,75,9;118,73,8;118,74,7;115,72,9;118,74,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="191" />
+      </Cell>
+      <Cell id="192">
+        <Nodes>145,44,4;146,44,4;145,44,3;145,45,4;145,43,4;145,44,5;146,44,3;146,45,4;146,43,4;146,44,5;144,44,4;145,45,3;145,43,3;145,45,5;145,43,5;146,45,3;146,43,3;144,44,3;146,45,5;144,45,4;146,43,5;144,43,4;144,44,5;147,44,4;144,45,3;144,43,3;147,44,3;144,45,5;145,44,2;147,45,4;144,43,5;147,43,4;145,46,4;147,44,5;145,42,4;146,44,2;145,44,6;146,46,4;146,42,4;147,45,3;146,44,6;145,45,2;147,43,3;145,43,2;145,46,3;147,45,5;145,42,3;147,43,5;145,46,5;146,45,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="192" />
+      </Cell>
+      <Cell id="193">
+        <Nodes>166,164,5;166,165,5;165,164,5;165,165,5;166,164,4;166,165,4;166,164,6;165,164,4;166,165,6;165,165,4;165,164,6;165,165,6;167,164,5;166,163,5;167,165,5;165,163,5;166,166,5;164,164,5;167,164,4;165,166,5;166,163,4;164,165,5;167,165,4;167,164,6;166,163,6;165,163,4;167,165,6;165,163,6;166,166,4;164,164,4;166,166,6;165,166,4;167,163,5;164,165,4;164,164,6;166,164,3;165,166,6;164,165,6;166,165,3;165,164,3;167,166,5;165,165,3;166,164,7;164,163,5;167,163,4;166,165,7;165,164,7;167,163,6;165,165,7;164,166,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="193" />
+      </Cell>
+      <Cell id="194">
+        <Nodes>124,52,3;124,51,3;123,52,3;124,52,4;124,52,2;123,51,3;125,52,3;124,51,4;124,51,2;125,51,3;124,53,3;123,52,4;123,52,2;123,51,4;123,51,2;125,52,4;125,52,2;125,51,4;125,51,2;124,50,3;123,53,3;124,53,4;124,53,2;125,53,3;123,50,3;124,50,4;123,53,4;124,50,2;123,53,2;122,52,3;125,50,3;122,51,3;125,53,4;124,52,5;125,53,2;124,52,1;124,51,5;123,50,4;124,51,1;123,50,2;126,52,3;122,52,4;122,52,2;126,51,3;125,50,4;125,50,2;123,52,5;122,51,4;123,52,1;122,51,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="194" />
+      </Cell>
+      <Cell id="195">
+        <Nodes>104,149,4;105,149,4;104,148,4;104,149,5;105,148,4;104,149,3;105,149,5;104,150,4;104,148,5;103,149,4;105,149,3;105,150,4;104,148,3;105,148,5;104,150,5;103,148,4;105,148,3;103,149,5;104,150,3;105,150,5;103,149,3;106,149,4;103,150,4;103,148,5;105,150,3;104,147,4;103,148,3;106,148,4;104,149,6;106,149,5;105,147,4;103,150,5;105,149,6;104,147,5;106,149,3;103,150,3;104,148,6;106,150,4;106,148,5;104,149,2;104,147,3;105,147,5;105,148,6;106,148,3;104,151,4;103,147,4;105,149,2;105,147,3;104,150,6;104,148,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="195" />
+      </Cell>
+      <Cell id="196">
+        <Nodes>110,64,7;109,64,7;110,65,7;109,65,7;110,64,6;109,64,6;110,65,6;109,65,6;110,64,8;109,64,8;110,65,8;109,65,8;110,63,7;109,63,7;111,64,7;108,64,7;111,65,7;108,65,7;110,66,7;109,66,7;110,63,6;109,63,6;111,64,6;108,64,6;111,65,6;108,65,6;110,63,8;109,63,8;110,66,6;109,66,6;111,64,8;108,64,8;111,65,8;110,64,5;109,64,5;108,65,8;110,65,5;110,66,8;109,65,5;111,63,7;109,66,8;108,63,7;111,66,7;111,63,6;108,66,7;110,64,9;109,64,9;108,63,6;110,65,9;109,65,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="196" />
+      </Cell>
+      <Cell id="197">
+        <Nodes>161,129,3;162,129,3;161,128,3;161,129,2;161,129,4;161,130,3;162,128,3;162,129,2;162,129,4;162,130,3;160,129,3;161,128,2;161,128,4;161,130,2;161,130,4;162,128,2;162,128,4;162,130,2;160,128,3;160,129,2;162,130,4;160,129,4;160,130,3;163,129,3;160,128,2;160,128,4;160,130,2;160,130,4;163,128,3;163,129,2;161,127,3;161,129,1;163,129,4;163,130,3;161,129,5;161,131,3;162,127,3;162,129,1;162,129,5;162,131,3;163,128,2;161,127,2;161,128,1;163,128,4;163,130,2;161,127,4;161,130,1;163,130,4;161,128,5;161,131,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="197" />
+      </Cell>
+      <Cell id="198">
+        <Nodes>150,174,6;149,174,6;150,175,6;150,174,7;150,174,5;150,173,6;151,174,6;149,175,6;149,174,7;150,175,7;149,174,5;150,175,5;149,173,6;151,175,6;150,173,7;151,174,7;150,173,5;151,174,5;151,173,6;149,175,7;149,175,5;149,173,7;151,175,7;149,173,5;151,175,5;151,173,7;151,173,5;148,174,6;150,176,6;150,174,8;150,174,4;150,172,6;148,175,6;149,176,6;148,174,7;152,174,6;150,176,7;149,174,8;150,175,8;148,174,5;148,173,6;150,176,5;151,176,6;150,173,8;151,174,8;149,174,4;150,175,4;149,172,6;150,172,7;148,175,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="198" />
+      </Cell>
+      <Cell id="199">
+        <Nodes>138,134,7;138,134,8;137,134,7;138,133,7;137,134,8;138,133,8;138,135,7;137,133,7;139,134,7;138,134,6;138,135,8;137,133,8;137,135,7;139,134,8;137,134,6;139,133,7;138,133,6;137,135,8;139,133,8;139,135,7;138,135,6;137,133,6;139,134,6;138,134,9;139,135,8;136,134,7;137,135,6;138,132,7;139,133,6;137,134,9;136,134,8;138,133,9;136,133,7;138,132,8;137,132,7;139,135,6;138,135,9;137,133,9;139,134,9;136,133,8;136,135,7;138,136,7;137,132,8;136,134,6;140,134,7;139,132,7;138,132,6;138,134,5;137,135,9;136,135,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="199" />
+      </Cell>
+      <Cell id="200">
+        <Nodes>129,131,6;130,131,6;129,131,5;130,131,5;129,130,6;129,132,6;130,130,6;129,130,5;130,132,6;129,132,5;130,130,5;129,131,7;128,131,6;130,132,5;130,131,7;128,131,5;129,130,7;128,130,6;131,131,6;129,131,4;129,132,7;130,130,7;128,132,6;128,130,5;131,131,5;130,131,4;130,132,7;128,132,5;128,131,7;131,130,6;129,130,4;131,132,6;129,129,6;131,130,5;129,132,4;130,130,4;130,129,6;131,132,5;129,129,5;130,132,4;128,130,7;131,131,7;129,133,6;130,129,5;128,131,4;128,132,7;130,133,6;129,133,5;130,133,5;131,130,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="200" />
+      </Cell>
+      <Cell id="201">
+        <Nodes>143,95,4;143,96,4;142,95,4;143,95,5;142,96,4;143,96,5;142,95,5;142,96,5;143,95,3;144,95,4;143,94,4;143,96,3;142,95,3;144,96,4;142,94,4;144,95,5;142,96,3;143,94,5;144,96,5;143,97,4;142,94,5;141,95,4;142,97,4;143,95,6;141,96,4;143,97,5;141,95,5;143,96,6;142,95,6;142,97,5;141,96,5;142,96,6;144,95,3;143,94,3;144,94,4;144,96,3;142,94,3;144,94,5;143,97,3;144,97,4;141,95,3;142,97,3;141,94,4;141,96,3;144,95,6;144,97,5;143,94,6;144,96,6;141,94,5;142,94,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="201" />
+      </Cell>
+      <Cell id="202">
+        <Nodes>144,66,5;144,66,6;145,66,5;144,67,5;144,65,5;143,66,5;144,66,4;145,66,6;144,67,6;144,65,6;145,67,5;145,65,5;143,66,6;145,66,4;143,67,5;143,65,5;144,67,4;144,65,4;145,67,6;145,65,6;143,66,4;143,67,6;143,65,6;145,67,4;145,65,4;144,66,7;146,66,5;143,67,4;143,65,4;144,68,5;144,64,5;145,66,7;146,66,6;144,67,7;144,65,7;146,67,5;142,66,5;146,65,5;143,66,7;144,68,6;144,66,3;145,68,5;144,64,6;145,64,5;146,66,4;145,67,7;145,65,7;146,67,6;142,66,6;143,68,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="202" />
+      </Cell>
+      <Cell id="203">
+        <Nodes>102,98,5;103,98,5;102,97,5;103,97,5;102,98,6;103,98,6;102,97,6;102,98,4;103,97,6;103,98,4;102,99,5;102,97,4;103,99,5;103,97,4;101,98,5;101,97,5;104,98,5;102,99,6;103,99,6;101,98,6;104,97,5;102,96,5;102,99,4;103,96,5;101,97,6;103,99,4;104,98,6;101,98,4;104,97,6;101,99,5;102,98,7;101,97,4;102,96,6;104,98,4;103,98,7;103,96,6;102,97,7;104,99,5;104,97,4;103,97,7;102,96,4;103,96,4;101,99,6;102,98,3;101,96,5;104,99,6;103,98,3;101,99,4;102,97,3;103,97,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="203" />
+      </Cell>
+      <Cell id="204">
+        <Nodes>107,44,3;107,44,4;107,43,3;106,44,3;108,44,3;107,43,4;107,45,3;106,44,4;107,44,2;108,44,4;106,43,3;108,43,3;107,45,4;106,43,4;107,43,2;108,43,4;106,45,3;108,45,3;106,44,2;108,44,2;106,45,4;107,45,2;108,45,4;107,44,5;106,43,2;108,43,2;107,42,3;107,43,5;107,42,4;106,45,2;108,45,2;105,44,3;106,44,5;108,44,5;109,44,3;106,42,3;108,42,3;107,45,5;105,44,4;109,44,4;105,43,3;106,43,5;108,43,5;109,43,3;107,46,3;106,42,4;107,42,2;108,42,4;107,44,1;105,43,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="204" />
+      </Cell>
+      <Cell id="205">
+        <Nodes>124,170,7;124,171,7;125,170,7;124,170,6;124,170,8;123,170,7;125,171,7;124,171,6;124,171,8;123,171,7;124,169,7;125,170,6;125,170,8;123,170,6;123,170,8;125,171,6;125,171,8;123,171,6;123,171,8;124,172,7;125,169,7;124,169,6;124,169,8;123,169,7;125,172,7;124,172,6;124,172,8;123,172,7;125,169,6;125,169,8;123,169,6;126,170,7;123,169,8;124,170,5;124,170,9;126,171,7;122,170,7;124,171,5;124,171,9;125,172,6;122,171,7;125,172,8;123,172,6;123,172,8;126,170,6;125,170,5;126,170,8;123,170,5;125,170,9;126,171,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="205" />
+      </Cell>
+      <Cell id="206">
+        <Nodes>154,130,2;155,130,2;154,130,3;154,129,2;155,130,3;155,129,2;154,131,2;154,129,3;154,130,1;155,131,2;155,129,3;153,130,2;154,131,3;155,130,1;155,131,3;153,130,3;154,129,1;153,129,2;155,129,1;156,130,2;154,131,1;153,131,2;153,129,3;154,130,4;155,131,1;156,130,3;153,130,1;155,130,4;153,131,3;156,129,2;154,128,2;154,129,4;155,128,2;156,131,2;156,129,3;153,129,1;154,128,3;155,129,4;154,131,4;156,130,1;155,128,3;156,131,3;153,131,1;154,132,2;155,131,4;153,130,4;155,132,2;154,132,3;156,129,1;154,130,0</Nodes>
+        <PropertyData symbol-ref="clone_id" value="206" />
+      </Cell>
+      <Cell id="207">
+        <Nodes>144,160,7;143,160,7;144,161,7;144,160,6;143,161,7;143,160,6;144,161,6;143,161,6;144,160,8;144,159,7;143,160,8;143,159,7;145,160,7;144,161,8;143,161,8;144,159,6;143,159,6;142,160,7;145,161,7;145,160,6;142,161,7;142,160,6;145,161,6;144,162,7;143,162,7;144,160,5;144,159,8;143,160,5;142,161,6;143,159,8;144,162,6;145,160,8;144,161,5;143,162,6;145,159,7;143,161,5;142,160,8;145,161,8;142,159,7;145,159,6;142,161,8;144,162,8;142,159,6;143,162,8;144,159,5;145,162,7;143,159,5;145,160,5;145,159,8;144,160,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="207" />
+      </Cell>
+      <Cell id="208">
+        <Nodes>129,159,8;129,159,7;129,160,8;129,160,7;130,159,8;128,159,8;130,159,7;128,159,7;130,160,8;128,160,8;129,158,8;129,159,9;130,160,7;128,160,7;129,158,7;129,160,9;130,158,8;128,158,8;130,159,9;128,159,9;129,159,6;130,158,7;128,158,7;129,161,8;130,160,9;128,160,9;129,158,9;129,160,6;129,161,7;130,159,6;128,159,6;130,161,8;131,159,8;128,161,8;127,159,8;130,158,9;128,158,9;130,160,6;128,160,6;129,158,6;130,161,7;131,159,7;128,161,7;131,160,8;127,159,7;127,160,8;129,161,9;131,160,7;127,160,7;129,157,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="208" />
+      </Cell>
+      <Cell id="209">
+        <Nodes>135,93,5;135,92,5;135,93,4;134,93,5;136,93,5;135,93,6;135,94,5;135,92,4;134,92,5;134,93,4;136,92,5;135,92,6;136,93,4;134,93,6;135,94,4;134,94,5;136,93,6;134,92,4;136,94,5;135,94,6;136,92,4;134,92,6;136,92,6;134,94,4;136,94,4;134,94,6;135,91,5;136,94,6;135,93,3;133,93,5;135,91,4;137,93,5;134,91,5;135,93,7;135,92,3;133,92,5;136,91,5;134,93,3;135,91,6;133,93,4;135,95,5;136,93,3;133,93,6;137,92,5;135,94,3;135,92,7;133,94,5;137,93,4;134,91,4;134,93,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="209" />
+      </Cell>
+      <Cell id="210">
+        <Nodes>109,102,4;110,102,4;109,101,4;110,101,4;109,102,5;110,102,5;109,101,5;110,101,5;109,102,3;110,102,3;109,101,3;110,101,3;109,103,4;110,103,4;108,102,4;111,102,4;108,101,4;111,101,4;109,103,5;110,103,5;109,100,4;110,100,4;108,102,5;111,102,5;108,101,5;111,101,5;109,100,5;110,100,5;109,102,6;110,102,6;109,101,6;110,101,6;109,103,3;110,103,3;108,102,3;111,102,3;108,101,3;111,101,3;108,103,4;111,103,4;109,100,3;110,100,3;108,103,5;111,103,5;108,100,4;111,100,4;109,103,6;110,103,6;108,100,5;111,100,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="210" />
+      </Cell>
+      <Cell id="211">
+        <Nodes>102,85,7;101,85,7;102,86,7;101,86,7;102,85,8;101,85,8;102,86,8;101,86,8;102,85,6;101,85,6;102,84,7;101,84,7;102,86,6;101,86,6;103,85,7;100,85,7;102,84,8;101,84,8;103,86,7;100,86,7;103,85,8;100,85,8;102,87,7;101,87,7;103,86,8;102,84,6;101,84,6;100,86,8;102,85,9;101,85,9;103,85,6;102,87,8;101,87,8;100,85,6;103,84,7;102,86,9;101,86,9;100,84,7;103,86,6;100,86,6;103,84,8;102,87,6;101,87,6;100,84,8;103,87,7;102,84,9;102,85,5;101,84,9;101,85,5;100,87,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="211" />
+      </Cell>
+      <Cell id="212">
+        <Nodes>121,48,2;120,48,2;121,49,2;121,48,3;120,49,2;120,48,3;121,49,3;120,49,3;121,48,1;121,47,2;122,48,2;120,48,1;120,47,2;121,49,1;121,47,3;122,49,2;122,48,3;120,49,1;120,47,3;122,49,3;119,48,2;121,50,2;121,48,4;121,47,1;122,48,1;122,47,2;119,49,2;119,48,3;120,50,2;120,48,4;121,50,3;120,47,1;121,49,4;122,49,1;122,47,3;119,49,3;120,50,3;120,49,4;119,48,1;119,47,2;121,50,1;122,50,2;121,47,4;122,48,4;122,47,1;119,49,1;120,50,1;119,47,3;120,47,4;121,48,0</Nodes>
+        <PropertyData symbol-ref="clone_id" value="212" />
+      </Cell>
+      <Cell id="213">
+        <Nodes>155,158,4;155,158,3;155,159,4;155,159,3;154,158,4;154,158,3;154,159,4;154,159,3;156,158,4;156,158,3;155,157,4;155,157,3;156,159,4;156,159,3;155,158,5;155,158,2;154,157,4;154,157,3;155,159,5;154,158,5;155,159,2;154,158,2;155,160,4;155,160,3;154,159,5;154,159,2;153,158,4;153,158,3;154,160,4;154,160,3;153,159,4;153,159,3;156,157,4;156,157,3;156,158,5;155,157,5;156,158,2;155,157,2;156,159,5;156,159,2;154,157,5;154,157,2;156,160,4;156,160,3;153,157,4;153,157,3;155,160,5;155,160,2;153,158,5;153,158,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="213" />
+      </Cell>
+      <Cell id="214">
+        <Nodes>101,136,7;101,136,8;100,136,7;100,136,8;101,137,7;101,137,8;100,137,7;100,137,8;101,135,7;101,135,8;102,136,7;102,136,8;100,135,7;100,135,8;101,136,6;101,136,9;102,137,7;102,137,8;100,136,6;100,136,9;101,137,6;101,137,9;102,135,7;102,135,8;99,136,7;99,136,8;100,137,6;100,137,9;101,135,6;101,135,9;101,138,7;101,138,8;102,136,6;102,136,9;99,137,7;99,137,8;100,135,6;100,135,9;100,138,7;100,138,8;99,135,7;99,135,8;102,137,6;102,137,9;101,134,7;101,134,8;102,135,6;102,135,9;99,136,6;99,136,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="214" />
+      </Cell>
+      <Cell id="215">
+        <Nodes>111,134,8;111,134,7;111,133,8;111,133,7;112,134,8;112,134,7;110,134,8;112,133,8;110,134,7;112,133,7;110,133,8;111,135,8;110,133,7;111,135,7;111,134,9;111,133,9;111,134,6;112,135,8;112,135,7;112,134,9;110,135,8;111,133,6;111,132,8;110,135,7;110,134,9;111,132,7;112,133,9;112,134,6;110,133,9;111,135,9;110,134,6;112,133,6;112,132,8;113,134,8;112,132,7;110,133,6;110,132,8;113,134,7;111,135,6;110,132,7;113,133,8;109,134,8;112,135,9;113,133,7;109,134,7;110,135,9;111,132,9;109,133,8;109,133,7;112,135,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="215" />
+      </Cell>
+      <Cell id="216">
+        <Nodes>125,39,5;126,39,5;125,38,5;126,38,5;125,39,6;126,39,6;125,38,6;125,39,4;126,38,6;126,39,4;125,40,5;126,40,5;125,38,4;126,38,4;124,39,5;127,39,5;125,40,6;124,38,5;126,40,6;124,39,6;127,38,5;125,40,4;126,40,4;125,37,5;127,39,6;126,37,5;124,38,6;124,39,4;124,40,5;127,38,6;125,39,7;127,39,4;124,38,4;126,39,7;125,37,6;127,40,5;126,37,6;125,38,7;127,38,4;126,38,7;124,40,6;125,37,4;126,37,4;125,39,3;127,40,6;126,39,3;124,40,4;124,37,5;125,38,3;125,40,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="216" />
+      </Cell>
+      <Cell id="217">
+        <Nodes>152,99,4;152,99,5;151,99,4;152,98,4;152,100,4;151,99,5;153,99,4;152,98,5;152,99,3;152,100,5;151,98,4;151,100,4;153,99,5;151,98,5;151,99,3;151,100,5;153,98,4;153,100,4;152,98,3;152,100,3;153,98,5;153,99,3;153,100,5;152,99,6;151,98,3;151,100,3;150,99,4;151,99,6;153,98,3;150,99,5;153,100,3;152,97,4;152,98,6;152,100,6;152,101,4;150,98,4;150,100,4;153,99,6;152,97,5;151,97,4;152,101,5;151,98,6;154,99,4;151,100,6;151,101,4;150,98,5;150,99,3;150,100,5;152,99,2;151,97,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="217" />
+      </Cell>
+      <Cell id="218">
+        <Nodes>136,44,6;136,44,7;136,45,6;137,44,6;136,45,7;135,44,6;137,44,7;136,43,6;137,45,6;135,44,7;136,44,5;136,43,7;135,45,6;137,45,7;135,45,7;137,43,6;136,45,5;137,44,5;135,43,6;137,43,7;136,44,8;135,44,5;135,43,7;136,43,5;137,45,5;136,46,6;136,45,8;135,45,5;137,44,8;136,46,7;138,44,6;137,43,5;135,44,8;138,44,7;137,46,6;136,43,8;135,43,5;137,45,8;134,44,6;138,45,6;135,46,6;137,46,7;135,45,8;134,44,7;138,45,7;136,42,6;135,46,7;136,46,5;134,45,6;137,43,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="218" />
+      </Cell>
+      <Cell id="219">
+        <Nodes>154,30,3;154,30,4;155,30,3;154,31,3;155,30,4;154,31,4;155,31,3;154,29,3;155,31,4;153,30,3;154,30,2;154,29,4;155,29,3;153,30,4;155,30,2;155,29,4;153,31,3;154,31,2;153,31,4;155,31,2;154,30,5;156,30,3;153,29,3;154,29,2;155,30,5;156,30,4;153,30,2;154,32,3;153,29,4;155,29,2;154,31,5;156,31,3;154,32,4;155,32,3;155,31,5;156,31,4;153,31,2;155,32,4;154,29,5;156,29,3;153,30,5;156,30,2;155,29,5;156,29,4;153,29,2;154,28,3;153,32,3;154,32,2;153,31,5;156,31,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="219" />
+      </Cell>
+      <Cell id="220">
+        <Nodes>146,51,7;145,51,7;146,51,6;146,50,7;146,52,7;146,51,8;147,51,7;145,51,6;145,50,7;145,52,7;145,51,8;146,50,6;146,52,6;146,50,8;146,52,8;147,51,6;147,50,7;147,52,7;147,51,8;145,50,6;145,52,6;145,50,8;145,52,8;147,50,6;147,52,6;144,51,7;147,50,8;147,52,8;146,51,5;146,49,7;146,53,7;146,51,9;144,51,6;144,50,7;144,52,7;144,51,8;145,51,5;148,51,7;145,49,7;145,53,7;145,51,9;146,50,5;146,52,5;146,49,6;146,53,6;146,49,8;146,53,8;146,50,9;146,52,9;147,51,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="220" />
+      </Cell>
+      <Cell id="221">
+        <Nodes>155,145,6;156,145,6;155,145,5;156,145,5;155,144,6;155,146,6;156,144,6;156,146,6;155,145,7;155,144,5;155,146,5;156,145,7;156,144,5;154,145,6;156,146,5;154,145,5;155,144,7;157,145,6;155,146,7;156,144,7;156,146,7;154,144,6;154,146,6;157,145,5;155,145,4;154,145,7;154,144,5;156,145,4;154,146,5;157,144,6;157,146,6;157,145,7;155,143,6;157,144,5;157,146,5;155,144,4;155,147,6;155,146,4;156,143,6;154,144,7;156,144,4;154,146,7;156,147,6;156,146,4;155,143,5;155,147,5;156,143,5;156,147,5;154,145,4;157,144,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="221" />
+      </Cell>
+      <Cell id="222">
+        <Nodes>103,169,3;103,170,3;103,169,2;103,170,2;104,169,3;104,170,3;102,169,3;102,170,3;103,169,4;103,170,4;104,169,2;104,170,2;102,169,2;103,168,3;102,170,2;104,169,4;103,171,3;104,170,4;102,169,4;102,170,4;103,168,2;104,168,3;103,171,2;104,171,3;102,168,3;103,168,4;102,171,3;103,171,4;103,169,1;104,168,2;103,170,1;105,169,3;104,171,2;105,170,3;102,168,2;104,168,4;102,171,2;104,171,4;101,169,3;102,168,4;101,170,3;103,169,5;102,171,4;103,170,5;104,169,1;104,170,1;105,169,2;105,170,2;102,169,1;102,170,1</Nodes>
+        <PropertyData symbol-ref="clone_id" value="222" />
+      </Cell>
+      <Cell id="223">
+        <Nodes>102,103,7;103,103,7;102,103,8;103,103,8;102,102,7;103,102,7;102,102,8;103,102,8;102,104,7;103,104,7;102,103,6;102,104,8;101,103,7;103,103,6;103,104,8;101,103,8;102,102,6;104,103,7;101,102,7;103,102,6;102,103,9;104,103,8;101,102,8;103,103,9;104,102,7;102,101,7;102,104,6;102,102,9;104,102,8;103,101,7;101,104,7;103,104,6;103,102,9;102,101,8;101,103,6;103,101,8;101,104,8;104,104,7;104,103,6;101,102,6;102,104,9;104,104,8;103,104,9;101,103,9;104,102,6;102,101,6;101,101,7;103,101,6;102,105,7;101,104,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="223" />
+      </Cell>
+      <Cell id="224">
+        <Nodes>106,121,8;106,121,7;106,120,8;106,120,7;105,121,8;107,121,8;105,121,7;107,121,7;106,122,8;106,122,7;105,120,8;107,120,8;106,121,9;105,120,7;107,120,7;105,122,8;107,122,8;106,121,6;105,122,7;107,122,7;106,120,9;105,121,9;107,121,9;106,122,9;106,120,6;105,121,6;107,121,6;106,119,8;105,120,9;107,120,9;106,119,7;106,122,6;104,121,8;108,121,8;105,122,9;107,122,9;105,120,6;107,120,6;104,121,7;108,121,7;105,119,8;107,119,8;106,123,8;105,119,7;107,119,7;105,122,6;107,122,6;104,120,8;108,120,8;106,123,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="224" />
+      </Cell>
+      <Cell id="225">
+        <Nodes>148,125,6;148,125,5;149,125,6;149,125,5;148,126,6;148,126,5;149,126,6;149,126,5;148,124,6;148,124,5;149,124,6;149,124,5;147,125,6;147,125,5;148,125,7;149,125,7;148,125,4;149,125,4;150,125,6;147,126,6;150,125,5;147,126,5;148,126,7;149,126,7;148,126,4;149,126,4;150,126,6;150,126,5;148,127,6;148,127,5;149,127,6;149,127,5;147,124,6;147,124,5;148,124,7;149,124,7;148,124,4;147,125,7;149,124,4;150,124,6;150,124,5;147,125,4;150,125,7;147,126,7;150,125,4;147,126,4;150,126,7;147,127,6;147,127,5;148,127,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="225" />
+      </Cell>
+      <Cell id="226">
+        <Nodes>107,86,3;107,87,3;107,86,4;107,87,4;106,86,3;106,87,3;108,86,3;106,86,4;108,87,3;106,87,4;108,86,4;108,87,4;107,86,2;107,87,2;107,85,3;107,85,4;107,88,3;107,88,4;107,86,5;107,87,5;106,86,2;106,87,2;106,85,3;108,86,2;108,87,2;108,85,3;106,85,4;106,88,3;108,85,4;108,88,3;106,88,4;106,86,5;106,87,5;108,88,4;108,86,5;108,87,5;107,85,2;105,86,3;105,87,3;107,88,2;105,86,4;105,87,4;109,86,3;109,87,3;107,85,5;109,86,4;109,87,4;106,85,2;107,88,5;108,85,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="226" />
+      </Cell>
+      <Cell id="227">
+        <Nodes>141,103,2;141,103,3;141,102,2;141,102,3;140,103,2;140,103,3;142,103,2;142,103,3;141,104,2;141,104,3;140,102,2;140,102,3;142,102,2;142,102,3;141,103,1;141,103,4;140,104,2;140,104,3;142,104,2;142,104,3;141,102,1;141,102,4;140,103,1;140,103,4;142,103,1;142,103,4;141,101,2;141,101,3;141,104,1;140,102,1;141,104,4;140,102,4;142,102,1;139,103,2;139,103,3;142,102,4;140,101,2;140,101,3;140,104,1;143,103,2;143,103,3;140,104,4;139,102,2;142,101,2;139,102,3;142,101,3;142,104,1;142,104,4;141,105,2;141,105,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="227" />
+      </Cell>
+      <Cell id="228">
+        <Nodes>132,137,4;131,137,4;132,136,4;132,137,5;131,136,4;131,137,5;132,136,5;132,137,3;131,136,5;132,138,4;133,137,4;131,137,3;132,136,3;131,138,4;133,136,4;131,136,3;132,138,5;133,137,5;131,138,5;130,137,4;133,136,5;132,135,4;132,138,3;133,137,3;130,136,4;133,138,4;131,135,4;131,138,3;133,136,3;132,137,6;130,137,5;132,135,5;131,137,6;132,136,6;130,136,5;133,138,5;131,135,5;130,137,3;132,135,3;131,136,6;130,138,4;130,136,3;133,135,4;133,138,3;131,135,3;132,137,2;132,138,6;131,137,2;130,138,5;133,137,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="228" />
+      </Cell>
+      <Cell id="229">
+        <Nodes>109,28,2;109,28,3;108,28,2;109,27,2;108,28,3;109,27,3;108,27,2;108,27,3;109,29,2;110,28,2;109,28,1;109,29,3;108,29,2;110,28,3;108,28,1;108,29,3;110,27,2;109,27,1;110,27,3;109,28,4;108,27,1;107,28,2;108,28,4;107,28,3;109,26,2;109,27,4;107,27,2;109,26,3;108,26,2;108,27,4;107,27,3;108,26,3;110,29,2;109,29,1;110,28,1;110,29,3;108,29,1;110,27,1;109,29,4;107,29,2;110,28,4;108,29,4;107,28,1;107,29,3;110,26,2;110,27,4;109,26,1;107,27,1;110,26,3;108,26,1</Nodes>
+        <PropertyData symbol-ref="clone_id" value="229" />
+      </Cell>
+      <Cell id="230">
+        <Nodes>148,55,7;148,54,7;149,55,7;148,55,8;149,54,7;148,55,6;148,54,8;149,55,8;147,55,7;148,56,7;148,54,6;149,55,6;149,54,8;147,54,7;149,56,7;149,54,6;147,55,8;148,56,8;147,55,6;148,56,6;147,54,8;149,56,8;147,56,7;148,53,7;150,55,7;147,54,6;149,56,6;149,53,7;150,54,7;148,55,9;147,56,8;148,53,8;150,55,8;147,56,6;148,53,6;150,55,6;148,55,5;148,54,9;149,55,9;149,53,8;150,54,8;147,53,7;150,56,7;149,53,6;150,54,6;148,54,5;149,55,5;149,54,9;146,55,7;148,57,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="230" />
+      </Cell>
+      <Cell id="231">
+        <Nodes>154,135,6;154,136,6;153,135,6;153,136,6;154,135,5;154,136,5;154,135,7;154,136,7;155,135,6;153,135,5;155,136,6;153,136,5;153,135,7;154,134,6;153,136,7;155,135,5;153,134,6;154,137,6;155,136,5;155,135,7;154,134,5;155,136,7;154,134,7;153,137,6;155,134,6;152,135,6;153,134,5;154,137,5;152,136,6;153,134,7;154,137,7;154,135,4;155,137,6;153,137,5;154,136,4;155,134,5;152,135,5;153,137,7;154,135,8;155,134,7;152,136,5;152,135,7;153,135,4;154,136,8;152,136,7;153,136,4;155,137,5;156,135,6;153,135,8;155,137,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="231" />
+      </Cell>
+      <Cell id="232">
+        <Nodes>160,159,5;160,160,5;160,159,6;159,159,5;161,159,5;160,159,4;160,158,5;160,160,6;159,160,5;161,160,5;160,160,4;159,159,6;161,159,6;159,159,4;161,159,4;160,158,6;159,158,5;161,158,5;160,158,4;159,160,6;161,160,6;159,160,4;161,160,4;160,161,5;159,158,6;161,158,6;159,158,4;161,158,4;160,159,7;158,159,5;162,159,5;160,161,6;160,159,3;159,161,5;161,161,5;160,161,4;160,160,7;158,160,5;162,160,5;160,160,3;160,157,5;159,159,7;161,159,7;158,159,6;162,159,6;158,159,4;162,159,4;159,161,6;159,159,3;161,161,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="232" />
+      </Cell>
+      <Cell id="233">
+        <Nodes>152,72,4;152,72,5;153,72,4;153,72,5;152,71,4;152,71,5;153,71,4;153,71,5;152,73,4;152,73,5;153,73,4;153,73,5;151,72,4;151,72,5;152,72,3;153,72,3;152,72,6;153,72,6;154,72,4;154,72,5;151,71,4;151,71,5;152,71,3;153,71,3;152,71,6;153,71,6;154,71,4;154,71,5;152,70,4;152,70,5;153,70,4;153,70,5;151,73,4;151,73,5;152,73,3;153,73,3;152,73,6;153,73,6;154,73,4;154,73,5;151,72,3;151,72,6;154,72,3;154,72,6;151,71,3;151,71,6;154,71,3;154,71,6;151,70,4;151,70,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="233" />
+      </Cell>
+      <Cell id="234">
+        <Nodes>163,169,3;164,169,3;163,169,2;164,169,2;163,168,3;164,168,3;163,168,2;163,170,3;164,168,2;164,170,3;163,170,2;163,169,4;164,170,2;164,169,4;162,169,3;162,169,2;165,169,3;163,168,4;164,168,4;162,168,3;165,169,2;163,169,1;163,170,4;164,169,1;162,168,2;164,170,4;162,170,3;165,168,3;162,170,2;162,169,4;165,168,2;163,168,1;163,167,3;165,170,3;164,168,1;164,167,3;163,167,2;165,170,2;165,169,4;163,170,1;164,167,2;164,170,1;162,168,4;163,171,3;162,169,1;164,171,3;162,170,4;165,168,4;163,171,2;164,171,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="234" />
+      </Cell>
+      <Cell id="235">
+        <Nodes>102,94,6;102,93,6;101,94,6;102,94,5;101,93,6;102,93,5;101,94,5;102,94,7;103,94,6;102,95,6;101,93,5;102,93,7;101,94,7;103,93,6;101,95,6;103,94,5;102,95,5;101,93,7;103,93,5;103,94,7;101,95,5;102,95,7;102,92,6;103,95,6;100,94,6;103,93,7;102,94,4;101,95,7;101,92,6;100,93,6;102,92,5;103,95,5;100,94,5;102,93,4;101,94,4;101,92,5;102,92,7;103,95,7;100,93,5;103,92,6;101,93,4;100,94,7;102,94,8;100,95,6;101,92,7;103,94,4;104,94,6;100,93,7;102,95,4;103,92,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="235" />
+      </Cell>
+      <Cell id="236">
+        <Nodes>110,110,7;110,110,8;111,110,7;110,109,7;111,110,8;110,109,8;110,111,7;111,109,7;109,110,7;110,110,6;110,111,8;111,109,8;109,110,8;111,111,7;109,109,7;111,110,6;110,109,6;111,111,8;109,109,8;109,111,7;110,111,6;110,110,9;111,109,6;109,110,6;109,111,8;112,110,7;110,108,7;111,111,6;111,110,9;110,109,9;109,109,6;112,110,8;110,108,8;112,109,7;111,108,7;110,111,9;111,109,9;109,111,6;109,110,9;112,109,8;111,108,8;112,111,7;110,112,7;108,110,7;111,111,9;112,110,6;109,108,7;112,111,8;109,109,9;110,112,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="236" />
+      </Cell>
+      <Cell id="237">
+        <Nodes>110,128,4;110,127,4;110,128,5;110,127,5;111,128,4;111,127,4;111,128,5;111,127,5;109,128,4;109,127,4;109,128,5;109,127,5;110,128,3;110,127,3;110,129,4;110,126,4;110,129,5;110,126,5;111,128,3;111,127,3;110,128,6;110,127,6;111,129,4;111,126,4;111,129,5;111,126,5;111,128,6;111,127,6;112,128,4;112,127,4;109,128,3;109,127,3;112,128,5;112,127,5;109,129,4;109,126,4;109,129,5;109,126,5;110,129,3;110,126,3;109,128,6;109,127,6;111,129,3;111,126,3;110,129,6;110,126,6;108,128,4;112,128,3;108,127,4;112,127,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="237" />
+      </Cell>
+      <Cell id="238">
+        <Nodes>154,117,4;154,117,5;153,117,4;153,117,5;154,116,4;154,116,5;154,118,4;154,118,5;155,117,4;155,117,5;153,116,4;153,116,5;153,118,4;153,118,5;154,117,3;154,117,6;155,116,4;155,116,5;155,118,4;155,118,5;153,117,3;153,117,6;154,116,3;154,116,6;154,118,3;154,118,6;155,117,3;152,117,4;155,117,6;152,117,5;153,116,3;153,116,6;154,115,4;154,115,5;153,118,3;153,118,6;155,116,3;152,116,4;155,116,6;152,116,5;153,115,4;153,115,5;154,119,4;154,119,5;155,118,3;152,118,4;155,118,6;152,118,5;156,117,4;156,117,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="238" />
+      </Cell>
+      <Cell id="239">
+        <Nodes>135,35,6;135,35,7;134,35,6;134,35,7;135,36,6;135,36,7;135,34,6;134,36,6;135,34,7;134,36,7;134,34,6;134,34,7;136,35,6;135,35,5;136,35,7;134,35,5;135,35,8;136,36,6;133,35,6;135,36,5;134,35,8;136,36,7;136,34,6;133,35,7;135,34,5;134,36,5;136,34,7;135,36,8;134,34,5;136,35,5;133,36,6;135,34,8;134,36,8;133,36,7;135,37,6;133,34,6;134,34,8;135,37,7;133,34,7;134,37,6;136,35,8;134,37,7;135,33,6;136,36,5;133,35,5;135,33,7;134,33,6;136,34,5;134,33,7;136,36,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="239" />
+      </Cell>
+      <Cell id="240">
+        <Nodes>109,170,4;109,171,4;109,170,5;109,171,5;108,170,4;108,171,4;108,170,5;110,170,4;108,171,5;110,171,4;109,170,3;109,171,3;110,170,5;109,169,4;110,171,5;108,170,3;109,169,5;109,172,4;108,171,3;108,169,4;110,170,3;109,172,5;109,170,6;110,171,3;108,169,5;110,169,4;108,172,4;109,171,6;109,169,3;107,170,4;110,169,5;108,172,5;110,172,4;107,171,4;108,170,6;108,171,6;109,172,3;107,170,5;108,169,3;110,172,5;107,171,5;110,170,6;110,171,6;111,170,4;110,169,3;108,172,3;111,171,4;109,169,6;111,170,5;107,170,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="240" />
+      </Cell>
+      <Cell id="241">
+        <Nodes>150,163,3;149,163,3;150,163,4;150,162,3;149,163,4;149,162,3;150,162,4;149,162,4;150,164,3;150,163,2;149,164,3;149,163,2;151,163,3;150,164,4;149,164,4;150,162,2;151,163,4;149,162,2;151,162,3;148,163,3;151,162,4;148,163,4;150,163,5;148,162,3;149,163,5;150,161,3;149,161,3;148,162,4;150,162,5;150,161,4;149,162,5;149,161,4;150,164,2;149,164,2;151,164,3;151,163,2;151,164,4;148,164,3;151,162,2;148,163,2;148,164,4;150,164,5;149,164,5;148,162,2;151,163,5;150,161,2;149,161,2;151,161,3;151,162,5;148,163,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="241" />
+      </Cell>
+      <Cell id="242">
+        <Nodes>119,160,5;118,160,5;119,160,6;118,160,6;119,159,5;118,159,5;119,159,6;119,161,5;118,159,6;118,161,5;119,161,6;118,161,6;119,160,4;118,160,4;120,160,5;120,160,6;117,160,5;117,160,6;119,160,7;119,159,4;118,160,7;118,159,4;120,159,5;119,161,4;120,159,6;118,161,4;120,161,5;117,159,5;120,161,6;117,159,6;119,159,7;117,161,5;118,159,7;120,160,4;117,161,6;119,158,5;119,161,7;118,158,5;118,161,7;119,158,6;117,160,4;118,158,6;119,162,5;120,160,7;118,162,5;120,159,4;119,162,6;118,162,6;117,160,7;120,161,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="242" />
+      </Cell>
+      <Cell id="243">
+        <Nodes>127,101,6;127,100,6;128,101,6;128,100,6;127,101,7;127,100,7;127,101,5;127,100,5;128,101,7;128,100,7;128,101,5;128,100,5;126,101,6;126,100,6;127,102,6;127,99,6;128,102,6;128,99,6;129,101,6;129,100,6;126,101,7;126,100,7;126,101,5;126,100,5;127,102,7;127,102,5;127,99,7;127,99,5;128,102,7;128,102,5;128,99,7;128,99,5;129,101,7;129,100,7;129,101,5;129,100,5;126,102,6;126,99,6;127,101,8;127,100,8;127,101,4;127,100,4;128,101,8;128,100,8;128,101,4;128,100,4;129,102,6;129,99,6;126,102,7;126,102,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="243" />
+      </Cell>
+      <Cell id="244">
+        <Nodes>120,26,4;120,25,4;119,26,4;119,25,4;120,26,3;120,25,3;119,26,3;119,25,3;120,26,5;120,25,5;121,26,4;119,26,5;120,27,4;121,25,4;119,25,5;119,27,4;121,26,3;120,27,3;120,24,4;121,25,3;118,26,4;119,27,3;119,24,4;118,25,4;120,24,3;120,26,2;118,26,3;119,24,3;120,25,2;118,25,3;119,26,2;119,25,2;121,26,5;120,27,5;121,25,5;121,27,4;119,27,5;120,24,5;118,26,5;121,27,3;121,24,4;119,24,5;118,25,5;118,27,4;121,24,3;121,26,2;120,27,2;118,27,3;118,24,4;121,25,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="244" />
+      </Cell>
+      <Cell id="245">
+        <Nodes>162,78,4;162,78,3;162,79,4;163,78,4;162,79,3;163,78,3;163,79,4;163,79,3;161,78,4;162,77,4;161,78,3;162,77,3;162,78,5;161,79,4;163,77,4;161,79,3;162,79,5;163,77,3;163,78,5;162,78,2;163,79,5;162,79,2;162,80,4;163,78,2;164,78,4;162,80,3;164,78,3;163,79,2;163,80,4;164,79,4;163,80,3;164,79,3;161,77,4;161,77,3;161,78,5;162,77,5;161,79,5;163,77,5;161,78,2;162,77,2;161,79,2;161,80,4;163,77,2;164,77,4;161,80,3;162,80,5;164,77,3;164,78,5;163,80,5;164,79,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="245" />
+      </Cell>
+      <Cell id="246">
+        <Nodes>126,105,8;126,104,8;126,105,7;126,104,7;127,105,8;127,104,8;127,105,7;127,104,7;125,105,8;125,104,8;125,105,7;126,105,9;125,104,7;126,104,9;126,106,8;126,103,8;126,106,7;127,105,9;127,104,9;126,103,7;127,106,8;126,105,6;126,104,6;127,103,8;127,106,7;127,103,7;125,105,9;125,104,9;127,105,6;128,105,8;127,104,6;128,104,8;125,106,8;125,103,8;128,105,7;128,104,7;125,106,7;126,106,9;125,103,7;126,103,9;125,105,6;125,104,6;127,106,9;127,103,9;126,106,6;126,103,6;124,105,8;124,104,8;128,105,9;128,104,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="246" />
+      </Cell>
+      <Cell id="247">
+        <Nodes>145,38,7;144,38,7;145,37,7;144,37,7;145,38,8;144,38,8;145,38,6;144,38,6;145,37,8;144,37,8;145,39,7;144,39,7;145,37,6;144,37,6;146,38,7;143,38,7;145,39,8;146,37,7;144,39,8;143,37,7;145,39,6;146,38,8;144,39,6;145,36,7;143,38,8;144,36,7;146,38,6;146,37,8;143,38,6;146,39,7;143,37,8;146,37,6;145,38,9;143,39,7;144,38,9;145,36,8;143,37,6;144,36,8;145,36,6;145,37,9;144,36,6;144,37,9;146,39,8;145,38,5;144,38,5;143,39,8;146,39,6;145,37,5;146,36,7;143,39,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="247" />
+      </Cell>
+      <Cell id="248">
+        <Nodes>115,122,4;115,122,3;116,122,4;116,122,3;115,121,4;115,123,4;115,121,3;115,123,3;114,122,4;114,122,3;116,121,4;116,123,4;116,121,3;115,122,5;116,123,3;114,121,4;115,122,2;114,123,4;114,121,3;116,122,5;114,123,3;115,121,5;115,123,5;116,122,2;114,122,5;115,121,2;117,122,4;115,123,2;116,121,5;117,122,3;116,123,5;114,122,2;115,120,4;116,121,2;116,123,2;115,120,3;115,124,4;114,121,5;117,121,4;114,123,5;115,124,3;117,123,4;117,121,3;117,123,3;116,120,4;114,121,2;116,120,3;113,122,4;114,123,2;116,124,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="248" />
+      </Cell>
+      <Cell id="249">
+        <Nodes>157,56,6;157,55,6;157,56,7;157,55,7;156,56,6;158,56,6;156,55,6;158,55,6;156,56,7;158,56,7;156,55,7;158,55,7;157,56,5;157,57,6;157,55,5;157,57,7;157,54,6;157,56,8;157,54,7;157,55,8;156,56,5;158,56,5;156,57,6;158,57,6;156,55,5;158,55,5;156,57,7;158,57,7;156,54,6;158,54,6;156,56,8;158,56,8;157,57,5;156,54,7;158,54,7;156,55,8;158,55,8;155,56,6;159,56,6;157,54,5;155,55,6;159,55,6;155,56,7;159,56,7;157,57,8;155,55,7;159,55,7;156,57,5;158,57,5;157,54,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="249" />
+      </Cell>
+      <Cell id="250">
+        <Nodes>165,63,7;165,63,6;165,62,7;164,63,7;165,62,6;164,63,6;166,63,7;164,62,7;165,64,7;165,63,8;166,63,6;164,62,6;166,62,7;165,64,6;165,62,8;166,62,6;164,64,7;164,63,8;164,64,6;166,64,7;165,63,5;166,63,8;164,62,8;165,61,7;165,64,8;166,64,6;165,62,5;166,62,8;165,61,6;163,63,7;164,63,5;164,61,7;164,64,8;163,63,6;163,62,7;166,63,5;164,62,5;164,61,6;166,61,7;165,64,5;166,64,8;163,62,6;167,63,7;166,62,5;165,61,8;166,61,6;167,63,6;167,62,7;165,65,7;163,64,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="250" />
+      </Cell>
+      <Cell id="251">
+        <Nodes>113,106,6;113,106,5;113,105,6;113,105,5;114,106,6;114,106,5;114,105,6;114,105,5;112,106,6;112,106,5;112,105,6;112,105,5;113,107,6;113,107,5;113,106,7;113,106,4;113,105,7;113,105,4;114,107,6;114,107,5;113,104,6;113,104,5;114,106,7;114,106,4;114,105,7;114,105,4;114,104,6;114,104,5;112,107,6;112,107,5;115,106,6;115,106,5;112,106,7;112,106,4;115,105,6;115,105,5;112,105,7;112,105,4;113,107,7;113,107,4;112,104,6;112,104,5;114,107,7;114,107,4;113,104,7;113,104,4;111,106,6;111,106,5;115,107,6;115,107,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="251" />
+      </Cell>
+      <Cell id="252">
+        <Nodes>114,98,4;113,98,4;114,97,4;114,98,5;113,97,4;113,98,5;114,97,5;113,97,5;114,98,3;114,99,4;113,98,3;113,99,4;115,98,4;114,97,3;114,99,5;113,97,3;113,99,5;112,98,4;115,97,4;115,98,5;112,97,4;112,98,5;114,99,3;115,97,5;113,99,3;114,96,4;114,98,6;113,96,4;113,98,6;112,97,5;115,98,3;115,99,4;114,96,5;114,97,6;112,98,3;112,99,4;113,96,5;113,97,6;115,97,3;115,99,5;112,97,3;112,99,5;114,96,3;114,99,6;113,96,3;113,99,6;115,99,3;114,98,2;115,96,4;114,100,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="252" />
+      </Cell>
+      <Cell id="253">
+        <Nodes>133,118,7;133,118,8;133,119,7;133,119,8;132,118,7;132,118,8;132,119,7;132,119,8;134,118,7;134,118,8;134,119,7;134,119,8;133,117,7;133,117,8;133,118,6;133,118,9;133,119,6;133,119,9;132,117,7;132,117,8;133,120,7;133,120,8;132,118,6;132,118,9;134,117,7;134,117,8;132,119,6;132,119,9;134,118,6;134,118,9;132,120,7;132,120,8;131,118,7;131,118,8;134,119,6;134,119,9;133,117,6;133,117,9;131,119,7;131,119,8;134,120,7;134,120,8;132,117,6;132,117,9;135,118,7;135,118,8;133,120,6;133,120,9;135,119,7;135,119,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="253" />
+      </Cell>
+      <Cell id="254">
+        <Nodes>159,96,6;159,97,6;158,96,6;158,97,6;159,96,7;159,97,7;158,96,7;158,97,7;159,96,5;159,97,5;160,96,6;160,97,6;158,96,5;159,95,6;158,97,5;160,96,7;159,98,6;160,97,7;158,95,6;159,95,7;158,98,6;159,98,7;157,96,6;158,95,7;157,97,6;159,96,8;158,98,7;159,97,8;157,96,7;157,97,7;158,96,8;158,97,8;160,96,5;160,97,5;159,95,5;160,95,6;159,98,5;158,95,5;160,98,6;160,95,7;158,98,5;157,96,5;157,97,5;160,98,7;157,95,6;160,96,8;160,97,8;159,95,8;157,98,6;157,95,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="254" />
+      </Cell>
+      <Cell id="255">
+        <Nodes>111,33,7;110,33,7;111,32,7;110,32,7;111,33,8;110,33,8;111,32,8;110,32,8;111,33,6;110,33,6;111,32,6;111,34,7;112,33,7;110,32,6;110,34,7;112,32,7;111,34,8;112,33,8;109,33,7;111,31,7;110,34,8;112,32,8;109,32,7;110,31,7;109,33,8;111,31,8;111,34,6;112,33,6;111,33,9;109,32,8;110,31,8;110,34,6;112,32,6;110,33,9;111,32,9;112,34,7;110,32,9;109,33,6;111,31,6;112,34,8;109,32,6;110,31,6;109,34,7;112,31,7;111,33,5;109,34,8;112,31,8;112,34,6;111,34,9;112,33,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="255" />
+      </Cell>
+      <Cell id="256">
+        <Nodes>112,120,8;112,121,8;112,120,7;112,121,7;113,120,8;113,121,8;113,120,7;113,121,7;111,120,8;111,121,8;111,120,7;112,120,9;112,119,8;111,121,7;112,121,9;112,119,7;113,120,9;113,119,8;112,122,8;112,120,6;113,121,9;113,119,7;112,122,7;112,121,6;111,120,9;111,119,8;113,122,8;111,121,9;113,120,6;114,120,8;111,119,7;112,119,9;113,122,7;113,121,6;114,121,8;114,120,7;111,122,8;114,121,7;111,120,6;113,119,9;111,122,7;111,121,6;112,122,9;112,119,6;110,120,8;111,119,9;113,122,9;110,121,8;110,120,7;113,119,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="256" />
+      </Cell>
+      <Cell id="257">
+        <Nodes>125,102,3;125,102,2;125,101,3;126,102,3;124,102,3;125,103,3;125,101,2;125,102,4;126,102,2;124,102,2;125,103,2;126,101,3;124,101,3;126,103,3;124,103,3;125,101,4;126,101,2;124,101,2;126,102,4;124,102,4;125,103,4;126,103,2;124,103,2;125,102,1;126,101,4;124,101,4;125,100,3;126,103,4;124,103,4;125,101,1;127,102,3;123,102,3;126,102,1;124,102,1;125,100,2;125,103,1;125,104,3;127,102,2;126,100,3;123,102,2;124,100,3;127,101,3;123,101,3;126,101,1;124,101,1;125,102,5;125,104,2;125,100,4;126,100,2;124,100,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="257" />
+      </Cell>
+      <Cell id="258">
+        <Nodes>148,138,2;148,138,3;148,139,2;149,138,2;148,139,3;149,138,3;147,138,2;148,137,2;147,138,3;148,137,3;149,139,2;149,139,3;148,138,1;147,139,2;149,137,2;147,139,3;149,137,3;148,138,4;147,137,2;148,139,1;149,138,1;147,137,3;147,138,1;148,137,1;148,139,4;149,138,4;149,139,1;148,140,2;150,138,2;147,138,4;148,140,3;148,137,4;150,138,3;147,139,1;149,137,1;149,139,4;149,140,2;150,139,2;147,137,1;147,139,4;149,140,3;149,137,4;150,139,3;146,138,2;148,136,2;146,138,3;147,140,2;148,136,3;150,137,2;147,140,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="258" />
+      </Cell>
+      <Cell id="259">
+        <Nodes>164,25,7;165,25,7;164,26,7;165,26,7;164,25,6;165,25,6;164,26,6;165,26,6;164,25,8;165,25,8;164,24,7;165,24,7;164,26,8;165,26,8;163,25,7;166,25,7;164,24,6;165,24,6;163,26,7;166,26,7;163,25,6;166,25,6;164,27,7;165,27,7;164,24,8;165,24,8;163,26,6;166,26,6;163,25,8;164,25,5;165,25,5;166,25,8;164,27,6;163,24,7;165,27,6;163,26,8;166,24,7;164,26,5;165,26,5;166,26,8;164,27,8;163,24,6;165,27,8;166,24,6;164,25,9;165,25,9;163,27,7;163,24,8;164,24,5;166,27,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="259" />
+      </Cell>
+      <Cell id="260">
+        <Nodes>137,81,7;137,81,6;136,81,7;137,82,7;136,81,6;137,82,6;137,80,7;138,81,7;136,82,7;137,80,6;138,81,6;136,82,6;137,81,8;136,80,7;138,82,7;136,80,6;138,82,6;136,81,8;137,82,8;137,81,5;138,80,7;138,80,6;137,80,8;138,81,8;136,82,8;136,81,5;137,82,5;135,81,7;137,83,7;135,81,6;136,80,8;137,83,6;138,82,8;137,80,5;138,81,5;136,82,5;135,82,7;136,83,7;138,80,8;135,82,6;136,83,6;136,80,5;137,79,7;138,82,5;139,81,7;135,80,7;138,83,7;137,79,6;139,81,6;135,80,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="260" />
+      </Cell>
+      <Cell id="261">
+        <Nodes>145,147,6;145,148,6;146,147,6;145,147,5;146,148,6;145,148,5;145,147,7;146,147,5;144,147,6;145,146,6;145,148,7;146,148,5;144,148,6;146,147,7;144,147,5;146,146,6;146,148,7;145,146,5;144,148,5;144,147,7;145,149,6;145,146,7;146,146,5;144,146,6;144,148,7;147,147,6;146,149,6;145,147,4;145,149,5;146,146,7;147,148,6;144,146,5;145,148,4;147,147,5;145,149,7;146,147,4;146,149,5;144,149,6;144,146,7;147,148,5;146,148,4;147,147,7;145,147,8;146,149,7;143,147,6;144,147,4;144,149,5;147,146,6;147,148,7;145,148,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="261" />
+      </Cell>
+      <Cell id="262">
+        <Nodes>133,150,6;134,150,6;133,149,6;134,149,6;133,150,5;133,150,7;134,150,5;134,150,7;133,149,5;133,149,7;134,149,5;134,149,7;133,151,6;134,151,6;132,150,6;132,149,6;135,150,6;133,151,5;135,149,6;133,148,6;133,151,7;134,151,5;132,150,5;134,148,6;134,151,7;132,150,7;132,149,5;132,149,7;135,150,5;135,150,7;132,151,6;135,149,5;133,148,5;135,149,7;133,148,7;134,148,5;134,148,7;133,150,4;135,151,6;134,150,4;133,150,8;133,149,4;134,150,8;134,149,4;133,149,8;132,151,5;132,148,6;132,151,7;134,149,8;135,151,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="262" />
+      </Cell>
+      <Cell id="263">
+        <Nodes>165,159,8;165,159,7;164,159,8;165,158,8;164,159,7;165,158,7;164,158,8;164,158,7;165,160,8;166,159,8;165,160,7;166,159,7;165,159,9;164,160,8;164,160,7;166,158,8;164,159,9;166,158,7;165,159,6;165,158,9;164,159,6;164,158,9;163,159,8;165,158,6;163,159,7;165,157,8;165,157,7;164,158,6;166,160,8;163,158,8;166,160,7;164,157,8;163,158,7;165,160,9;164,157,7;166,159,9;164,160,9;165,160,6;166,159,6;166,158,9;164,160,6;163,160,8;163,160,7;166,158,6;163,159,9;166,157,8;166,157,7;165,157,9;163,159,6;166,160,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="263" />
+      </Cell>
+      <Cell id="264">
+        <Nodes>125,138,8;125,137,8;126,138,8;126,137,8;125,138,7;125,137,7;126,138,7;126,137,7;125,138,9;125,137,9;124,138,8;124,137,8;126,138,9;126,137,9;125,139,8;125,136,8;124,138,7;126,139,8;124,137,7;126,136,8;125,139,7;127,138,8;125,136,7;127,137,8;126,139,7;126,136,7;125,138,6;125,137,6;127,138,7;127,137,7;126,138,6;126,137,6;124,138,9;124,137,9;125,139,9;125,136,9;124,139,8;126,139,9;124,136,8;126,136,9;127,138,9;127,137,9;124,139,7;124,136,7;127,139,8;127,136,8;124,138,6;124,137,6;125,139,6;127,139,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="264" />
+      </Cell>
+      <Cell id="265">
+        <Nodes>159,49,6;160,49,6;159,50,6;159,49,5;160,50,6;160,49,5;159,50,5;160,50,5;159,49,7;159,48,6;160,49,7;160,48,6;158,49,6;159,50,7;159,48,5;160,50,7;160,48,5;158,50,6;161,49,6;158,49,5;159,48,7;161,50,6;158,50,5;161,49,5;160,48,7;159,51,6;159,49,4;158,49,7;160,51,6;158,48,6;160,49,4;161,50,5;159,51,5;159,50,4;158,50,7;161,49,7;161,48,6;160,51,5;158,48,5;160,50,4;161,50,7;161,48,5;159,51,7;159,48,4;160,51,7;158,48,7;159,49,8;160,48,4;158,51,6;159,47,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="265" />
+      </Cell>
+      <Cell id="266">
+        <Nodes>149,35,7;149,34,7;149,35,8;150,35,7;149,34,8;150,34,7;150,35,8;148,35,7;150,34,8;149,35,6;149,36,7;148,34,7;148,35,8;149,34,6;149,36,8;150,35,6;150,36,7;148,34,8;150,34,6;150,36,8;149,33,7;148,35,6;149,35,9;148,36,7;149,36,6;151,35,7;149,33,8;148,34,6;149,34,9;150,33,7;148,36,8;150,35,9;151,34,7;151,35,8;150,36,6;150,33,8;150,34,9;151,34,8;148,33,7;149,33,6;148,35,9;148,36,6;149,36,9;151,35,6;151,36,7;148,33,8;148,34,9;147,35,7;150,33,6;149,35,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="266" />
+      </Cell>
+      <Cell id="267">
+        <Nodes>140,156,3;140,155,3;140,156,4;139,156,3;141,156,3;140,156,2;140,157,3;140,155,4;139,155,3;139,156,4;141,155,3;141,156,4;140,155,2;140,157,4;139,156,2;139,157,3;141,156,2;141,157,3;140,157,2;139,155,4;141,155,4;139,155,2;139,157,4;141,155,2;141,157,4;139,157,2;141,157,2;140,154,3;140,156,5;138,156,3;142,156,3;140,154,4;140,155,5;140,156,1;140,158,3;139,154,3;139,156,5;141,154,3;141,156,5;138,155,3;138,156,4;140,154,2;140,157,5;142,155,3;142,156,4;138,156,2;138,157,3;140,155,1;140,158,4;139,154,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="267" />
+      </Cell>
+      <Cell id="268">
+        <Nodes>122,136,3;121,136,3;122,136,2;122,135,3;122,137,3;121,136,2;122,136,4;121,135,3;121,137,3;123,136,3;122,135,2;122,137,2;121,136,4;121,135,2;121,137,2;123,136,2;122,135,4;122,137,4;123,135,3;123,137,3;121,135,4;121,137,4;120,136,3;123,136,4;123,135,2;123,137,2;122,136,1;120,136,2;121,136,1;120,135,3;120,137,3;123,135,4;122,134,3;123,137,4;122,138,3;122,135,1;122,137,1;120,136,4;121,134,3;120,135,2;121,138,3;120,137,2;122,134,2;121,135,1;122,138,2;121,137,1;123,136,1;122,136,5;121,134,2;121,138,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="268" />
+      </Cell>
+      <Cell id="269">
+        <Nodes>157,85,4;157,84,4;156,85,4;157,85,3;157,85,5;158,85,4;156,84,4;157,84,3;157,84,5;158,84,4;157,86,4;156,85,3;156,85,5;158,85,3;156,84,3;158,85,5;156,84,5;158,84,3;158,84,5;156,86,4;157,83,4;157,86,3;157,86,5;158,86,4;156,83,4;156,86,3;157,83,3;156,86,5;157,83,5;158,83,4;155,85,4;158,86,3;157,85,2;158,86,5;155,84,4;157,84,2;157,85,6;159,85,4;156,83,3;157,84,6;156,83,5;159,84,4;158,83,3;155,85,3;156,85,2;158,83,5;155,85,5;155,84,3;158,85,2;156,84,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="269" />
+      </Cell>
+      <Cell id="270">
+        <Nodes>130,60,3;131,60,3;130,60,4;131,60,4;130,61,3;131,61,3;130,61,4;131,61,4;130,59,3;131,59,3;130,60,2;131,60,2;130,59,4;129,60,3;131,59,4;130,61,2;129,60,4;132,60,3;131,61,2;129,61,3;132,60,4;130,60,5;129,61,4;132,61,3;131,60,5;130,59,2;130,62,3;131,59,2;132,61,4;129,59,3;131,62,3;130,61,5;129,60,2;131,61,5;130,62,4;129,59,4;131,62,4;132,59,3;132,60,2;129,61,2;132,59,4;130,59,5;131,59,5;132,61,2;129,60,5;130,62,2;130,58,3;129,59,2;131,62,2;129,62,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="270" />
+      </Cell>
+      <Cell id="271">
+        <Nodes>162,41,8;162,41,7;162,42,8;162,42,7;163,41,8;161,41,8;163,41,7;163,42,8;161,41,7;161,42,8;163,42,7;162,40,8;162,41,9;161,42,7;162,40,7;162,42,9;163,40,8;163,41,9;162,41,6;162,43,8;161,40,8;161,41,9;163,40,7;163,42,9;162,42,6;162,43,7;161,40,7;161,42,9;162,40,9;163,41,6;163,43,8;164,41,8;161,41,6;161,43,8;163,42,6;163,43,7;164,41,7;164,42,8;163,40,9;161,42,6;161,43,7;160,41,8;162,40,6;162,43,9;161,40,9;164,42,7;160,41,7;160,42,8;160,42,7;163,40,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="271" />
+      </Cell>
+      <Cell id="272">
+        <Nodes>155,63,7;156,63,7;155,63,8;155,64,7;155,62,7;155,63,6;154,63,7;156,63,8;156,64,7;155,64,8;156,62,7;156,63,6;155,62,8;155,64,6;154,63,8;154,64,7;156,64,8;155,62,6;154,62,7;156,62,8;154,63,6;156,64,6;154,64,8;156,62,6;157,63,7;154,62,8;154,64,6;155,63,9;155,65,7;154,62,6;157,63,8;157,64,7;156,63,9;156,65,7;155,64,9;155,65,8;155,61,7;157,62,7;155,63,5;157,63,6;155,62,9;153,63,7;157,64,8;154,63,9;155,65,6;156,64,9;154,65,7;156,65,8;156,61,7;155,61,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="272" />
+      </Cell>
+      <Cell id="273">
+        <Nodes>148,89,2;148,88,2;148,89,3;149,89,2;148,88,3;149,88,2;149,89,3;149,88,3;147,89,2;148,89,1;147,88,2;148,90,2;148,88,1;147,89,3;147,88,3;149,89,1;148,90,3;149,90,2;149,88,1;148,87,2;149,90,3;148,89,4;148,87,3;149,87,2;148,88,4;150,89,2;147,89,1;150,88,2;149,89,4;149,87,3;147,90,2;150,89,3;147,88,1;149,88,4;148,90,1;150,88,3;147,90,3;149,90,1;147,87,2;148,87,1;147,89,4;147,87,3;147,88,4;148,90,4;149,87,1;150,89,1;150,90,2;150,88,1;147,90,1;149,90,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="273" />
+      </Cell>
+      <Cell id="274">
+        <Nodes>104,119,3;105,119,3;104,118,3;104,119,2;105,118,3;104,119,4;105,119,2;104,118,2;104,120,3;103,119,3;105,119,4;104,118,4;105,118,2;105,120,3;103,118,3;104,120,2;103,119,2;105,118,4;104,120,4;105,120,2;103,119,4;103,118,2;103,120,3;106,119,3;104,117,3;105,120,4;103,118,4;104,119,1;106,118,3;105,117,3;103,120,2;106,119,2;104,117,2;105,119,1;104,118,1;103,120,4;106,119,4;106,118,2;104,117,4;105,117,2;106,120,3;104,119,5;105,118,1;103,117,3;106,118,4;105,117,4;104,121,3;104,120,1;105,119,5;102,119,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="274" />
+      </Cell>
+      <Cell id="275">
+        <Nodes>149,48,7;148,48,7;149,48,6;148,48,6;149,49,7;149,47,7;148,49,7;148,47,7;149,48,8;148,48,8;149,49,6;149,47,6;148,49,6;148,47,6;150,48,7;147,48,7;149,49,8;149,47,8;148,49,8;150,48,6;148,47,8;150,49,7;147,48,6;150,47,7;147,49,7;149,48,5;150,48,8;147,47,7;148,48,5;150,49,6;150,47,6;147,48,8;147,49,6;149,50,7;147,47,6;148,50,7;149,46,7;149,49,5;150,49,8;148,46,7;149,47,5;148,49,5;150,47,8;148,47,5;149,50,6;147,49,8;148,50,6;147,47,8;149,46,6;149,48,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="275" />
+      </Cell>
+      <Cell id="276">
+        <Nodes>113,85,2;114,85,2;113,85,3;114,85,3;113,84,2;114,84,2;113,84,3;114,84,3;113,86,2;114,86,2;113,85,1;113,86,3;112,85,2;114,85,1;114,86,3;112,85,3;113,84,1;112,84,2;115,85,2;114,84,1;113,85,4;112,84,3;115,85,3;113,86,1;114,85,4;112,86,2;115,84,2;114,86,1;113,83,2;112,85,1;113,84,4;112,86,3;115,84,3;114,83,2;114,84,4;113,83,3;115,86,2;114,83,3;112,84,1;115,85,1;113,86,4;115,86,3;114,86,4;112,85,4;113,87,2;112,86,1;115,84,1;114,87,2;113,83,1;113,87,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="276" />
+      </Cell>
+      <Cell id="277">
+        <Nodes>119,124,7;119,124,6;120,124,7;120,124,6;119,123,7;119,123,6;119,125,7;119,125,6;118,124,7;118,124,6;120,123,7;120,123,6;120,125,7;119,124,8;120,125,6;118,123,7;119,124,5;118,123,6;118,125,7;120,124,8;118,125,6;119,123,8;120,124,5;119,123,5;119,125,8;118,124,8;121,124,7;120,123,8;119,125,5;121,124,6;118,124,5;119,122,7;120,123,5;119,122,6;120,125,8;118,123,8;120,125,5;121,123,7;121,123,6;120,122,7;118,123,5;120,122,6;119,126,7;118,125,8;119,126,6;121,125,7;117,124,7;121,125,6;118,125,5;117,124,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="277" />
+      </Cell>
+      <Cell id="278">
+        <Nodes>138,70,6;137,70,6;138,69,6;137,69,6;138,70,7;137,70,7;138,70,5;137,70,5;138,71,6;137,71,6;138,69,7;137,69,7;138,69,5;137,69,5;139,70,6;136,70,6;138,71,7;137,71,7;138,71,5;139,69,6;137,71,5;136,69,6;139,70,7;136,70,7;139,70,5;138,68,6;136,70,5;137,68,6;139,71,6;139,69,7;136,71,6;136,69,7;138,70,8;137,70,8;139,69,5;136,69,5;138,68,7;137,68,7;139,71,7;138,69,8;136,71,7;137,69,8;138,70,4;137,70,4;138,68,5;137,68,5;139,71,5;136,71,5;138,72,6;137,72,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="278" />
+      </Cell>
+      <Cell id="279">
+        <Nodes>107,82,3;107,82,2;107,83,3;107,83,2;106,82,3;106,82,2;108,82,3;108,82,2;107,81,3;107,81,2;106,83,3;106,83,2;108,83,3;107,82,4;108,83,2;106,81,3;107,82,1;106,81,2;108,81,3;108,81,2;107,83,4;106,82,4;107,83,1;108,82,4;106,82,1;107,81,4;108,82,1;107,81,1;107,84,3;106,83,4;107,84,2;108,83,4;105,82,3;106,83,1;105,82,2;108,83,1;106,81,4;109,82,3;108,81,4;109,82,2;106,81,1;107,80,3;108,81,1;106,84,3;107,80,2;106,84,2;108,84,3;105,83,3;108,84,2;105,83,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="279" />
+      </Cell>
+      <Cell id="280">
+        <Nodes>108,161,5;109,161,5;108,162,5;109,162,5;108,161,4;109,161,4;108,162,4;109,162,4;108,161,6;109,161,6;108,160,5;109,160,5;108,162,6;109,162,6;107,161,5;110,161,5;108,160,4;109,160,4;107,162,5;110,162,5;107,161,4;110,161,4;108,163,5;109,163,5;108,160,6;109,160,6;107,162,4;110,162,4;107,161,6;110,161,6;108,161,3;109,161,3;108,163,4;107,160,5;109,163,4;110,160,5;107,162,6;110,162,6;108,162,3;109,162,3;108,163,6;109,163,6;107,160,4;110,160,4;108,161,7;109,161,7;107,163,5;107,160,6;110,163,5;110,160,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="280" />
+      </Cell>
+      <Cell id="281">
+        <Nodes>106,71,3;105,71,3;106,71,2;105,71,2;106,70,3;105,70,3;106,70,2;105,70,2;106,72,3;105,72,3;106,71,4;106,72,2;105,71,4;107,71,3;105,72,2;107,71,2;106,70,4;104,71,3;105,70,4;107,70,3;104,71,2;106,71,1;107,70,2;105,71,1;106,72,4;104,70,3;105,72,4;107,72,3;106,69,3;104,70,2;106,70,1;107,71,4;105,69,3;107,72,2;105,70,1;106,69,2;104,72,3;105,69,2;104,71,4;107,70,4;104,72,2;106,72,1;105,72,1;107,71,1;104,70,4;106,73,3;107,72,4;105,73,3;106,69,4;106,73,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="281" />
+      </Cell>
+      <Cell id="282">
+        <Nodes>165,136,7;165,136,6;166,136,7;166,136,6;165,137,7;165,137,6;166,137,7;166,137,6;165,135,7;165,135,6;166,135,7;166,135,6;164,136,7;165,136,8;164,136,6;166,136,8;165,136,5;167,136,7;166,136,5;167,136,6;164,137,7;165,137,8;164,137,6;166,137,8;164,135,7;165,135,8;165,137,5;164,135,6;167,137,7;166,135,8;166,137,5;167,137,6;165,135,5;167,135,7;166,135,5;167,135,6;165,138,7;164,136,8;165,138,6;166,138,7;166,138,6;164,136,5;167,136,8;165,134,7;165,134,6;166,134,7;167,136,5;166,134,6;164,137,8;164,135,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="282" />
+      </Cell>
+      <Cell id="283">
+        <Nodes>153,56,7;153,57,7;152,56,7;152,57,7;153,56,6;153,56,8;153,57,6;153,57,8;152,56,6;152,56,8;152,57,6;152,57,8;154,56,7;154,57,7;153,55,7;152,55,7;153,58,7;152,58,7;151,56,7;154,56,6;154,56,8;151,57,7;154,57,6;153,55,6;154,57,8;153,55,8;152,55,6;152,55,8;153,58,6;153,58,8;152,58,6;154,55,7;151,56,6;152,58,8;151,56,8;151,57,6;151,57,8;153,56,5;154,58,7;153,57,5;153,56,9;153,57,9;152,56,5;152,57,5;152,56,9;151,55,7;152,57,9;154,55,6;154,55,8;151,58,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="283" />
+      </Cell>
+      <Cell id="284">
+        <Nodes>150,108,8;149,108,8;150,107,8;149,107,8;150,108,7;149,108,7;150,107,7;149,107,7;150,108,9;149,108,9;150,109,8;149,109,8;150,107,9;149,107,9;151,108,8;148,108,8;150,109,7;151,107,8;149,109,7;151,108,7;148,107,8;150,106,8;148,108,7;149,106,8;151,107,7;148,107,7;150,108,6;149,108,6;150,106,7;149,106,7;150,107,6;149,107,6;150,109,9;149,109,9;151,108,9;151,109,8;148,108,9;151,107,9;148,109,8;148,107,9;150,106,9;151,109,7;149,106,9;148,109,7;151,106,8;150,109,6;148,106,8;149,109,6;151,108,6;151,106,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="284" />
+      </Cell>
+      <Cell id="285">
+        <Nodes>163,125,7;163,125,8;162,125,7;162,125,8;163,124,7;163,124,8;162,124,7;162,124,8;163,126,7;163,126,8;162,126,7;164,125,7;162,126,8;164,125,8;163,125,6;163,125,9;162,125,6;164,124,7;164,124,8;162,125,9;163,124,6;161,125,7;161,125,8;163,124,9;162,124,6;162,124,9;161,124,7;163,123,7;161,124,8;163,123,8;162,123,7;164,126,7;162,123,8;164,126,8;163,126,6;163,126,9;162,126,6;164,125,6;162,126,9;164,125,9;161,126,7;161,126,8;164,124,6;164,124,9;161,125,6;161,125,9;164,123,7;164,123,8;161,124,6;163,123,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="285" />
+      </Cell>
+      <Cell id="286">
+        <Nodes>124,67,5;123,67,5;124,67,6;124,68,5;124,66,5;124,67,4;123,67,6;123,68,5;123,66,5;123,67,4;125,67,5;124,68,6;124,66,6;124,68,4;124,66,4;123,68,6;123,66,6;123,68,4;123,66,4;125,67,6;125,68,5;122,67,5;125,66,5;125,67,4;125,68,6;122,67,6;125,66,6;122,68,5;122,66,5;125,68,4;122,67,4;125,66,4;124,67,7;124,69,5;124,65,5;123,67,7;124,67,3;123,69,5;123,65,5;123,67,3;122,68,6;122,66,6;122,68,4;124,68,7;122,66,4;124,66,7;124,69,6;124,65,6;124,69,4;123,68,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="286" />
+      </Cell>
+      <Cell id="287">
+        <Nodes>114,162,4;115,162,4;114,162,3;115,162,3;114,163,4;115,163,4;114,163,3;115,163,3;114,161,4;115,161,4;114,161,3;114,162,5;113,162,4;115,161,3;115,162,5;113,162,3;114,163,5;113,163,4;116,162,4;114,162,2;115,163,5;113,163,3;116,162,3;115,162,2;116,163,4;114,163,2;114,164,4;116,163,3;115,163,2;115,164,4;114,164,3;115,164,3;114,161,5;113,161,4;115,161,5;113,161,3;113,162,5;116,161,4;114,161,2;116,161,3;115,161,2;113,163,5;116,162,5;113,162,2;116,163,5;113,163,2;116,162,2;114,164,5;113,164,4;115,164,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="287" />
+      </Cell>
+      <Cell id="288">
+        <Nodes>138,106,7;138,106,8;139,106,7;139,106,8;138,105,7;138,107,7;138,105,8;138,107,8;137,106,7;139,105,7;139,107,7;137,106,8;138,106,6;139,105,8;139,107,8;139,106,6;137,105,7;137,107,7;138,106,9;137,105,8;137,107,8;138,105,6;138,107,6;139,106,9;140,106,7;137,106,6;139,105,6;139,107,6;140,106,8;138,105,9;138,107,9;137,106,9;138,104,7;139,105,9;138,108,7;139,107,9;140,105,7;137,105,6;140,107,7;138,104,8;137,107,6;138,108,8;140,105,8;140,107,8;139,104,7;139,108,7;139,104,8;136,106,7;139,108,8;137,105,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="288" />
+      </Cell>
+      <Cell id="289">
+        <Nodes>116,164,7;116,163,7;116,164,8;116,163,8;115,164,7;115,163,7;115,164,8;115,163,8;117,164,7;117,163,7;116,164,6;117,164,8;116,165,7;116,163,6;117,163,8;116,165,8;115,164,6;115,165,7;116,162,7;115,163,6;116,164,9;115,165,8;116,162,8;116,163,9;115,162,7;117,164,6;114,164,7;115,164,9;117,165,7;115,162,8;117,163,6;114,163,7;115,163,9;114,164,8;116,165,6;117,165,8;114,163,8;117,162,7;117,164,9;115,165,6;116,162,6;117,162,8;117,163,9;116,165,9;115,162,6;118,164,7;114,164,6;117,165,6;114,165,7;115,165,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="289" />
+      </Cell>
+      <Cell id="290">
+        <Nodes>142,80,4;142,81,4;142,80,5;143,80,4;142,81,5;143,81,4;143,80,5;143,81,5;141,80,4;142,80,3;141,81,4;142,79,4;142,81,3;141,80,5;141,81,5;143,80,3;142,79,5;143,79,4;143,81,3;142,82,4;143,79,5;142,80,6;142,82,5;141,80,3;143,82,4;142,81,6;144,80,4;141,79,4;141,81,3;142,79,3;144,81,4;143,80,6;143,82,5;144,80,5;141,79,5;143,81,6;144,81,5;143,79,3;141,82,4;142,82,3;141,80,6;141,82,5;141,81,6;142,79,6;143,82,3;144,80,3;141,79,3;140,80,4;144,79,4;144,81,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="290" />
+      </Cell>
+      <Cell id="291">
+        <Nodes>160,64,3;159,64,3;160,64,4;159,64,4;160,63,3;159,63,3;160,65,3;159,65,3;160,63,4;159,63,4;160,65,4;159,65,4;160,64,2;159,64,2;161,64,3;158,64,3;161,64,4;158,64,4;160,64,5;159,64,5;160,63,2;159,63,2;160,65,2;159,65,2;161,63,3;158,63,3;161,65,3;158,65,3;161,63,4;158,63,4;161,65,4;158,65,4;160,63,5;159,63,5;160,65,5;159,65,5;161,64,2;158,64,2;160,62,3;159,62,3;160,66,3;159,66,3;160,62,4;159,62,4;160,66,4;159,66,4;161,64,5;158,64,5;161,63,2;158,63,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="291" />
+      </Cell>
+      <Cell id="292">
+        <Nodes>136,140,4;136,139,4;136,140,3;137,140,4;135,140,4;136,140,5;136,141,4;136,139,3;137,139,4;137,140,3;135,139,4;136,139,5;135,140,3;137,140,5;136,141,3;137,141,4;135,140,5;135,141,4;136,141,5;137,139,3;135,139,3;137,139,5;135,139,5;137,141,3;135,141,3;137,141,5;135,141,5;136,138,4;136,140,2;138,140,4;134,140,4;136,140,6;136,138,3;137,138,4;136,139,2;136,142,4;138,139,4;135,138,4;137,140,2;136,138,5;138,140,3;135,140,2;134,139,4;136,141,2;138,140,5;134,140,3;136,139,6;138,141,4;137,140,6;137,138,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="292" />
+      </Cell>
+      <Cell id="293">
+        <Nodes>157,40,3;157,41,3;157,40,4;157,41,4;158,40,3;158,41,3;158,40,4;158,41,4;156,40,3;156,41,3;156,40,4;156,41,4;157,40,2;157,41,2;157,39,3;157,39,4;157,42,3;157,42,4;157,40,5;157,41,5;158,40,2;158,41,2;158,39,3;158,39,4;158,42,3;158,42,4;158,40,5;158,41,5;159,40,3;159,41,3;159,40,4;159,41,4;156,40,2;156,41,2;156,39,3;156,39,4;156,42,3;156,42,4;156,40,5;156,41,5;157,39,2;157,42,2;157,39,5;157,42,5;158,39,2;158,42,2;158,39,5;158,42,5;155,40,3;155,41,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="293" />
+      </Cell>
+      <Cell id="294">
+        <Nodes>141,70,7;142,70,7;141,71,7;142,71,7;141,70,8;142,70,8;141,70,6;142,70,6;141,69,7;142,69,7;141,71,8;142,71,8;141,71,6;142,71,6;140,70,7;143,70,7;141,69,8;142,69,8;141,69,6;142,69,6;140,71,7;140,70,8;143,71,7;143,70,8;140,70,6;140,69,7;143,70,6;141,72,7;143,69,7;142,72,7;140,71,8;143,71,8;141,70,9;142,70,9;140,71,6;143,71,6;140,69,8;141,72,8;143,69,8;142,72,8;141,71,9;142,71,9;141,70,5;142,70,5;140,69,6;141,72,6;143,69,6;141,68,7;142,72,6;142,68,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="294" />
+      </Cell>
+      <Cell id="295">
+        <Nodes>110,152,8;110,153,8;109,152,8;109,153,8;110,152,7;110,153,7;109,152,7;109,153,7;110,152,9;110,153,9;111,152,8;111,153,8;109,152,9;109,153,9;110,151,8;110,154,8;111,152,7;111,153,7;109,151,8;109,154,8;110,151,7;110,154,7;108,152,8;108,153,8;109,151,7;109,154,7;110,152,6;110,153,6;111,152,9;111,153,9;108,152,7;108,153,7;109,152,6;109,153,6;110,151,9;110,154,9;111,151,8;111,154,8;109,151,9;109,154,9;111,151,7;111,154,7;108,152,9;108,153,9;111,152,6;111,153,6;108,151,8;108,154,8;110,152,10;110,153,10</Nodes>
+        <PropertyData symbol-ref="clone_id" value="295" />
+      </Cell>
+      <Cell id="296">
+        <Nodes>160,166,7;160,166,8;161,166,7;161,166,8;160,165,7;160,165,8;160,167,7;161,165,7;160,167,8;159,166,7;161,165,8;159,166,8;161,167,7;160,166,6;161,167,8;159,165,7;160,166,9;159,165,8;161,166,6;160,165,6;159,167,7;159,167,8;161,166,9;160,167,6;160,165,9;162,166,7;161,165,6;159,166,6;162,166,8;160,164,7;160,167,9;161,167,6;161,165,9;160,164,8;159,166,9;162,165,7;159,165,6;162,165,8;161,164,7;161,167,9;161,164,8;162,167,7;160,168,7;159,167,6;159,165,9;162,167,8;160,168,8;158,166,7;159,164,7;162,166,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="296" />
+      </Cell>
+      <Cell id="297">
+        <Nodes>113,77,6;113,78,6;112,77,6;112,78,6;113,77,7;113,77,5;113,78,7;113,78,5;114,77,6;114,78,6;112,77,7;112,77,5;113,76,6;112,78,7;112,78,5;114,77,7;114,77,5;113,79,6;114,78,7;114,78,5;112,76,6;113,76,7;113,76,5;114,76,6;112,79,6;113,79,7;113,79,5;111,77,6;112,76,7;112,76,5;114,79,6;111,78,6;113,77,8;113,77,4;114,76,7;114,76,5;112,79,7;112,79,5;113,78,8;113,78,4;115,77,6;111,77,7;111,77,5;114,79,7;114,79,5;115,78,6;111,78,7;111,78,5;112,77,8;112,77,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="297" />
+      </Cell>
+      <Cell id="298">
+        <Nodes>120,81,5;120,82,5;120,81,6;121,81,5;120,82,6;121,82,5;119,81,5;120,81,4;121,81,6;120,80,5;119,82,5;120,82,4;121,82,6;119,81,6;121,81,4;120,80,6;119,82,6;121,80,5;121,82,4;119,81,4;120,83,5;119,80,5;120,80,4;119,82,4;121,80,6;120,81,7;120,83,6;122,81,5;121,83,5;119,80,6;121,80,4;120,82,7;122,82,5;119,83,5;120,83,4;121,81,7;122,81,6;121,83,6;119,80,4;121,82,7;118,81,5;122,82,6;119,81,7;120,81,3;119,83,6;122,81,4;121,83,4;118,82,5;120,80,7;119,82,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="298" />
+      </Cell>
+      <Cell id="299">
+        <Nodes>122,60,6;122,60,7;121,60,6;121,60,7;122,59,6;122,59,7;121,59,6;121,59,7;122,61,6;122,61,7;123,60,6;121,61,6;123,60,7;121,61,7;122,60,5;122,60,8;121,60,5;123,59,6;123,59,7;121,60,8;122,59,5;120,60,6;120,60,7;122,59,8;123,61,6;121,59,5;123,61,7;122,61,5;121,59,8;122,58,6;120,59,6;122,58,7;122,61,8;123,60,5;120,59,7;121,61,5;121,58,6;123,60,8;121,58,7;121,61,8;120,61,6;120,61,7;123,59,5;123,59,8;122,62,6;120,60,5;122,62,7;123,61,5;120,60,8;121,62,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="299" />
+      </Cell>
+      <Cell id="300">
+        <Nodes>165,58,3;165,57,3;165,58,2;165,57,2;166,58,3;166,57,3;166,58,2;166,57,2;164,58,3;164,57,3;164,58,2;164,57,2;165,58,4;165,57,4;165,59,3;165,56,3;165,59,2;165,56,2;166,58,4;166,57,4;165,58,1;165,57,1;166,59,3;166,56,3;166,59,2;164,58,4;164,57,4;166,56,2;164,59,3;166,58,1;166,57,1;164,56,3;167,58,3;167,57,3;164,59,2;165,59,4;164,56,2;167,58,2;167,57,2;165,56,4;164,58,1;164,57,1;166,59,4;166,56,4;165,59,1;163,58,3;163,57,3;165,56,1;163,58,2;163,57,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="300" />
+      </Cell>
+      <Cell id="301">
+        <Nodes>136,167,3;136,167,2;136,166,3;136,166,2;137,167,3;137,167,2;135,167,3;135,167,2;137,166,3;137,166,2;135,166,3;136,168,3;135,166,2;136,168,2;136,167,4;136,167,1;136,166,4;137,168,3;137,168,2;136,166,1;135,168,3;135,168,2;137,167,4;136,165,3;136,165,2;135,167,4;137,167,1;137,166,4;135,167,1;135,166,4;136,168,4;137,166,1;135,166,1;136,168,1;137,165,3;138,167,3;137,165,2;138,167,2;135,165,3;135,165,2;134,167,3;134,167,2;138,166,3;138,166,2;137,168,4;135,168,4;134,166,3;137,168,1;134,166,2;136,165,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="301" />
+      </Cell>
+      <Cell id="302">
+        <Nodes>132,46,6;132,46,7;131,46,6;132,45,6;131,46,7;132,45,7;131,45,6;132,47,6;133,46,6;132,46,5;131,45,7;132,47,7;131,47,6;133,46,7;131,46,5;133,45,6;131,47,7;132,45,5;133,45,7;131,45,5;133,47,6;132,46,8;132,47,5;130,46,6;133,46,5;133,47,7;131,46,8;131,47,5;132,44,6;130,46,7;132,45,8;130,45,6;133,45,5;132,44,7;131,44,6;131,45,8;130,45,7;132,47,8;130,47,6;131,44,7;133,46,8;133,47,5;130,46,5;132,48,6;131,47,8;130,47,7;133,44,6;132,44,5;134,46,6;132,48,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="302" />
+      </Cell>
+      <Cell id="303">
+        <Nodes>121,57,4;121,57,3;122,57,4;121,58,4;122,57,3;121,58,3;122,58,4;121,56,4;122,58,3;120,57,4;121,56,3;121,57,5;120,57,3;122,56,4;122,56,3;120,58,4;122,57,5;121,58,5;120,58,3;121,57,2;120,56,4;122,58,5;123,57,4;121,56,5;122,57,2;120,56,3;120,57,5;121,58,2;123,57,3;121,59,4;122,56,5;121,59,3;123,58,4;122,58,2;121,56,2;122,59,4;120,58,5;123,58,3;120,57,2;122,59,3;123,56,4;122,56,2;120,56,5;123,56,3;121,55,4;120,58,2;123,57,5;120,59,4;121,55,3;119,57,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="303" />
+      </Cell>
+      <Cell id="304">
+        <Nodes>159,89,6;159,89,7;158,89,6;158,89,7;159,88,6;159,88,7;159,90,6;159,90,7;160,89,6;160,89,7;158,88,6;158,88,7;158,90,6;158,90,7;159,89,5;159,89,8;160,88,6;160,88,7;160,90,6;160,90,7;158,89,5;158,89,8;159,88,5;159,88,8;159,90,5;159,90,8;160,89,5;160,89,8;157,89,6;157,89,7;158,88,5;158,88,8;159,87,6;159,87,7;158,90,5;158,90,8;160,88,5;160,88,8;159,91,6;159,91,7;160,90,5;160,90,8;161,89,6;161,89,7;157,88,6;157,88,7;158,87,6;158,87,7;157,90,6;157,90,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="304" />
+      </Cell>
+      <Cell id="305">
+        <Nodes>126,82,7;125,82,7;126,83,7;126,82,8;125,83,7;125,82,8;126,83,8;125,83,8;126,82,6;126,81,7;127,82,7;125,82,6;125,81,7;126,83,6;126,81,8;127,83,7;127,82,8;125,83,6;125,81,8;127,83,8;124,82,7;126,84,7;126,82,9;124,83,7;124,82,8;125,84,7;125,82,9;126,84,8;126,83,9;126,81,6;127,82,6;127,81,7;124,83,8;125,84,8;125,83,9;125,81,6;127,83,6;127,81,8;124,82,6;124,81,7;126,84,6;126,81,9;127,84,7;127,82,9;124,83,6;124,81,8;125,84,6;125,81,9;127,84,8;127,83,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="305" />
+      </Cell>
+      <Cell id="306">
+        <Nodes>139,26,4;140,26,4;139,27,4;140,27,4;139,26,5;139,26,3;140,26,5;140,26,3;139,25,4;140,25,4;139,27,5;139,27,3;138,26,4;140,27,5;140,27,3;139,25,5;139,25,3;141,26,4;140,25,5;140,25,3;138,27,4;138,26,5;138,26,3;138,25,4;141,27,4;141,26,5;141,26,3;141,25,4;139,28,4;138,27,5;138,27,3;140,28,4;139,26,6;138,25,5;141,27,5;140,26,6;139,26,2;138,25,3;141,27,3;140,26,2;139,24,4;141,25,5;141,25,3;140,24,4;139,28,5;139,28,3;140,28,5;139,27,6;140,28,3;140,27,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="306" />
+      </Cell>
+      <Cell id="307">
+        <Nodes>112,169,7;112,169,8;113,169,7;113,169,8;112,168,7;112,170,7;112,168,8;112,170,8;111,169,7;113,168,7;113,170,7;111,169,8;112,169,6;113,168,8;113,170,8;113,169,6;111,168,7;111,170,7;112,169,9;111,168,8;112,168,6;111,170,8;112,170,6;113,169,9;114,169,7;111,169,6;113,168,6;113,170,6;114,169,8;112,168,9;112,170,9;112,167,7;111,169,9;113,168,9;114,168,7;111,168,6;112,167,8;112,171,7;113,170,9;114,170,7;111,170,6;114,168,8;113,167,7;112,171,8;114,170,8;113,167,8;113,171,7;114,169,6;110,169,7;111,168,9</Nodes>
+        <PropertyData symbol-ref="clone_id" value="307" />
+      </Cell>
+      <Cell id="308">
+        <Nodes>134,81,3;134,80,3;135,81,3;134,81,4;135,80,3;134,80,4;135,81,4;134,81,2;133,81,3;134,82,3;135,80,4;134,80,2;133,80,3;135,81,2;133,81,4;135,82,3;134,82,4;135,80,2;133,80,4;133,81,2;134,79,3;135,82,4;134,82,2;133,82,3;133,80,2;136,81,3;134,81,5;135,79,3;134,79,4;135,82,2;133,82,4;136,80,3;134,80,5;136,81,4;135,81,5;135,79,4;134,79,2;133,79,3;136,80,4;133,82,2;135,80,5;136,81,2;134,81,1;133,81,5;132,81,3;135,79,2;136,82,3;133,79,4;134,82,5;136,80,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="308" />
+      </Cell>
+      <Cell id="309">
+        <Nodes>102,157,2;102,157,3;101,157,2;101,157,3;102,158,2;102,158,3;101,158,2;101,158,3;102,156,2;102,156,3;101,156,2;101,156,3;103,157,2;103,157,3;102,157,1;102,157,4;101,157,1;101,157,4;103,158,2;103,158,3;100,157,2;100,157,3;102,158,1;102,158,4;103,156,2;103,156,3;101,158,1;102,156,1;101,158,4;102,156,4;100,158,2;100,158,3;101,156,1;102,159,2;102,159,3;103,157,1;101,156,4;103,157,4;100,156,2;101,159,2;100,156,3;101,159,3;103,158,1;102,155,2;102,155,3;100,157,1;103,158,4;100,157,4;101,155,2;101,155,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="309" />
+      </Cell>
+      <Cell id="310">
+        <Nodes>116,86,7;116,87,7;117,86,7;116,86,6;116,86,8;115,86,7;116,85,7;117,87,7;116,87,6;116,87,8;115,87,7;117,86,6;117,86,8;115,86,6;115,86,8;117,85,7;116,85,6;116,85,8;117,87,6;115,85,7;117,87,8;115,87,6;115,87,8;117,85,6;116,88,7;117,85,8;115,85,6;115,85,8;118,86,7;116,86,5;116,86,9;117,88,7;116,88,6;114,86,7;116,88,8;115,88,7;118,87,7;116,87,5;116,87,9;118,86,6;116,84,7;117,86,5;118,86,8;114,87,7;117,86,9;115,86,5;117,88,6;118,85,7;117,88,8;114,86,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="310" />
+      </Cell>
+      <Cell id="311">
+        <Nodes>117,115,4;118,115,4;117,115,5;117,116,4;117,114,4;118,115,5;117,115,3;118,116,4;118,114,4;116,115,4;118,115,3;117,116,5;117,114,5;118,116,5;118,114,5;117,116,3;117,114,3;116,115,5;116,116,4;116,114,4;118,116,3;118,114,3;116,115,3;119,115,4;116,116,5;116,114,5;117,115,6;119,115,5;116,116,3;116,114,3;119,116,4;119,114,4;118,115,6;117,117,4;117,113,4;119,115,3;118,117,4;118,113,4;117,115,2;117,116,6;117,114,6;119,116,5;119,114,5;117,117,5;117,113,5;118,115,2;118,116,6;118,114,6;119,116,3;119,114,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="311" />
+      </Cell>
+      <Cell id="312">
+        <Nodes>165,149,5;165,150,5;164,149,5;165,149,6;164,150,5;165,150,6;164,149,6;164,150,6;165,149,4;166,149,5;165,150,4;166,150,5;165,148,5;164,149,4;164,150,4;166,149,6;166,150,6;165,151,5;164,148,5;165,148,6;164,151,5;165,151,6;164,148,6;163,149,5;163,150,5;165,149,7;165,150,7;164,151,6;163,149,6;164,149,7;166,149,4;163,150,6;164,150,7;166,150,4;165,148,4;166,148,5;165,151,4;166,151,5;164,148,4;166,148,6;164,151,4;166,151,6;163,149,4;163,150,4;166,149,7;166,150,7;163,148,5;165,148,7;163,151,5;165,151,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="312" />
+      </Cell>
+      <Cell id="313">
+        <Nodes>120,104,6;121,104,6;120,105,6;121,105,6;120,104,5;121,104,5;120,104,7;121,104,7;120,105,5;121,105,5;120,103,6;120,105,7;121,103,6;121,105,7;119,104,6;122,104,6;119,105,6;120,103,5;121,103,5;122,105,6;120,103,7;119,104,5;121,103,7;120,106,6;121,106,6;122,104,5;119,104,7;119,105,5;122,104,7;122,105,5;119,103,6;119,105,7;120,104,4;122,103,6;120,106,5;121,104,4;122,105,7;121,106,5;120,106,7;120,105,4;121,106,7;121,105,4;119,103,5;120,104,8;121,104,8;122,103,5;119,103,7;120,105,8;119,106,6;121,105,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="313" />
+      </Cell>
+      <Cell id="314">
+        <Nodes>149,135,6;149,134,6;149,135,5;150,135,6;148,135,6;149,135,7;149,136,6;149,134,5;150,134,6;148,134,6;149,134,7;150,135,5;148,135,5;150,135,7;148,135,7;149,136,5;150,136,6;150,134,5;148,136,6;148,134,5;149,136,7;150,134,7;148,134,7;149,133,6;150,136,5;148,136,5;150,136,7;148,136,7;149,135,4;151,135,6;149,133,5;150,133,6;147,135,6;148,133,6;149,135,8;149,133,7;149,134,4;151,134,6;147,134,6;149,134,8;150,135,4;151,135,5;148,135,4;149,137,6;150,133,5;151,135,7;147,135,5;148,133,5;150,135,8;150,133,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="314" />
+      </Cell>
+      <Cell id="315">
+        <Nodes>146,113,4;146,112,4;146,113,5;147,113,4;146,112,5;147,112,4;145,113,4;146,113,3;145,112,4;147,113,5;146,112,3;147,112,5;146,114,4;145,113,5;145,112,5;147,113,3;146,114,5;147,112,3;146,111,4;145,113,3;147,114,4;145,112,3;145,114,4;146,114,3;146,111,5;147,114,5;146,113,6;147,111,4;146,112,6;145,114,5;145,111,4;148,113,4;146,111,3;148,112,4;147,114,3;147,111,5;147,113,6;145,114,3;145,111,5;144,113,4;148,113,5;147,112,6;145,113,6;144,112,4;148,112,5;145,112,6;147,111,3;146,113,2;144,113,5;146,112,2</Nodes>
+        <PropertyData symbol-ref="clone_id" value="315" />
+      </Cell>
+      <Cell id="316">
+        <Nodes>130,74,7;130,75,7;129,74,7;130,74,6;129,75,7;130,75,6;130,74,8;131,74,7;129,74,6;130,75,8;131,75,7;130,73,7;129,75,6;129,74,8;131,74,6;129,75,8;131,75,6;129,73,7;130,73,6;131,74,8;130,76,7;131,75,8;130,73,8;131,73,7;129,73,6;129,76,7;130,76,6;128,74,7;130,74,5;129,73,8;128,75,7;131,73,6;130,75,5;130,76,8;131,76,7;129,76,6;128,74,6;129,74,5;131,73,8;128,75,6;129,75,5;130,74,9;129,76,8;128,74,8;132,74,7;131,76,6;131,74,5;130,75,9;128,75,8;132,75,7</Nodes>
+        <PropertyData symbol-ref="clone_id" value="316" />
+      </Cell>
+      <Cell id="317">
+        <Nodes>169,67,3;170,67,3;169,66,3;169,67,2;170,66,3;170,67,2;169,66,2;169,67,4;169,68,3;168,67,3;170,66,2;170,67,4;169,66,4;170,68,3;168,66,3;169,68,2;168,67,2;170,66,4;170,68,2;168,66,2;169,68,4;168,67,4;168,68,3;171,67,3;169,65,3;170,68,4;169,67,1;168,66,4;168,68,2;171,66,3;170,65,3;171,67,2;169,65,2;170,67,1;169,66,1;168,68,4;171,66,2;170,65,2;171,67,4;170,66,1;169,65,4;171,68,3;168,65,3;169,67,5;169,68,1;168,67,1;169,69,3;167,67,3;171,66,4;170,65,4</Nodes>
+        <PropertyData symbol-ref="clone_id" value="317" />
+      </Cell>
+      <Cell id="318">
+        <Nodes>162,55,6;162,55,5;163,55,6;163,55,5;162,56,6;162,56,5;163,56,6;163,56,5;162,54,6;162,54,5;163,54,6;163,54,5;161,55,6;162,55,7;161,55,5;163,55,7;162,55,4;164,55,6;163,55,4;164,55,5;161,56,6;162,56,7;161,56,5;163,56,7;162,56,4;164,56,6;163,56,4;164,56,5;162,57,6;162,57,5;163,57,6;163,57,5;161,54,6;162,54,7;161,54,5;163,54,7;162,54,4;164,54,6;163,54,4;164,54,5;161,55,7;161,55,4;164,55,7;164,55,4;161,56,7;161,56,4;164,56,7;164,56,4;162,53,6;162,53,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="318" />
+      </Cell>
+      <Cell id="319">
+        <Nodes>125,123,3;126,123,3;125,124,3;125,123,2;126,124,3;126,123,2;125,123,4;125,122,3;125,124,2;124,123,3;126,123,4;126,122,3;126,124,2;125,124,4;125,122,2;124,124,3;124,123,2;126,124,4;126,122,2;125,122,4;124,123,4;127,123,3;124,122,3;124,124,2;126,122,4;125,125,3;125,123,1;124,124,4;127,124,3;127,123,2;124,122,2;126,125,3;126,123,1;125,125,2;125,124,1;127,123,4;124,122,4;127,122,3;127,124,2;126,125,2;126,124,1;125,123,5;125,125,4;125,121,3;125,122,1;127,124,4;124,125,3;127,122,2;124,123,1;126,123,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="319" />
+      </Cell>
+      <Cell id="320">
+        <Nodes>170,110,7;169,110,7;170,110,8;170,111,7;170,109,7;169,110,8;170,110,6;169,111,7;171,110,7;169,109,7;170,111,8;169,110,6;170,109,8;169,111,8;170,111,6;171,110,8;169,109,8;170,109,6;171,111,7;169,111,6;171,109,7;171,110,6;169,109,6;168,110,7;171,111,8;171,109,8;170,110,9;168,110,8;171,111,6;170,112,7;168,111,7;169,110,9;171,109,6;168,109,7;168,110,6;170,108,7;169,112,7;170,111,9;170,112,8;168,111,8;170,109,9;170,110,5;169,108,7;168,109,8;169,111,9;170,108,8;169,112,8;171,110,9;169,109,9;169,110,5</Nodes>
+        <PropertyData symbol-ref="clone_id" value="320" />
+      </Cell>
+      <Cell id="321">
+        <Nodes>145,143,7;145,144,7;145,143,6;145,144,6;146,143,7;146,144,7;144,143,7;144,144,7;146,143,6;145,143,8;146,144,6;144,143,6;145,144,8;144,144,6;145,142,7;145,145,7;145,142,6;146,143,8;146,144,8;144,143,8;144,144,8;145,145,6;146,142,7;144,142,7;145,143,5;145,144,5;146,145,7;146,142,6;144,145,7;145,142,8;144,142,6;146,145,6;145,145,8;144,145,6;147,143,7;146,143,5;147,144,7;146,144,5;144,143,5;143,143,7;144,144,5;143,144,7;146,142,8;147,143,6;144,142,8;147,144,6;143,143,6;146,145,8;143,144,6;144,145,8</Nodes>
+        <PropertyData symbol-ref="clone_id" value="321" />
+      </Cell>
+      <Cell id="322">
+        <Nodes>148,72,6;148,72,7;147,72,6;148,71,6;147,72,7;148,71,7;147,71,6;148,73,6;147,71,7;149,72,6;148,72,5;148,73,7;149,72,7;147,73,6;149,71,6;147,72,5;148,71,5;147,73,7;149,71,7;147,71,5;148,72,8;149,73,6;146,72,6;148,73,5;149,72,5;148,70,6;147,72,8;149,73,7;148,71,8;146,72,7;147,73,5;148,70,7;146,71,6;147,70,6;149,71,5;147,71,8;146,71,7;147,70,7;148,73,8;149,72,8;146,73,6;149,73,5;146,72,5;149,70,6;148,70,5;147,73,8;146,73,7;148,74,6;149,71,8;150,72,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="322" />
+      </Cell>
+      <Cell id="323">
+        <Nodes>163,154,4;163,153,4;163,154,5;162,154,4;163,153,5;162,153,4;162,154,5;162,153,5;164,154,4;163,154,3;163,155,4;164,153,4;164,154,5;163,153,3;163,155,5;164,153,5;162,154,3;162,155,4;162,153,3;162,155,5;163,152,4;163,154,6;164,154,3;164,155,4;163,152,5;163,153,6;161,154,4;163,155,3;162,152,4;164,153,3;162,154,6;164,155,5;161,153,4;161,154,5;162,152,5;162,153,6;162,155,3;161,153,5;164,152,4;164,154,6;163,152,3;163,155,6;164,152,5;164,153,6;164,155,3;165,154,4;161,154,3;161,155,4;162,152,3;162,155,6</Nodes>
+        <PropertyData symbol-ref="clone_id" value="323" />
+      </Cell>
+      <Cell id="324">
+        <Nodes>149,61,2;148,61,2;149,61,3;148,61,3;149,62,2;149,60,2;148,62,2;148,60,2;149,62,3;149,61,1;149,60,3;148,62,3;148,61,1;150,61,2;148,60,3;150,61,3;149,62,1;147,61,2;149,60,1;148,62,1;150,62,2;148,60,1;150,60,2;147,61,3;149,61,4;150,62,3;150,61,1;148,61,4;147,62,2;150,60,3;147,60,2;149,63,2;147,62,3;149,62,4;147,61,1;148,63,2;150,62,1;147,60,3;149,60,4;148,62,4;149,59,2;149,63,3;150,60,1;148,60,4;148,59,2;148,63,3;149,59,3;150,61,4;147,62,1;149,61,0</Nodes>
+        <PropertyData symbol-ref="clone_id" value="324" />
+      </Cell>
+      <Cell id="325">
+        <Nodes>149,146,2;149,146,3;148,146,2;149,145,2;148,146,3;149,145,3;149,147,2;148,145,2;150,146,2;149,147,3;148,145,3;149,146,1;150,146,3;148,147,2;150,145,2;148,147,3;148,146,1;149,145,1;150,145,3;149,146,4;150,147,2;149,147,1;148,145,1;150,147,3;150,146,1;147,146,2;148,146,4;149,145,4;149,144,2;147,146,3;148,147,1;149,144,3;150,145,1;147,145,2;149,147,4;148,145,4;148,144,2;150,146,4;147,145,3;148,144,3;150,147,1;147,147,2;148,147,4;149,148,2;147,147,3;150,145,4;147,146,1;151,146,2;150,144,2;149,148,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="325" />
+      </Cell>
+      <Cell id="326">
+        <Nodes>134,65,4;133,65,4;134,66,4;134,65,3;134,65,5;134,64,4;135,65,4;133,66,4;133,65,3;133,65,5;134,66,3;134,66,5;133,64,4;135,66,4;134,64,3;134,64,5;135,65,3;133,66,3;135,65,5;133,66,5;135,64,4;133,64,3;133,64,5;135,66,3;135,66,5;132,65,4;135,64,3;134,67,4;135,64,5;134,65,2;132,66,4;134,65,6;133,67,4;132,65,3;132,65,5;134,63,4;132,64,4;134,67,3;133,65,2;134,67,5;133,65,6;134,66,2;136,65,4;134,66,6;135,67,4;132,66,3;133,63,4;132,66,5;134,64,2;133,67,3</Nodes>
+        <PropertyData symbol-ref="clone_id" value="326" />
+      </Cell>
+    </Population>
+  </CellPopulations>
+  <Analysis>
+    <ModelGraph format="dot" reduced="true" include-tags="#untagged" />
+    <Logger time-step=".01">
+      <Input>
+        <Symbol symbol-ref="B_left" />
+        <Symbol symbol-ref="B_right" />
+        <Symbol symbol-ref="affinity_mean" />
+        <Symbol symbol-ref="cycling_left" />
+        <Symbol symbol-ref="cycling_right" />
+        <Symbol symbol-ref="mean_generation" />
+        <Symbol symbol-ref="mean_volume" />
+        <Symbol symbol-ref="AP4_mean" />
+        <Symbol symbol-ref="CXCR4_mean" />
+      </Input>
+      <Output>
+        <TextOutput file-name="aggregate_raw" separator="comma" />
+      </Output>
+    </Logger>
+    <Logger time-step="1">
+      <Input>
+        <Symbol symbol-ref="cell.center.x" />
+        <Symbol symbol-ref="cell.center.y" />
+        <Symbol symbol-ref="cell.center.z" />
+        <Symbol symbol-ref="cell.volume" />
+        <Symbol symbol-ref="affinity" />
+        <Symbol symbol-ref="phase" />
+        <Symbol symbol-ref="clone_id" />
+        <Symbol symbol-ref="generation" />
+        <Symbol symbol-ref="birth_time" />
+        <Symbol symbol-ref="cycle_start_time" />
+        <Symbol symbol-ref="cycle_number" />
+        <Symbol symbol-ref="selected_time" />
+        <Symbol symbol-ref="return_time" />
+        <Symbol symbol-ref="return_origin_x" />
+        <Symbol symbol-ref="AP4" />
+        <Symbol symbol-ref="MYC" />
+        <Symbol symbol-ref="target_volume" />
+        <Symbol symbol-ref="signal_gain" />
+        <Symbol symbol-ref="MYC_peak" />
+        <Symbol symbol-ref="AP4_peak" />
+        <Symbol symbol-ref="MYC_AUC_hours" />
+        <Symbol symbol-ref="AKT" />
+        <Symbol symbol-ref="FOXO1" />
+        <Symbol symbol-ref="CXCR4" />
+        <Symbol symbol-ref="death_timer" />
+        <Symbol symbol-ref="last_entry_time" />
+        <Symbol symbol-ref="birth_x" />
+        <Symbol symbol-ref="birth_y" />
+        <Symbol symbol-ref="birth_z" />
+        <Symbol symbol-ref="cycle_duration" />
+        <Symbol symbol-ref="burst_origin_id" />
+        <Symbol symbol-ref="search_start_time" />
+        <Symbol symbol-ref="search_origin_x" />
+      </Input>
+      <Restriction>
+        <Celltype celltype="BCell" />
+      </Restriction>
+      <Output>
+        <TextOutput file-name="cells_raw" separator="comma" />
+      </Output>
+    </Logger>
+    <Logger time-step=".01">
+      <Input>
+        <Symbol symbol-ref="cell.center.x" />
+        <Symbol symbol-ref="cell.center.y" />
+        <Symbol symbol-ref="cell.center.z" />
+        <Symbol symbol-ref="cell.volume" />
+        <Symbol symbol-ref="birth_time" />
+        <Symbol symbol-ref="affinity" />
+        <Symbol symbol-ref="lethal" />
+        <Symbol symbol-ref="generation" />
+        <Symbol symbol-ref="clone_id" />
+        <Symbol symbol-ref="cycle_number" />
+        <Symbol symbol-ref="cycle_duration" />
+        <Symbol symbol-ref="target_volume" />
+        <Symbol symbol-ref="burst_origin_id" />
+        <Symbol symbol-ref="AP4" />
+        <Symbol symbol-ref="phase" />
+      </Input>
+      <Restriction condition="birth_time == time_hours">
+        <Celltype celltype="BCell" />
+      </Restriction>
+      <Output>
+        <TextOutput file-name="births_raw" separator="comma" />
+      </Output>
+    </Logger>
+    <Gnuplotter time-step="100.0" decorate="true" log-commands="true">
+      <Terminal name="png" />
+      <Plot slice="5" title="CXCL12: stationary source diffusion-decay">
+        <Field symbol-ref="CXCL12" surface="true" isolines="8" />
+      </Plot>
+      <Plot slice="5" title="CXCL13: stationary source diffusion-decay">
+        <Field symbol-ref="CXCL13" surface="true" isolines="8" />
+      </Plot>
+      <Plot slice="5" title="B-cell affinity (z=5 um slice); time in biological hours">
+        <Cells value="affinity">
+          <ColorMap adaptive-range="false">
+            <Color value="0" color="black" />
+            <Color value="4" color="#304990" />
+            <Color value="5" color="#31c9d0" />
+            <Color value="7" color="#43b946" />
+            <Color value="8" color="yellow" />
+            <Color value="9" color="red" />
+            <Color value="11" color="#9c0000" />
+          </ColorMap>
+        </Cells>
+      </Plot>
+    </Gnuplotter>
+    <TiffPlotter time-step="50.0" format="32bit" compression="false" timelapse="true" OME-header="false">
+      <Channel symbol-ref="cell.id" exclude-medium="true" />
+      <Channel symbol-ref="affinity" celltype="BCell" exclude-medium="true" />
+    </TiffPlotter>
+  </Analysis>
+</MorpheusModel>

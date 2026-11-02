@@ -1,0 +1,9 @@
+# Thapa et al. (2024) Fig. 4D, Model 4 (magenta): fold change of the senescent area, mean +- SD of n = 5 runs.
+# Written by figures/Supplementary/Supp_Fig_02_Thapa2024/thapa_fig4d_extract.py from the Fig. 4 raster image on page 6 of benchmark_papers/02_Thapa2024.pdf (see its docstring); 12 h hidden and omitted.
+t_h,mean,sd,method
+0.0,1.0,,1 by definition (fold change wrt the initial area)
+24.0,1.0081,,connector 24-36 h (dashes at 25-34 h) evaluated at 24 h; marker hidden
+36.0,0.8803,0.0723,midpoint of the error-bar caps; diamond hidden
+48.0,0.7612,0.0808,midpoint of the error-bar caps
+60.0,0.54,0.0787,midpoint of the error-bar caps
+72.0,0.4358,,diamond centre; error bar shorter than the marker

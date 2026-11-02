@@ -1,0 +1,781 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<MorpheusModel version="4">
+  <Description>
+    <Title>Atwell 2015: C. elegans gonad development and mechanical feedback</Title>
+    <Details>Source: Atwell et al., Development 142:3902-3911 (2015), doi:10.1242/dev.126359.
+Source model: 3D off-lattice deformable spheres in Chaste plus orthogonal cell statecharts.
+This Morpheus translation uses actual 3D CPM cells, initially 16; daughters are generated only by division.
+Hours post-hatching are the simulation time units; a lattice node is 1 micrometre.
+Preserved: stage-dependent DTC migration and radial growth, 5 um DTC contact requirement,
+transverse semicircular turn (radius 11.5 um), late-L4 proximal stretching, distal/turn rachis,
+irreversible GLP-1 loss at 70 um, G1 commitment, one final mitosis for S/G2 cells,
+G1/S/G2/M timing (2/57/39/2%), larval/adult 3/8 h cycle, stochastic G1/G2,
+adult G2 compression arrest below 70% rest volume, 200 um sex decision, 32.5 h fate switch,
+two sperm divisions after 2 h, 1 um/h meiotic/oogenic radius growth, stage-dependent apoptosis,
+and paired sperm/oocyte removal at the proximal outlet.
+Approximations: CPM volume/surface regularization supports the contact-force adapter described below;
+finite boundary/lumen energy replaces center-position projection. The DTC is an explicit global
+leader coordinate and trajectory state, rather than a CPM cell. No axial cell motility bias is used.
+CPM energy parameters are numerical choices; the source spring constant mu=50 enters the force adapter.
+Counts and cell-resolved diagnostics are recorded independently of target images or count data.
+See evidence/model_grounding.md and scripts/build_model.py for definitions and provenance.
+Source-force extension: overlapping CPM neighbours contribute the published logarithmic
+repulsion with mu=50; force components are passed to CPM cell displacement with radius-dependent
+mobility 5/(eta*r), eta=1. This is an isotropic, neighbour-derived force, not an active axial cue.
+The CPM contact neighbourhood approximates the source all-overlapping-spheres neighbour set,
+and energy coupling substitutes for direct off-lattice Euler integration. The coupling scale is
+a declared numerical adapter parameter. The source effective-radius compression estimator
+is used for the adult 70 percent checkpoint: Reff = r - sum(overlap)/(2*max(12,Noverlap)).
+The compressed/rest volume ratio is (Reff/r)^3; occupied CPM volume is logged separately.
+All earlier CPM/boundary approximations remain.
+Division planes have random 3D orientation, matching the default division directions in the paper-era Chaste OffLatticeSimulation (release_3.3). CPM splits a mother lattice cell rather than placing two overlapping sphere centres 0.3 um apart. Prescribed geometry fields stop recomputing after the gonad becomes stationary in adulthood; saved fields retain their final values.
+Centre-constraint extension: each cell computes the nearest point on the reported midline.
+In the distal arm and turn, its restoring displacement projects the centre onto radius R-r;
+in the proximal arm, it only acts if the centre is outside radius R-r. The existing numerical
+wall-energy weight converts this restoring displacement to a CPM bias together with the
+source repulsion. This is a soft approximation to the source hard projection, has no active
+axial motility term, and does not assign fates or cell counts. It addresses cross-arm mixing
+permitted by voxel confinement alone. Existing boundary fields still restrict voxel extent.</Details>
+  </Description>
+  <Global>
+    <Constant symbol="dt_h" value="0.001393939393939394" />
+    <Constant symbol="initial_time_hph" value="18.5" />
+    <Constant symbol="initial_length_um" value="32" />
+    <Constant symbol="initial_radius_um" value="5.48" />
+    <Constant symbol="origin_x_um" value="100" />
+    <Constant symbol="proximal_y_um" value="16" />
+    <Constant symbol="base_z_um" value="16" />
+    <Constant symbol="turn_radius_um" value="11.5" />
+    <Constant symbol="turn_time_hph" value="23" />
+    <Constant symbol="adult_time_hph" value="35.5" />
+    <Constant symbol="switch_start_hph" value="31" />
+    <Constant symbol="sex_switch_hph" value="32.5" />
+    <Constant symbol="notch_bind_um" value="35" />
+    <Constant symbol="notch_loss_um" value="70" />
+    <Constant symbol="sex_decision_um" value="200" />
+    <Constant symbol="oocyte_growth_um" value="250" />
+    <Constant symbol="larval_cycle_h" value="3" />
+    <Constant symbol="adult_cycle_h" value="8" />
+    <Constant symbol="g1_fraction" value="0.02" />
+    <Constant symbol="s_fraction" value="0.57" />
+    <Constant symbol="g2_fraction" value="0.39" />
+    <Constant symbol="m_fraction" value="0.02" />
+    <Constant symbol="phase_cv" value="0.1" />
+    <Constant symbol="mitotic_radius_um" value="2.8" />
+    <Constant symbol="meiotic_radius_um" value="4" />
+    <Constant symbol="oocyte_radius_um" value="10" />
+    <Constant symbol="sperm_radius_um" value="1.5" />
+    <Constant symbol="radius_growth_um_h" value="1" />
+    <Constant symbol="sperm_delay_h" value="2" />
+    <Constant symbol="apoptosis_probability_per_h" value="0.025" />
+    <Constant symbol="compression_threshold" value="0.7" />
+    <Constant symbol="feedback_enabled" value="1" />
+    <Constant symbol="outlet_length_um" value="20" />
+    <Constant symbol="wall_energy" value="200" />
+    <Constant symbol="lumen_energy" value="20" />
+    <Constant symbol="volume_energy" value="0.5" />
+    <Constant symbol="cpm_temperature" value="8" />
+    <Constant symbol="surface_energy" value="0.15" />
+    <Constant symbol="colour" value="0" />
+    <Variable symbol="migration_length_um" value="32" />
+    <Variable symbol="turn_start_length_um" value="0" />
+    <Variable symbol="tip_gap_um" value="0" />
+    <Variable symbol="candidate_oocyte_id" value="1000000000000.0" />
+    <Variable symbol="candidate_sperm_id" value="1000000000000.0" />
+    <Variable symbol="remove_oocyte_id" value="-1" />
+    <Variable symbol="remove_sperm_id" value="-1" />
+    <Variable symbol="ovulated_oocytes" value="0" />
+    <Variable symbol="proliferative_cells" value="0" />
+    <Variable symbol="meiotic_cells" value="0" />
+    <Variable symbol="sperm_cells" value="0" />
+    <Variable symbol="oogenic_cells" value="0" />
+    <Variable symbol="meiotic_S_cells" value="0" />
+    <Variable symbol="meiotic_prophase_cells" value="0" />
+    <Variable symbol="spermatogenic_cells" value="0" />
+    <Variable symbol="fig3_yellow_cells" value="0" />
+    <Variable symbol="fig3_green_cells" value="0" />
+    <Variable symbol="fig3_blue_cells" value="0" />
+    <Variable symbol="fig3_pink_cells" value="0" />
+    <Variable symbol="g2_arrested_cells" value="0" />
+    <Variable symbol="min_meiotic_distance_um" value="1000000000000.0" />
+    <Variable symbol="max_proliferative_distance_um" value="0" />
+    <Variable symbol="mean_compression" value="1" />
+    <Variable symbol="total_cells" value="16" />
+    <Variable symbol="cache_P" value="32" />
+    <Variable symbol="cache_A" value="0" />
+    <Variable symbol="cache_R" value="5.48" />
+    <Variable symbol="cache_Tx" value="132" />
+    <Variable symbol="cache_Dx" value="132" />
+    <Function symbol="elapsed_hours">
+      <Expression>time_hph - initial_time_hph</Expression>
+    </Function>
+    <Function symbol="stage_fraction">
+      <Expression>min(1,max(0,(time_hph-switch_start_hph)/(adult_time_hph-switch_start_hph)))</Expression>
+    </Function>
+    <Function symbol="cycle_duration_h">
+      <Expression>larval_cycle_h+(adult_cycle_h-larval_cycle_h)*stage_fraction</Expression>
+    </Function>
+    <Function symbol="gonad_radius_um">
+      <Expression>initial_radius_um+0.153*min(4,max(0,time_hph-22))+0.376*min(5,max(0,time_hph-26))+0.74*min(4.5,max(0,time_hph-31))</Expression>
+    </Function>
+    <Function symbol="dtc_speed_um_h">
+      <Expression>if(time_hph&lt;22,8.77,if(time_hph&lt;26,7.43,if(time_hph&lt;31,21.3,if(time_hph&lt;35.5,13.6,0))))</Expression>
+    </Function>
+    <Function symbol="stretch_um">
+      <Expression>(turn_angle&gt;=pi)*16.2*min(4.5,max(0,time_hph-31))</Expression>
+    </Function>
+    <Function symbol="proximal_length_um">
+      <Expression>if(turn_start_length_um==0,migration_length_um,turn_start_length_um+stretch_um)</Expression>
+    </Function>
+    <Function symbol="turn_angle">
+      <Expression>if(turn_start_length_um==0,0,min(pi,max(0,(migration_length_um-turn_start_length_um)/turn_radius_um)))</Expression>
+    </Function>
+    <Function symbol="distal_length_um">
+      <Expression>if(turn_angle&lt;pi,0,max(0,migration_length_um-turn_start_length_um-pi*turn_radius_um)+stretch_um)</Expression>
+    </Function>
+    <Function symbol="gonad_length_um">
+      <Expression>migration_length_um+2*stretch_um</Expression>
+    </Function>
+    <Function symbol="turn_x_um">
+      <Expression>origin_x_um+proximal_length_um</Expression>
+    </Function>
+    <Function symbol="turn_y_um">
+      <Expression>proximal_y_um+turn_radius_um</Expression>
+    </Function>
+    <Function symbol="distal_y_um">
+      <Expression>proximal_y_um+2*turn_radius_um</Expression>
+    </Function>
+    <Function symbol="dtc_x_um">
+      <Expression>if(turn_angle&lt;pi,turn_x_um,turn_x_um-distal_length_um)</Expression>
+    </Function>
+    <Function symbol="dtc_y_um">
+      <Expression>turn_y_um-turn_radius_um*cos(turn_angle)</Expression>
+    </Function>
+    <Function symbol="dtc_z_um">
+      <Expression>base_z_um+turn_radius_um*sin(turn_angle)</Expression>
+    </Function>
+    <Function symbol="query_angle">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>min(turn_angle,if(qz&gt;=base_z_um,acos(min(1,max(-1,(turn_y_um-qy)/max(1e-8,sqrt((qy-turn_y_um)^2+(qz-base_z_um)^2))))),if(qy&lt;turn_y_um,0,pi)))</Expression>
+    </Function>
+    <Function symbol="prox_distance_sq">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>(qx-min(turn_x_um,max(origin_x_um,qx)))^2+(qy-proximal_y_um)^2+(qz-base_z_um)^2</Expression>
+    </Function>
+    <Function symbol="turn_distance_sq">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>if(turn_angle&lt;=0,1e12,(qx-turn_x_um)^2+(qy-(turn_y_um-turn_radius_um*cos(query_angle(qx,qy,qz))))^2+(qz-(base_z_um+turn_radius_um*sin(query_angle(qx,qy,qz))))^2)</Expression>
+    </Function>
+    <Function symbol="distal_distance_sq">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>if(turn_angle&lt;pi,1e12,(qx-min(turn_x_um,max(dtc_x_um,qx)))^2+(qy-distal_y_um)^2+(qz-base_z_um)^2)</Expression>
+    </Function>
+    <Function symbol="midline_distance_um">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>sqrt(min(prox_distance_sq(qx,qy,qz),turn_distance_sq(qx,qy,qz),distal_distance_sq(qx,qy,qz)))</Expression>
+    </Function>
+    <Function symbol="path_coordinate_um">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>if(prox_distance_sq(qx,qy,qz)&lt;=min(turn_distance_sq(qx,qy,qz),distal_distance_sq(qx,qy,qz)),min(proximal_length_um,max(0,qx-origin_x_um)),if(turn_distance_sq(qx,qy,qz)&lt;=distal_distance_sq(qx,qy,qz),proximal_length_um+turn_radius_um*query_angle(qx,qy,qz),proximal_length_um+pi*turn_radius_um+turn_x_um-min(turn_x_um,max(dtc_x_um,qx))))</Expression>
+    </Function>
+    <Field symbol="confinement_mitotic" value="-wall_energy*max(0,sqrt((space.x-min(132,max(100,space.x)))^2+(space.y-16)^2+(space.z-16)^2)-initial_radius_um)^2" />
+    <Field symbol="confinement_meiotic" value="-wall_energy*max(0,sqrt((space.x-min(132,max(100,space.x)))^2+(space.y-16)^2+(space.z-16)^2)-initial_radius_um)^2" />
+    <Event time-step="0.1" trigger="when-true" name="Refresh prescribed geometry until adulthood">
+      <Condition>time_hph&lt;=adult_time_hph</Condition>
+      <Intermediate symbol="field_theta" value="min(cache_A,if(space.z&gt;=base_z_um,acos(min(1,max(-1,(turn_y_um-space.y)/max(1e-8,sqrt((space.y-turn_y_um)^2+(space.z-base_z_um)^2))))),if(space.y&lt;turn_y_um,0,pi)))" />
+      <Intermediate symbol="field_p2" value="(space.x-min(cache_Tx,max(origin_x_um,space.x)))^2+(space.y-proximal_y_um)^2+(space.z-base_z_um)^2" />
+      <Intermediate symbol="field_t2" value="if(cache_A&lt;=0,1e12,(space.x-cache_Tx)^2+(space.y-(turn_y_um-turn_radius_um*cos(field_theta)))^2+(space.z-(base_z_um+turn_radius_um*sin(field_theta)))^2)" />
+      <Intermediate symbol="field_d2" value="if(cache_A&lt;pi,1e12,(space.x-min(cache_Tx,max(cache_Dx,space.x)))^2+(space.y-distal_y_um)^2+(space.z-base_z_um)^2)" />
+      <Intermediate symbol="field_distance" value="sqrt(min(field_p2,field_t2,field_d2))" />
+      <Intermediate symbol="field_is_rachis" value="field_p2&gt;min(field_t2,field_d2)" />
+      <Intermediate symbol="field_outer" value="-wall_energy*max(0,field_distance-cache_R)^2" />
+      <Rule symbol-ref="confinement_mitotic">
+        <Expression>field_outer-lumen_energy*field_is_rachis*max(0,cache_R-2*mitotic_radius_um-field_distance)^2</Expression>
+      </Rule>
+      <Rule symbol-ref="confinement_meiotic">
+        <Expression>field_outer-lumen_energy*field_is_rachis*max(0,cache_R-2*meiotic_radius_um-field_distance)^2</Expression>
+      </Rule>
+    </Event>
+    <Event name="Start prescribed DTC turn" time-step="0.001393939393939394" trigger="when-true">
+      <Condition>time_hph&gt;=turn_time_hph and turn_start_length_um==0</Condition>
+      <Rule symbol-ref="turn_start_length_um">
+        <Expression>migration_length_um</Expression>
+      </Rule>
+    </Event>
+    <System time-step="0.001393939393939394" solver="Euler [fixed, O(1)]">
+      <Rule symbol-ref="migration_length_um">
+        <Expression>migration_length_um+dt_h*dtc_speed_um_h*(tip_gap_um&lt;=5)</Expression>
+      </Rule>
+      <Rule symbol-ref="remove_oocyte_id">
+        <Expression>if(time_hph&gt;=adult_time_hph and candidate_oocyte_id&lt;1e12 and candidate_sperm_id&lt;1e12,candidate_oocyte_id,-1)</Expression>
+      </Rule>
+      <Rule symbol-ref="remove_sperm_id">
+        <Expression>if(time_hph&gt;=adult_time_hph and candidate_oocyte_id&lt;1e12 and candidate_sperm_id&lt;1e12,candidate_sperm_id,-1)</Expression>
+      </Rule>
+      <Rule symbol-ref="ovulated_oocytes">
+        <Expression>ovulated_oocytes+(time_hph&gt;=adult_time_hph and candidate_oocyte_id&lt;1e12 and candidate_sperm_id&lt;1e12)</Expression>
+      </Rule>
+      <Rule symbol-ref="cache_P">
+        <Expression>proximal_length_um</Expression>
+      </Rule>
+      <Rule symbol-ref="cache_A">
+        <Expression>turn_angle</Expression>
+      </Rule>
+      <Rule symbol-ref="cache_R">
+        <Expression>gonad_radius_um</Expression>
+      </Rule>
+      <Rule symbol-ref="cache_Tx">
+        <Expression>turn_x_um</Expression>
+      </Rule>
+      <Rule symbol-ref="cache_Dx">
+        <Expression>dtc_x_um</Expression>
+      </Rule>
+    </System>
+    <Constant symbol="source_repulsion_mu" value="50" />
+    <Constant symbol="source_drag_eta" value="1" />
+    <Constant symbol="force_to_cpm_coupling" value="1" />
+    <Function symbol="overlap_force_coefficient">
+      <Parameter symbol="dx" />
+      <Parameter symbol="dy" />
+      <Parameter symbol="dz" />
+      <Parameter symbol="ri" />
+      <Parameter symbol="rj" />
+      <Expression>-source_repulsion_mu*(ri+rj)*ln(min(1,max(1e-6,sqrt(dx^2+dy^2+dz^2)/max(1e-6,ri+rj))))/max(1e-6,sqrt(dx^2+dy^2+dz^2))</Expression>
+    </Function>
+    <Function symbol="overlap_depth">
+      <Parameter symbol="dx" />
+      <Parameter symbol="dy" />
+      <Parameter symbol="dz" />
+      <Parameter symbol="ri" />
+      <Parameter symbol="rj" />
+      <Expression>max(0,ri+rj-sqrt(dx^2+dy^2+dz^2))</Expression>
+    </Function>
+    <Function symbol="nearest_midline_x">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>if(prox_distance_sq(qx,qy,qz)&lt;=min(turn_distance_sq(qx,qy,qz),distal_distance_sq(qx,qy,qz)),min(turn_x_um,max(origin_x_um,qx)),if(turn_distance_sq(qx,qy,qz)&lt;=distal_distance_sq(qx,qy,qz),turn_x_um,min(turn_x_um,max(dtc_x_um,qx))))</Expression>
+    </Function>
+    <Function symbol="nearest_midline_y">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>if(prox_distance_sq(qx,qy,qz)&lt;=min(turn_distance_sq(qx,qy,qz),distal_distance_sq(qx,qy,qz)),proximal_y_um,if(turn_distance_sq(qx,qy,qz)&lt;=distal_distance_sq(qx,qy,qz),turn_y_um-turn_radius_um*cos(query_angle(qx,qy,qz)),distal_y_um))</Expression>
+    </Function>
+    <Function symbol="nearest_midline_z">
+      <Parameter symbol="qx" />
+      <Parameter symbol="qy" />
+      <Parameter symbol="qz" />
+      <Expression>if(prox_distance_sq(qx,qy,qz)&lt;=min(turn_distance_sq(qx,qy,qz),distal_distance_sq(qx,qy,qz)),base_z_um,if(turn_distance_sq(qx,qy,qz)&lt;=distal_distance_sq(qx,qy,qz),base_z_um+turn_radius_um*sin(query_angle(qx,qy,qz)),base_z_um))</Expression>
+    </Function>
+  </Global>
+  <Space>
+    <Lattice class="cubic">
+      <Size symbol="size" value="280,64,50" />
+      <NodeLength value="1" />
+      <Neighborhood>
+        <Order>2</Order>
+      </Neighborhood>
+      <BoundaryConditions>
+        <Condition boundary="x" type="noflux" />
+        <Condition boundary="-x" type="noflux" />
+        <Condition boundary="y" type="noflux" />
+        <Condition boundary="-y" type="noflux" />
+        <Condition boundary="z" type="noflux" />
+        <Condition boundary="-z" type="noflux" />
+      </BoundaryConditions>
+    </Lattice>
+    <SpaceSymbol symbol="space" />
+  </Space>
+  <Time>
+    <StartTime value="18.5" />
+    <StopTime value="87.5" />
+    <TimeSymbol symbol="time_hph" />
+    <RandomSeed value="1729" />
+    <SaveInterval value="6.96969696969697" />
+  </Time>
+  <CellTypes>
+    <CellType name="medium" class="medium">
+      <Constant symbol="radius_um" value="0" />
+    </CellType>
+    <CellType name="germ" class="biological">
+      <Property symbol="initial_cycle_position" value="rand_uni(0,1)" />
+      <Property symbol="radius_um" value="2.8" />
+      <Property symbol="phase" value="if(initial_cycle_position&lt;0.02,0,if(initial_cycle_position&lt;0.59,1,if(initial_cycle_position&lt;0.98,2,3)))" />
+      <Property symbol="phase_clock_h" value="3*(initial_cycle_position-if(phase==0,0,if(phase==1,0.02,if(phase==2,0.59,0.98))))" />
+      <Property symbol="phase_duration_h" value="3*if(phase==0,0.02,if(phase==1,0.57,if(phase==2,0.39,0.02)))" />
+      <Property symbol="glp1" value="0" />
+      <Property symbol="fate" value="0" />
+      <Property symbol="fate_clock_h" value="0" />
+      <Property symbol="sperm_divisions" value="0" />
+      <Property symbol="division_ready" value="0" />
+      <Property symbol="ancestor" value="0" />
+      <Property symbol="g2_arrest_h" value="0" />
+      <Function symbol="rest_volume_um3">
+        <Expression>(4/3)*pi*radius_um^3</Expression>
+      </Function>
+      <Function symbol="compression_ratio">
+        <Expression>(effective_radius_um/radius_um)^3</Expression>
+      </Function>
+      <Function symbol="distance_from_dtc_um">
+        <Expression>max(0,gonad_length_um-path_coordinate_um(cell.center.x,cell.center.y,cell.center.z))</Expression>
+      </Function>
+      <Function symbol="lag1_active">
+        <Expression>glp1==1</Expression>
+      </Function>
+      <Function symbol="gld1_active">
+        <Expression>glp1!=1</Expression>
+      </Function>
+      <Function symbol="gld2_active">
+        <Expression>glp1!=1</Expression>
+      </Function>
+      <Function symbol="g2_arrested">
+        <Expression>feedback_enabled and time_hph&gt;=adult_time_hph and phase==2 and compression_ratio&lt;compression_threshold</Expression>
+      </Function>
+      <Function symbol="colour">
+        <Expression>if(fate==1,3,if(fate==3,4,if(fate==2 or fate==4,5,if(phase==6,2,1))))</Expression>
+      </Function>
+      <VolumeConstraint target="rest_volume_um3" strength="volume_energy" />
+      <SurfaceConstraint target="1" mode="aspherity" strength="surface_energy" />
+      <ConnectivityConstraint />
+      <Haptotaxis attractant="confinement_mitotic" strength="min(1,max(0,(meiotic_radius_um-radius_um)/(meiotic_radius_um-mitotic_radius_um)))" />
+      <Haptotaxis attractant="confinement_meiotic" strength="1-min(1,max(0,(meiotic_radius_um-radius_um)/(meiotic_radius_um-mitotic_radius_um)))" />
+      <System time-step="0.001393939393939394" solver="Euler [fixed, O(1)]">
+        <Rule symbol-ref="phase_clock_h">
+          <Expression>phase_clock_h+dt_h*(phase&lt;6)*(1-g2_arrested)</Expression>
+        </Rule>
+        <Rule symbol-ref="fate_clock_h">
+          <Expression>fate_clock_h+dt_h*(fate==1)</Expression>
+        </Rule>
+        <Rule symbol-ref="g2_arrest_h">
+          <Expression>g2_arrest_h+dt_h*g2_arrested</Expression>
+        </Rule>
+        <Rule symbol-ref="radius_um">
+          <Expression>if(fate==3,sperm_radius_um,if(fate==2 and distance_from_dtc_um&gt;oocyte_growth_um,min(oocyte_radius_um,radius_um+dt_h*radius_growth_um_h),if(phase==6 and fate!=4 and sperm_divisions==0 and radius_um&lt;meiotic_radius_um and radius_um&lt;meiotic_radius_um,min(meiotic_radius_um,radius_um+dt_h*radius_growth_um_h),radius_um)))</Expression>
+        </Rule>
+        <Intermediate symbol="centre_theta" value="min(turn_angle,if(cell.center.z&gt;=base_z_um,acos(min(1,max(-1,(turn_y_um-cell.center.y)/max(1e-8,sqrt((cell.center.y-turn_y_um)^2+(cell.center.z-base_z_um)^2))))),if(cell.center.y&lt;turn_y_um,0,pi)))" />
+        <Intermediate symbol="centre_p2" value="(cell.center.x-min(turn_x_um,max(origin_x_um,cell.center.x)))^2+(cell.center.y-proximal_y_um)^2+(cell.center.z-base_z_um)^2" />
+        <Intermediate symbol="centre_t2" value="if(turn_angle&lt;=0,1e12,(cell.center.x-turn_x_um)^2+(cell.center.y-(turn_y_um-turn_radius_um*cos(centre_theta)))^2+(cell.center.z-(base_z_um+turn_radius_um*sin(centre_theta)))^2)" />
+        <Intermediate symbol="centre_d2" value="if(turn_angle&lt;pi,1e12,(cell.center.x-min(turn_x_um,max(dtc_x_um,cell.center.x)))^2+(cell.center.y-distal_y_um)^2+(cell.center.z-base_z_um)^2)" />
+        <Intermediate symbol="centre_region" value="if(centre_p2&lt;=min(centre_t2,centre_d2),0,if(centre_t2&lt;=centre_d2,1,2))" />
+        <Intermediate symbol="centre_mid_x" value="if(centre_region==0,min(turn_x_um,max(origin_x_um,cell.center.x)),if(centre_region==1,turn_x_um,min(turn_x_um,max(dtc_x_um,cell.center.x))))" />
+        <Intermediate symbol="radial_x" value="cell.center.x-centre_mid_x" />
+        <Intermediate symbol="centre_mid_y" value="if(centre_region==0,proximal_y_um,if(centre_region==1,turn_y_um-turn_radius_um*cos(centre_theta),distal_y_um))" />
+        <Intermediate symbol="radial_y" value="cell.center.y-centre_mid_y" />
+        <Intermediate symbol="centre_mid_z" value="if(centre_region==1,base_z_um+turn_radius_um*sin(centre_theta),base_z_um)" />
+        <Intermediate symbol="radial_z" value="cell.center.z-centre_mid_z" />
+        <Intermediate symbol="radial_norm" value="sqrt(radial_x^2+radial_y^2+radial_z^2)" />
+        <Intermediate symbol="allowed_center_radius" value="max(0,gonad_radius_um-radius_um)" />
+        <Intermediate symbol="centre_in_rachis_region" value="centre_region!=0" />
+        <Intermediate symbol="projection_scale" value="if(centre_in_rachis_region,allowed_center_radius/max(1e-8,radial_norm)-1,min(0,allowed_center_radius/max(1e-8,radial_norm)-1))" />
+        <VectorRule symbol-ref="boundary_correction">
+          <Expression>projection_scale*radial_x,projection_scale*radial_y,projection_scale*radial_z</Expression>
+        </VectorRule>
+      </System>
+      <Event name="Bind GLP1 near DTC" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>glp1==0 and distance_from_dtc_um&lt;notch_bind_um</Condition>
+        <Rule symbol-ref="glp1">
+          <Expression>1</Expression>
+        </Rule>
+      </Event>
+      <Event name="Irreversible GLP1 loss" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>glp1==1 and distance_from_dtc_um&gt;=notch_loss_um</Condition>
+        <Rule symbol-ref="glp1">
+          <Expression>2</Expression>
+        </Rule>
+      </Event>
+      <Event name="Commit to meiosis during G1" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>phase==0 and (gld1_active or gld2_active) and elapsed_hours&gt;1</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>4</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_clock_h">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_duration_h">
+          <Expression>g1_fraction*cycle_duration_h</Expression>
+        </Rule>
+      </Event>
+      <Event name="G1 to S" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>phase==0 and glp1==1 and phase_clock_h&gt;=phase_duration_h</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>1</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_clock_h">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_duration_h">
+          <Expression>s_fraction*cycle_duration_h</Expression>
+        </Rule>
+      </Event>
+      <Event name="S to G2" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>phase==1 and phase_clock_h&gt;=phase_duration_h</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>2</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_clock_h">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_duration_h">
+          <Expression>max(dt_h,rand_norm(g2_fraction*cycle_duration_h,phase_cv*g2_fraction*cycle_duration_h))</Expression>
+        </Rule>
+      </Event>
+      <Event name="G2 to M; mitotic division" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>phase==2 and phase_clock_h&gt;=phase_duration_h</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>3</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_clock_h">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_duration_h">
+          <Expression>m_fraction*cycle_duration_h</Expression>
+        </Rule>
+        <Rule symbol-ref="division_ready">
+          <Expression>1</Expression>
+        </Rule>
+      </Event>
+      <Event name="M to G1" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>phase==3 and phase_clock_h&gt;=phase_duration_h</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_clock_h">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_duration_h">
+          <Expression>max(dt_h,rand_norm(g1_fraction*cycle_duration_h,phase_cv*g1_fraction*cycle_duration_h))</Expression>
+        </Rule>
+      </Event>
+      <Event name="Nonproliferative G1 to meiotic S" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>phase==4 and phase_clock_h&gt;=phase_duration_h</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>5</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_clock_h">
+          <Expression>0</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_duration_h">
+          <Expression>s_fraction*cycle_duration_h</Expression>
+        </Rule>
+      </Event>
+      <Event name="Meiotic S to prophase" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>phase==5 and phase_clock_h&gt;=phase_duration_h</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>6</Expression>
+        </Rule>
+        <Rule symbol-ref="phase_clock_h">
+          <Expression>0</Expression>
+        </Rule>
+      </Event>
+      <Event name="Sex determination at 200 um" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>fate==0 and distance_from_dtc_um&gt;sex_decision_um and elapsed_hours&gt;1</Condition>
+        <Rule symbol-ref="fate">
+          <Expression>if(time_hph&lt;sex_switch_hph,1,2)</Expression>
+        </Rule>
+        <Rule symbol-ref="fate_clock_h">
+          <Expression>0</Expression>
+        </Rule>
+      </Event>
+      <Event name="Oocyte maturation" time-step="0.001393939393939394" trigger="when-true">
+        <Condition>fate==2 and radius_um&gt;=oocyte_radius_um</Condition>
+        <Rule symbol-ref="fate">
+          <Expression>4</Expression>
+        </Rule>
+      </Event>
+      <CellDivision division-plane="random" write-log="csv" trigger="when-true">
+        <Condition>(division_ready==1 or (fate==1 and fate_clock_h&gt;=sperm_delay_h and sperm_divisions&lt;2)) and cell.volume&gt;=4</Condition>
+        <Triggers>
+          <Rule symbol-ref="division_ready">
+            <Expression>0</Expression>
+          </Rule>
+          <Rule symbol-ref="phase_clock_h">
+            <Expression>if(division_ready==1,0,phase_clock_h)</Expression>
+          </Rule>
+          <Rule symbol-ref="sperm_divisions">
+            <Expression>sperm_divisions+(fate==1)</Expression>
+          </Rule>
+          <Rule symbol-ref="fate">
+            <Expression>if(fate==1 and sperm_divisions==1,3,fate)</Expression>
+          </Rule>
+          <Rule symbol-ref="radius_um">
+            <Expression>if(fate==1,if(sperm_divisions==1,sperm_radius_um,radius_um/2^(1/3)),radius_um)</Expression>
+          </Rule>
+        </Triggers>
+      </CellDivision>
+      <CellDeath name="Oogenic apoptosis or paired fertilisation">
+        <Condition>cell.id==remove_oocyte_id or cell.id==remove_sperm_id or (time_hph&gt;=adult_time_hph and (fate==2 or fate==4) and distance_from_dtc_um&lt;oocyte_growth_um and rand_uni(0,1)&lt;1-(1-apoptosis_probability_per_h)^dt_h)</Condition>
+      </CellDeath>
+      <Mapper name="proliferative_cells" time-step="0.001393939393939394">
+        <Input value="phase&lt;4 and fate==0" />
+        <Output symbol-ref="proliferative_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="meiotic_cells" time-step="0.001393939393939394">
+        <Input value="phase&gt;=4 and fate==0" />
+        <Output symbol-ref="meiotic_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="sperm_cells" time-step="0.001393939393939394">
+        <Input value="fate==3" />
+        <Output symbol-ref="sperm_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="oogenic_cells" time-step="0.001393939393939394">
+        <Input value="fate==2 or fate==4" />
+        <Output symbol-ref="oogenic_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="meiotic_S_cells" time-step="0.001393939393939394">
+        <Input value="(phase==4 or phase==5) and fate==0" />
+        <Output symbol-ref="meiotic_S_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="meiotic_prophase_cells" time-step="0.001393939393939394">
+        <Input value="phase==6 and fate==0" />
+        <Output symbol-ref="meiotic_prophase_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="spermatogenic_cells" time-step="0.001393939393939394">
+        <Input value="fate==1" />
+        <Output symbol-ref="spermatogenic_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="fig3_yellow_cells" time-step="0.001393939393939394">
+        <Input value="phase&lt;6 and fate==0" />
+        <Output symbol-ref="fig3_yellow_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="fig3_green_cells" time-step="0.001393939393939394">
+        <Input value="phase==6 and fate==0" />
+        <Output symbol-ref="fig3_green_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="fig3_blue_cells" time-step="0.001393939393939394">
+        <Input value="fate==1 or fate==3" />
+        <Output symbol-ref="fig3_blue_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="fig3_pink_cells" time-step="0.001393939393939394">
+        <Input value="fate==2 or fate==4" />
+        <Output symbol-ref="fig3_pink_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="g2_arrested_cells" time-step="0.001393939393939394">
+        <Input value="g2_arrested" />
+        <Output symbol-ref="g2_arrested_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="min_meiotic_distance_um" time-step="0.001393939393939394">
+        <Input value="if(phase==6 and fate==0,distance_from_dtc_um,1e12)" />
+        <Output symbol-ref="min_meiotic_distance_um" mapping="minimum" />
+      </Mapper>
+      <Mapper name="max_proliferative_distance_um" time-step="0.001393939393939394">
+        <Input value="if(phase&lt;4 and fate==0,distance_from_dtc_um,0)" />
+        <Output symbol-ref="max_proliferative_distance_um" mapping="maximum" />
+      </Mapper>
+      <Mapper name="mean_compression" time-step="0.001393939393939394">
+        <Input value="compression_ratio" />
+        <Output symbol-ref="mean_compression" mapping="mean" />
+      </Mapper>
+      <Mapper name="tip_gap_um" time-step="0.001393939393939394">
+        <Input value="distance_from_dtc_um" />
+        <Output symbol-ref="tip_gap_um" mapping="minimum" />
+      </Mapper>
+      <Mapper name="total_cells" time-step="0.001393939393939394">
+        <Input value="1" />
+        <Output symbol-ref="total_cells" mapping="sum" />
+      </Mapper>
+      <Mapper name="candidate_oocyte_id" time-step="0.001393939393939394">
+        <Input value="if(fate==4 and path_coordinate_um(cell.center.x,cell.center.y,cell.center.z)&lt;=outlet_length_um,cell.id,1e12)" />
+        <Output symbol-ref="candidate_oocyte_id" mapping="minimum" />
+      </Mapper>
+      <Mapper name="candidate_sperm_id" time-step="0.001393939393939394">
+        <Input value="if(fate==3 and path_coordinate_um(cell.center.x,cell.center.y,cell.center.z)&lt;=outlet_length_um,cell.id,1e12)" />
+        <Output symbol-ref="candidate_sperm_id" mapping="minimum" />
+      </Mapper>
+      <PropertyVector symbol="pair_force" value="0,0,0" />
+      <NeighborhoodVectorReporter name="Published logarithmic overlap repulsion" time-step="0.001393939393939394">
+        <Input value="(cell.type==celltype.germ.id) ? (overlap_force_coefficient(local.cell.center.x-cell.center.x,local.cell.center.y-cell.center.y,local.cell.center.z-cell.center.z,local.radius_um,radius_um))*(local.cell.center.x-cell.center.x) : 0,(cell.type==celltype.germ.id) ? (overlap_force_coefficient(local.cell.center.x-cell.center.x,local.cell.center.y-cell.center.y,local.cell.center.z-cell.center.z,local.radius_um,radius_um))*(local.cell.center.y-cell.center.y) : 0,(cell.type==celltype.germ.id) ? (overlap_force_coefficient(local.cell.center.x-cell.center.x,local.cell.center.y-cell.center.y,local.cell.center.z-cell.center.z,local.radius_um,radius_um))*(local.cell.center.z-cell.center.z) : 0" scaling="cell" />
+        <Output symbol-ref="pair_force" mapping="sum" />
+      </NeighborhoodVectorReporter>
+      <DirectedMotion name="Source repulsion and soft centre projection; no axial cue" direction="pair_force+wall_energy*boundary_correction" strength="force_to_cpm_coupling*5/(source_drag_eta*radius_um)" />
+      <Property symbol="overlap_neighbours" value="0" />
+      <Property symbol="summed_overlap_um" value="0" />
+      <NeighborhoodReporter name="Source compressed-volume estimator" time-step="0.001393939393939394">
+        <Input value="(cell.type==celltype.germ.id) ? (overlap_depth(local.cell.center.x-cell.center.x,local.cell.center.y-cell.center.y,local.cell.center.z-cell.center.z,local.radius_um,radius_um)&gt;0) : 0" scaling="cell" />
+        <Output symbol-ref="overlap_neighbours" mapping="sum" />
+      </NeighborhoodReporter>
+      <NeighborhoodReporter name="Source compressed-volume estimator" time-step="0.001393939393939394">
+        <Input value="(cell.type==celltype.germ.id) ? overlap_depth(local.cell.center.x-cell.center.x,local.cell.center.y-cell.center.y,local.cell.center.z-cell.center.z,local.radius_um,radius_um) : 0" scaling="cell" />
+        <Output symbol-ref="summed_overlap_um" mapping="sum" />
+      </NeighborhoodReporter>
+      <Function symbol="effective_radius_um">
+        <Expression>max(1e-6,radius_um-0.5*summed_overlap_um/max(12,overlap_neighbours))</Expression>
+      </Function>
+      <Function symbol="occupied_fraction">
+        <Expression>cell.volume/rest_volume_um3</Expression>
+      </Function>
+      <PropertyVector symbol="boundary_correction" value="0,0,0" />
+    </CellType>
+  </CellTypes>
+  <CPM>
+    <Interaction default="0" />
+    <MonteCarloSampler stepper="edgelist">
+      <MCSDuration value="0.001393939393939394" />
+      <Neighborhood>
+        <Order>2</Order>
+      </Neighborhood>
+      <MetropolisKinetics temperature="cpm_temperature" />
+    </MonteCarloSampler>
+    <ShapeSurface scaling="norm">
+      <Neighborhood>
+        <Order>2</Order>
+      </Neighborhood>
+    </ShapeSurface>
+  </CPM>
+  <CellPopulations>
+    <Population type="germ" size="0">
+      <InitCellObjects mode="distance">
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="127.0,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="125.2,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="123.4,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="121.6,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="119.8,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="118.0,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="116.2,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="114.4,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="112.6,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="110.8,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="109.0,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="107.2,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="105.4,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="103.6,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="101.8,16,16" />
+        </Arrangement>
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere radius="2.8" center="100.0,16,16" />
+        </Arrangement>
+      </InitCellObjects>
+      <InitProperty symbol-ref="ancestor">
+        <Expression>cell.id</Expression>
+      </InitProperty>
+    </Population>
+  </CellPopulations>
+  <Analysis>
+    <ModelGraph format="dot" reduced="true" />
+    <Logger time-step="0.696969696969697">
+      <Input>
+        <Symbol symbol-ref="elapsed_hours" />
+        <Symbol symbol-ref="proliferative_cells" />
+        <Symbol symbol-ref="meiotic_cells" />
+        <Symbol symbol-ref="sperm_cells" />
+        <Symbol symbol-ref="oogenic_cells" />
+        <Symbol symbol-ref="meiotic_S_cells" />
+        <Symbol symbol-ref="meiotic_prophase_cells" />
+        <Symbol symbol-ref="spermatogenic_cells" />
+        <Symbol symbol-ref="fig3_yellow_cells" />
+        <Symbol symbol-ref="fig3_green_cells" />
+        <Symbol symbol-ref="fig3_blue_cells" />
+        <Symbol symbol-ref="fig3_pink_cells" />
+        <Symbol symbol-ref="total_cells" />
+        <Symbol symbol-ref="gonad_length_um" />
+        <Symbol symbol-ref="gonad_radius_um" />
+        <Symbol symbol-ref="g2_arrested_cells" />
+        <Symbol symbol-ref="mean_compression" />
+        <Symbol symbol-ref="ovulated_oocytes" />
+        <Symbol symbol-ref="tip_gap_um" />
+        <Symbol symbol-ref="min_meiotic_distance_um" />
+        <Symbol symbol-ref="max_proliferative_distance_um" />
+        <Symbol symbol-ref="dtc_x_um" />
+        <Symbol symbol-ref="dtc_y_um" />
+        <Symbol symbol-ref="dtc_z_um" />
+      </Input>
+      <Output>
+        <TextOutput file-name="cell_counts" file-format="csv" separator="comma" />
+      </Output>
+    </Logger>
+    <Logger time-step="0.5">
+      <Input>
+        <Symbol symbol-ref="cell.center.x" />
+        <Symbol symbol-ref="cell.center.y" />
+        <Symbol symbol-ref="cell.center.z" />
+        <Symbol symbol-ref="cell.volume" />
+        <Symbol symbol-ref="radius_um" />
+        <Symbol symbol-ref="phase" />
+        <Symbol symbol-ref="fate" />
+        <Symbol symbol-ref="glp1" />
+        <Symbol symbol-ref="phase_clock_h" />
+        <Symbol symbol-ref="phase_duration_h" />
+        <Symbol symbol-ref="distance_from_dtc_um" />
+        <Symbol symbol-ref="compression_ratio" />
+        <Symbol symbol-ref="g2_arrested" />
+        <Symbol symbol-ref="g2_arrest_h" />
+        <Symbol symbol-ref="ancestor" />
+        <Symbol symbol-ref="colour" />
+        <Symbol symbol-ref="sperm_divisions" />
+        <Symbol symbol-ref="initial_cycle_position" />
+        <Symbol symbol-ref="pair_force.x" />
+        <Symbol symbol-ref="pair_force.y" />
+        <Symbol symbol-ref="pair_force.z" />
+        <Symbol symbol-ref="occupied_fraction" />
+        <Symbol symbol-ref="effective_radius_um" />
+        <Symbol symbol-ref="overlap_neighbours" />
+        <Symbol symbol-ref="summed_overlap_um" />
+        <Symbol symbol-ref="boundary_correction.x" />
+        <Symbol symbol-ref="boundary_correction.y" />
+        <Symbol symbol-ref="boundary_correction.z" />
+      </Input>
+      <Output>
+        <TextOutput file-name="cell_states" file-format="csv" separator="tab" />
+      </Output>
+      <Restriction>
+        <Celltype celltype="germ" />
+      </Restriction>
+    </Logger>
+    <Gnuplotter time-step="17.25" decorate="true">
+      <Terminal name="png" />
+      <Plot slice="16" title="CPM gonad; hours post-hatching; positions in um">
+        <Cells value="colour">
+          <ColorMap adaptive-range="false">
+            <Color value="0" color="white" />
+            <Color value="1" color="gold" />
+            <Color value="2" color="forest-green" />
+            <Color value="3" color="light-blue" />
+            <Color value="4" color="blue" />
+            <Color value="5" color="red" />
+          </ColorMap>
+        </Cells>
+      </Plot>
+    </Gnuplotter>
+  </Analysis>
+</MorpheusModel>

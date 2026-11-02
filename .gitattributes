@@ -1,0 +1,6 @@
+
+# Figure source data are kept byte for byte (MANIFEST.csv checksums): no line-ending conversion.
+figures/**/data/** -text
+figures/Supplementary/DATA_MANIFEST.csv -text
+# Main-figure layout and icons: SVG kept byte for byte
+figures/**/*.svg -text

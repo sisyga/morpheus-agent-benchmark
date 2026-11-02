@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MorpheusModel version="4">
+    <Description>
+        <Title>Malkmus 2025 Fig.7E: six-node limb-bud reaction-diffusion approximation</Title>
+        <Details>SOURCE CLASS: continuum 2D LimbNET reaction-diffusion network (paper p.13). All 12 signed Fig.7E links, including its gray hypotheses, are retained. This is a biologically grounded approximation, not the unavailable original numerical model. Time is hours since E10.5, from 0 to 36 h in the canonical model. Normalized effective concentrations/activity; no transcript/protein separation. Static no-flux disk diameter 1000 um is an inferred scale; no axes, boundary sources, growth, target masks, or scheduled expression. beta-cat and Sox9 are non-diffusive. Low SULF1 mobility approximates local extracellular/ECM action. Kinetic coefficients, diffusion coefficients and 1% homogeneous perturbations are inferred. Reaction production is 2/(1+exp(-2*sum_j w_ij*(u_j-1))); decay is k*u_i. Uniform u_i=1 is the exact equilibrium. See sources/source_model.md and sources/approximation_parameters.json for provenance and limitations.</Details>
+    </Description>
+    <Global>
+        <Constant symbol="k" value="1.3" name="Inferred loss/response rate [1/h]" />
+        <Constant symbol="dx_um" value="10" name="Spatial discretization [um/node]" />
+        <Constant symbol="diffusion_scale" value="1" name="Diffusion control multiplier" />
+        <Function symbol="x_um">
+            <Expression>l.x*dx_um</Expression>
+        </Function>
+        <Function symbol="y_um">
+            <Expression>l.y*dx_um</Expression>
+        </Function>
+        <Function symbol="time_since_E10_5_h">
+            <Expression>time_h</Expression>
+        </Function>
+        <Field symbol="Sfrp2" value="1+rand_uni(-0.01,0.01)" name="Sfrp2 normalized activity">
+            <Diffusion rate="10847.087*diffusion_scale" />
+        </Field>
+        <Field symbol="WNT2" value="1+rand_uni(-0.01,0.01)" name="WNT2 normalized activity">
+            <Diffusion rate="542.35434*diffusion_scale" />
+        </Field>
+        <Field symbol="beta_cat" value="1+rand_uni(-0.01,0.01)" name="beta_cat normalized activity">
+            <Diffusion rate="0*diffusion_scale" />
+        </Field>
+        <Field symbol="BMP2" value="1+rand_uni(-0.01,0.01)" name="BMP2 normalized activity">
+            <Diffusion rate="16270.63*diffusion_scale" />
+        </Field>
+        <Field symbol="SULF1" value="1+rand_uni(-0.01,0.01)" name="SULF1 normalized activity">
+            <Diffusion rate="108.47087*diffusion_scale" />
+        </Field>
+        <Field symbol="Sox9" value="1+rand_uni(-0.01,0.01)" name="Sox9 normalized activity">
+            <Diffusion rate="0*diffusion_scale" />
+        </Field>
+        <System name="Fig.7E signed GRN with saturating production" time-step="0.005" solver="Runge-Kutta [fixed, O(4)]">
+            <DiffEqn symbol-ref="Sfrp2">
+                <Expression>k*(2/(1+exp(-2*((2.69)*(beta_cat-1))))-Sfrp2)</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="WNT2">
+                <Expression>k*(2/(1+exp(-2*((-0.35)*(Sfrp2-1)+(0.87)*(beta_cat-1)+(-1.22)*(SULF1-1)+(-0.20)*(Sox9-1))))-WNT2)</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="beta_cat">
+                <Expression>k*(2/(1+exp(-2*((1.28)*(WNT2-1))))-beta_cat)</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="BMP2">
+                <Expression>k*(2/(1+exp(-2*((0.30)*(beta_cat-1)+(-2.27)*(Sox9-1))))-BMP2)</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="SULF1">
+                <Expression>k*(2/(1+exp(-2*((-0.17)*(beta_cat-1)+(0.94)*(Sox9-1))))-SULF1)</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="Sox9">
+                <Expression>k*(2/(1+exp(-2*((-1.41)*(beta_cat-1)+(2.78)*(BMP2-1))))-Sox9)</Expression>
+            </DiffEqn>
+        </System>
+    </Global>
+    <Space>
+        <Lattice class="square">
+            <Size symbol="size" value="110, 110, 0" />
+            <NodeLength value="10" />
+            <BoundaryConditions>
+                <Condition boundary="x" type="noflux" />
+                <Condition boundary="-x" type="noflux" />
+                <Condition boundary="y" type="noflux" />
+                <Condition boundary="-y" type="noflux" />
+            </BoundaryConditions>
+            <Neighborhood>
+                <Order>1</Order>
+            </Neighborhood>
+            <Domain boundary-type="noflux">
+                <Expression>(l.x-54.5)^2+(l.y-54.5)^2&lt;=50.0^2</Expression>
+            </Domain>
+        </Lattice>
+        <SpaceSymbol symbol="l" />
+    </Space>
+    <Time>
+        <StartTime value="0" />
+        <StopTime value="36" />
+        <SaveInterval value="0" />
+        <RandomSeed value="2025" />
+        <TimeSymbol symbol="time_h" />
+    </Time>
+    <Analysis>
+        <ModelGraph include-tags="#untagged" format="dot" reduced="false" />
+        <Gnuplotter time-step="6" decorate="true" file-numbering="time" condition="abs(time_h-0)&lt;1e-6 or abs(time_h-12)&lt;1e-6 or abs(time_h-18)&lt;1e-6 or abs(time_h-24)&lt;1e-6 or abs(time_h-36)&lt;1e-6">
+            <Terminal name="png" size="1500, 1000, 0" />
+            <Plot title="Sfrp2 (normalized; time in h)">
+                <Field symbol-ref="Sfrp2" min="0" max="2">
+                    <ColorMap adaptive-range="false">
+                        <Color value="0" color="black" />
+                        <Color value="2" color="#ff00ff" />
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Plot title="WNT2 (normalized; time in h)">
+                <Field symbol-ref="WNT2" min="0" max="2">
+                    <ColorMap adaptive-range="false">
+                        <Color value="0" color="black" />
+                        <Color value="2" color="#00bfff" />
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Plot title="beta_cat (normalized; time in h)">
+                <Field symbol-ref="beta_cat" min="0" max="2">
+                    <ColorMap adaptive-range="false">
+                        <Color value="0" color="black" />
+                        <Color value="2" color="#0066dd" />
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Plot title="BMP2 (normalized; time in h)">
+                <Field symbol-ref="BMP2" min="0" max="2">
+                    <ColorMap adaptive-range="false">
+                        <Color value="0" color="black" />
+                        <Color value="2" color="#00aa55" />
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Plot title="SULF1 (normalized; time in h)">
+                <Field symbol-ref="SULF1" min="0" max="2">
+                    <ColorMap adaptive-range="false">
+                        <Color value="0" color="black" />
+                        <Color value="2" color="#00e5e5" />
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Plot title="Sox9 (normalized; time in h)">
+                <Field symbol-ref="Sox9" min="0" max="2">
+                    <ColorMap adaptive-range="false">
+                        <Color value="0" color="black" />
+                        <Color value="2" color="#ff3333" />
+                    </ColorMap>
+                </Field>
+            </Plot>
+        </Gnuplotter>
+        <Logger time-step="3">
+            <Input>
+                <Symbol symbol-ref="time_since_E10_5_h" />
+                <Symbol symbol-ref="x_um" />
+                <Symbol symbol-ref="y_um" />
+                <Symbol symbol-ref="Sfrp2" />
+                <Symbol symbol-ref="WNT2" />
+                <Symbol symbol-ref="beta_cat" />
+                <Symbol symbol-ref="BMP2" />
+                <Symbol symbol-ref="SULF1" />
+                <Symbol symbol-ref="Sox9" />
+            </Input>
+            <Output>
+                <TextOutput file-format="csv" file-name="fields_raw" separator="comma" />
+            </Output>
+            <Restriction domain-only="true" condition="(l.x-54.5)^2+(l.y-54.5)^2&lt;=50.0^2" />
+        </Logger>
+    </Analysis>
+</MorpheusModel>

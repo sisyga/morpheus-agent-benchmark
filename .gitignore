@@ -37,7 +37,15 @@ tmp/refactor-morpheus-ai.md
 bug_reports/
 analysis_reports/
 
-# Benchmark paper PDFs are not redistributed; see benchmark_papers/README.md
-benchmark_papers/*.pdf
+# The four benchmark PDFs without an open licence are not redistributed; download them as described in
+# benchmark_papers/README.md. The CC BY PDFs and the two preprints are tracked.
+benchmark_papers/01_Szabo2010.pdf
+benchmark_papers/03_Carpenter2024.pdf
+benchmark_papers/07_Scheel2021.pdf
+benchmark_papers/15_Reza2025.pdf
 biological_benchmark_papers/
 smoke_reports/
+
+# Figure builds (figures/**/build.py default output) and the README demo
+figures/**/build/
+demo_comparison/

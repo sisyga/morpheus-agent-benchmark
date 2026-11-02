@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" width="360" height="360">
+  <!-- Own drawing for Fig. 1 (Morpheus agent benchmark), matching the layout of the earlier icon. -->
+  <g fill="none" stroke="#221F20" stroke-width="16.5">
+    <line x1="180" y1="11" x2="180" y2="350"/>
+    <line x1="10.5" y1="180.5" x2="349.5" y2="180.5"/>
+    <ellipse cx="180" cy="180.5" rx="94" ry="169.5"/>
+    <path d="M59.3 61.5 A222.7 222.7 0 0 0 300.7 61.5 M59.3 299.5 A222.7 222.7 0 0 1 300.7 299.5"/>
+    <circle cx="180" cy="180.5" r="170" stroke-width="17.5"/>
+  </g>
+</svg>

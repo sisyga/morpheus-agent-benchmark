@@ -1,0 +1,1 @@
+Name of the scorer folder of the benchmark run: scorer version, scorer model and reasoning effort, and the version and first 12 hex digits of the SHA-256 of biological_scoring_criteria.json that scored the runs. The score files are not published.

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MorpheusModel version="4">
+  <Description>
+    <Title>Otsuki 2025: Hand2-Shh positional memory and regeneration</Title>
+    <Details>Biologically grounded approximation of an experimental, conceptual model,
+not a translation of a published computational simulation. Otsuki et al., Nature
+642, 730-739, DOI 10.1038/s41586-025-09036-5, Fig.5f and Extended Data Fig.5c.
+Explicit connective tissue CPM cells carry posterior memory, Hand2 and EGFP.
+At day 0 the distal half has been amputated: only surviving stump cells exist.
+The cut is open at x=96. A finite injury pulse in the reported 500 micrometre
+source zone initiates a two-stage autonomous activation/differentiation program.
+Hand2 primes Shh production in the highly activated subset; diffusing Shh
+amplifies Hand2 and can permanently posteriorize competent anterior cells.
+Anterior Fgf8 and posterior Shh interact, promoting cell growth and division.
+The finite injury program decays without a time schedule, extinguishing Shh
+and leaving low Hand2 memory in daughter cells. The closure program, diffusion,
+cell sizes and rates are phenomenological; they are not paper measurements.
+Time unit = day; 100 CPM sweeps/day; lattice spacing maps to 5 micrometres.
+Transverse no-flux boundaries approximate a fixed-width 2D limb strip.
+No imposed target length, shape, future cells, or prescribed cell count drives
+outgrowth. The distal simulation boundary is well beyond the missing segment.
+See scientific_grounding.md and parameter_table.csv for assumptions.</Details>
+  </Description>
+  <Global>
+    <Constant symbol="dx_um" value="5" name="micrometres per lattice site (assumed)"/>
+    <Constant symbol="cut_x" value="96" name="postamputation stump length, lattice sites"/>
+    <Constant symbol="limb_width" value="128"/>
+    <Constant symbol="source_zone" value="100" name="500 micrometre injury source-zone approximation"/>
+    <Constant symbol="injury_rate" value="0.23" name="autonomous injury-cascade rate per day, assumed"/>
+    <Constant symbol="h_wound" value="2.1"/>
+    <Constant symbol="h_feedback" value="4.4"/>
+    <Constant symbol="tau_h" value="1.5"/>
+    <Constant symbol="tau_egfp" value="1.5"/>
+    <Constant symbol="tau_egfp_clearance" value="6.5" name="non-labile reporter clearance time, days (assumed)"/>
+    <Constant symbol="h_threshold" value="2.35"/>
+    <Constant symbol="growth_rate" value="0.27" name="FGF-stimulated area growth per day, assumed"/>
+    <Constant symbol="shh_response" value="1" name="1 control, 0 idealized BMS pathway block"/>
+    <Constant symbol="hand2_enabled" value="1" name="1 control, 0 idealized Hand2 loss"/>
+    <Function symbol="time_days"><Expression>time</Expression></Function>
+    <Field symbol="Shh" value="0" name="extracellular Shh, arbitrary units">
+      <Diffusion rate="576"/>
+    </Field>
+    <Field symbol="Fgf8" value="0" name="extracellular Fgf8, arbitrary units">
+      <Diffusion rate="6000"/>
+    </Field>
+    <System solver="Euler [fixed, O(1)]" time-step="0.01">
+      <DiffEqn symbol-ref="Shh"><Expression>shh_source - 1.5*Shh</Expression></DiffEqn>
+      <DiffEqn symbol-ref="Fgf8"><Expression>fgf_source - 1.2*Fgf8</Expression></DiffEqn>
+    </System>
+  </Global>
+  <Space>
+    <Lattice class="square">
+      <Size symbol="size" value="320, 128, 0"/>
+      <Neighborhood><Order>2</Order></Neighborhood>
+      <BoundaryConditions>
+        <Condition boundary="x" type="noflux"/>
+        <Condition boundary="y" type="noflux"/>
+      </BoundaryConditions>
+      <NodeLength value="1"/>
+    </Lattice>
+    <SpaceSymbol symbol="space"/>
+  </Space>
+  <Time>
+    <StartTime value="0"/><StopTime value="39"/>
+    <TimeSymbol symbol="time"/><RandomSeed value="2025"/>
+    <SaveInterval value="0"/>
+  </Time>
+  <CellTypes>
+    <CellType class="medium" name="medium">
+      <Constant symbol="shh_source" value="0"/>
+      <Constant symbol="fgf_source" value="0"/>
+      <Constant symbol="hand2" value="0"/>
+      <Constant symbol="memory" value="0"/>
+      <Constant symbol="lineage" value="0"/>
+      <Constant symbol="egfp" value="0"/>
+    </CellType>
+    <CellType class="biological" name="CT">
+      <Property symbol="lineage" value="cell.center.y &lt; limb_width/2" name="original P lineage, inherited"/>
+      <Property symbol="memory" value="lineage" name="stable posterior memory"/>
+      <Property symbol="hand2" value="hand2_enabled*memory" name="Hand2 relative to posterior steady state"/>
+      <Property symbol="egfp" value="hand2" name="non-labile EGFP reporter approximation"/>
+      <Property symbol="injury0" value="exp(-max(0,cut_x-cell.center.x)/source_zone)" name="finite day-0 injury pulse in survivors"/>
+      <Property symbol="injury1" value="0"/>
+      <Property symbol="injury2" value="0"/>
+      <Property symbol="shh_seen" value="0"/>
+      <Property symbol="fgf_seen" value="0"/>
+      <Property symbol="target_area" value="64"/>
+      <Property symbol="generation" value="0"/>
+      <Function symbol="competence"><Expression>injury2/(2*exp(-2))</Expression></Function>
+      <Function symbol="shh_activity"><Expression>shh_response*shh_seen^2/(0.01^2+shh_seen^2)</Expression></Function>
+      <Function symbol="shh_source"><Expression>1.8*competence^4*max(hand2-h_threshold,0)^2/(0.7^2+max(hand2-h_threshold,0)^2)*fgf_seen/(0.03+fgf_seen)</Expression></Function>
+      <Function symbol="fgf_source"><Expression>competence*(1-memory)*(0.03+0.97*shh_activity)</Expression></Function>
+      <Mapper name="Shh reception"><Input value="Shh"/><Output symbol-ref="shh_seen" mapping="average"/></Mapper>
+      <Mapper name="Fgf8 reception"><Input value="Fgf8"/><Output symbol-ref="fgf_seen" mapping="average"/></Mapper>
+      <System solver="Runge-Kutta [fixed, O(4)]" time-step="0.01">
+        <DiffEqn symbol-ref="injury0"><Expression>-injury_rate*injury0</Expression></DiffEqn>
+        <DiffEqn symbol-ref="injury1"><Expression>injury_rate*(injury0-injury1)</Expression></DiffEqn>
+        <DiffEqn symbol-ref="injury2"><Expression>injury_rate*(injury1-injury2)</Expression></DiffEqn>
+        <DiffEqn symbol-ref="memory"><Expression>0.12*competence*shh_activity*(1-memory)</Expression></DiffEqn>
+        <DiffEqn symbol-ref="hand2"><Expression>(hand2_enabled*(memory*(1+h_wound*competence)+h_feedback*competence*shh_activity)-hand2)/tau_h</Expression></DiffEqn>
+        <DiffEqn symbol-ref="egfp"><Expression>max(hand2-egfp,0)/tau_egfp - max(egfp-hand2,0)/tau_egfp_clearance</Expression></DiffEqn>
+        <DiffEqn symbol-ref="target_area"><Expression>growth_rate*competence*fgf_seen/(0.06+fgf_seen)*target_area</Expression></DiffEqn>
+      </System>
+      <VolumeConstraint target="target_area" strength="1"/>
+      <SurfaceConstraint mode="aspherity" target="1" strength="0.7"/>
+      <ConnectivityConstraint/>
+      <CellDivision division-plane="major" write-log="csv">
+        <Condition>cell.volume &gt;= 120 and target_area &gt;= 124</Condition>
+        <Triggers>
+          <Rule symbol-ref="target_area"><Expression>target_area/2</Expression></Rule>
+          <Rule symbol-ref="generation"><Expression>generation+1</Expression></Rule>
+        </Triggers>
+      </CellDivision>
+    </CellType>
+  </CellTypes>
+  <CPM>
+    <Interaction default="0">
+      <Contact type1="CT" type2="CT" value="4"/>
+      <Contact type1="CT" type2="medium" value="10"/>
+    </Interaction>
+    <MonteCarloSampler stepper="edgelist">
+      <MCSDuration value="0.01"/>
+      <Neighborhood><Order>2</Order></Neighborhood>
+      <MetropolisKinetics temperature="2"/>
+    </MonteCarloSampler>
+    <ShapeSurface scaling="norm"><Neighborhood><Order>2</Order></Neighborhood></ShapeSurface>
+  </CPM>
+  <CellPopulations>
+    <Population type="CT" size="0">
+      <InitCellObjects mode="distance">
+        <Arrangement repetitions="12, 16, 1" displacements="8, 8, 0">
+          <Box origin="0, 0, 0" size="8, 8, 1"/>
+        </Arrangement>
+      </InitCellObjects>
+    </Population>
+  </CellPopulations>
+  <Analysis>
+    <Gnuplotter time-step="1" condition="abs(time_days-0)&lt;0.000001 or abs(time_days-7)&lt;0.000001 or abs(time_days-15)&lt;0.000001 or abs(time_days-28)&lt;0.000001 or abs(time_days-39)&lt;0.000001" decorate="true">
+      <Terminal name="png"/>
+      <Plot title="Hand2 per cell; x distal, upper half A / lower half P">
+        <Cells value="hand2" min="0" max="7">
+          <ColorMap>
+            <Color value="0" color="#eeeeee"/><Color value="1" color="#a7cfe2"/>
+            <Color value="3" color="#2275ad"/><Color value="7" color="#160a50"/>
+          </ColorMap>
+        </Cells>
+      </Plot>
+      <Plot title="Diffusing Shh, arbitrary units">
+        <Field symbol-ref="Shh" min="0" max="0.2" surface="true"/>
+      </Plot>
+      <Plot title="Stable Hand2 memory (including daughter cells)">
+        <Cells value="memory" min="0" max="1">
+          <ColorMap><Color value="0" color="#eeeeee"/><Color value="1" color="#409dc4"/></ColorMap>
+        </Cells>
+      </Plot>
+    </Gnuplotter>
+    <Logger time-step="0.25">
+      <Input>
+        <Symbol symbol-ref="time_days"/><Symbol symbol-ref="cell.id"/>
+        <Symbol symbol-ref="cell.center.x"/><Symbol symbol-ref="cell.center.y"/>
+        <Symbol symbol-ref="cell.volume"/><Symbol symbol-ref="target_area"/>
+        <Symbol symbol-ref="lineage"/><Symbol symbol-ref="memory"/>
+        <Symbol symbol-ref="hand2"/><Symbol symbol-ref="egfp"/>
+        <Symbol symbol-ref="competence"/><Symbol symbol-ref="shh_seen"/>
+        <Symbol symbol-ref="fgf_seen"/><Symbol symbol-ref="shh_source"/>
+        <Symbol symbol-ref="generation"/>
+      </Input>
+      <Output><TextOutput file-name="cells" file-format="csv" separator="comma"/></Output>
+      <Restriction><Celltype celltype="CT"/></Restriction>
+    </Logger>
+    <Logger time-step="0.25">
+      <Input><Symbol symbol-ref="time_days"/><Symbol symbol-ref="celltype.CT.size"/></Input>
+      <Output><TextOutput file-name="population" file-format="csv" separator="comma"/></Output>
+    </Logger>
+    <Logger time-step="1">
+      <Input force-node-granularity="true">
+        <Symbol symbol-ref="time_days"/><Symbol symbol-ref="space.x"/><Symbol symbol-ref="space.y"/>
+        <Symbol symbol-ref="cell.id"/><Symbol symbol-ref="Shh"/><Symbol symbol-ref="Fgf8"/>
+        <Symbol symbol-ref="hand2"/><Symbol symbol-ref="shh_source"/>
+      </Input>
+      <Output><TextOutput file-name="spatial" file-format="csv" separator="comma"/></Output>
+      <Restriction condition="abs(time_days-0)&lt;0.000001 or abs(time_days-7)&lt;0.000001 or abs(time_days-15)&lt;0.000001 or abs(time_days-28)&lt;0.000001 or abs(time_days-39)&lt;0.000001" exclude-medium="false"/>
+    </Logger>
+    <ModelGraph format="dot" reduced="false"/>
+  </Analysis>
+</MorpheusModel>

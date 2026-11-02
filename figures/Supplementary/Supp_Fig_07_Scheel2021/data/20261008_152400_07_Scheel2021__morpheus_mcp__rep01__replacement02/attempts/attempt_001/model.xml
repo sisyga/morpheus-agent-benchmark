@@ -1,0 +1,386 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MorpheusModel version="4">
+  <Description>
+    <Title>Scheel 2021: cut, six-field dynamic boundary model</Title>
+    <Details>Source: Scheel, Stevens &amp; Tenbrock (2021), DOI 10.1007/s00285-021-01627-w. Full density PDE model (1.1)-(1.6), dynamic boundary compartments (1.8)-(1.12), Table 1 parameters. Fig.5 geometry L=5 overrides the table L=10. One simulation time unit = one dimensionless paper model-time unit; no conversion to hours. Bulk positions are the source finite-difference interior nodes -L+dx,...,L-dx. Endpoints are independent ODE compartments of mass gamma. Morpheus half-node Dirichlet faces use the midpoint value (edge+first_bulk)/2; this reproduces the source full-node finite-difference stencil. Boundary exchange and sensing use the full distance dx, conserving dx-weighted bulk + gamma-weighted boundary mass in the continuous semidiscretization. Sensing convention: inward. The printed head/tail indicators paired with an outward normal in section 1.1 have signs inconsistent with the low-Wnt anterior in Figs.2,3,5. Using the inward gradient for sensing reproduces that polarity and positive feedback. There are no imposed differentiation axes, future cells, or scheduled target profiles. h and d denote cell densities (as in the paper); uh/ud are the short-range signals.</Details>
+  </Description>
+  <Global>
+    <Constant symbol="Ds" value="1" />
+    <Constant symbol="Dh" value="0.001" />
+    <Constant symbol="Dd" value="0.001" />
+    <Constant symbol="Duh" value="0.01" />
+    <Constant symbol="Dud" value="0.01" />
+    <Constant symbol="Dw" value="1" />
+    <Constant symbol="ps" value="200" />
+    <Constant symbol="ph" value="1" />
+    <Constant symbol="pd" value="1" />
+    <Constant symbol="pw" value="10" />
+    <Constant symbol="eta_s" value="100" />
+    <Constant symbol="eta_h" value="1" />
+    <Constant symbol="eta_d" value="1" />
+    <Constant symbol="r0" value="18" />
+    <Constant symbol="r1" value="12" />
+    <Constant symbol="r2" value="6" />
+    <Constant symbol="r3" value="6" />
+    <Constant symbol="tau" value="0.5" />
+    <Constant symbol="gamma" value="0.3" />
+    <Constant symbol="theta" value="3" />
+    <Constant symbol="epsilon" value="0.002" />
+    <Constant symbol="L" value="5" />
+    <Constant symbol="dx" value="0.01" />
+    <Constant symbol="alpha" value="0.02" />
+    <Constant symbol="y0" value="0.7" />
+    <Function symbol="x_paper" name="position (paper length units)">
+      <Expression>if(space.x&lt;0,-L,if(space.x&gt;size.x-1,L,-L+(space.x+1)*dx))</Expression>
+    </Function>
+    <Field symbol="s" name="s" value="1">
+      <Diffusion rate="1" />
+      <BoundaryValue boundary="-x" value="0.5*(s_left+s_bulk_left)" />
+      <BoundaryValue boundary="x" value="0.5*(s_right+s_bulk_right)" />
+    </Field>
+    <Variable symbol="s_left" value="1" name="stem-cell density: left boundary" />
+    <Variable symbol="s_bulk_left" value="1" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==0,s,0)" />
+      <Output symbol-ref="s_bulk_left" mapping="sum" />
+    </Mapper>
+    <Variable symbol="s_right" value="1" name="stem-cell density: right boundary" />
+    <Variable symbol="s_bulk_right" value="1" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==998,s,0)" />
+      <Output symbol-ref="s_bulk_right" mapping="sum" />
+    </Mapper>
+    <Field symbol="h" name="h" value="0">
+      <Diffusion rate="0.001" />
+      <BoundaryValue boundary="-x" value="0.5*(h_left+h_bulk_left)" />
+      <BoundaryValue boundary="x" value="0.5*(h_right+h_bulk_right)" />
+    </Field>
+    <Variable symbol="h_left" value="0" name="head-cell density: left boundary" />
+    <Variable symbol="h_bulk_left" value="0" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==0,h,0)" />
+      <Output symbol-ref="h_bulk_left" mapping="sum" />
+    </Mapper>
+    <Variable symbol="h_right" value="0" name="head-cell density: right boundary" />
+    <Variable symbol="h_bulk_right" value="0" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==998,h,0)" />
+      <Output symbol-ref="h_bulk_right" mapping="sum" />
+    </Mapper>
+    <Field symbol="d" name="d" value="0">
+      <Diffusion rate="0.001" />
+      <BoundaryValue boundary="-x" value="0.5*(d_left+d_bulk_left)" />
+      <BoundaryValue boundary="x" value="0.5*(d_right+d_bulk_right)" />
+    </Field>
+    <Variable symbol="d_left" value="0" name="tail-cell density: left boundary" />
+    <Variable symbol="d_bulk_left" value="0" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==0,d,0)" />
+      <Output symbol-ref="d_bulk_left" mapping="sum" />
+    </Mapper>
+    <Variable symbol="d_right" value="0" name="tail-cell density: right boundary" />
+    <Variable symbol="d_bulk_right" value="0" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==998,d,0)" />
+      <Output symbol-ref="d_bulk_right" mapping="sum" />
+    </Mapper>
+    <Field symbol="uh" name="uh" value="0">
+      <Diffusion rate="0.01" />
+      <BoundaryValue boundary="-x" value="0.5*(uh_left+uh_bulk_left)" />
+      <BoundaryValue boundary="x" value="0.5*(uh_right+uh_bulk_right)" />
+    </Field>
+    <Variable symbol="uh_left" value="0" name="local head morphogen: left boundary" />
+    <Variable symbol="uh_bulk_left" value="0" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==0,uh,0)" />
+      <Output symbol-ref="uh_bulk_left" mapping="sum" />
+    </Mapper>
+    <Variable symbol="uh_right" value="0" name="local head morphogen: right boundary" />
+    <Variable symbol="uh_bulk_right" value="0" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==998,uh,0)" />
+      <Output symbol-ref="uh_bulk_right" mapping="sum" />
+    </Mapper>
+    <Field symbol="ud" name="ud" value="0">
+      <Diffusion rate="0.01" />
+      <BoundaryValue boundary="-x" value="0.5*(ud_left+ud_bulk_left)" />
+      <BoundaryValue boundary="x" value="0.5*(ud_right+ud_bulk_right)" />
+    </Field>
+    <Variable symbol="ud_left" value="0" name="local tail morphogen: left boundary" />
+    <Variable symbol="ud_bulk_left" value="0" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==0,ud,0)" />
+      <Output symbol-ref="ud_bulk_left" mapping="sum" />
+    </Mapper>
+    <Variable symbol="ud_right" value="0" name="local tail morphogen: right boundary" />
+    <Variable symbol="ud_bulk_right" value="0" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==998,ud,0)" />
+      <Output symbol-ref="ud_bulk_right" mapping="sum" />
+    </Mapper>
+    <Field symbol="wnt" name="wnt" value="y0+alpha*(x_paper+L)/(2*L)">
+      <Diffusion rate="1" />
+      <BoundaryValue boundary="-x" value="0.5*(wnt_left+wnt_bulk_left)" />
+      <BoundaryValue boundary="x" value="0.5*(wnt_right+wnt_bulk_right)" />
+    </Field>
+    <Variable symbol="wnt_left" value="y0" name="Wnt-related signal: left boundary" />
+    <Variable symbol="wnt_bulk_left" value="0.70002" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==0,wnt,0)" />
+      <Output symbol-ref="wnt_bulk_left" mapping="sum" />
+    </Mapper>
+    <Variable symbol="wnt_right" value="y0+alpha" name="Wnt-related signal: right boundary" />
+    <Variable symbol="wnt_bulk_right" value="0.71998" />
+    <Mapper time-step="1e-05">
+      <Input value="if(space.x==998,wnt,0)" />
+      <Output symbol-ref="wnt_bulk_right" mapping="sum" />
+    </Mapper>
+    <System solver="Runge-Kutta [fixed, O(4)]" time-step="1e-05" name="six-field bulk reaction-diffusion kinetics">
+      <DiffEqn symbol-ref="s">
+        <Expression>ps*s/(1+s)-eta_s*s-ph*uh*s-pd*ud*s</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="h">
+        <Expression>ph*uh*s-eta_h*h</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="d">
+        <Expression>pd*ud*s-eta_d*d</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="uh">
+        <Expression>h^2*(r0-r1*uh)-r2*uh*d-r3*uh</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="ud">
+        <Expression>d^2*(r0-r1*ud)-r2*ud*h-r3*ud</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="wnt">
+        <Expression>-pw*h*wnt+pw*d*(1-wnt)</Expression>
+      </DiffEqn>
+    </System>
+    <System solver="Runge-Kutta [fixed, O(4)]" time-step="1e-05" name="twelve dynamic boundary ODE concentrations">
+      <Intermediate value="1*(wnt_bulk_left-wnt_left)/dx" symbol="g_left" />
+      <Intermediate value="tau*(1-h_left)*(1-d_left)*0.5*(tanh((g_left-epsilon*theta)/epsilon)+1)" symbol="psi_h_left" />
+      <Intermediate value="tau*(1-h_left)*(1-d_left)*0.5*(tanh(-(g_left+epsilon*theta)/epsilon)+1)" symbol="psi_d_left" />
+      <DiffEqn symbol-ref="s_left">
+        <Expression>1*Ds*(s_bulk_left-s_left)/(gamma*dx)+ps*s_left/(1+s_left)-eta_s*s_left-ph*uh_left*s_left-pd*ud_left*s_left-(psi_h_left+psi_d_left)*s_left</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="h_left">
+        <Expression>1*Dh*(h_bulk_left-h_left)/(gamma*dx)+ph*uh_left*s_left-eta_h*h_left+psi_h_left*s_left</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="d_left">
+        <Expression>1*Dd*(d_bulk_left-d_left)/(gamma*dx)+pd*ud_left*s_left-eta_d*d_left+psi_d_left*s_left</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="uh_left">
+        <Expression>1*Duh*(uh_bulk_left-uh_left)/(gamma*dx)+h_left^2*(r0-r1*uh_left)-r2*uh_left*d_left-r3*uh_left</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="ud_left">
+        <Expression>1*Dud*(ud_bulk_left-ud_left)/(gamma*dx)+d_left^2*(r0-r1*ud_left)-r2*ud_left*h_left-r3*ud_left</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="wnt_left">
+        <Expression>1*Dw*(wnt_bulk_left-wnt_left)/(gamma*dx)+-pw*h_left*wnt_left+pw*d_left*(1-wnt_left)</Expression>
+      </DiffEqn>
+      <Intermediate value="1*(wnt_bulk_right-wnt_right)/dx" symbol="g_right" />
+      <Intermediate value="tau*(1-h_right)*(1-d_right)*0.5*(tanh((g_right-epsilon*theta)/epsilon)+1)" symbol="psi_h_right" />
+      <Intermediate value="tau*(1-h_right)*(1-d_right)*0.5*(tanh(-(g_right+epsilon*theta)/epsilon)+1)" symbol="psi_d_right" />
+      <DiffEqn symbol-ref="s_right">
+        <Expression>1*Ds*(s_bulk_right-s_right)/(gamma*dx)+ps*s_right/(1+s_right)-eta_s*s_right-ph*uh_right*s_right-pd*ud_right*s_right-(psi_h_right+psi_d_right)*s_right</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="h_right">
+        <Expression>1*Dh*(h_bulk_right-h_right)/(gamma*dx)+ph*uh_right*s_right-eta_h*h_right+psi_h_right*s_right</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="d_right">
+        <Expression>1*Dd*(d_bulk_right-d_right)/(gamma*dx)+pd*ud_right*s_right-eta_d*d_right+psi_d_right*s_right</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="uh_right">
+        <Expression>1*Duh*(uh_bulk_right-uh_right)/(gamma*dx)+h_right^2*(r0-r1*uh_right)-r2*uh_right*d_right-r3*uh_right</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="ud_right">
+        <Expression>1*Dud*(ud_bulk_right-ud_right)/(gamma*dx)+d_right^2*(r0-r1*ud_right)-r2*ud_right*h_right-r3*ud_right</Expression>
+      </DiffEqn>
+      <DiffEqn symbol-ref="wnt_right">
+        <Expression>1*Dw*(wnt_bulk_right-wnt_right)/(gamma*dx)+-pw*h_right*wnt_right+pw*d_right*(1-wnt_right)</Expression>
+      </DiffEqn>
+    </System>
+    <Variable symbol="h_bulk_min" value="0" />
+    <Variable symbol="h_bulk_max" value="0" />
+    <Mapper time-step="0.10101010101010101">
+      <Input value="h" />
+      <Output symbol-ref="h_bulk_min" mapping="minimum" />
+      <Output symbol-ref="h_bulk_max" mapping="maximum" />
+    </Mapper>
+    <Function symbol="h_min">
+      <Expression>min(h_bulk_min,h_left,h_right)</Expression>
+    </Function>
+    <Function symbol="h_max">
+      <Expression>max(h_bulk_max,h_left,h_right)</Expression>
+    </Function>
+    <Function symbol="h_range">
+      <Expression>h_max-h_min</Expression>
+    </Function>
+    <Variable symbol="d_bulk_min" value="0" />
+    <Variable symbol="d_bulk_max" value="0" />
+    <Mapper time-step="0.10101010101010101">
+      <Input value="d" />
+      <Output symbol-ref="d_bulk_min" mapping="minimum" />
+      <Output symbol-ref="d_bulk_max" mapping="maximum" />
+    </Mapper>
+    <Function symbol="d_min">
+      <Expression>min(d_bulk_min,d_left,d_right)</Expression>
+    </Function>
+    <Function symbol="d_max">
+      <Expression>max(d_bulk_max,d_left,d_right)</Expression>
+    </Function>
+    <Function symbol="d_range">
+      <Expression>d_max-d_min</Expression>
+    </Function>
+    <Variable symbol="wnt_bulk_min" value="0" />
+    <Variable symbol="wnt_bulk_max" value="0" />
+    <Mapper time-step="0.10101010101010101">
+      <Input value="wnt" />
+      <Output symbol-ref="wnt_bulk_min" mapping="minimum" />
+      <Output symbol-ref="wnt_bulk_max" mapping="maximum" />
+    </Mapper>
+    <Function symbol="wnt_min">
+      <Expression>min(wnt_bulk_min,wnt_left,wnt_right)</Expression>
+    </Function>
+    <Function symbol="wnt_max">
+      <Expression>max(wnt_bulk_max,wnt_left,wnt_right)</Expression>
+    </Function>
+    <Function symbol="wnt_range">
+      <Expression>wnt_max-wnt_min</Expression>
+    </Function>
+    <Variable symbol="s_bulk_min" value="1" />
+    <Variable symbol="s_bulk_max" value="1" />
+    <Mapper time-step="0.10101010101010101">
+      <Input value="s" />
+      <Output symbol-ref="s_bulk_min" mapping="minimum" />
+      <Output symbol-ref="s_bulk_max" mapping="maximum" />
+    </Mapper>
+    <Function symbol="s_min">
+      <Expression>min(s_bulk_min,s_left,s_right)</Expression>
+    </Function>
+    <Function symbol="s_max">
+      <Expression>max(s_bulk_max,s_left,s_right)</Expression>
+    </Function>
+    <Function symbol="s_range">
+      <Expression>s_max-s_min</Expression>
+    </Function>
+  </Global>
+  <Space>
+    <Lattice class="linear">
+      <Size value="999,0,0" symbol="size" />
+      <NodeLength value="0.01" />
+      <Neighborhood>
+        <Order>1</Order>
+      </Neighborhood>
+      <BoundaryConditions>
+        <Condition boundary="-x" type="constant" />
+        <Condition boundary="x" type="constant" />
+      </BoundaryConditions>
+    </Lattice>
+    <SpaceSymbol symbol="space" />
+  </Space>
+  <Time>
+    <StartTime value="0" />
+    <StopTime value="10.0" />
+    <SaveInterval value="0" />
+    <TimeSymbol symbol="T" name="time (paper model-time units)" />
+  </Time>
+  <Analysis>
+    <Logger time-step="0.10101010101010101" name="ranges including boundary compartments">
+      <Input>
+        <Symbol symbol-ref="h_min" />
+        <Symbol symbol-ref="h_max" />
+        <Symbol symbol-ref="h_range" />
+        <Symbol symbol-ref="d_min" />
+        <Symbol symbol-ref="d_max" />
+        <Symbol symbol-ref="d_range" />
+        <Symbol symbol-ref="wnt_min" />
+        <Symbol symbol-ref="wnt_max" />
+        <Symbol symbol-ref="wnt_range" />
+        <Symbol symbol-ref="s_min" />
+        <Symbol symbol-ref="s_max" />
+        <Symbol symbol-ref="s_range" />
+        <Symbol symbol-ref="s_left" />
+        <Symbol symbol-ref="s_right" />
+        <Symbol symbol-ref="h_left" />
+        <Symbol symbol-ref="h_right" />
+        <Symbol symbol-ref="d_left" />
+        <Symbol symbol-ref="d_right" />
+        <Symbol symbol-ref="uh_left" />
+        <Symbol symbol-ref="uh_right" />
+        <Symbol symbol-ref="ud_left" />
+        <Symbol symbol-ref="ud_right" />
+        <Symbol symbol-ref="wnt_left" />
+        <Symbol symbol-ref="wnt_right" />
+      </Input>
+      <Output>
+        <TextOutput file-name="ranges_raw" file-format="csv" separator="comma" />
+      </Output>
+    </Logger>
+    <Logger time-step="0.1" name="six spatial fields">
+      <Input include-boundary="true">
+        <Symbol symbol-ref="x_paper" />
+        <Symbol symbol-ref="s" />
+        <Symbol symbol-ref="h" />
+        <Symbol symbol-ref="d" />
+        <Symbol symbol-ref="uh" />
+        <Symbol symbol-ref="ud" />
+        <Symbol symbol-ref="wnt" />
+      </Input>
+      <Output>
+        <TextOutput file-name="fields_raw" file-format="csv" separator="comma" />
+      </Output>
+      <Plots>
+        <Plot title="Six concentration profiles" time-step="2.5">
+          <Style style="lines" line-width="2.0" decorate="true" />
+          <Terminal terminal="png" plot-size="1000,600,0" />
+          <X-axis minimum="-5" maximum="5">
+            <Symbol symbol-ref="x_paper" />
+          </X-axis>
+          <Y-axis minimum="0" maximum="1.05">
+            <Symbol symbol-ref="s" />
+            <Symbol symbol-ref="h" />
+            <Symbol symbol-ref="d" />
+            <Symbol symbol-ref="uh" />
+            <Symbol symbol-ref="ud" />
+            <Symbol symbol-ref="wnt" />
+          </Y-axis>
+          <Range>
+            <Time mode="current" />
+          </Range>
+        </Plot>
+      </Plots>
+    </Logger>
+    <Logger time-step="0.1" name="dynamic boundary states for spatial profiles">
+      <Input>
+        <Symbol symbol-ref="s_left" />
+        <Symbol symbol-ref="s_right" />
+        <Symbol symbol-ref="h_left" />
+        <Symbol symbol-ref="h_right" />
+        <Symbol symbol-ref="d_left" />
+        <Symbol symbol-ref="d_right" />
+        <Symbol symbol-ref="uh_left" />
+        <Symbol symbol-ref="uh_right" />
+        <Symbol symbol-ref="ud_left" />
+        <Symbol symbol-ref="ud_right" />
+        <Symbol symbol-ref="wnt_left" />
+        <Symbol symbol-ref="wnt_right" />
+      </Input>
+      <Output>
+        <TextOutput file-name="boundary_states_raw" file-format="csv" separator="comma" />
+      </Output>
+    </Logger>
+    <Gnuplotter time-step="0" decorate="true" log-commands="true">
+      <Terminal name="png" size="1000,600,0" />
+      <Plot title="head-cell density">
+        <Field symbol-ref="h" min="0" max="1" />
+      </Plot>
+      <Plot title="tail-cell density">
+        <Field symbol-ref="d" min="0" max="1" />
+      </Plot>
+      <Plot title="Wnt-related signal">
+        <Field symbol-ref="wnt" min="0" max="1" />
+      </Plot>
+    </Gnuplotter>
+    <ModelGraph format="dot" reduced="false" include-tags="#untagged" />
+  </Analysis>
+</MorpheusModel>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 139 185" width="139" height="185">
+  <!-- Own drawing for Fig. 1 (Morpheus agent benchmark), matching the layout of the earlier icon. -->
+  <g stroke="#263f52" stroke-width="5" stroke-linejoin="round">
+    <!-- arm: dark band with blue core -->
+    <path d="M46.8,48.2 A37,50 0 0 0 40,146" fill="none" stroke-width="26"/>
+    <path d="M46.8,48.2 A37,50 0 0 0 40,146" fill="none" stroke="#5b7aa2" stroke-width="16"/>
+    <!-- pivot -->
+    <circle cx="38" cy="47" r="10" fill="#79a1b1"/>
+    <!-- tube, eyepiece, collar, objectives -->
+    <g transform="translate(47,12) rotate(-26)">
+      <rect x="-17" y="67" width="12" height="21" rx="2" fill="#79a1b1" transform="rotate(8 -11 67)"/>
+      <rect x="6" y="67" width="12" height="21" rx="2" fill="#79a1b1" transform="rotate(-8 12 67)"/>
+      <rect x="-13" y="6" width="26" height="50" fill="#79a1b1"/>
+      <rect x="-18" y="-6" width="36" height="13" rx="2" fill="#5d7a9c"/>
+      <rect x="-22.5" y="56" width="45" height="13" rx="2" fill="#5d7a9c"/>
+    </g>
+    <!-- stage bracket and stage -->
+    <path d="M63,127 H90 L71,143 Z" fill="#79a1b1"/>
+    <rect x="55.5" y="115" width="79" height="11" rx="4" fill="#79a1b1"/>
+    <!-- pillar with focus knob -->
+    <path d="M28,162 C33,145 38,128 51,128 C62,128 69.5,134 69.5,143 V162 Z" fill="#79a1b1"/>
+    <circle cx="51.7" cy="144.2" r="5" fill="#b4b6e2"/>
+    <!-- base (cropped at the bottom like the original) -->
+    <rect x="9" y="161.5" width="125" height="45" rx="14" fill="#79a1b1" stroke-width="5.5"/>
+  </g>
+</svg>

@@ -1,6 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below and cite the accompanying preprint."
 type: software
+doi: 10.5281/zenodo.23697418
 title: "Morpheus agent benchmark: code and scoring criteria for testing LLM agents that build multicellular models in Morpheus"
 abstract: >-
   Benchmark runner, Morpheus agent skill, Model Context Protocol (MCP) server, biological scoring
@@ -29,7 +30,7 @@ authors:
   - given-names: Simon
     family-names: Syga
     affiliation: "Center for Interdisciplinary Digital Sciences, TUD Dresden University of Technology"
-version: 2.0.0
+version: 2.1.0
 license: Apache-2.0
 repository-code: "https://github.com/sisyga/morpheus-agent-benchmark"
 keywords:
@@ -53,7 +54,7 @@ references:
     doi: 10.1093/bioinformatics/btt772
 preferred-citation:
   type: article
-  title: "LLM-based agents can autonomously generate, execute, and refine in silico models"
+  title: "Morpheus.AI: agents autonomously generate, execute and refine virtual tissue models"
   status: preprint
   year: 2026
   authors:

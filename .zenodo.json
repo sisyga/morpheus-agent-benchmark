@@ -1,7 +1,7 @@
 {
   "upload_type": "software",
   "title": "Morpheus agent benchmark: code and scoring criteria for testing LLM agents that build multicellular models in Morpheus",
-  "description": "<p>Benchmark runner, Morpheus agent skill, Model Context Protocol (MCP) server, biological scoring criteria and analysis scripts used to test whether LLM-based coding agents can rebuild published multicellular models in the Morpheus simulator. The release contains the subject-facing setup of benchmark version 3, which produced the main results of the accompanying preprint.</p><p>The benchmark paper PDFs are not included; benchmark_papers/papers.csv lists their DOIs and the SHA-256 checksums of the files used. Benchmark runs and manual scores are archived in a separate dataset.</p>",
+  "description": "<p>Benchmark runner, Morpheus agent skill, Model Context Protocol (MCP) server, biological scoring criteria and analysis scripts used to test whether LLM-based coding agents can rebuild published multicellular models in the Morpheus simulator. The release contains the subject-facing setup of benchmark version 3, which produced the main results of the accompanying preprint.</p><p>The folder figures/ rebuilds every figure and table of the preprint from the data it contains. The eleven benchmark papers published under a CC BY licence and two bioRxiv preprints (CC BY 4.0 and CC BY-NC-ND 4.0) are included unchanged under their own licences, not under the Apache License (see NOTICE); benchmark_papers/papers.csv lists all 15 papers with DOIs, licences and the SHA-256 checksums of the files used, and benchmark_papers/README.md explains how to obtain the four that may not be redistributed.</p>",
   "creators": [
     {
       "name": "Chandratre, Prerana",

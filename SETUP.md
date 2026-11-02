@@ -25,7 +25,7 @@ If Poppler is not installed, the repository falls back to Python PDF tooling. Th
 
 ## 1a. Add the benchmark paper PDFs
 
-The benchmark paper PDFs are not distributed with the repository. Download them from the DOIs in `benchmark_papers/papers.csv`, save them as `benchmark_papers/<stem>.pdf`, and verify them against the recorded checksums as described in [benchmark_papers/README.md](benchmark_papers/README.md). PDFs in that folder are ignored by git.
+Eleven of the 15 benchmark paper PDFs (the CC BY ones) are part of the repository. The other four (`01_Szabo2010`, `03_Carpenter2024`, `07_Scheel2021`, `15_Reza2025`) may not be redistributed: download them from the DOIs in `benchmark_papers/papers.csv`, save them as `benchmark_papers/<stem>.pdf`, and verify all files against the recorded checksums as described in [benchmark_papers/README.md](benchmark_papers/README.md). These four files are ignored by git.
 
 ## 2. Choose your platform
 
@@ -246,7 +246,7 @@ The default configuration is stored in `benchmark.config.json`:
 Important fields:
 
 - `papersDir`
-  Folder scanned for benchmark PDFs. The default `benchmark_papers/` corpus is not distributed; see `1a. Add the benchmark paper PDFs` after cloning.
+  Folder scanned for benchmark PDFs. The default `benchmark_papers/` corpus ships eleven of its 15 PDFs; see `1a. Add the benchmark paper PDFs` for the other four.
 - `resultsDir`
   Parent folder where each benchmark invocation creates a timestamped master directory. Paper run directories and benchmark-level diagnostics are written inside that master directory.
 - `benchmarkFocusDir`

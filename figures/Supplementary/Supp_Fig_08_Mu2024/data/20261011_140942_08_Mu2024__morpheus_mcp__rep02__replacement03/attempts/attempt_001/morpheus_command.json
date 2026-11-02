@@ -1,0 +1,33 @@
+{
+  "artifactSchemaVersion": 2,
+  "benchmarkProtocol": "legacy",
+  "command": [
+    "morpheus",
+    "-f",
+    "/home/service/projects/Morpheus.AI/benchmark_runs/20261007_202940_benchmark/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/attempts/attempt_001/model.xml",
+    "--outdir",
+    "/home/service/projects/Morpheus.AI/benchmark_runs/20261007_202940_benchmark/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/attempts/attempt_001",
+    "--num-threads",
+    "2"
+  ],
+  "inputXmlPath": "/home/service/projects/Morpheus.AI/benchmark_runs/20261007_202940_benchmark/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/agent_workspace/model.xml",
+  "executedXmlPath": "/home/service/projects/Morpheus.AI/benchmark_runs/20261007_202940_benchmark/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/attempts/attempt_001/model.xml",
+  "inputXmlSha256": "b01bfb9fbba4f2ffe66ac62018dd7e569812c8a6fb178c69304a43ee285c1cbc",
+  "attemptPath": "/home/service/projects/Morpheus.AI/benchmark_runs/20261007_202940_benchmark/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/attempts/attempt_001",
+  "configuredTimeoutMs": 3600000,
+  "requestedTimeoutMs": 3600000,
+  "effectiveTimeoutMs": 3600000,
+  "remainingBeforeMs": null,
+  "remainingAfterMs": null,
+  "hardRemainingBeforeMs": null,
+  "returnCode": 0,
+  "timedOut": false,
+  "refusedForFinalization": false,
+  "startedAt": "2026-10-11T15:10:30.528056+00:00",
+  "finishedAt": "2026-10-11T15:19:04.259479+00:00",
+  "durationMs": 513731,
+  "stdoutTruncated": false,
+  "stderrTruncated": false,
+  "stdoutBytes": 140623,
+  "stderrBytes": 0
+}

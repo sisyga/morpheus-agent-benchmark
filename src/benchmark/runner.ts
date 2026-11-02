@@ -973,6 +973,13 @@ export class BenchmarkRunner {
     if (pdfs.length === 0) {
       throw new Error(`No paper PDFs found in ${this.config.papersDir}. ${missingPapersHint}`);
     }
+    const missing = await missingManifestPapers(this.config.papersDir, pdfs);
+    if (missing.length > 0) {
+      this.reportProgress(
+        `Warning: ${missing.length} paper(s) listed in papers.csv are missing and will not run: ${missing.join(", ")}. ` +
+          missingPapersHint,
+      );
+    }
     if (startAtPaper) {
       const startIndex = findStartPaperIndex(pdfs, startAtPaper);
       if (startIndex < 0) {
@@ -2444,6 +2451,26 @@ function durationBetweenIsoStrings(startedAt: string | null, finishedAt: string 
   const start = Date.parse(startedAt);
   const finish = Date.parse(finishedAt);
   return Number.isFinite(start) && Number.isFinite(finish) ? Math.max(0, finish - start) : null;
+}
+
+// Stems listed in <papersDir>/papers.csv without a PDF; empty when the folder has no manifest.
+export async function missingManifestPapers(papersDir: string, pdfs: string[]): Promise<string[]> {
+  let manifest: string;
+  try {
+    manifest = await readFile(path.join(papersDir, "papers.csv"), "utf8");
+  } catch (error) {
+    if (isFileNotFoundError(error)) {
+      return [];
+    }
+    throw error;
+  }
+  const present = new Set(pdfs.map((pdf) => path.basename(pdf, path.extname(pdf))));
+  return manifest
+    .trim()
+    .split(/\r?\n/)
+    .slice(1)
+    .map((line) => line.split(",")[0])
+    .filter((stem) => stem && !present.has(stem));
 }
 
 function findStartPaperIndex(pdfs: string[], startAtPaper: string): number {

@@ -1,0 +1,360 @@
+{
+  "source_anchors": [
+    "paper.pdf pp. 6-7 Figure 4A-D, five independent simulations per paper model",
+    "paper.pdf p. 5 Figure 3A-C, multiple cancer contacts and clearance before confluence",
+    "paper.pdf pp. 23-25 S12, S13, Table S2"
+  ],
+  "selected_attempt": "attempt_012",
+  "model4_n": 5,
+  "control_n_each": 1,
+  "model4_attempts": [
+    {
+      "attempt": "attempt_010",
+      "model_xml": "attempts/attempt_010/model.xml",
+      "population_csv": "attempts/attempt_010/cell_counts.csv",
+      "spatial_states": "attempts/attempt_010/cell.id_cell.type.tif",
+      "validation": "attempts/attempt_010/quantitative_validation.json",
+      "biological_xml_sha256": "a8cd9d0ef3f92abdd480deaa64e7680bd015b065b94c995788e4ecf6cf52ca30",
+      "rng_initialization_log_excerpt": "Intitalize Thread 0 with seed 0\nIntitalize Thread 0 with seed 0\nRegistering Symbol time_hours of linktype TimeLink in Scope root\nIntitalize Thread Intitalize Thread 10 with seed 1791406565\n with seed 3378736802\nRegistering Symbol space of linktype LocationLink in Scope root",
+      "rng_policy": "No fixed seed in XML or command; engine-generated initialization recorded verbatim. Thread messages may interleave.",
+      "rows": 100,
+      "count_mismatches": 0,
+      "fragmented_cell_times": 0,
+      "initial_counts": {
+        "cancer": 8,
+        "senescent": 25,
+        "non_senescent": 16
+      },
+      "final_counts": {
+        "cancer": 115,
+        "senescent": 1,
+        "non_senescent": 174
+      },
+      "first_division_time_hours": {
+        "CANCER": 19.512,
+        "NON_SEN": 13.848
+      },
+      "nearest72_time_hours": 71.51515152,
+      "nearest72_sen_area_fold_raster": 0.48142011834319526,
+      "nearest72_sen_area_fold_mapper": 0.4842603550295858,
+      "contact_deaths": 24,
+      "background_sen_deaths": 0,
+      "contact_death_fraction_min": 0.5526315789,
+      "contact_death_fraction_max": 0.5857142857,
+      "first_contact_death_time_hours": 20.712,
+      "contact_death_occupied_fraction_min": 0.3701428271,
+      "contact_death_occupied_fraction_max": 0.8971329553,
+      "first_contact_death_occupied_fraction": 0.3701428271,
+      "all_contact_fractions_above_055": true,
+      "all_contact_ratios_consistent": true
+    },
+    {
+      "attempt": "attempt_012",
+      "model_xml": "attempts/attempt_012/model.xml",
+      "population_csv": "attempts/attempt_012/cell_counts.csv",
+      "spatial_states": "attempts/attempt_012/cell.id_cell.type.tif",
+      "validation": "attempts/attempt_012/quantitative_validation.json",
+      "biological_xml_sha256": "a8cd9d0ef3f92abdd480deaa64e7680bd015b065b94c995788e4ecf6cf52ca30",
+      "rng_initialization_log_excerpt": "Intitalize Thread 0 with seed 0\nIntitalize Thread 0 with seed 0\nRegistering Symbol time_hours of linktype TimeLink in Scope root\nIntitalize Thread 1 with seed 2943680338Intitalize Thread \n0 with seed 1791407008\nRegistering Symbol space of linktype LocationLink in Scope root",
+      "rng_policy": "No fixed seed in XML or command; engine-generated initialization recorded verbatim. Thread messages may interleave.",
+      "rows": 100,
+      "count_mismatches": 0,
+      "fragmented_cell_times": 0,
+      "initial_counts": {
+        "cancer": 8,
+        "senescent": 25,
+        "non_senescent": 16
+      },
+      "final_counts": {
+        "cancer": 144,
+        "senescent": 1,
+        "non_senescent": 159
+      },
+      "first_division_time_hours": {
+        "CANCER": 20.184,
+        "NON_SEN": 12.6
+      },
+      "nearest72_time_hours": 71.51515152,
+      "nearest72_sen_area_fold_raster": 0.3981065088757396,
+      "nearest72_sen_area_fold_mapper": 0.3981065088757396,
+      "contact_deaths": 23,
+      "background_sen_deaths": 1,
+      "contact_death_fraction_min": 0.5526315789,
+      "contact_death_fraction_max": 0.578125,
+      "first_contact_death_time_hours": 25.32,
+      "contact_death_occupied_fraction_min": 0.3769166142,
+      "contact_death_occupied_fraction_max": 0.8255093468,
+      "first_contact_death_occupied_fraction": 0.3769166142,
+      "all_contact_fractions_above_055": true,
+      "all_contact_ratios_consistent": true
+    },
+    {
+      "attempt": "attempt_016",
+      "model_xml": "attempts/attempt_016/model.xml",
+      "population_csv": "attempts/attempt_016/cell_counts.csv",
+      "spatial_states": "attempts/attempt_016/cell.id_cell.type.tif",
+      "validation": "attempts/attempt_016/quantitative_validation.json",
+      "biological_xml_sha256": "a8cd9d0ef3f92abdd480deaa64e7680bd015b065b94c995788e4ecf6cf52ca30",
+      "rng_initialization_log_excerpt": "Intitalize Thread 0 with seed 0\nIntitalize Thread 0 with seed 0\nRegistering Symbol time_hours of linktype TimeLink in Scope root\nIntitalize Thread 1 with seed 2750485103\nIntitalize Thread 0 with seed 1791407368\nRegistering Symbol space of linktype LocationLink in Scope root",
+      "rng_policy": "No fixed seed in XML or command; engine-generated initialization recorded verbatim. Thread messages may interleave.",
+      "rows": 100,
+      "count_mismatches": 0,
+      "fragmented_cell_times": 0,
+      "initial_counts": {
+        "cancer": 8,
+        "senescent": 25,
+        "non_senescent": 16
+      },
+      "final_counts": {
+        "cancer": 127,
+        "senescent": 2,
+        "non_senescent": 168
+      },
+      "first_division_time_hours": {
+        "CANCER": 19.416,
+        "NON_SEN": 12.888
+      },
+      "nearest72_time_hours": 71.51515152,
+      "nearest72_sen_area_fold_raster": 0.2859171597633136,
+      "nearest72_sen_area_fold_mapper": 0.2856804733727811,
+      "contact_deaths": 18,
+      "background_sen_deaths": 5,
+      "contact_death_fraction_min": 0.5540540541,
+      "contact_death_fraction_max": 0.5882352941,
+      "first_contact_death_time_hours": 27.648,
+      "contact_death_occupied_fraction_min": 0.381800042,
+      "contact_death_occupied_fraction_max": 0.5526675068,
+      "first_contact_death_occupied_fraction": 0.3843205209,
+      "all_contact_fractions_above_055": true,
+      "all_contact_ratios_consistent": true
+    },
+    {
+      "attempt": "attempt_017",
+      "model_xml": "attempts/attempt_017/model.xml",
+      "population_csv": "attempts/attempt_017/cell_counts.csv",
+      "spatial_states": "attempts/attempt_017/cell.id_cell.type.tif",
+      "validation": "attempts/attempt_017/quantitative_validation.json",
+      "biological_xml_sha256": "a8cd9d0ef3f92abdd480deaa64e7680bd015b065b94c995788e4ecf6cf52ca30",
+      "rng_initialization_log_excerpt": "Intitalize Thread 0 with seed 0\nIntitalize Thread 0 with seed 0\nRegistering Symbol time_hours of linktype TimeLink in Scope root\nIntitalize Thread 1 with seed Intitalize Thread 01414891131 with seed 1791407416\n",
+      "rng_policy": "No fixed seed in XML or command; engine-generated initialization recorded verbatim. Thread messages may interleave.",
+      "rows": 100,
+      "count_mismatches": 0,
+      "fragmented_cell_times": 0,
+      "initial_counts": {
+        "cancer": 8,
+        "senescent": 25,
+        "non_senescent": 16
+      },
+      "final_counts": {
+        "cancer": 129,
+        "senescent": 0,
+        "non_senescent": 137
+      },
+      "first_division_time_hours": {
+        "CANCER": 20.304,
+        "NON_SEN": 17.832
+      },
+      "nearest72_time_hours": 71.51515152,
+      "nearest72_sen_area_fold_raster": 0.4714792899408284,
+      "nearest72_sen_area_fold_mapper": 0.4724260355029586,
+      "contact_deaths": 24,
+      "background_sen_deaths": 1,
+      "contact_death_fraction_min": 0.5526315789,
+      "contact_death_fraction_max": 0.5857142857,
+      "first_contact_death_time_hours": 27.48,
+      "contact_death_occupied_fraction_min": 0.3906742281,
+      "contact_death_occupied_fraction_max": 0.8037177064,
+      "first_contact_death_occupied_fraction": 0.4040642722,
+      "all_contact_fractions_above_055": true,
+      "all_contact_ratios_consistent": true
+    },
+    {
+      "attempt": "attempt_018",
+      "model_xml": "attempts/attempt_018/model.xml",
+      "population_csv": "attempts/attempt_018/cell_counts.csv",
+      "spatial_states": "attempts/attempt_018/cell.id_cell.type.tif",
+      "validation": "attempts/attempt_018/quantitative_validation.json",
+      "biological_xml_sha256": "a8cd9d0ef3f92abdd480deaa64e7680bd015b065b94c995788e4ecf6cf52ca30",
+      "rng_initialization_log_excerpt": "Intitalize Thread 0 with seed 0\nIntitalize Thread 0 with seed 0\nRegistering Symbol time_hours of linktype TimeLink in Scope root\nIntitalize Thread Intitalize Thread 0 with seed 1791407462\n1 with seed 1146201479\nRegistering Symbol space of linktype LocationLink in Scope root",
+      "rng_policy": "No fixed seed in XML or command; engine-generated initialization recorded verbatim. Thread messages may interleave.",
+      "rows": 100,
+      "count_mismatches": 0,
+      "fragmented_cell_times": 57,
+      "initial_counts": {
+        "cancer": 8,
+        "senescent": 25,
+        "non_senescent": 16
+      },
+      "final_counts": {
+        "cancer": 104,
+        "senescent": 1,
+        "non_senescent": 180
+      },
+      "first_division_time_hours": {
+        "CANCER": 18.888,
+        "NON_SEN": 15.024
+      },
+      "nearest72_time_hours": 71.51515152,
+      "nearest72_sen_area_fold_raster": 0.3718343195266272,
+      "nearest72_sen_area_fold_mapper": 0.37136094674556214,
+      "contact_deaths": 24,
+      "background_sen_deaths": 0,
+      "contact_death_fraction_min": 0.5540540541,
+      "contact_death_fraction_max": 0.5972222222,
+      "first_contact_death_time_hours": 24.288,
+      "contact_death_occupied_fraction_min": 0.3691976476,
+      "contact_death_occupied_fraction_max": 0.7047889099,
+      "first_contact_death_occupied_fraction": 0.3769166142,
+      "all_contact_fractions_above_055": true,
+      "all_contact_ratios_consistent": true
+    }
+  ],
+  "control_attempts": {
+    "1": {
+      "attempt": "attempt_013",
+      "model_xml": "attempts/attempt_013/model.xml",
+      "population_csv": "attempts/attempt_013/cell_counts.csv",
+      "spatial_states": "attempts/attempt_013/cell.id_cell.type.tif",
+      "validation": "attempts/attempt_013/quantitative_validation.json",
+      "biological_xml_sha256": "61cebce0f98789bf8d22231c14bb357e0ce070b5efeda4e766432a11d13dae7c",
+      "rng_initialization_log_excerpt": "Intitalize Thread 0 with seed 0\nIntitalize Thread 0 with seed 0\nRegistering Symbol time_hours of linktype TimeLink in Scope root\nIntitalize Thread 1 with seed 4210972821\nIntitalize Thread 0 with seed 1791407227\nRegistering Symbol space of linktype LocationLink in Scope root",
+      "rng_policy": "No fixed seed in XML or command; engine-generated initialization recorded verbatim. Thread messages may interleave.",
+      "rows": 100,
+      "count_mismatches": 0,
+      "fragmented_cell_times": 0,
+      "initial_counts": {
+        "cancer": 8,
+        "senescent": 25,
+        "non_senescent": 16
+      },
+      "final_counts": {
+        "cancer": 113,
+        "senescent": 22,
+        "non_senescent": 98
+      },
+      "first_division_time_hours": {
+        "CANCER": 20.904,
+        "NON_SEN": 14.64
+      },
+      "nearest72_time_hours": 71.51515152,
+      "nearest72_sen_area_fold_raster": 1.0598816568047338,
+      "nearest72_sen_area_fold_mapper": 1.0598816568047338,
+      "contact_deaths": 0,
+      "background_sen_deaths": 3,
+      "contact_death_fraction_min": null,
+      "contact_death_fraction_max": null,
+      "first_contact_death_time_hours": null,
+      "contact_death_occupied_fraction_min": null,
+      "contact_death_occupied_fraction_max": null,
+      "first_contact_death_occupied_fraction": null,
+      "all_contact_fractions_above_055": null,
+      "all_contact_ratios_consistent": null
+    },
+    "2": {
+      "attempt": "attempt_014",
+      "model_xml": "attempts/attempt_014/model.xml",
+      "population_csv": "attempts/attempt_014/cell_counts.csv",
+      "spatial_states": "attempts/attempt_014/cell.id_cell.type.tif",
+      "validation": "attempts/attempt_014/quantitative_validation.json",
+      "biological_xml_sha256": "152eaea5c58305034fbc92b85e2ac2ab707dbab5002d4a1a8d4c520e6fd1fd3d",
+      "rng_initialization_log_excerpt": "Intitalize Thread 0 with seed 0\nIntitalize Thread 0 with seed 0\nRegistering Symbol time_hours of linktype TimeLink in Scope root\nIntitalize Thread Intitalize Thread 10 with seed 1791407280\n with seed 2085378408\nRegistering Symbol space of linktype LocationLink in Scope root",
+      "rng_policy": "No fixed seed in XML or command; engine-generated initialization recorded verbatim. Thread messages may interleave.",
+      "rows": 100,
+      "count_mismatches": 0,
+      "fragmented_cell_times": 1,
+      "initial_counts": {
+        "cancer": 8,
+        "senescent": 25,
+        "non_senescent": 16
+      },
+      "final_counts": {
+        "cancer": 187,
+        "senescent": 6,
+        "non_senescent": 112
+      },
+      "first_division_time_hours": {
+        "CANCER": 18.888,
+        "NON_SEN": 14.592
+      },
+      "nearest72_time_hours": 71.51515152,
+      "nearest72_sen_area_fold_raster": 1.1663905325443786,
+      "nearest72_sen_area_fold_mapper": 1.1654437869822485,
+      "contact_deaths": 19,
+      "background_sen_deaths": 1,
+      "contact_death_fraction_min": 0.5535714286,
+      "contact_death_fraction_max": 0.578125,
+      "first_contact_death_time_hours": 81.624,
+      "contact_death_occupied_fraction_min": 0.8556500735,
+      "contact_death_occupied_fraction_max": 1.0,
+      "first_contact_death_occupied_fraction": 0.8556500735,
+      "all_contact_fractions_above_055": true,
+      "all_contact_ratios_consistent": true
+    },
+    "3": {
+      "attempt": "attempt_015",
+      "model_xml": "attempts/attempt_015/model.xml",
+      "population_csv": "attempts/attempt_015/cell_counts.csv",
+      "spatial_states": "attempts/attempt_015/cell.id_cell.type.tif",
+      "validation": "attempts/attempt_015/quantitative_validation.json",
+      "biological_xml_sha256": "2e2b0f707c9e09f3b26df1c62f6fa8b4085125fea96d86a8799aa383c8be394b",
+      "rng_initialization_log_excerpt": "Intitalize Thread 0 with seed 0\nIntitalize Thread 0 with seed 0\nRegistering Symbol time_hours of linktype TimeLink in Scope root\nIntitalize Thread Intitalize Thread 0 with seed 1791407313\n1 with seed 711638791\nRegistering Symbol space of linktype LocationLink in Scope root",
+      "rng_policy": "No fixed seed in XML or command; engine-generated initialization recorded verbatim. Thread messages may interleave.",
+      "rows": 100,
+      "count_mismatches": 0,
+      "fragmented_cell_times": 0,
+      "initial_counts": {
+        "cancer": 8,
+        "senescent": 25,
+        "non_senescent": 16
+      },
+      "final_counts": {
+        "cancer": 113,
+        "senescent": 23,
+        "non_senescent": 112
+      },
+      "first_division_time_hours": {
+        "CANCER": 19.848,
+        "NON_SEN": 13.464
+      },
+      "nearest72_time_hours": 71.51515152,
+      "nearest72_sen_area_fold_raster": 1.0487573964497041,
+      "nearest72_sen_area_fold_mapper": 1.0499408284023668,
+      "contact_deaths": 0,
+      "background_sen_deaths": 2,
+      "contact_death_fraction_min": null,
+      "contact_death_fraction_max": null,
+      "first_contact_death_time_hours": null,
+      "contact_death_occupied_fraction_min": null,
+      "contact_death_occupied_fraction_max": null,
+      "first_contact_death_occupied_fraction": null,
+      "all_contact_fractions_above_055": null,
+      "all_contact_ratios_consistent": null
+    }
+  },
+  "nearest72_time_hours": 71.51515152,
+  "model4_nearest72_sen_area_fold_mean": 0.40175147928994087,
+  "model4_nearest72_sen_area_fold_sample_sd": 0.0798983283063303,
+  "paper_model4_area_fold_72h_visual_approximation": 0.4,
+  "selected_nearest72_sen_area_fold_raster": 0.3981065088757396,
+  "no_extrusion_controls_nearest72_sen_area_fold": {
+    "1": 1.0598816568047338,
+    "3": 1.0487573964497041
+  },
+  "all_model4_biological_xml_identical": true,
+  "all_requested_count_values_match_grids": true,
+  "total_type_count_values_audited": 2400,
+  "all_model4_contact_deaths_above_055": true,
+  "total_model4_contact_deaths": 113,
+  "comparison_limits": [
+    "Paper curve values are approximate readings, not recovered numerical source data.",
+    "Only Model 4 has five independent repeats here; each control has one, so control uncertainty is unestimated.",
+    "Mean and sample SD use independent runs and exact type areas from TIFF; no realization is excluded.",
+    "One Model 4 lineage has a persistent one-pixel division fragment (attempt_018, fragmentation_audit.json); the selected showcase has none.",
+    "The motility translation is approximate and movement connectivity regularization is added."
+  ],
+  "figures": [
+    "figures/showcase.png",
+    "figures/showcase.pdf"
+  ],
+  "time_series_tsv": "ensemble_time_series.tsv"
+}

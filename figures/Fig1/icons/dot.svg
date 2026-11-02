@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 313 360" width="313" height="360">
+<!-- Own drawing for Fig. 1 (Morpheus agent benchmark), matching the layout of the earlier icon. -->
+<path d="M81,40 H233 L325,132 V349 Q325,357 317,357 H81 Q73,357 73,349 V48 Q73,40 81,40 Z" fill="#DDE1ED"/>
+<path d="M47,1 H207 L291,85 V329 Q291,337 283,337 H47 Q39,337 39,329 V9 Q39,1 47,1 Z" fill="#EEF1F7"/>
+<path d="M207,1 V70 Q207,82 219,82 H289 Z" fill="#DDE2EE"/>
+<rect x="74" y="22" width="85" height="35" fill="#99352C"/>
+<g stroke="#99352C" stroke-width="7" stroke-linecap="round">
+<line x1="79.5" y1="119.5" x2="250" y2="119.5"/>
+<line x1="79.5" y1="153.5" x2="250.5" y2="153.5"/>
+</g>
+<path d="M1,200 V174 Q1,166 9,166 H38 V200 Z" fill="#99352C"/>
+<path d="M1,191 H215 Q221,191 221,197 V282 Q221,288 215,288 H8 Q1,288 1,281 Z" fill="#D05951"/>
+<text x="26" y="268" letter-spacing="-4.5" font-family="Arial, Helvetica, sans-serif" font-size="84" fill="#FFFFFF">DOT</text>
+</svg>

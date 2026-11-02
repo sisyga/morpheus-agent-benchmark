@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MorpheusModel version="4">
+  <Description>
+    <Title>Herron 2022: spontaneous GTPase rosette, WPGAP gradients</Title>
+    <Details>Source: Herron et al., PLoS Computational Biology 18:e1010092 (2022),
+Eqns p5; conserved masses p6; logistic profiles p10; Fig4E-F pp11-12;
+Table2 p13; initialization and 40 s spot-size simulations p19.
+The explicit source model is a four-species mass-conserved reaction-diffusion PDE,
+implemented in Dedalus. This translation uses Cartesian finite differences within
+an isotropic disk, with reflecting boundaries. No explicit cells occur in the source.
+One simulation time unit = one second; one physical length unit = one micrometre;
+all fields in molecules per square micrometre. SpaceSymbol is in lattice nodes,
+so radius_um explicitly multiplies by dx_um; NodeLength controls diffusion scaling.
+Morpheus 2.4.1 Circle domains add a two-node buffer without updating SizeSymbol;
+SpaceSymbol includes that buffer. The domain center is size/2+2, established by
+raw coordinate fields in attempts/attempt_009. The rate origin subtracts those two
+nodes to center the IgG disk on the circular boundary, avoiding any biological offset.
+Spatial rates = minimum + (maximum-minimum)/(1+exp(k*(r-1.75))).
+This resolves the alpha/beta naming ambiguity in the printed equations using the
+published source function logistic_decay; the rounded Table2 values are preserved.
+Basal homogeneous ODE was integrated to 1000 s before initialization. At each
+site a uniform sample in [0,0.2*v_ss] is converted from v to u, preserving u+v=808.
+RandomSeed 2022 is an arbitrary reproducibility setting, not a spatial cue.
+Grid 256x256, dx=0.03125 um; circular domain radius 4 um.
+Morpheus RK4 with reaction step 0.0025 s and internally scheduled diffusion.
+Diffusion operator and random-noise discretization differ from Dedalus spectral
+Fourier-Chebyshev grid; mechanistic geometry and physical units are preserved.
+CSV interval 0.40404040404040403 s provides 100 samples, including 0 and 40 s.
+PNG and raw unscaled float-TIFF snapshots at five evenly spaced times.</Details>
+  </Description>
+  <Global>
+    <Constant symbol="dx_um" value="0.03125" name="physical length per lattice node, um"/>
+    <Constant symbol="disk_radius_um" value="1.75" name="IgG disk radius, um"/>
+    <Constant symbol="domain_buffer_nodes" value="2" name="Morpheus circular-domain coordinate buffer, nodes"/>
+    <Constant symbol="b" value="0.002" name="basal GTPase activation, per s"/>
+    <Constant symbol="gamma_min" value="0.005" name="minimum self-positive feedback, per s"/>
+    <Constant symbol="gamma_max" value="9.6" name="maximum self-positive feedback, per s"/>
+    <Constant symbol="gamma_k" value="2.04" name="positive-feedback spatial decay, per um"/>
+    <Constant symbol="c_min" value="0.005" name="minimum GAP activation, um2 per molecule per s"/>
+    <Constant symbol="c_max" value="0.08" name="maximum GAP activation, um2 per molecule per s"/>
+    <Constant symbol="c_k" value="13" name="GAP activation spatial decay, per um"/>
+    <Constant symbol="K" value="200" name="half-response active GTPase, molecules per um2"/>
+    <Constant symbol="n" value="2" name="Hill exponent"/>
+    <Constant symbol="sigma" value="0.4" name="basal GTPase inactivation, per s"/>
+    <Constant symbol="d" value="43" name="GAP inactivation, per s"/>
+    <Constant symbol="e" value="31.3" name="GAP-driven GTPase inactivation, um2 per molecule per s"/>
+    <Constant symbol="Du" value="0.04" name="active GTPase diffusion, um2 per s"/>
+    <Constant symbol="Dv" value="4" name="inactive GTPase diffusion, um2 per s"/>
+    <Constant symbol="DG" value="4" name="active GAP diffusion, um2 per s"/>
+    <Constant symbol="Dg" value="4" name="inactive GAP diffusion, um2 per s"/>
+    <Constant symbol="T" value="808" name="mean total GTPase, molecules per um2"/>
+    <Constant symbol="Tg" value="10" name="mean total GAP, molecules per um2"/>
+    <Constant symbol="u_ss" value="3.1336450913472675"/>
+    <Constant symbol="v_ss" value="804.86635490865433"/>
+    <Constant symbol="G_ss" value="0.0036424461372109676"/>
+    <Constant symbol="g_ss" value="9.9963575538627936"/>
+    <Function symbol="radius_um">
+      <Expression>dx_um*sqrt((space.x-size.x/2-domain_buffer_nodes)^2+(space.y-size.y/2-domain_buffer_nodes)^2)</Expression>
+    </Function>
+    <Function symbol="gamma_r">
+      <Expression>gamma_min+(gamma_max-gamma_min)/(1+exp(gamma_k*(radius_um-disk_radius_um)))</Expression>
+    </Function>
+    <Function symbol="c_r">
+      <Expression>c_min+(c_max-c_min)/(1+exp(c_k*(radius_um-disk_radius_um)))</Expression>
+    </Function>
+    <Field symbol="u" value="u_ss+rand_uni(0,0.2*v_ss)" name="active GTPase, molecules per um2">
+      <Diffusion rate="Du"/>
+    </Field>
+    <Field symbol="v" value="T-u" name="inactive GTPase, molecules per um2">
+      <Diffusion rate="Dv"/>
+    </Field>
+    <Field symbol="G" value="G_ss" name="active GAP, molecules per um2">
+      <Diffusion rate="DG"/>
+    </Field>
+    <Field symbol="g" value="g_ss" name="inactive GAP, molecules per um2">
+      <Diffusion rate="Dg"/>
+    </Field>
+    <System name="WPGAP reactions" time-step="0.0025000000000000001" solver="Runge-Kutta [fixed, O(4)]">
+      <Intermediate symbol="activation_flux" value="b*v+gamma_r*v*u^n/(K^n+u^n)-sigma*u-e*G*u"/>
+      <Intermediate symbol="gap_flux" value="c_r*u*g-d*G"/>
+      <DiffEqn symbol-ref="u"><Expression>activation_flux</Expression></DiffEqn>
+      <DiffEqn symbol-ref="v"><Expression>-activation_flux</Expression></DiffEqn>
+      <DiffEqn symbol-ref="G"><Expression>gap_flux</Expression></DiffEqn>
+      <DiffEqn symbol-ref="g"><Expression>-gap_flux</Expression></DiffEqn>
+    </System>
+    <Variable symbol="u_min_molecules_per_um2" value="0"/>
+    <Variable symbol="u_max_molecules_per_um2" value="0"/>
+    <Variable symbol="u_mean_molecules_per_um2" value="0"/>
+    <Variable symbol="gtpase_mean_molecules_per_um2" value="808"/>
+    <Variable symbol="gap_mean_molecules_per_um2" value="10"/>
+    <Variable symbol="domain_radius_min_um" value="0"/>
+    <Variable symbol="domain_radius_max_um" value="4"/>
+    <Mapper name="physical domain origin and radius audit" time-step="0.40404040404040403">
+      <Input value="radius_um"/>
+      <Output symbol-ref="domain_radius_min_um" mapping="minimum"/>
+      <Output symbol-ref="domain_radius_max_um" mapping="maximum"/>
+    </Mapper>
+    <Mapper name="active GTPase extrema and mean" time-step="0.40404040404040403">
+      <Input value="u"/>
+      <Output symbol-ref="u_min_molecules_per_um2" mapping="minimum"/>
+      <Output symbol-ref="u_max_molecules_per_um2" mapping="maximum"/>
+      <Output symbol-ref="u_mean_molecules_per_um2" mapping="mean"/>
+    </Mapper>
+    <Function symbol="u_range_molecules_per_um2">
+      <Expression>u_max_molecules_per_um2-u_min_molecules_per_um2</Expression>
+    </Function>
+    <Mapper name="GTPase mass audit" time-step="0.40404040404040403">
+      <Input value="u+v"/>
+      <Output symbol-ref="gtpase_mean_molecules_per_um2" mapping="mean"/>
+    </Mapper>
+    <Mapper name="GAP mass audit" time-step="0.40404040404040403">
+      <Input value="G+g"/>
+      <Output symbol-ref="gap_mean_molecules_per_um2" mapping="mean"/>
+    </Mapper>
+  </Global>
+  <Space>
+    <Lattice class="square">
+      <Size symbol="size" value="256, 256, 0"/>
+      <NodeLength value="0.03125"/>
+      <BoundaryConditions>
+        <Condition boundary="x" type="noflux"/>
+        <Condition boundary="y" type="noflux"/>
+      </BoundaryConditions>
+      <Neighborhood><Order>1</Order></Neighborhood>
+      <Domain boundary-type="noflux"><Circle diameter="256"/></Domain>
+    </Lattice>
+    <SpaceSymbol symbol="space"/>
+  </Space>
+  <Time>
+    <StartTime value="0"/>
+    <StopTime value="40"/>
+    <TimeSymbol symbol="time_s" name="physical time, seconds"/>
+    <RandomSeed value="2022"/>
+    <SaveInterval value="0"/>
+  </Time>
+  <Analysis>
+    <Logger name="GTPase contrast at 100 times" time-step="0.40404040404040403">
+      <Input>
+        <Symbol symbol-ref="u_min_molecules_per_um2"/>
+        <Symbol symbol-ref="u_max_molecules_per_um2"/>
+        <Symbol symbol-ref="u_range_molecules_per_um2"/>
+        <Symbol symbol-ref="u_mean_molecules_per_um2"/>
+        <Symbol symbol-ref="gtpase_mean_molecules_per_um2"/>
+        <Symbol symbol-ref="gap_mean_molecules_per_um2"/>
+        <Symbol symbol-ref="domain_radius_min_um"/>
+        <Symbol symbol-ref="domain_radius_max_um"/>
+      </Input>
+      <Output><TextOutput file-name="u_range" file-format="csv" separator="comma"/></Output>
+    </Logger>
+    <Gnuplotter name="five active GTPase snapshots" time-step="10" decorate="true">
+      <Terminal name="png" size="800 700 0"/>
+      <Plot title="Active GTPase u (molecules/um2)">
+        <Field symbol-ref="u" min="0" max="200">
+          <ColorMap>
+            <Color value="0" color="#440154"/>
+            <Color value="50" color="#3b528b"/>
+            <Color value="100" color="#21918c"/>
+            <Color value="150" color="#5ec962"/>
+            <Color value="200" color="#fde725"/>
+          </ColorMap>
+        </Field>
+      </Plot>
+    </Gnuplotter>
+    <TiffPlotter time-step="10" format="32bit" compression="false" timelapse="true" OME-header="true">
+      <Channel symbol-ref="u" scale="false"/>
+      <Channel symbol-ref="v" scale="false"/>
+      <Channel symbol-ref="G" scale="false"/>
+      <Channel symbol-ref="g" scale="false"/>
+    </TiffPlotter>
+    <ModelGraph format="dot" reduced="false"/>
+  </Analysis>
+</MorpheusModel>

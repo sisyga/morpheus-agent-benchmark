@@ -33,6 +33,16 @@ BENCHMARK_COLORS = ["#4477AA", "#EE6677", "#228833", "#CCBB44", "#66CCEE", "#AA3
 BENCHMARK_MARKERS = ["o", "D", "s", "^", "v", "P"]
 MORPHEUS_MODES = ["morpheus_cli", "morpheus_cli_docs", "morpheus_skill", "morpheus_mcp"]
 EXECUTION_BASELINE_MODE = "python_web"
+# Numbered tool configurations as in manuscript Fig. 1; selected with --mode-labels config.
+CONFIG_LABELS = {
+    "python_web": "1 Web",
+    "morpheus_cli": "2 CLI",
+    "morpheus_cli_docs": "3 Docs",
+    "morpheus_skill": "4 Skill",
+    "morpheus_mcp": "5 MCP",
+}
+MODE_LABEL_SETS = {"long": analysis.MODE_LABELS, "config": CONFIG_LABELS}
+MODE_LABELS = dict(analysis.MODE_LABELS)
 CONFIDENCE_LEVEL = 0.95
 CI_METHODS = ["bootstrap", "t"]
 BOOTSTRAP_RESAMPLES = 10_000
@@ -60,6 +70,49 @@ REQUIRED_RECORD_COLUMNS = {
     "total_cost_usd",
 }
 SCORER_COHORT_PATTERN = re.compile(r"(scorer-v[^/\\]+?)__attempt-")
+# Per-run source data: column -> description, in export order. Columns a benchmark folder lacks are skipped.
+RUN_EXPORT_COLUMNS = {
+    "benchmark_label": "Model label used in the figures",
+    "agent_model": "Subject (agent) model",
+    "agent_reasoning_effort": "Subject reasoning effort",
+    "paper": "Paper PDF",
+    "paper_short": "Short paper name",
+    "paper_number": "Paper number",
+    "mode": "Tool mode",
+    "repetition": "Repetition (1-based)",
+    "in_figures": "False if the run never started (no tokens, no cost) and is left out of every figure",
+    "stop_reason": "Why the subject stopped (agent_finished or time_limit)",
+    "artifact_status": "Status of the final model artifacts",
+    "biological_score": "Biological score from the scoring agent (0-1; empty if not scored)",
+    "biological_scoring_status": "Scoring-agent status (scored, insufficient_evidence, ...)",
+    "biological_score_itt": "Biological score as plotted: intention-to-treat, unscored subject failures count as 0",
+    "reproduction_score": "Agent self-score of its reproduction (0-8)",
+    "technical_score": "Technical score from the host checks (0-7; empty if not evaluated)",
+    "technical_score_itt": "Technical score as plotted: intention-to-treat, unevaluated runs count as 0",
+    "manual_biological_score": "Manual biological score, where one exists (none for the version 3 runs)",
+    "attempts": "Model revisions (plotted as revisions)",
+    "subject_active_time_min": "Subject wall-clock time in minutes (plotted as active time)",
+    "budget_fraction": "Subject time as a fraction of the time limit",
+    "morpheus_time_min": "Summed Morpheus simulation time in minutes; concurrent simulations add up, so it can exceed wall-clock time; empty if the agent bypassed the launcher",
+    "launcher_bypass": "True if the agent ran the Morpheus binary directly, so simulation time was not recorded",
+    "uncached_input_tokens_m": "Uncached input tokens (millions)",
+    "cached_input_tokens_m": "Cached input tokens (millions)",
+    "cache_write_input_tokens_m": "Cache-write input tokens (millions)",
+    "output_reasoning_tokens_m": "Output tokens including reasoning tokens (millions)",
+    "total_tokens_m": "All tokens (millions)",
+    "uncached_input_cost_usd": "Cost of uncached input tokens (USD)",
+    "cached_input_cost_usd": "Cost of cached input tokens (USD)",
+    "cache_write_input_cost_usd": "Cost of cache-write input tokens (USD)",
+    "output_reasoning_cost_usd": "Cost of output tokens (USD)",
+    "total_cost_usd": "API cost of the run (USD, as plotted)",
+    "scorer_model": "Scoring-agent model",
+    "scorer_reasoning_effort": "Scoring-agent reasoning effort",
+    "scorer_version": "Scorer version (the criteria version is in scorer_cohort)",
+    "benchmark_id": "Benchmark folder",
+    "protocol": "Benchmark protocol",
+    "total_time_limit_ms": "Time limit per run (ms)",
+    "biological_score_path": "Scoring-agent output file",
+}
 # Nature Methods: 180 mm double column, Arial 5–7 pt. The two box plots and the Pareto plot
 # share one row, so each panel is exported at its final size and placed in the figure unscaled.
 MM_PER_INCH = 25.4
@@ -67,13 +120,13 @@ PANEL_SIZE_MM = (59.0, 45.0)
 PANEL_STYLE = {
     "font.family": "sans-serif",
     "font.sans-serif": ["Arial", "Liberation Sans", "DejaVu Sans"],
-    "font.size": 6,
-    "axes.labelsize": 6,
+    "font.size": 7,
+    "axes.labelsize": 7,
     "axes.titlesize": 7,
-    "xtick.labelsize": 5,
-    "ytick.labelsize": 5,
-    "legend.fontsize": 5,
-    "legend.title_fontsize": 6,
+    "xtick.labelsize": 6,
+    "ytick.labelsize": 6,
+    "legend.fontsize": 6,
+    "legend.title_fontsize": 7,
     "axes.linewidth": 0.5,
     "xtick.major.width": 0.5,
     "ytick.major.width": 0.5,
@@ -103,8 +156,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "benchmark_dirs",
-        nargs="+",
+        nargs="*",
         help="Two or more benchmark folders containing benchmark_summary.json.",
+    )
+    parser.add_argument(
+        "--runs-csv",
+        default=None,
+        help="Instead of benchmark folders, the per-run table of an earlier comparison "
+             "(benchmark_model_comparison_by_run.csv in run order, e.g. figures/Fig2/data/runs_by_run.csv).",
     )
     parser.add_argument(
         "--labels",
@@ -149,8 +208,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         metavar=("WIDTH", "HEIGHT"),
         help="Exported size of each panel in mm (default: %(default)s, three panels in one 180 mm row).",
     )
+    parser.add_argument(
+        "--mode-labels",
+        default="long",
+        choices=sorted(MODE_LABEL_SETS),
+        help="Mode names in figures and tables: descriptive (long, default) or the numbered configurations of "
+             "manuscript Fig. 1 (config: 1 Web ... 5 MCP).",
+    )
     args = parser.parse_args(argv)
-    if len(args.benchmark_dirs) < 2:
+    if args.runs_csv and args.benchmark_dirs:
+        parser.error("give either benchmark folders or --runs-csv")
+    if not args.runs_csv and len(args.benchmark_dirs) < 2:
         parser.error("at least two benchmark folders are required")
     if args.labels is not None and len(args.labels) != len(args.benchmark_dirs):
         parser.error("--labels needs exactly one label per benchmark folder")
@@ -417,7 +485,12 @@ def stats_row(
 
 
 def mode_label(mode: str) -> str:
-    return analysis.MODE_LABELS.get(mode, mode)
+    return MODE_LABELS.get(mode, mode)
+
+
+def set_mode_labels(name: str) -> None:
+    MODE_LABELS.clear()
+    MODE_LABELS.update(MODE_LABEL_SETS[name])
 
 
 def compute_statistical_tests(
@@ -742,8 +815,11 @@ def grouped_metric_boxplots(
             ecolor="black", elinewidth=0.6, capsize=1.5, capthick=0.6, zorder=4,
         )
     ax.set_xticks(x)
-    ax.set_xticklabels([analysis.MODE_LABELS.get(mode, mode) for mode in modes], rotation=30, ha="right",
-                       rotation_mode="anchor")
+    tick_labels = [mode_label(mode) for mode in modes]
+    if max(map(len, tick_labels)) <= 8:   # short configuration names fit horizontally
+        ax.set_xticklabels(tick_labels)
+    else:
+        ax.set_xticklabels(tick_labels, rotation=30, ha="right", rotation_mode="anchor")
     if ylabel:
         ax.set_ylabel(ylabel)
     if ylim != (None, None):
@@ -856,7 +932,7 @@ def annotate_between_model_tests(
             for mode_index, mode in enumerate(modes):
                 if mode in letters[benchmark_id]:
                     ax.text(x[mode_index] + offsets[benchmark_id], data_fraction + 0.01, letters[benchmark_id][mode],
-                            ha="center", va="bottom", fontsize=5, fontweight="bold", color=color,
+                            ha="center", va="bottom", fontsize=6, fontweight="bold", color=color,
                             transform=transform)
         data_fraction += 0.06
     for level, (id_a, id_b) in enumerate(pairs):
@@ -870,7 +946,7 @@ def annotate_between_model_tests(
                     linewidth=0.5, transform=transform, clip_on=False)
             label = significance_label(row.iloc[0]["p_holm"])
             ax.text((left + right) / 2, y + (0.0 if "*" in label else 0.02), label,
-                    ha="center", va="bottom", fontsize=7 if "*" in label else 5, transform=transform)
+                    ha="center", va="bottom", fontsize=7 if "*" in label else 6, transform=transform)
 
 
 def make_biological_score_figure(
@@ -979,7 +1055,7 @@ def make_pareto_figure(
     mode_handles = [
         Line2D([0], [0], marker="o", linestyle="none", markersize=3.5, markeredgecolor="black",
                markeredgewidth=0.4, markerfacecolor=analysis.MODE_COLORS.get(mode, "#777777"),
-               label=analysis.MODE_LABELS.get(mode, mode))
+               label=mode_label(mode))
         for mode in modes
     ]
     model_handles = [
@@ -1033,7 +1109,7 @@ def make_overall_figure(
                 # A label above the data rather than an axes title.
                 label = significance_label(row.iloc[0]["p_value"])
                 ax.text(0.5, 1.0, label, transform=ax.transAxes, ha="center", va="bottom",
-                        fontsize=7 if "*" in label else 5)
+                        fontsize=7 if "*" in label else 6)
     save_panel(fig, output_dir, "overall_score_and_cost_by_model", formats)
     plt.close(fig)
 
@@ -1193,6 +1269,33 @@ def write_statistics_markdown(
                    ci_method, all_body)
 
 
+def run_export_table(records: pd.DataFrame) -> pd.DataFrame:
+    """One row per run with the values the figures are built from, before any averaging."""
+    records = with_comparison_defaults(records)
+    records["in_figures"] = ~never_started_mask(records)
+    for column in ["paper_number", "repetition"]:
+        if column in records.columns:
+            records[column] = pd.to_numeric(records[column], errors="coerce").astype("Int64")
+    columns = [column for column in RUN_EXPORT_COLUMNS if column in records.columns]
+    return records[columns].sort_values(["benchmark_label", "paper", "mode", "repetition"], kind="stable")
+
+
+def write_run_records(records: pd.DataFrame, output_dir: Path) -> None:
+    table = run_export_table(records)
+    table.to_csv(output_dir / "benchmark_model_comparison_by_run.csv", index=False)
+    lines = [
+        "# Columns of benchmark_model_comparison_by_run.csv",
+        "",
+        "One row per run. The figures average repetitions within each paper and mode first.",
+        "",
+        "| Column | Description |",
+        "|---|---|",
+        *[f"| `{column}` | {RUN_EXPORT_COLUMNS[column]} |" for column in table.columns],
+        "",
+    ]
+    (output_dir / "benchmark_model_comparison_by_run_columns.md").write_text("\n".join(lines), encoding="utf8")
+
+
 def write_comparison_outputs(
     records: pd.DataFrame,
     output_dir: Path,
@@ -1208,6 +1311,7 @@ def write_comparison_outputs(
         if column in excluded.columns
     ]
     excluded[excluded_columns].to_csv(output_dir / "benchmark_model_comparison_excluded_runs.csv", index=False)
+    write_run_records(records, output_dir)
     paper_records, summary = aggregate_comparison_records(included, ci_method)
     overall_papers, overall_summary = aggregate_overall_records(paper_records, ci_method)
     tests = compute_statistical_tests(paper_records, overall_papers, ci_method)
@@ -1233,10 +1337,14 @@ def write_comparison_outputs(
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    set_mode_labels(args.mode_labels)
     benchmark_dirs = [Path(value).resolve() for value in args.benchmark_dirs]
     output_dir = Path(args.out_dir).resolve() if args.out_dir else Path.cwd() / "benchmark_comparison_figures"
     try:
-        records = load_comparison_records(benchmark_dirs, args.labels, args.force)
+        if args.runs_csv:  # round-trip floats: the same sums and bootstrap results as from the benchmark folders
+            records = pd.read_csv(args.runs_csv, float_precision="round_trip")
+        else:
+            records = load_comparison_records(benchmark_dirs, args.labels, args.force)
     except ValueError as exc:
         print(f"Error: {exc}")
         return 2
@@ -1244,7 +1352,7 @@ def main(argv: list[str] | None = None) -> int:
     _, summary = write_comparison_outputs(
         records, output_dir, args.formats, args.ci, args.significance, args.panel_size_mm
     )
-    print(f"Wrote comparison for {len(benchmark_dirs)} benchmark runs to {output_dir}")
+    print(f"Wrote comparison for {records['benchmark_label'].nunique()} benchmark runs to {output_dir}")
     if excluded.any():
         counts = records.loc[excluded].groupby("benchmark_label", sort=False).size()
         print("Excluded runs that never started (no tokens, no cost): "

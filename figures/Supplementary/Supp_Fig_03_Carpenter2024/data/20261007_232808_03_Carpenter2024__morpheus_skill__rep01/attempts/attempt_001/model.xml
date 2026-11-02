@@ -1,0 +1,319 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MorpheusModel version="4">
+  <Description>
+    <Title>Carpenter 2024: mechanically regulated epithelial monolayer with apoptosis</Title>
+    <Details>Source: Carpenter et al., Biophysical Journal 123 (2024) 909-919, doi:10.1016/j.bpj.2024.03.002. Source model class: explicit-cell 2D Cellular Potts Model in CompuCell3D plus discrete stochastic cell-fate rules. This translation preserves Eqs 1-4/S1-S4. Native pixel and MCS units: tau0=225 MCS~10 hours; one site=0.13+/-0.03 um^2. Target 35 tau0=7875 MCS. Default raw parameters are from Supplemental Methods pp 2-5: lambda=1, T=10, Jcc=6,Jcm=10,k=0.1,G0=3200/(2*225). Table 1 temperature normalization is inconsistent with Supplement; raw T=10 is selected explicitly. A_S~N(1377,34.4), timer~N(225,5.625), growth sampled each MCS with SD=0.05G0. Apoptosis probability checked every 10 MCS; target=0, lambda=5; extrusion A&lt;mean(A)/4. Division normal is major axis (cleavage perpendicular to semimajor axis). For installed version conversion, the legacy v4 minor label provides this normal, as established by an elongated-cell conformance test. No motility, polarity, prescribed future cells or spatial growth cues. No ConnectivityConstraint is imposed: the source explicitly permits negligible fragmentation. The source T=10 fragmentation regime is checked using raw cell-ID TIFFs. Discrete target growth runs as an Event once per MCS after current CPM mechanics, matching the source discrete update rather than integrating stale CPM values. Initial area half the mean G1 threshold is an explicit inference because only A_initial&lt;A_S is reported. Reference isolated area=3200 source pixels: paper's mean subconfluent MDCK area used to calibrate the isolated growth rate, rather than a fixed nondividing cell size. Boundary noflux represents the reported square confinement. Native CC3D unnormalized contact stencil compatibility is used; the 4-site nearest-face lattice stencil is an explicit numerical choice because stencil order is not reported in the paper. Edgelist sampling provides the Morpheus CPM acceleration required for native-grid validation; MCS duration stays1 and tau0 stays225 MCS. A single realization is shown; published curves average five realizations.</Details>
+  </Description>
+  <Global>
+    <Constant symbol="tau0" value="225" name="Mean S/G2/M timer [MCS]" />
+    <Constant symbol="A_S" value="1377" name="Mean G1 size threshold [source pixels]" />
+    <Constant symbol="A_isolated" value="3200" name="Paper isolated-growth reference area [source pixels]" />
+    <Constant symbol="G0" value="A_isolated/(2*tau0)" name="Uncrowded mean target growth [pixels/MCS]" />
+    <Constant symbol="k" value="0.1" name="Sensitivity to crowding [pixel^-2]" />
+    <Constant symbol="lambda" value="1" name="Area elastic modulus [lattice energy/pixel^2]" />
+    <Constant symbol="temperature" value="10" name="Supplemental raw CPM temperature [lattice energy]" />
+    <Constant symbol="p_apo_max" value="0.0015" name="Maximum apoptosis probability per 10 MCS" />
+    <Constant symbol="rho_half" value="1.5015/A_S" name="Half maximum apoptosis local density [pixel^-1]" />
+    <Constant symbol="alpha" value="0.968*A_S" name="Apoptosis sigmoid steepness [pixels]" />
+    <Constant symbol="apoptosis_enabled" value="1" name="Apoptosis switch" />
+    <Variable symbol="mean_area_for_extrusion" value="0" name="Mean cell area before extrusion check [source pixels]" />
+    <Variable symbol="occupied_area" value="0" name="Total area occupied by cells [source pixels]" />
+    <Variable symbol="mean_local_density" value="0" name="Mean local cell density [A_S^-1]" />
+    <Variable symbol="number_apoptotic" value="0" name="Number of shrinking apoptotic cells" />
+    <Variable symbol="g1_fraction" value="0" name="Fraction in G1" />
+    <Variable symbol="mean_growth_fraction" value="0" name="Mean target growth divided by G0" />
+    <Function symbol="number_of_cells">
+      <Expression>celltype.epithelium.size</Expression>
+    </Function>
+    <Function symbol="mean_cell_area">
+      <Expression>occupied_area/max(number_of_cells,1)</Expression>
+    </Function>
+    <Function symbol="time_tau0">
+      <Expression>time/tau0</Expression>
+    </Function>
+    <Function symbol="time_hours">
+      <Expression>10*time/tau0</Expression>
+    </Function>
+    <Function symbol="mean_cell_area_relative_to_isolated_cell">
+      <Expression>mean_cell_area/A_isolated</Expression>
+    </Function>
+    <Function symbol="mean_cell_area_in_sizer_units">
+      <Expression>mean_cell_area/A_S</Expression>
+    </Function>
+    <Function symbol="occupied_fraction">
+      <Expression>occupied_area/(size.x*size.y)</Expression>
+    </Function>
+  </Global>
+  <Space>
+    <Lattice class="square">
+      <Size symbol="size" value="1500,1500,0" />
+      <BoundaryConditions>
+        <Condition boundary="x" type="noflux" />
+        <Condition boundary="-x" type="noflux" />
+        <Condition boundary="y" type="noflux" />
+        <Condition boundary="-y" type="noflux" />
+      </BoundaryConditions>
+      <Neighborhood>
+        <Order>1</Order>
+      </Neighborhood>
+    </Lattice>
+    <SpaceSymbol symbol="space" />
+  </Space>
+  <Time>
+    <StartTime value="0" />
+    <StopTime value="7875" />
+    <TimeSymbol symbol="time" />
+    <RandomSeed value="240302" />
+  </Time>
+  <CellTypes>
+    <CellType name="medium" class="medium" />
+    <CellType name="epithelium" class="biological">
+      <Property symbol="target_area" value="A_S/2" />
+      <Property symbol="sizer_threshold" value="rand_norm(A_S,0.025*A_S)" />
+      <Property symbol="timer_duration" value="rand_norm(tau0,0.025*tau0)" />
+      <Property symbol="phase" value="0" />
+      <Property symbol="timer_start" value="-1" />
+      <Property symbol="apoptotic" value="0" />
+      <Property symbol="neighbor_density" value="0" />
+      <Property symbol="birth_time" value="0" />
+      <Property symbol="generation" value="0" />
+      <Property symbol="previous_area" value="A_S/2" />
+      <Property symbol="actual_growth" value="0" />
+      <Property symbol="applied_growth_fraction" value="1" />
+      <Function symbol="local_density">
+        <Expression>1/max(cell.volume,1)+neighbor_density</Expression>
+      </Function>
+      <Function symbol="growth_fraction">
+        <Expression>if(apoptotic&gt;0,0,applied_growth_fraction)</Expression>
+      </Function>
+      <Function symbol="actual_growth_over_G">
+        <Expression>actual_growth/G0</Expression>
+      </Function>
+      <Function symbol="visual_growth">
+        <Expression>if(apoptotic&gt;0,-0.6,min(max(actual_growth/G0,-0.5),0.5))</Expression>
+      </Function>
+      <Function symbol="area_over_sizer">
+        <Expression>cell.volume/A_S</Expression>
+      </Function>
+      <Function symbol="radius_over_sizer">
+        <Expression>sqrt((cell.center.x-size.x/2)^2+(cell.center.y-size.y/2)^2)/sqrt(A_S)</Expression>
+      </Function>
+      <Function symbol="cycle_state">
+        <Expression>if(apoptotic&gt;0,2,phase)</Expression>
+      </Function>
+      <VolumeConstraint target="target_area" strength="if(apoptotic&gt;0,5,lambda)" />
+      <NeighborhoodReporter time-step="1" name="Sum inverse areas of all contacting cells (Eq 4)">
+        <Input value="if(cell.type==celltype.medium.id,0,1/max(cell.volume,1))" scaling="cell" />
+        <Output symbol-ref="neighbor_density" mapping="sum" />
+      </NeighborhoodReporter>
+      <Event time-step="1" trigger="when-true" name="Discrete MCS growth from current CPM state (Eq 2)">
+        <Condition>time&gt;0</Condition>
+        <Rule symbol-ref="target_area">
+          <Expression>if(apoptotic&gt;0,0,target_area+max(rand_norm(G0,0.05*G0),0)*exp(-k*(cell.volume-target_area)^2))</Expression>
+        </Rule>
+        <Rule symbol-ref="applied_growth_fraction">
+          <Expression>if(apoptotic&gt;0,0,exp(-k*(cell.volume-target_area)^2))</Expression>
+        </Rule>
+        <Rule symbol-ref="actual_growth">
+          <Expression>cell.volume-previous_area</Expression>
+        </Rule>
+        <Rule symbol-ref="previous_area">
+          <Expression>cell.volume</Expression>
+        </Rule>
+      </Event>
+      <Event time-step="1" trigger="when-true" name="G1 sizer to S/G2/M timer">
+        <Condition>apoptotic==0 and phase==0 and cell.volume&gt;sizer_threshold</Condition>
+        <Rule symbol-ref="phase">
+          <Expression>1</Expression>
+        </Rule>
+        <Rule symbol-ref="timer_start">
+          <Expression>time</Expression>
+        </Rule>
+      </Event>
+      <Event time-step="10" trigger="when-true" name="Density dependent stochastic apoptosis (Eq 3)">
+        <Condition>apoptosis_enabled&gt;0 and apoptotic==0 and rand_uni(0,1)&lt;p_apo_max/(1+exp(-alpha*(local_density-rho_half)))</Condition>
+        <Rule symbol-ref="apoptotic">
+          <Expression>1</Expression>
+        </Rule>
+        <Rule symbol-ref="target_area">
+          <Expression>0</Expression>
+        </Rule>
+        <Logging />
+      </Event>
+      <CellDivision division-plane="minor" trigger="when-true" name="Complete timer and divide perpendicular to long axis (v4 minor label)">
+        <Condition>apoptotic==0 and phase==1 and time-timer_start&gt;=timer_duration</Condition>
+        <Triggers>
+          <Rule symbol-ref="target_area">
+            <Expression>cell.volume</Expression>
+          </Rule>
+          <Rule symbol-ref="sizer_threshold">
+            <Expression>rand_norm(A_S,0.025*A_S)</Expression>
+          </Rule>
+          <Rule symbol-ref="timer_duration">
+            <Expression>rand_norm(tau0,0.025*tau0)</Expression>
+          </Rule>
+          <Rule symbol-ref="phase">
+            <Expression>0</Expression>
+          </Rule>
+          <Rule symbol-ref="timer_start">
+            <Expression>-1</Expression>
+          </Rule>
+          <Rule symbol-ref="birth_time">
+            <Expression>time</Expression>
+          </Rule>
+          <Rule symbol-ref="generation">
+            <Expression>generation+1</Expression>
+          </Rule>
+          <Rule symbol-ref="previous_area">
+            <Expression>cell.volume</Expression>
+          </Rule>
+          <Rule symbol-ref="actual_growth">
+            <Expression>0</Expression>
+          </Rule>
+          <Rule symbol-ref="applied_growth_fraction">
+            <Expression>1</Expression>
+          </Rule>
+        </Triggers>
+        <Logging />
+      </CellDivision>
+      <CellDeath name="Live extrusion below quarter mean area; final apoptotic removal">
+        <Condition>cell.volume&lt;mean_area_for_extrusion/4 or (apoptotic&gt;0 and cell.volume&lt;=1)</Condition>
+        <Logging />
+      </CellDeath>
+      <Mapper time-step="1">
+        <Input value="cell.volume" />
+        <Output symbol-ref="mean_area_for_extrusion" mapping="mean" />
+      </Mapper>
+      <Mapper time-step="1">
+        <Input value="cell.volume" />
+        <Output symbol-ref="occupied_area" mapping="sum" />
+      </Mapper>
+      <Mapper time-step="1">
+        <Input value="local_density*A_S" />
+        <Output symbol-ref="mean_local_density" mapping="mean" />
+      </Mapper>
+      <Mapper time-step="1">
+        <Input value="apoptotic" />
+        <Output symbol-ref="number_apoptotic" mapping="sum" />
+      </Mapper>
+      <Mapper time-step="1">
+        <Input value="(phase==0) and (apoptotic==0)" />
+        <Output symbol-ref="g1_fraction" mapping="mean" />
+      </Mapper>
+      <Mapper time-step="1">
+        <Input value="growth_fraction" />
+        <Output symbol-ref="mean_growth_fraction" mapping="mean" />
+      </Mapper>
+    </CellType>
+  </CellTypes>
+  <CPM>
+    <Interaction default="0">
+      <Contact type1="epithelium" type2="epithelium" value="6" />
+      <Contact type1="epithelium" type2="medium" value="10" />
+    </Interaction>
+    <ShapeSurface scaling="compat-cc3d">
+      <Neighborhood>
+        <Order>1</Order>
+      </Neighborhood>
+    </ShapeSurface>
+    <MonteCarloSampler stepper="edgelist">
+      <MCSDuration value="1" />
+      <MetropolisKinetics temperature="temperature" />
+      <Neighborhood>
+        <Order>1</Order>
+      </Neighborhood>
+    </MonteCarloSampler>
+  </CPM>
+  <CellPopulations>
+    <Population type="epithelium" size="0">
+      <InitCellObjects mode="distance">
+        <Arrangement repetitions="1,1,1" displacements="0,0,0">
+          <Sphere center="size.x/2,size.y/2,0" radius="sqrt(A_S/(2*pi))" />
+        </Arrangement>
+      </InitCellObjects>
+      <InitProperty symbol-ref="target_area">
+        <Expression>cell.volume</Expression>
+      </InitProperty>
+      <InitProperty symbol-ref="previous_area">
+        <Expression>cell.volume</Expression>
+      </InitProperty>
+    </Population>
+  </CellPopulations>
+  <Analysis>
+    <Logger time-step="79.54545454545455">
+      <Input>
+        <Symbol symbol-ref="time_tau0" />
+        <Symbol symbol-ref="time_hours" />
+        <Symbol symbol-ref="number_of_cells" />
+        <Symbol symbol-ref="mean_cell_area_relative_to_isolated_cell" />
+        <Symbol symbol-ref="mean_cell_area" />
+        <Symbol symbol-ref="mean_cell_area_in_sizer_units" />
+        <Symbol symbol-ref="occupied_fraction" />
+        <Symbol symbol-ref="mean_local_density" />
+        <Symbol symbol-ref="number_apoptotic" />
+        <Symbol symbol-ref="g1_fraction" />
+        <Symbol symbol-ref="mean_growth_fraction" />
+      </Input>
+      <Output>
+        <TextOutput file-format="csv" file-name="quantification" separator="comma" />
+      </Output>
+    </Logger>
+    <Logger time-step="225">
+      <Input>
+        <Symbol symbol-ref="cell.center.x" />
+        <Symbol symbol-ref="cell.center.y" />
+        <Symbol symbol-ref="cell.volume" />
+        <Symbol symbol-ref="target_area" />
+        <Symbol symbol-ref="local_density" />
+        <Symbol symbol-ref="phase" />
+        <Symbol symbol-ref="apoptotic" />
+        <Symbol symbol-ref="growth_fraction" />
+        <Symbol symbol-ref="actual_growth_over_G" />
+        <Symbol symbol-ref="sizer_threshold" />
+        <Symbol symbol-ref="timer_duration" />
+        <Symbol symbol-ref="generation" />
+        <Symbol symbol-ref="birth_time" />
+        <Symbol symbol-ref="radius_over_sizer" />
+      </Input>
+      <Output>
+        <TextOutput file-format="csv" file-name="cell_states" separator="comma" />
+      </Output>
+    </Logger>
+    <Gnuplotter time-step="225" decorate="false" log-commands="true" condition="time==0 or time==2025 or time==4050 or time==5625 or time==7875">
+      <Terminal name="png" />
+      <Plot title="Actual area growth / G0">
+        <Cells value="visual_growth">
+          <ColorMap adaptive-range="false">
+            <Color value="-0.6" color="yellow" />
+            <Color value="-0.5" color="#b54d00" />
+            <Color value="0" color="#e7f2d4" />
+            <Color value="0.5" color="#00652a" />
+          </ColorMap>
+        </Cells>
+      </Plot>
+      <Plot title="G1 / S-G2-M / apoptosis">
+        <Cells value="cycle_state">
+          <ColorMap adaptive-range="false">
+            <Color value="0" color="#1461a8" />
+            <Color value="1" color="#dc1d84" />
+            <Color value="2" color="#ffff00" />
+          </ColorMap>
+        </Cells>
+      </Plot>
+      <Plot title="Actual cell area / A_S">
+        <Cells value="area_over_sizer">
+          <ColorMap adaptive-range="false">
+            <Color value="0.4" color="#440154" />
+            <Color value="0.7" color="#31688e" />
+            <Color value="1" color="#35b779" />
+            <Color value="1.5" color="#fde725" />
+          </ColorMap>
+        </Cells>
+      </Plot>
+    </Gnuplotter>
+    <ModelGraph format="dot" reduced="true" />
+    <TiffPlotter time-step="7875" format="16bit" compression="true" timelapse="true" OME-header="true">
+      <Channel symbol-ref="cell.id" celltype="epithelium" scale="false" />
+    </TiffPlotter>
+  </Analysis>
+</MorpheusModel>

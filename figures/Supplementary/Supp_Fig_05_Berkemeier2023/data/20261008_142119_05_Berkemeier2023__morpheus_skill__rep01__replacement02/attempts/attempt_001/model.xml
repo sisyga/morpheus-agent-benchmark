@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<MorpheusModel version="4">
+    <Description>
+        <Title>Berkemeier &amp; Page 2023: epsilon-Collier, explicit hexagonal cells</Title>
+        <Details>Source: Coupling dynamics of 2D Notch-Delta signalling, DOI 10.1016/j.mbs.2023.109012.
+Cell-resolved translation of the Interactive Epithelium coupled ODE model (Methods 2.1-2.3, Eqs. 1-8, 25-29).
+Every fixed hexagonal node is one biological cell. No mechanics, motion, division, imposed axes, or fate templates.
+Reported target: 14x14 periodic hexagonal tissue; epsilon=1; R1 has six cells, R2 has twelve cells; h=k=6; a=1e-8; b=100; nu=1.
+Initial N~Normal(0.744,0.01), D~Normal(0.055,0.01): 0.01 interpreted as standard deviation, matching near-homogeneous perturbations.
+At epsilon=1 no direct-contact signalling remains. All second-ring cells signal equally at weight 1/12.
+Simulation time is dimensionless, measured in Notch decay times, as in Eqs. 1-2. No conversion to hours is reported.
+The Fig.1 caption does not specify an endpoint; 0..100 is an explicit relaxation-window assumption, checked for convergence.
+Neighbour coupling is refreshed at the fixed ODE time step 0.001; numerical error is checked separately.
+High Delta is D&gt;=0.5 (analysis convention); clusters are connected components on six direct-contact neighbours, including singleton components.
+Reference structure: bundled DeltaNotch and LateralSignaling models; global NeighborhoodReporter, Mapper, Logger, ClusteringTracker, Gnuplotter from Morpheus 2.4.1 reference.
+</Details>
+    </Description>
+    <Global>
+        <Constant symbol="epsilon" value="1" name="relative protrusion signalling weight" />
+        <Constant symbol="a" value="1e-08" name="Notch Hill denominator" />
+        <Constant symbol="b" value="100" name="Delta inhibition" />
+        <Constant symbol="h" value="6" name="Delta inhibition Hill exponent" />
+        <Constant symbol="k" value="6" name="Notch activation Hill exponent" />
+        <Constant symbol="nu" value="1" name="relative Delta decay rate" />
+        <Constant symbol="D_threshold" value="0.5" name="analysis threshold" />
+        <Constant symbol="D" value="0" name="default Delta outside biological cells" />
+        <Constant symbol="N" value="0" name="default Notch" />
+        <Constant symbol="D_input" value="0" name="default signal outside biological cells" />
+        <Constant symbol="high_D" value="0" name="default high-Delta flag outside biological cells" />
+        <Constant symbol="cluster_id" value="0" name="default cluster ID outside biological cells" />
+        <Field symbol="signal" value="0" />
+        <Field symbol="r1_count" value="0" />
+        <Field symbol="r2_count" value="0" />
+        <NeighborhoodReporter>
+            <Input value="D*if(((min(abs(space.x-local.space.x), size.x-abs(space.x-local.space.x)))^2+(min(abs(space.y-local.space.y), sqrt(3)*size.y/2-abs(space.y-local.space.y)))^2 &lt; 1.21), (1-epsilon)/6, epsilon/12)" />
+            <Output symbol-ref="signal" mapping="sum" />
+        </NeighborhoodReporter>
+        <NeighborhoodReporter>
+            <Input value="if(((min(abs(space.x-local.space.x), size.x-abs(space.x-local.space.x)))^2+(min(abs(space.y-local.space.y), sqrt(3)*size.y/2-abs(space.y-local.space.y)))^2 &lt; 1.21),1,0)" />
+            <Output symbol-ref="r1_count" mapping="sum" />
+        </NeighborhoodReporter>
+        <NeighborhoodReporter>
+            <Input value="if(((min(abs(space.x-local.space.x), size.x-abs(space.x-local.space.x)))^2+(min(abs(space.y-local.space.y), sqrt(3)*size.y/2-abs(space.y-local.space.y)))^2 &lt; 1.21),0,1)" />
+            <Output symbol-ref="r2_count" mapping="sum" />
+        </NeighborhoodReporter>
+    </Global>
+    <Space>
+        <Lattice class="hexagonal">
+            <Neighborhood>
+                <Distance>2.1</Distance>
+            </Neighborhood>
+            <Size symbol="size" value="14, 14, 0" />
+            <BoundaryConditions>
+                <Condition type="periodic" boundary="x" />
+                <Condition type="periodic" boundary="y" />
+            </BoundaryConditions>
+        </Lattice>
+        <SpaceSymbol symbol="space" />
+    </Space>
+    <Time>
+        <StartTime value="0" />
+        <StopTime value="100" />
+        <TimeSymbol symbol="t" />
+        <RandomSeed value="1" />
+    </Time>
+    <CellTypes>
+        <CellType name="epithelium" class="biological">
+            <Property symbol="N" value="rand_norm(0.744,0.01)" />
+            <Property symbol="D" value="rand_norm(0.055,0.01)" />
+            <Property symbol="D_input" value="0" />
+            <Property symbol="cluster_id" value="0" />
+            <Mapper>
+                <Input value="signal" />
+                <Output symbol-ref="D_input" mapping="average" />
+            </Mapper>
+            <Function symbol="high_D">
+                <Expression>D &gt;= D_threshold</Expression>
+            </Function>
+            <System solver="Runge-Kutta [fixed, O(4)]" time-step="0.001">
+                <DiffEqn symbol-ref="N">
+                    <Expression>D_input^k/(a+D_input^k)-N</Expression>
+                </DiffEqn>
+                <DiffEqn symbol-ref="D">
+                    <Expression>nu*(1/(1+b*N^h)-D)</Expression>
+                </DiffEqn>
+            </System>
+        </CellType>
+    </CellTypes>
+    <CPM>
+        <ShapeSurface scaling="none">
+            <Neighborhood>
+                <Order>1</Order>
+            </Neighborhood>
+        </ShapeSurface>
+    </CPM>
+    <CellPopulations>
+        <Population type="epithelium" size="0">
+            <InitCellLattice />
+        </Population>
+    </CellPopulations>
+    <Analysis>
+        <Logger time-step="100/99">
+            <Input>
+                <Symbol symbol-ref="cell.id" />
+                <Symbol symbol-ref="cell.center.x" />
+                <Symbol symbol-ref="cell.center.y" />
+                <Symbol symbol-ref="N" />
+                <Symbol symbol-ref="D" />
+                <Symbol symbol-ref="D_input" />
+                <Symbol symbol-ref="r1_count" />
+                <Symbol symbol-ref="r2_count" />
+                <Symbol symbol-ref="high_D" />
+                <Symbol symbol-ref="cluster_id" />
+            </Input>
+            <Output>
+                <TextOutput file-name="cell_states" file-format="csv" separator="comma" />
+            </Output>
+        </Logger>
+        <ContactLogger time-step="100" celltype-from="epithelium" celltype-to="epithelium" />
+        <ClusteringTracker time-step="100/99" celltype="epithelium" exclude="D &lt; D_threshold">
+            <ClusterID symbol-ref="cluster_id" />
+        </ClusteringTracker>
+        <Gnuplotter time-step="100/100" condition="abs(t-(0))&lt;1e-7 or abs(t-(3))&lt;1e-7 or abs(t-(6))&lt;1e-7 or abs(t-(10))&lt;1e-7 or abs(t-(100))&lt;1e-7" decorate="true">
+            <Terminal name="png" size="900, 800, 0" />
+            <Plot title="Delta activity; epsilon=1">
+                <Cells value="D" min="0" max="1">
+                    <ColorMap>
+                        <Color value="0" color="#65ad2f" />
+                        <Color value="1" color="white" />
+                    </ColorMap>
+                </Cells>
+            </Plot>
+        </Gnuplotter>
+        <ModelGraph format="dot" reduced="false" include-tags="#untagged" />
+        <External time-step="0">
+            <Command>/home/service/projects/Morpheus.AI/.venv/bin/python /tmp/morpheus-modeling-sessions/20261007_202940_session/20261008_142119_05_Berkemeier2023__morpheus_skill__rep01__replacement02/scripts/analyze_run.py .</Command>
+        </External>
+    </Analysis>
+</MorpheusModel>

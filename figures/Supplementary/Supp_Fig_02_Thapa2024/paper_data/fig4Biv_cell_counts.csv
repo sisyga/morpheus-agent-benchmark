@@ -1,0 +1,8 @@
+# Thapa et al. (2024), Model 4: cells per type counted by a co-author in the Fig. 4B iv snapshots (PDF page 6;
+# 24, 72 and 120 h; one representative run) and, for t = 0, in the initial layout of Suppl. Fig. S12 (page 23).
+# Column names as in the agent's cell_counts.csv.
+t_h,cancer_cells,non_senescent_cells,senescent_cells
+0,8,16,25
+24,11,26,22
+72,29,83,11
+120,123,162,0

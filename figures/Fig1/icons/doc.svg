@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 355" width="360" height="355">
+<!-- Own drawing for Fig. 1 (Morpheus agent benchmark), matching the layout of the earlier icon. -->
+<g fill="none" stroke="#221F20" stroke-width="15.5" stroke-linejoin="round">
+<path d="M69.5 7H247.5A21 21 0 0 1 268.5 28V325A21 21 0 0 1 247.5 346H29A21 21 0 0 1 8 325V66.5L67.5 7Z"/>
+<path d="M70 7V64A8.5 8.5 0 0 1 61.5 72.5H8"/>
+</g>
+<g fill="#221F20">
+<rect x="100" y="78" width="121" height="15"/>
+<rect x="57" y="126" width="90" height="15"/>
+<rect x="57" y="175" width="90" height="15"/>
+<rect x="57" y="223" width="90" height="15"/>
+<rect x="57" y="271" width="164" height="15"/>
+</g>
+<rect x="125" y="110" width="260" height="135" rx="30" fill="#FFFFFF"/>
+<rect x="145" y="130" width="215" height="95" rx="10" fill="#221F20"/>
+<text x="174.5" y="204" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="73" fill="#FFFFFF">DOC</text>
+</svg>
