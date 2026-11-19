@@ -631,7 +631,7 @@ def model_row(letter, top, by0, actor, actor_label, output, scope):
         text(MX + MW / 2, top + 2.8, "Virtual tissue model", LABEL, bold=True, anchor="middle")
     bottom = output(MX, MW, top + (C_OUT if scope else 5.4))
     y_n = by1 + 1.2
-    text(BX0, top + 2.8, "Morpheus.AI workflow, benchmarked in this study" if scope else "Traditional workflow", LABEL,
+    text(BX0, top + 2.8, "MorpheusAI workflow, benchmarked in this study" if scope else "Traditional workflow", LABEL,
          bold=True)
     rect(BX0, by0, BX1 - BX0, by1 - by0, stroke=INK, fill="#ffffff", rx=0.8)
     if actor == "robot":

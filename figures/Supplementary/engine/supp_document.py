@@ -44,7 +44,7 @@ PREAMBLE = r"""\documentclass[
 
 # title page: title and author block of the manuscript, with the
 # subtitle; nothing else on the page
-TITLE_PAGE = r"""\title{Morpheus.AI: agents autonomously generate, execute and refine virtual tissue models\\[0.6em]
+TITLE_PAGE = r"""\title{MorpheusAI: agents autonomously generate, execute and refine virtual tissue models\\[0.6em]
 \normalfont Supplementary material}
 
 \author{Prerana Chandratre}

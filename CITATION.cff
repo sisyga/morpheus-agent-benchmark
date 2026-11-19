@@ -54,7 +54,7 @@ references:
     doi: 10.1093/bioinformatics/btt772
 preferred-citation:
   type: article
-  title: "Morpheus.AI: agents autonomously generate, execute and refine virtual tissue models"
+  title: "MorpheusAI: agents autonomously generate, execute and refine virtual tissue models"
   status: preprint
   year: 2026
   authors:
