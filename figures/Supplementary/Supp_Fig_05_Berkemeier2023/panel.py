@@ -4,6 +4,7 @@ colour bar of the run's Delta palette."""
 import os
 
 import numpy as np
+import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 
 import berkemeier_fig1f_extract
@@ -15,7 +16,16 @@ AB_LAYOUT = "side"
 # D palette of the run's Gnuplotter (model.xml: Cells value="D" min="0" max="1", ColorMap 0 -> #65ad2f,
 # 1 -> white), linear in RGB as gnuplot's "set palette defined"
 D_CMAP = LinearSegmentedColormap.from_list("delta", [(0, "#65ad2f"), (1, "#ffffff")])
-C_D, C_FRAC, C_CL = "#4d9a2a", "#4d9a2a", "#566573"  # agent: a darker shade of the frames' low-Delta green
+C_D, C_FRAC, C_CL = "0.55", "black", "black"  # agent: grey per-cell lines (i); ensemble mean (ii, iii)
+C_SD = "0.8"  # +- s.d. band of the ensemble (ii, iii)
+# d: time courses up to T_SHOW from reruns of the shown model.xml with RandomSeed 1-10 (seed 1 = the scored run),
+# stopped at t = 20 with output every 20/99 tau_N (data/seed_ensemble_setup_runs.py), each analysed with the agent's
+# scripts/analyze_run.py. d i: seed 1 (cell_states); d ii, iii: mean +- s.d. over the 10 seeds. The pattern is final
+# by t = 8 in every seed; at the shared output times the reruns equal the t = 100 runs (seed 1: the scored run).
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+ENSEMBLE = os.path.join(DATA, "seed_ensemble.csv")
+SEED1_STATES = os.path.join(DATA, "seed01_t20_cell_states.csv")
+T_SHOW = 20.0
 # two authors: "Berkemeier & Page (2023)", no "et al."
 PAPER = paper_label("Berkemeier & Page", 2023, et_al=False) + ",\nFig. 1f (ε = 1)"
 # time axis: the model's dimensionless time t, in units of the Notch decay time τ_N
@@ -53,11 +63,16 @@ LEGEND = {
     "b": "Delta activity *D* of each cell at dimensionless times *t*, in units of the Notch decay time τ<sub>N</sub> "
          "(color bar below). The pattern is final by *t* = 10 τ<sub>N</sub>.",
     "c": "{graph}",
-    "d": "**i**, Delta activity of each cell against time (one line per cell); the cells settle at two levels. The "
+    "d": "Time courses up to *t* = 20 τ<sub>N</sub> (the pattern does not change after *t* = 8 τ<sub>N</sub>), from "
+         "reruns with output every 0.2 τ<sub>N</sub>; seed 1 is identical to the scored run. "
+         "**i**, Delta activity of each cell against time (one line per cell); the cells settle at two levels. The "
          "paper has no time course at ε = 1, so **i** shows the agent's model only. **ii**, Fraction of cells with "
          "high Delta (*D* ≥ 0.5). **iii**, Mean size of clusters of adjacent high-Delta cells. In **ii** and **iii**, "
-         "solid lines show the agent's model and dashed lines the pattern of Fig. 1f of Berkemeier & Page, counted "
-         "from the PDF ({p_high} of {p_n} cells high, in {p_ncl} clusters).",
+         "solid lines and shading show the mean ± s.d. of {e_n} simulations of the agent's model with different "
+         "random initial conditions (final values {e_frac} and {e_cl} cells), and dashed lines the pattern of Fig. 1f "
+         "of Berkemeier & Page, counted from the PDF ({p_high} of {p_n} cells high, in {p_ncl} clusters). All "
+         "{e_n} simulations meet both numeric scoring criteria (high-Delta fraction 0.1–0.3, mean cluster size "
+         "1.5–3.5 cells).",
     "license": "Material from Berkemeier & Page is adapted under a CC BY 4.0 license.",
 }
 
@@ -94,19 +109,32 @@ def draw(ctx, fig, box):
     b1, b2, b3 = split(box, [1.4, 1, 1], gap=10)
 
     ax = axes(fig, b1, label="i")
-    for _, c in d.groupby("cell.id"):
+    d20 = pd.read_csv(ctx.add("panel d i data (seed 1 rerun, output every 20/99 tau_N)", SEED1_STATES))
+    for _, c in d20.groupby("cell.id"):
         ax.plot(c.t, c.D, color=C_D, lw=0.35, alpha=0.45, zorder=2)
     ax.plot([], [], color=C_D, label=AGENT_LABEL + " (one line per cell)")
-    ax.set(xlabel=T_LABEL, ylabel="Delta activity D", xlim=(0, t_end), ylim=(0, 1.05))
+    ax.set(xlabel=T_LABEL, ylabel="Delta activity D", xlim=(0, T_SHOW), ylim=(0, 1.05), xticks=[0, 5, 10, 15, 20])
     legend(ax, loc="center right")
 
+    e = pd.read_csv(ctx.add("panel d ii-iii data (seed ensemble)", ENSEMBLE))
+    g = e.groupby("time_notch_decay_units")
+    n_e = e.seed.nunique()
+    fin = e[e.time_notch_decay_units == e.time_notch_decay_units.max()]
+    ctx.fmt.update(e_n=n_e,
+                   e_frac=f"{fin.fraction_high_delta_cells.mean():.3f} ± {fin.fraction_high_delta_cells.std():.3f}",
+                   e_cl=f"{fin.mean_high_delta_cluster_size_cells.mean():.2f} ± "
+                        f"{fin.mean_high_delta_cluster_size_cells.std():.2f}")
     t = s.time_notch_decay_units
     for b, col, y, ref, lab, c in ((b2, "fraction_high_delta_cells", "High-Delta fraction of cells", ph / pn, "ii",
                                     C_FRAC),
                                    (b3, "mean_high_delta_cluster_size_cells", "Mean high-Delta cluster size (cells)",
                                     np.mean(ps), "iii", C_CL)):
         ax = axes(fig, b, label=lab)
-        ax.plot(t, s[col], color=c, label=AGENT_LABEL)
-        ax.axhline(ref, **style.PAPER_LINE_KW, label=PAPER)
-        ax.set(xlabel=T_LABEL, ylabel=y, xlim=(0, t.max()), ylim=(0, None))
-        legend(ax, loc="lower right")
+        m, sd = g[col].mean(), g[col].std()
+        ax.fill_between(m.index, m.values - sd.values, m.values + sd.values, color=C_SD, lw=0, zorder=1)
+        ax.plot(m.index, m.values, color=c, zorder=3)
+        ax.plot([], [], color=c, label=f"Mean (n = {n_e})")
+        ax.fill_between([], [], [], color=C_SD, lw=0, label="± s.d.")
+        ax.axhline(ref, **style.PAPER_LINE_KW, label="Paper, Fig. 1f")
+        ax.set(xlabel=T_LABEL, ylabel=y, xlim=(0, T_SHOW), ylim=(0, None), xticks=[0, 5, 10, 15, 20])
+        ax.legend(loc="lower right", handlelength=1.0, handletextpad=0.4, borderaxespad=0.2)  # free below the plateau
