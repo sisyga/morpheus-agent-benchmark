@@ -74,7 +74,9 @@ LEGEND = {
     "cite": "berkhout2025",  # bib key (morpheusai_supp.bib) cited after every mention of the authors
     "title": "Neural tube closure (Berkhout *et al.*, 2025).",
     "a": "Cell field of the model of Berkhout *et al.* from 0 to 50 h (adapted from their Fig. 1).",
-    "b": "The model at the same times, with cells colored by tissue as in Fig. 1 of Berkhout *et al.* (key below).",
+    "b": "The model at the same times, with cells colored by tissue as in Fig. 1 of Berkhout *et al.* (key below). "
+         "Frames come from a rerun of the same model file with image output every 600 instead of 3,000 MCS; cell "
+         "counts at the shared output times are identical to those of the scored run.",
     "c": "{graph}",
     "d": "Number of surface ectoderm (**i**), neural crest (**ii**; agent's model, attached cells only), paraxial "
          "mesoderm (**iii**) and somite cells (**iv**) in the agent's model (solid lines, colored as in **b**) and "
