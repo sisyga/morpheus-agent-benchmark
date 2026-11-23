@@ -19,20 +19,20 @@ TOOLS = {"morpheus_mcp": "MCP", "morpheus_skill": "Skill", "morpheus_cli": "CLI"
          "python_web": "Web"}
 PAPERS = [  # number, source paper, biological domain, model type in the study (None: no model in the literature)
     (1, "Szabó et al. (2010)", "Collective cell motion", "CPM"),
-    (2, "Thapa et al. (2024)", "Ovarian cancer", "CPM"),
+    (2, "Thapa et al. (2024)", "Senescent cell extrusion", "CPM"),
     (3, "Carpenter et al. (2024)", "Monolayer growth", "CPM"),
-    (4, "Atwell et al. (2015)", "Germ cell proliferation", "ABM"),
-    (5, "Berkemeier et al. (2023)", "Pattern formation", "ABM"),
-    (6, "Herron et al. (2022)", "Pattern formation", "PDE"),
-    (7, "Scheel et al. (2021)", "Tissue regeneration", "PDE"),
-    (8, "Mu et al. (2024)", "Morphogenesis", "Multiscale"),
-    (9, "Luque et al. (2023)", "Liver cancer", "Multiscale"),
-    (10, "Berkhout et al. (2025)", "Morphogenesis", "Multiscale"),
+    (4, "Atwell et al. (2015)", "Germ-line development", "ABM"),
+    (5, "Berkemeier et al. (2023)", "Cell communication", "ABM"),
+    (6, "Herron et al. (2022)", "Cell polarity patterning", "PDE"),
+    (7, "Scheel et al. (2021)", "Planarian regeneration", "PDE"),
+    (8, "Mu et al. (2024)", "Germinal center reaction", "Multiscale"),
+    (9, "Luque et al. (2023)", "Liver cancer recurrence", "Multiscale"),
+    (10, "Berkhout et al. (2025)", "Neural tube closure", "Multiscale"),
     (11, "Anlaş et al. (2024)", "Axis formation", None),
     (12, "Malkmus et al. (2025)", "Digit patterning", None),
-    (13, "Molè et al. (2026)", "Embryogenesis", None),
+    (13, "Molè et al. (2026)", "Embryo implantation", None),
     (14, "Otsuki et al. (2025)", "Limb regeneration", None),
-    (15, "Al Reza et al. (2025)", "Liver organoid", None),
+    (15, "Al Reza et al. (2025)", "Organoid formation", None),
 ]
 COLUMNS = [  # header, key, alignment
     ("No.", "no", "middle"), ("Study", "paper", "start"), ("Biological domain", "domain", "start"),
@@ -86,7 +86,7 @@ SIZE = 6 * PT                      # 6 pt body and header text
 ROW = 3.0                          # row pitch (mm)
 LINE = 2.3                         # extra height of a two-line column head (mm)
 X0, X1, Y0 = 4.4, 131.2, 2.2       # table left/right edge and top rule (page mm)
-PAD = 1.0
+PAD = 0.85                         # cell padding (mm); 0.85 so that the widest domain label (No. 8) fits
 font = arial()
 bold = arial(bold=True)
 
