@@ -1,4 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- Changed for publication: the 8 TIFFReader filenames in this model pointed to
+     /tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/ on the machine that ran the benchmark.
+     They now point to the same files, which the agent generated, in ../../agent_workspace/assets/.
+     Morpheus resolves relative paths against its working directory: run "morpheus -f model.xml" in this folder.
+     Nothing else differs from the model of the benchmark run. -->
 <MorpheusModel version="4">
   <Description>
     <Title>Mu 2024 germinal center: explicit B-cell chemotaxis and selection</Title>
@@ -33,35 +38,35 @@
     <Variable symbol="CXCR4_mean" value="0" />
     <Field symbol="CXCL12" value="0">
       <Diffusion rate="0" />
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL12.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/resident_6x1/CXCL12.tif" />
     </Field>
     <Field symbol="CXCL12_gradient_x" value="0">
       <Diffusion rate="0" />
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL12_gradient_x.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/resident_6x1/CXCL12_gradient_x.tif" />
     </Field>
     <Field symbol="CXCL12_gradient_y" value="0">
       <Diffusion rate="0" />
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL12_gradient_y.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/resident_6x1/CXCL12_gradient_y.tif" />
     </Field>
     <Field symbol="CXCL12_gradient_z" value="0">
       <Diffusion rate="0" />
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL12_gradient_z.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/resident_6x1/CXCL12_gradient_z.tif" />
     </Field>
     <Field symbol="CXCL13" value="0">
       <Diffusion rate="0" />
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL13.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/resident_6x1/CXCL13.tif" />
     </Field>
     <Field symbol="CXCL13_gradient_x" value="0">
       <Diffusion rate="0" />
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL13_gradient_x.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/resident_6x1/CXCL13_gradient_x.tif" />
     </Field>
     <Field symbol="CXCL13_gradient_y" value="0">
       <Diffusion rate="0" />
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL13_gradient_y.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/resident_6x1/CXCL13_gradient_y.tif" />
     </Field>
     <Field symbol="CXCL13_gradient_z" value="0">
       <Diffusion rate="0" />
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261011_140942_08_Mu2024__morpheus_mcp__rep02__replacement03/assets/resident_6x1/CXCL13_gradient_z.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/resident_6x1/CXCL13_gradient_z.tif" />
     </Field>
   </Global>
   <Space>

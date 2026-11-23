@@ -1,4 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!-- Changed for publication: the TIFFReader filename in this model pointed to
+     /tmp/morpheus-modeling-sessions/20261007_202940_session/20261014_135600_09_Luque2023__morpheus_mcp__rep03__replacement04/assets/ on the machine that ran the benchmark.
+     It now points to the same file, which the agent generated, in ../../agent_workspace/assets/.
+     Morpheus resolves relative paths against its working directory: run "morpheus -f model.xml" in this folder.
+     Nothing else differs from the model of the benchmark run. -->
 <MorpheusModel version="4">
   <Description>
     <Title>Luque 2023: HCC recurrence in regenerating liver, 2D section</Title>
@@ -93,7 +98,7 @@
       </Rule>
     </System>
     <Field symbol="oxygen_mmHg" value="0" name="Oxygen (mmHg)">
-      <TIFFReader filename="/tmp/morpheus-modeling-sessions/20261007_202940_session/20261014_135600_09_Luque2023__morpheus_mcp__rep03__replacement04/assets/hypoxia_candidate_oxygen_initial.tif" />
+      <TIFFReader filename="../../agent_workspace/assets/hypoxia_candidate_oxygen_initial.tif" />
       <Diffusion rate="D_oxygen_um2_min*1440/oxygen_slowdown" />
     </Field>
     <Field symbol="uptake_field_min" value="0" />

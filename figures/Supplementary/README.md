@@ -47,7 +47,7 @@ revtex4-2 for the PDF.
 ## Data
 
 Each figure's `data/` holds only the files of the shown benchmark run that the figure reads; `DATA_MANIFEST.csv`
-lists every file with its SHA-256. Three kinds of file differ from the run, and the manifest gives both checksums:
+lists every file with its SHA-256. Four kinds of file differ from the run, and the manifest gives both checksums:
 
 - `figure_data/*.csv` in a run's attempt folder: small tables that `panel.py` computes from a large output that is
   not included (Szabo's 131 MB track log, Mu's 40 MB TIFF stack and 22 MB cell log, Otsuki's 11 MB field log);
@@ -55,12 +55,16 @@ lists every file with its SHA-256. Three kinds of file differ from the run, and 
   read only the cell nodes);
 - `Supp_Table_1/data/biological_scores/<scorer>/README.md`, which stands in for the scorer folder whose name
   carries the hash of the criteria file.
+- the `model.xml` files of Mu and Luque, whose `TIFFReader` paths are changed (see below).
 
 Four shown models refer to files on the machine that ran the benchmark. Thapa and Berkemeier call an analysis
 script of the agent at the end of the simulation; it is not included, and Morpheus only reports that the command
-failed. Mu and Luque read TIFF inputs by absolute path; to rerun them, point the `TIFFReader` paths to the files in
-`data/<run>/agent_workspace/assets/`. The complete run outputs (agent transcripts, workspaces, all logs) are not
-published; they are available on request.
+failed. Mu and Luque read TIFF inputs that the agent generated (initial chemokine and oxygen fields), included in
+`data/<run>/agent_workspace/assets/`. In the run, their `TIFFReader` paths pointed to the benchmark machine; here
+they are relative paths to those files, and a comment at the top of each `model.xml` gives the original path.
+Morpheus resolves relative paths against its working directory, so run `morpheus -f model.xml` in the attempt
+folder. The complete run outputs (agent transcripts, workspaces, all logs) are not published; they are available
+on request.
 
 `engine/` holds the shared code (layout, legends, model graphs, the LaTeX document); its `README.md` documents
 every input and option.
