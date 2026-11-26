@@ -63,8 +63,8 @@ failed. Mu and Luque read TIFF inputs that the agent generated (initial chemokin
 `data/<run>/agent_workspace/assets/`. In the run, their `TIFFReader` paths pointed to the benchmark machine; here
 they are relative paths to those files, and a comment at the top of each `model.xml` gives the original path.
 Morpheus resolves relative paths against its working directory, so run `morpheus -f model.xml` in the attempt
-folder. The complete run outputs (agent transcripts, workspaces, all logs) are not published; they are available
-on request.
+folder. The complete run outputs (agent transcripts, workspaces, all logs) of the eleven CC BY papers are on Zenodo,
+[doi:10.5281/zenodo.24535542](https://doi.org/10.5281/zenodo.24535542); those of the other four papers are available on request.
 
 `engine/` holds the shared code (layout, legends, model graphs, the LaTeX document); its `README.md` documents
 every input and option.

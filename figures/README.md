@@ -18,4 +18,5 @@ its own pinned environment (see `Supplementary/README.md`).
 On our system, Fig. 2 and Supplementary Figs. 1–15 built from these folders matched the published versions pixel
 for pixel. Fig. 1 differs from the version in the first preprint only in its icons, which are our own drawings now. The data in the
 folders are the files the figures read and nothing else from the benchmark runs; the complete run outputs (agent
-transcripts, workspaces, all logs) are available on request.
+transcripts, workspaces, all logs) of the eleven CC BY papers are on Zenodo, [doi:10.5281/zenodo.24535542](https://doi.org/10.5281/zenodo.24535542), and those of the other four
+are available on request.

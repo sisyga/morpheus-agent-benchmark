@@ -10,7 +10,7 @@ The repository has three parts:
 
 To use the agent workflow for your own modeling tasks, install the Morpheus skill from [sisyga/morpheus-skills](https://github.com/sisyga/morpheus-skills), which explains its setup.
 
-[figures/](figures/README.md) has one folder per figure and table of the preprint, each with its build script and the data behind it: the per-run scores, times and costs of both final benchmarks, the manual scores, and the files of the 15 runs shown in the figures. The complete run outputs (agent transcripts, workspaces, all logs) are not published; they contain the copyrighted paper PDFs and are available on request. Cite this code with [CITATION.cff](CITATION.cff) or its Zenodo record, [doi:10.5281/zenodo.23697418](https://doi.org/10.5281/zenodo.23697418) (all versions).
+[figures/](figures/README.md) has one folder per figure and table of the preprint, each with its build script and the data behind it: the per-run scores, times and costs of both final benchmarks, the manual scores, and the files of the 15 runs shown in the figures. The complete run outputs (agent transcripts, workspaces, all logs) of the gpt-6.1-sol, gpt-6-luna and gpt-5.5 benchmarks are published on Zenodo, [doi:10.5281/zenodo.24535542](https://doi.org/10.5281/zenodo.24535542), for the eleven papers under a CC BY licence; the run outputs of the other four papers contain those papers and are available on request. Cite this code with [CITATION.cff](CITATION.cff) or its Zenodo record, [doi:10.5281/zenodo.23697418](https://doi.org/10.5281/zenodo.23697418) (all versions).
 
 ## Reproducing the preprint
 
